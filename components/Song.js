@@ -1,11 +1,12 @@
 import useSpotify from '@/hooks/useSpotify';
-import React from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import { PlayIcon } from '@heroicons/react/24/solid';
 
 function Song({ order, track }) {
   const spotifyApi = useSpotify();
@@ -14,6 +15,7 @@ function Song({ order, track }) {
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const [isShown, setIsShown] = useState(false);
 
   const playSong = () => {
     setCurrentTrackId(song.track.id);
@@ -23,16 +25,20 @@ function Song({ order, track }) {
         uris: [song.uri],
       })
       .then((data) => console.log(data))
-      .catch((err) => console.error("Playback failed: ",err));
+      .catch((err) => console.error('Playback failed: ', err));
   };
 
   return (
     <div
       className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 rounded-lg cursor-pointer"
       onClick={playSong}
+      onMouseEnter={() => setIsShown(true)}
+      onMouseLeave={() => setIsShown(false)}
     >
       <div className="flex items-center space-x-4">
-        <p>{order + 1}</p>
+        <p className="w-2 md:w-4">
+          {!isShown ? order + 1 : <PlayIcon className="h-4" />}
+        </p>
         <Image
           className="h-10 w-10"
           src={song.album.images[0].url}

@@ -36,7 +36,6 @@ function Center() {
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
   }, 0);
-  console.log(msToTime(total));
 
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
