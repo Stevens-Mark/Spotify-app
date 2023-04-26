@@ -9,11 +9,10 @@ import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { PlayIcon } from '@heroicons/react/24/solid';
 
 function Song({ order, track }) {
+
   const spotifyApi = useSpotify();
   const song = track.track;
-
-  const [currentrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const [currentrackId, setCurrentTrackId] = useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [isShown, setIsShown] = useState(false);
 
@@ -24,7 +23,7 @@ function Song({ order, track }) {
       .play({
         uris: [song.uri],
       })
-      .then((data) => console.log(data))
+      .then(() => console.log('Playback Success'))
       .catch((err) => console.error('Playback failed: ', err));
   };
 

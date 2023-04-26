@@ -1,8 +1,8 @@
-import { playListState } from '@/atoms/playListAtom';
 import React from 'react';
 import { useRecoilValue } from 'recoil';
-import Song from './Song';
 import { ClockIcon } from '@heroicons/react/24/outline';
+import { playListState } from '@/atoms/playListAtom';
+import Song from './Song';
 
 function Songs() {
   const playlist = useRecoilValue(playListState);
@@ -24,6 +24,7 @@ function Songs() {
       </div>
       <hr className="border-t-1 text-gray-400 mx-12" />
       <div className="p-8 flex flex-col space-y-1 bp-28 text-white">
+        {/* song playlist here */}
         {playlist?.tracks.items.map((track, i) => (
           <Song key={`${track.track.id}-${i}`} track={track} order={i} />
         ))}
