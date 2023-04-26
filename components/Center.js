@@ -5,7 +5,7 @@ import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
-import noAlbum from '@/public/images/NoAlbum.svg';
+import noAlbum from '@/public/images/noImageAvailable.svg';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { playListIdState, playListState } from '@/atoms/playListAtom';
