@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback, useMemo } from 'react';
 import Image from 'next/image';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import useSongInfo from '@/hooks/useSongInfo';
 import { useSession } from 'next-auth/react';
+import { debounce } from 'lodash';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
@@ -14,8 +15,6 @@ import {
   ArrowsRightLeftIcon,
   BackwardIcon,
   ForwardIcon,
-  PauseIcon,
-  PlayIcon,
   ArrowUturnLeftIcon,
   PauseCircleIcon,
   PlayCircleIcon,
@@ -35,26 +34,32 @@ function Player() {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
 
-  const fetchCurrentSong = useCallback(() => {
-    if (!songInfo) {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        console.log('Now Playing: ', data.body?.item);
-        setCurrentTrackId(data.body?.item?.id);
-
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          setIsPlaying(data.body?.is_playing);
-        });
-      });
-    }
-  }, [setCurrentTrackId, setIsPlaying, songInfo, spotifyApi]);
-
   useEffect(() => {
     if (spotifyApi.getAccessToken() && !currenTrackId) {
       // fetch the song info
+      const fetchCurrentSong = () => {
+        if (!songInfo) {
+          spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+            console.log('Now Playing: ', data.body?.item);
+            setCurrentTrackId(data.body?.item?.id);
+
+            spotifyApi.getMyCurrentPlaybackState().then((data) => {
+              setIsPlaying(data.body?.is_playing);
+            });
+          });
+        }
+      };
       fetchCurrentSong();
       setVolume(50);
     }
-  }, [spotifyApi, session, currenTrackId, fetchCurrentSong]);
+  }, [
+    spotifyApi,
+    session,
+    currenTrackId,
+    songInfo,
+    setCurrentTrackId,
+    setIsPlaying,
+  ]);
 
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -68,10 +73,33 @@ function Player() {
     });
   };
 
+  // old causing error in linting
+  // const debounceAdjustVolume = useCallback(
+  //   debounce((volume) => {
+  //     spotifyApi.setVolume(volume);
+  //   }, 500),
+  //   []
+  // );
+
+  // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
+  const debounceAdjustVolume = useMemo(
+    () =>
+      debounce((volume) => {
+        spotifyApi.setVolume(volume);
+      }, 500),
+    [spotifyApi]
+  );
+
+  useEffect(() => {
+    if (volume > 0 && volume < 100) {
+      debounceAdjustVolume(volume);
+    }
+  }, [debounceAdjustVolume, volume]);
+
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
-      {/* left side */}
-      <div className="flex items-center space-x-4 pt-4">
+      {/* left hand side */}
+      <div className="flex items-center space-x-4">
         <Image
           className="hidden md:inline h-10 w-10"
           src={songInfo?.album.images?.[0]?.url || noAlbum}
@@ -106,9 +134,25 @@ function Player() {
           onClick={() => spotifyApi.skipToNext()} // The API is not working
           className="button"
         />
-        <ArrowUturnLeftIcon
-          // onClick={() => spotifyApi.()} // The API is not working
+        <ArrowUturnLeftIcon className="button" />
+      </div>
+      {/* right hand side */}
+      <div className="flex items-center space-x-3 md:space-x-4 justify-end pr-5">
+        <SpeakerXMarkIcon
+          className="button "
+          onClick={() => volume > 0 && setVolume(volume - 10)}
+        />
+        <input
+          className="w-14 md:w-28"
+          type="range"
+          value={volume}
+          onChange={(e) => setVolume(Number(e.target.value))}
+          min={0}
+          max={100}
+        />
+        <SpeakerWaveIcon
           className="button"
+          onClick={() => volume < 100 && setVolume(volume + 10)}
         />
       </div>
     </div>
