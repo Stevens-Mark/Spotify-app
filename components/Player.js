@@ -25,6 +25,7 @@ import {
   SpeakerXMarkIcon,
 } from '@heroicons/react/24/outline';
 
+
 function Player() {
   const spotifyApi = useSpotify();
   const songInfo = useSongInfo();
@@ -73,19 +74,20 @@ function Player() {
     });
   };
 
-  // old causing error in linting
-  // const debounceAdjustVolume = useCallback(
-  //   debounce((volume) => {
-  //     spotifyApi.setVolume(volume);
-  //   }, 500),
-  //   []
-  // );
+  // handles 3 way toggle, off, repeat, repeat  once
+  const [repeatState, setRepeatState] = useState(0);
+  const handleRepeatToggle = () => {
+    let value =
+      repeatState === 0 ? 'off' : repeatState === 1 ? 'context' : 'track';
+    setRepeatState((prevState) => (prevState + 1) % 3);
+    spotifyApi.setRepeat(`${value}`, {});
+  };
 
   // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
   const debounceAdjustVolume = useMemo(
     () =>
       debounce((volume) => {
-        spotifyApi.setVolume(volume);
+        spotifyApi.setVolume(volume).catch((err) => {}); // for now throw error but could check for active device;
       }, 500),
     [spotifyApi]
   );
@@ -95,6 +97,16 @@ function Player() {
       debounceAdjustVolume(volume);
     }
   }, [debounceAdjustVolume, volume]);
+
+  // const renderCount = useMemo(() => {
+  //   let count = 0;
+  //   return () => ++count;
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(`Component has rendered ${renderCount()} times`);
+  // }, [renderCount]);
+
 
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
@@ -134,7 +146,10 @@ function Player() {
           onClick={() => spotifyApi.skipToNext()} // The API is not working
           className="button"
         />
-        <ArrowUturnLeftIcon className="button" />
+        <ArrowUturnLeftIcon
+          className="button"
+          onClick={() => handleRepeatToggle()}
+        />
       </div>
       {/* right hand side */}
       <div className="flex items-center space-x-3 md:space-x-4 justify-end pr-5">
