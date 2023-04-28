@@ -6,6 +6,7 @@ import { useRecoilState } from 'recoil';
 import { playListIdState } from '@/atoms/playListAtom';
 
 // please vist https://heroicons.com/ for icon details
+import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
   HomeIcon,
   BuildingLibraryIcon,
@@ -18,8 +19,9 @@ import {
 
 function Sidebar() {
   const spotifyApi = useSpotify();
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
+  
   const [playlistId, setPlaylistId] = useRecoilState(playListIdState);
 
   useEffect(() => {
@@ -77,9 +79,16 @@ function Sidebar() {
           <p
             key={playlist.id}
             onClick={() => setPlaylistId(playlist.id)}
-            className="cursor-pointer hover:text-white"
+            className="cursor-pointer hover:text-white flex items-center"
           >
             {playlist.name}
+            <span className="pl-2">
+              {playlist.id == playlistId ? (
+                <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+              ) : (
+                ' '
+              )}
+            </span>
           </p>
         ))}
       </div>

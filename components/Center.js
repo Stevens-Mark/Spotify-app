@@ -53,6 +53,8 @@ function Center() {
     }
   }, [spotifyApi, playlistId, setPlaylist]);
 
+  // console.log("center: ", playlist)
+
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <header className="absolute top-5 right-8">

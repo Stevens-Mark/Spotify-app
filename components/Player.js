@@ -19,16 +19,14 @@ import {
   PauseCircleIcon,
   PlayCircleIcon,
 } from '@heroicons/react/24/solid';
-import {
-  HeartIcon,
-  SpeakerWaveIcon,
-  SpeakerXMarkIcon,
-} from '@heroicons/react/24/outline';
-
+import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
 function Player() {
   const spotifyApi = useSpotify();
   const songInfo = useSongInfo();
+
+  // console.log("songinfo", songInfo)
+
   const { data: session } = useSession();
   const [currenTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
@@ -36,12 +34,11 @@ function Player() {
   const [volume, setVolume] = useState(50);
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken() && !currenTrackId) {
+    if (spotifyApi.getAccessToken()) {
       // fetch the song info
       const fetchCurrentSong = () => {
         if (!songInfo) {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-            console.log('Now Playing: ', data.body?.item);
             setCurrentTrackId(data.body?.item?.id);
 
             spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -64,12 +61,15 @@ function Player() {
 
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body.is_playing) {
+      if (data.body?.is_playing) {
         spotifyApi.pause();
         setIsPlaying(false);
       } else {
-        spotifyApi.play();
+        spotifyApi
+          .play()
+          .catch((err) => console.error('Playback failed: ', err));
         setIsPlaying(true);
+        
       }
     });
   };
@@ -98,15 +98,14 @@ function Player() {
     }
   }, [debounceAdjustVolume, volume]);
 
-  // const renderCount = useMemo(() => {
-  //   let count = 0;
-  //   return () => ++count;
-  // }, []);
+  const renderCount = useMemo(() => {
+    let count = 0;
+    return () => ++count;
+  }, []);
 
-  // useEffect(() => {
-  //   console.log(`Component has rendered ${renderCount()} times`);
-  // }, [renderCount]);
-
+  useEffect(() => {
+    console.log(`Component has rendered ${renderCount()} times`);
+  }, [renderCount]);
 
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">

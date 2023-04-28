@@ -3,6 +3,7 @@ import { getSession } from 'next-auth/react';
 import Sidebar from '@/components/Sidebar';
 import Center from '@/components/Center';
 import Player from '@/components/Player';
+import Player2 from '@/components/Player2'
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -29,6 +30,7 @@ export default function Home() {
 
         <div className="sticky bottom-0">
           <Player />
+          {/* <Player2 /> */}
         </div>
       </div>
     </>
