@@ -8,6 +8,7 @@ import { debounce } from 'lodash';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import { playListIdState, playListState } from '@/atoms/playListAtom';
 // import noAlbum from '@/public/images/blank.svg';
 
 import PlayingInfo from './PlayingInfo';
@@ -22,45 +23,107 @@ import {
 } from '@heroicons/react/24/solid';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
+
 function Player() {
   const spotifyApi = useSpotify();
+  const songInfo = useSongInfo();
+
+  // console.log("songinfo", songInfo)
+
   const { data: session } = useSession();
+  // const [currenTrackId, setCurrentTrackId] =
+  //   useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
-  const [currentrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const [playlist, setPlaylist] = useState([]);
+  const [playlistId, setPlaylistId] = useRecoilState(playListIdState);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
-  const skipToPrevious = async () => {
-    spotifyApi.skipToPrevious();
-    setTimeout(() => {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body.item.id);
-      });
-    }, '1000');
-  };
+  // useEffect(() => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     // fetch the song info
+  //     const fetchCurrentSong = () => {
+  //       if (!songInfo) {
+  //         spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+  //           setCurrentTrackId(data.body?.item?.id);
+
+  //           spotifyApi.getMyCurrentPlaybackState().then((data) => {
+  //             setIsPlaying(data.body?.is_playing);
+  //           });
+  //         });
+  //       }
+  //     };
+  //     fetchCurrentSong();
+  //     setVolume(50);
+  //   }
+  // }, [
+  //   spotifyApi,
+  //   session,
+  //   currenTrackId,
+  //   songInfo,
+  //   setCurrentTrackId,
+  //   setIsPlaying,
+  // ]);
+
+  useEffect(() => {
+    // Fetch the playlist and set the initial state
+    spotifyApi
+      .getPlaylist(playlistId)
+      .then(({ body: { tracks } }) => {
+        setPlaylist(tracks.items.map(({ track }) => track));
+        setCurrentIndex(0);
+      })
+      .catch(console.error);
+  }, [playlistId, spotifyApi]);
 
   const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing) {
-        spotifyApi.pause();
-        setIsPlaying(false);
-      } else {
-        spotifyApi
-          .play()
-          .catch((err) => console.error('Playback failed: ', err));
-        setIsPlaying(true);
-      }
-    });
+    setIsPlaying(!isPlaying);
   };
 
-  const skipToNext = async () => {
-    spotifyApi.skipToNext();
-    setTimeout(() => {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body.item.id);
-      });
-    }, '1000');
+  const handlePrev = () => {
+    setCurrentIndex(
+      currentIndex === 0 ? playlist.length - 1 : currentIndex - 1
+    );
   };
+
+  const handleNext = () => {
+    setCurrentIndex(
+      currentIndex === playlist.length - 1 ? 0 : currentIndex + 1
+    );
+  };
+
+  useEffect(() => {
+    // Play or pause the current track when the playing state changes
+    if (isPlaying) {
+      console.log(playlist[currentIndex].uri);
+      spotifyApi
+        .play({ uris: [playlist[currentIndex].uri] })
+        .catch(console.error);
+    } else {
+      spotifyApi.pause().catch(console.error);
+    }
+  }, [isPlaying, currentIndex, spotifyApi, playlist]);
+
+  useEffect(() => {
+    // Skip to the previous or next track when the current index changes
+    if (isPlaying) {
+      spotifyApi.skipToNext().catch(console.error);
+    }
+  }, [isPlaying, currentIndex, spotifyApi, playlist]);
+  // const handlePlayPause = () => {
+  //   spotifyApi.getMyCurrentPlaybackState().then((data) => {
+  //     if (data.body?.is_playing) {
+  //       spotifyApi.pause();
+  //       setIsPlaying(false);
+  //     } else {
+  //       spotifyApi
+  //         .play()
+  //         .catch((err) => console.error('Playback failed: ', err));
+  //       setIsPlaying(true);
+        
+  //     }
+  //   });
+  // };
 
   // handles 3 way toggle, off, repeat, repeat  once
   const [repeatState, setRepeatState] = useState(0);
@@ -98,12 +161,25 @@ function Player() {
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
       {/* left hand side */}
-      <PlayingInfo />
+      {/* <div className="flex items-center space-x-4">
+        <Image
+          className="hidden md:inline h-10 w-10"
+          src={songInfo?.album.images?.[0]?.url || noAlbum}
+          alt="Track playing ..."
+          width={100}
+          height={100}
+        />
+        <div>
+          <h3>{songInfo?.name}</h3>
+          <p>{songInfo?.artists?.[0]?.name}</p>
+        </div>
+      </div> */}
+      <PlayingInfo/>
       {/* center */}
       <div className="flex items-center justify-evenly">
         <ArrowsRightLeftIcon className="button" />
         <BackwardIcon
-          onClick={() => skipToPrevious()} // The API is not working
+          onClick={() => handlePrev} // The API is not working
           className="button"
         />
         {isPlaying ? (
@@ -118,7 +194,7 @@ function Player() {
           />
         )}
         <ForwardIcon
-          onClick={() => skipToNext()} // The API is not working
+          onClick={() => handleNext} // The API is not working
           className="button"
         />
         <ArrowUturnLeftIcon

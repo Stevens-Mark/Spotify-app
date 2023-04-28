@@ -6,14 +6,14 @@ import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 import noAlbum from '@/public/images/noImageAvailable.svg';
+// import component
+import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { playListIdState, playListState } from '@/atoms/playListAtom';
-// function used to select random color
-import { shuffle } from 'lodash';
 // import functions
+import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
-import Songs from './Songs';
 
 // random color options for top background
 const colors = [
@@ -52,8 +52,6 @@ function Center() {
         .catch((err) => console.log('Something went wrong! ', err));
     }
   }, [spotifyApi, playlistId, setPlaylist]);
-
-  // console.log("center: ", playlist)
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">

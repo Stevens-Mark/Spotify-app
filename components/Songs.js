@@ -1,8 +1,10 @@
 import React from 'react';
+// import state management recoil
 import { useRecoilValue } from 'recoil';
-import { ClockIcon } from '@heroicons/react/24/outline';
 import { playListState } from '@/atoms/playListAtom';
+// import component/icons
 import Song from './Song';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 function Songs() {
   const playlist = useRecoilValue(playListState);
