@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useMemo } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
 import Image from 'next/image';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
@@ -42,9 +42,12 @@ function Player() {
   const skipToPrevious = () => {
     spotifyApi.skipToPrevious().catch((err) => console.error('Rewind failed:'));
     setTimeout(() => {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body.item.id);
-      });
+      spotifyApi
+        .getMyCurrentPlayingTrack()
+        .then((data) => {
+          setCurrentTrackId(data.body.item.id);
+        })
+        .catch((err) => console.error('Get Current Track ID failed: ', err));
     }, '500');
   };
 
@@ -62,14 +65,17 @@ function Player() {
     });
   };
 
-  const skipToNext = async () => {
+  const skipToNext = () => {
     spotifyApi
       .skipToNext()
       .catch((err) => console.error('Forward failed: ', err));
     setTimeout(() => {
-      spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-        setCurrentTrackId(data.body.item.id);
-      });
+      spotifyApi
+        .getMyCurrentPlayingTrack()
+        .then((data) => {
+          setCurrentTrackId(data.body.item.id);
+        })
+        .catch((err) => console.error('Get Current Track ID failed: ', err));
     }, '500');
   };
 
@@ -77,10 +83,11 @@ function Player() {
   const [repeatState, setRepeatState] = useState(0);
   const handleRepeatToggle = () => {
     let adjusted = repeatState == 0 ? 1 : repeatState == 2 ? 0 : 2;
-
     let value = adjusted === 0 ? 'off' : adjusted === 1 ? 'context' : 'track';
     setRepeatState((prevState) => (prevState + 1) % 3);
-    spotifyApi.setRepeat(`${value}`, {});
+    spotifyApi
+      .setRepeat(`${value}`, {})
+      .catch((err) => console.error('Repeat failed:'));
   };
 
   // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
@@ -98,18 +105,18 @@ function Player() {
     }
   }, [debounceAdjustVolume, volume]);
 
-  const renderCount = useMemo(() => {
-    let count = 0;
-    return () => ++count;
-  }, []);
+  // const renderCount = useMemo(() => {
+  //   let count = 0;
+  //   return () => ++count;
+  // }, []);
 
-  useEffect(() => {
-    console.log(`Component has rendered ${renderCount()} times`);
-  }, [renderCount]);
+  // useEffect(() => {
+  //   console.log(`Component has rendered ${renderCount()} times`);
+  // }, [renderCount]);
 
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
-      <PlayingInfo /> {/* left hand side - albump hoto/info */}
+      <PlayingInfo /> {/* left hand side - album photo/info */}
       {/* center */}
       <div className="flex items-center justify-evenly">
         <span className="relative">

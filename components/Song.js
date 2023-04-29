@@ -25,7 +25,6 @@ function Song({ order, track }) {
       .play({
         context_uri: `spotify:playlist:${playlistId}`,
         offset: { position: currentTrackIndex },
-        // shuffle_mode: shuffle ? 1 : 0,
       })
       .then(() => console.log('Playback Success'))
       .catch((err) => console.error('Playback failed: ', err));
