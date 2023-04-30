@@ -6,7 +6,7 @@ import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import { playListIdState, playListState } from '@/atoms/playListAtom';
+import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
 // import icon
 import { PlayIcon } from '@heroicons/react/24/solid';
 
@@ -18,7 +18,7 @@ function Song({ order, track }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [isShown, setIsShown] = useState(false);
 
-  const [playlistId, setPlaylistId] = useRecoilState(playListIdState);
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
 
   const playSong = (event, currentTrackIndex) => {
     spotifyApi

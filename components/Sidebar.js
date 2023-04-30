@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { playListIdState } from '@/atoms/playListAtom';
+import { playlistIdState } from '@/atoms/playlistAtom';
 
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
@@ -22,7 +22,7 @@ function Sidebar() {
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
 
-  const [playlistId, setPlaylistId] = useRecoilState(playListIdState);
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
 
   const [currentPlaylistId, setCurrentPlaylistId] = useState(null);
 
@@ -106,7 +106,7 @@ function Sidebar() {
         </button>
         <hr className="border-t-[0.1px] border-gray-900" />
 
-        {/* PlayLists.. */}
+        {/* Playlists.. */}
         {playlists.map((playlist) => (
           <p
             key={playlist.id}
@@ -115,7 +115,7 @@ function Sidebar() {
           >
             {playlist.name}
             <span className="pl-2">
-              {playlist.id == currentPlaylistId ? (
+              {playlist.id == playlistId ? (
                 <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
               ) : (
                 ' '

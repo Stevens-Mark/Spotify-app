@@ -10,7 +10,7 @@ import noAlbum from '@/public/images/noImageAvailable.svg';
 import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { playListIdState, playListState } from '@/atoms/playListAtom';
+import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -30,8 +30,8 @@ function Center() {
   const { data: session } = useSession();
   const spotifyApi = useSpotify();
   const [randomColor, setRandomColor] = useState(null);
-  const playlistId = useRecoilValue(playListIdState);
-  const [playlist, setPlaylist] = useRecoilState(playListState);
+  const playlistId = useRecoilValue(playlistIdState);
+  const [playlist, setPlaylist] = useRecoilState(playlistState);
 
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
@@ -43,13 +43,15 @@ function Center() {
   }, [playlistId]);
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getPlaylist(playlistId)
-        .then((data) => {
-          setPlaylist(data.body);
-        })
-        .catch((err) => console.log('Something went wrong! ', err));
+    if (playlistId !== null) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getPlaylist(playlistId)
+          .then((data) => {
+            setPlaylist(data.body);
+          })
+          .catch((err) => console.log('Something went wrong! ', err));
+      }
     }
   }, [spotifyApi, playlistId, setPlaylist]);
 
@@ -95,7 +97,8 @@ function Center() {
                 {playlist?.description}
               </h2>
               <span className="text-sm">
-                {playlist?.tracks.items.length} {playlist?.tracks.items.length>1? 'songs': 'song'},{' '}
+                {playlist?.tracks.items.length}{' '}
+                {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
               <span className="text-gray-400 text-sm">{msToTime(total)}</span>
             </>
