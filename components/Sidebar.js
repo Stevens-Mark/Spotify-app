@@ -24,43 +24,46 @@ function Sidebar() {
 
   const [playlistId, setPlaylistId] = useRecoilState(playListIdState);
 
-  // const [currentPlaylistId, setCurrentPlaylistId] = useState(null);
+  const [currentPlaylistId, setCurrentPlaylistId] = useState(null);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getUserPlaylists().then((data) => {
         setPlaylists(data.body.items);
-        setPlaylistId(data.body.items[0].id)
+        setPlaylistId(data.body.items[0].id);
       });
     }
 
     // retrieve the current playing track
-    // spotifyApi
-    //   .getMyCurrentPlayingTrack()
-    //   .then((data) => {
-    //     // check if the user is currently playing a track
-    //     if (data.body && data.body.is_playing) {
-    //       const playlist = data.body?.context.uri.split(':');
-    //       const id = playlist[playlist.length - 1];
-    //       setCurrentPlaylistId(id);
-    //       // } else {
-    //       //   console.log('User is not currently playing a track');
-    //     }
-    //   })
-    //   .then(
-    //     setTimeout(() => {
-    //       spotifyApi
-    //         .getPlaylist(currentPlaylistId)
-    //         .then((data) => {
-    //           console.log(data.body.name);
-    //         })
-    //         // )
-    //         .catch((error) => {
-    //           console.error('Failed to get current playing track', error);
-    //         });
-    //     }, '1000')
-    //   );
-  }, [session, setPlaylistId, spotifyApi]);
+    spotifyApi
+      .getMyCurrentPlayingTrack()
+      .then((data) => {
+        // check if the user is currently playing a track
+        if (data.body && data.body.is_playing) {
+          const playlist = data.body?.context.uri.split(':');
+          const id = playlist[playlist.length - 1];
+          setCurrentPlaylistId(id);
+        } else {
+          console.log('User is not currently playing a track');
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to get current playing track', error);
+      });
+    // .then(
+    //   setTimeout(() => {
+    //     spotifyApi
+    //       .getPlaylist(currentPlaylistId)
+    //       .then((data) => {
+    //         console.log(data.body.name);
+    //       })
+    //       // )
+    //       .catch((error) => {
+    //         console.error('Failed to get current playing track', error);
+    //       });
+    //   }, '1000')
+    // );
+  }, [currentPlaylistId, session, setPlaylistId, spotifyApi]);
 
   // console.log(playlists);
   // console.log("you clicked >>>>> ", playlistId);
@@ -112,7 +115,7 @@ function Sidebar() {
           >
             {playlist.name}
             <span className="pl-2">
-              {playlist.id == playlistId ? (
+              {playlist.id == currentPlaylistId ? (
                 <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
               ) : (
                 ' '
