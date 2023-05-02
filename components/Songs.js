@@ -8,6 +8,7 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 
 function Songs() {
   const playlist = useRecoilValue(playlistState);
+  // console.log('playlist: ', playlist);
 
   return (
     <>

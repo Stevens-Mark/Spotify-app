@@ -9,3 +9,8 @@ export const isPlayState = atom({
   key: "isPlayState",
   default: false,
 });
+
+export const currentSongIndexState = atom({
+  key: "currentSongIndexState",
+  default: null,
+});

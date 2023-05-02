@@ -5,7 +5,11 @@ import Image from 'next/image';
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import {
+  currentTrackIdState,
+  currentSongIndexState,
+  isPlayState,
+} from '@/atoms/songAtom';
 import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
 // import icon
 import { PlayIcon, PauseIcon, ChartBarIcon } from '@heroicons/react/24/solid';
@@ -19,6 +23,9 @@ function Song({ order, track }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const [isShown, setIsShown] = useState(false);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
 
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;
@@ -39,23 +46,11 @@ function Song({ order, track }) {
             console.log('Playback Success');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
+            setCurrentSongIndex(currentTrackIndex);
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
     });
-  };
-
-  const playSong = (event, currentTrackIndex) => {
-    spotifyApi
-      .play({
-        context_uri: `spotify:playlist:${playlistId}`,
-        offset: { position: currentTrackIndex },
-      })
-      .then(() => console.log('Playback Success'))
-      .catch((err) => console.error('Playback failed: ', err));
-
-    setCurrentTrackId(song.id);
-    setIsPlaying(true);
   };
 
   return (
@@ -70,12 +65,12 @@ function Song({ order, track }) {
       <div className="flex items-center space-x-4">
         <p className="w-2 md:w-4">
           {!isShown ? (
-            activeStatus ? (
+            activeStatus && order == currentSongIndex ? (
               <Equaliser /> // <ChartBarIcon className="h-4 text-green-500" />
             ) : (
               order + 1
             )
-          ) : activeStatus ? (
+          ) : activeStatus && order == currentSongIndex ? (
             <PauseIcon className="h-4" />
           ) : (
             <PlayIcon className="h-4" />
@@ -91,7 +86,9 @@ function Song({ order, track }) {
         <div>
           <p
             className={`w-36 lg:w-64 ${
-              activeStatus ? 'text-green-500' : 'text-white'
+              activeStatus && order == currentSongIndex
+                ? 'text-green-500'
+                : 'text-white'
             } truncate`}
           >
             {song.name}

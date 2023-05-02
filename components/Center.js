@@ -6,6 +6,7 @@ import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 import noAlbum from '@/public/images/noImageAvailable.svg';
+import likedImage from '@/public/images/likedSongs.png';
 // import component
 import Songs from './Songs';
 // import state management recoil
@@ -44,13 +45,29 @@ function Center() {
 
   useEffect(() => {
     if (playlistId !== null) {
-      if (spotifyApi.getAccessToken()) {
+      if (playlistId == 99999) {
+        // Get the user's liked songs
         spotifyApi
-          .getPlaylist(playlistId)
+          .getMySavedTracks({ limit: 50 })
           .then((data) => {
-            setPlaylist(data.body);
+            setPlaylist({
+              name: 'Liked Songs',
+              images: [{ height: 60, url: likedImage, width: 60 }],
+              tracks: data.body,
+            });
+            console.log('liked ', data);
           })
-          .catch((err) => console.log('Something went wrong! ', err));
+          .catch(console.error);
+      } else {
+        if (spotifyApi.getAccessToken()) {
+          spotifyApi
+            .getPlaylist(playlistId)
+            .then((data) => {
+              setPlaylist(data.body);
+              console.log('normal: ', data.body);
+            })
+            .catch((err) => console.log('Something went wrong! ', err));
+        }
       }
     }
   }, [spotifyApi, playlistId, setPlaylist]);
@@ -106,7 +123,7 @@ function Center() {
         </div>
       </session>
 
-      <div>
+      <div className="pb-20">
         <Songs />
       </div>
     </div>

@@ -4,7 +4,6 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { playlistIdState } from '@/atoms/playlistAtom';
-
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -21,9 +20,7 @@ function Sidebar() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
-
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
-
   const [currentPlaylistId, setCurrentPlaylistId] = useState(null);
 
   useEffect(() => {
@@ -33,7 +30,6 @@ function Sidebar() {
         setPlaylistId(data.body.items[0].id);
       });
     }
-
     // retrieve the current playing track
     spotifyApi
       .getMyCurrentPlayingTrack()
@@ -96,9 +92,19 @@ function Sidebar() {
           <PlusCircleIcon className="h-5 w-5" />
           <p>Create Playlist</p>
         </button>
-        <button className="flex items-center space-x-2 hover:text-white">
+        <button
+          className="flex items-center space-x-2 hover:text-white"
+          onClick={() => setPlaylistId(99999)}
+        >
           <HeartIcon className="h-5 w-5" />
           <p>Liked Songs</p>
+          <span className="pl-2">
+            {playlistId == 99999 ? (
+              <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+            ) : (
+              ' '
+            )}
+          </span>
         </button>
         <button className="flex items-center space-x-2 hover:text-white">
           <RssIcon className="h-5 w-5" />
@@ -123,6 +129,7 @@ function Sidebar() {
             </span>
           </p>
         ))}
+        <hr className="border-t-[0.1px] border-gray-900 pb-36" />
       </div>
     </div>
   );

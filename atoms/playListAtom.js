@@ -10,8 +10,3 @@ export const playlistState = atom({
   key: "playlistState",
   default: null,
 });
-
-// export const currentplaylistIdState = atom({
-//   key: "currentplaylistIdState",
-//   default: null,
-// });

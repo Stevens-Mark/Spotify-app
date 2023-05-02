@@ -7,7 +7,11 @@ import { useSession } from 'next-auth/react';
 import { debounce } from 'lodash';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import {
+  currentTrackIdState,
+  currentSongIndexState,
+  isPlayState,
+} from '@/atoms/songAtom';
 // import noAlbum from '@/public/images/blank.svg';
 
 import PlayingInfo from './PlayingInfo';
@@ -17,7 +21,6 @@ import {
   BackwardIcon,
   ForwardIcon,
   ArrowPathRoundedSquareIcon,
-  ArrowPathIcon,
   PauseCircleIcon,
   PlayCircleIcon,
 } from '@heroicons/react/24/solid';
@@ -30,6 +33,9 @@ function Player() {
   const [volume, setVolume] = useState(50);
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
 
   const [shuffleState, setShuffletState] = useState(false);
   const setShuffle = () => {
@@ -46,6 +52,9 @@ function Player() {
         .getMyCurrentPlayingTrack()
         .then((data) => {
           setCurrentTrackId(data.body.item.id);
+          if (currentSongIndex !== 0) {
+            setCurrentSongIndex(currentSongIndex - 1);
+          }
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));
     }, '750');
@@ -74,6 +83,7 @@ function Player() {
         .getMyCurrentPlayingTrack()
         .then((data) => {
           setCurrentTrackId(data.body.item.id);
+          setCurrentSongIndex(currentSongIndex + 1);
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));
     }, '750');
