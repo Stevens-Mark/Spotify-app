@@ -1,5 +1,5 @@
 import useSpotify from '@/hooks/useSpotify';
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Image from 'next/image';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
@@ -8,7 +8,8 @@ import { useRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
 // import icon
-import { PlayIcon } from '@heroicons/react/24/solid';
+import { PlayIcon, PauseIcon, ChartBarIcon } from '@heroicons/react/24/solid';
+import Equaliser from './Equaliser';
 
 function Song({ order, track }) {
   const spotifyApi = useSpotify();
@@ -16,9 +17,33 @@ function Song({ order, track }) {
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const [isShown, setIsShown] = useState(false);
 
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const activeStatus = useMemo(() => {
+    return song.id == currentrackId && isPlaying ? true : false;
+  }, [currentrackId, isPlaying, song.id]);
+
+  const handlePlayPause = (event, currentTrackIndex) => {
+    spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      if (data.body?.is_playing && song.id == currentrackId) {
+        spotifyApi.pause();
+        setIsPlaying(false);
+      } else {
+        spotifyApi
+          .play({
+            context_uri: `spotify:playlist:${playlistId}`,
+            offset: { position: currentTrackIndex },
+          })
+          .then(() => {
+            console.log('Playback Success');
+            setIsPlaying(true);
+            setCurrentTrackId(song.id);
+          })
+          .catch((err) => console.error('Playback failed: ', err));
+      }
+    });
+  };
 
   const playSong = (event, currentTrackIndex) => {
     spotifyApi
@@ -37,14 +62,24 @@ function Song({ order, track }) {
     <div
       className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
       onClick={(event) => {
-        playSong(event, order);
+        handlePlayPause(event, order);
       }}
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
       <div className="flex items-center space-x-4">
         <p className="w-2 md:w-4">
-          {!isShown ? order + 1 : <PlayIcon className="h-4" />}
+          {!isShown ? (
+            activeStatus ? (
+              <Equaliser /> // <ChartBarIcon className="h-4 text-green-500" />
+            ) : (
+              order + 1
+            )
+          ) : activeStatus ? (
+            <PauseIcon className="h-4" />
+          ) : (
+            <PlayIcon className="h-4" />
+          )}
         </p>
         <Image
           className="h-10 w-10"
@@ -54,7 +89,13 @@ function Song({ order, track }) {
           height={100}
         />
         <div>
-          <p className="w-36 lg:w-64 text-white truncate">{song.name}</p>
+          <p
+            className={`w-36 lg:w-64 ${
+              activeStatus ? 'text-green-500' : 'text-white'
+            } truncate`}
+          >
+            {song.name}
+          </p>
           <p className="w-40 ">{song.artists[0].name}</p>
         </div>
       </div>

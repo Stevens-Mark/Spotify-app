@@ -48,7 +48,7 @@ function Player() {
           setCurrentTrackId(data.body.item.id);
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));
-    }, '500');
+    }, '750');
   };
 
   const handlePlayPause = () => {
@@ -76,7 +76,7 @@ function Player() {
           setCurrentTrackId(data.body.item.id);
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));
-    }, '500');
+    }, '750');
   };
 
   // handles 3 way toggle, off, repeat, repeat  once
