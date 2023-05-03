@@ -23,9 +23,9 @@ function PlayingInfo() {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
             setCurrentTrackId(data.body?.item?.id);
 
-            spotifyApi.getMyCurrentPlaybackState().then((data) => {
-              setIsPlaying(data.body?.is_playing);
-            });
+            // spotifyApi.getMyCurrentPlaybackState().then((data) => {
+            //   setIsPlaying(data.body?.is_playing);
+            // });
           });
         }
       };
