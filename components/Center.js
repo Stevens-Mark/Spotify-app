@@ -11,7 +11,7 @@ import likedImage from '@/public/images/likedSongs.png';
 import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
+import { playlistIdState, playlistState } from '@/atoms/playListAtom';
 import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color

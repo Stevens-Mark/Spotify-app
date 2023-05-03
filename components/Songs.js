@@ -1,7 +1,7 @@
 import React from 'react';
 // import state management recoil
 import { useRecoilValue } from 'recoil';
-import { playlistState } from '@/atoms/playlistAtom';
+import { playlistState } from '@/atoms/playListAtom';
 // import component/icons
 import Song from './Song';
 import { ClockIcon } from '@heroicons/react/24/outline';

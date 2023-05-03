@@ -10,7 +10,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
+import { playlistIdState, playlistState } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
@@ -28,6 +28,8 @@ function Song({ order, track }) {
     currentSongIndexState
   );
   const [isShown, setIsShown] = useState(false);
+
+  console.log(currentSongIndex)
 
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;

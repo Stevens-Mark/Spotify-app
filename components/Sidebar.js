@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
+import { playlistIdState, playlistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, currentSongIndexState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
@@ -58,12 +58,12 @@ function Sidebar() {
     }
   }, [setPlaylistId, session, spotifyApi, setCurrentTrackId]);
 
-  useEffect(() => {
-    const indexPosition = playlist?.tracks.items.findIndex(
-      (x) => x.track.id == currentrackId
-    );
-    setCurrentSongIndex(indexPosition);
-  }, [currentrackId, playlist?.tracks.items, setCurrentSongIndex]);
+  // useEffect(() => {
+  //   const indexPosition = playlist?.tracks.items.findIndex(
+  //     (x) => x.track.id == currentrackId
+  //   );
+  //   setCurrentSongIndex(indexPosition);
+  // }, [currentrackId, playlist?.tracks.items, setCurrentSongIndex]);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
