@@ -10,3 +10,4 @@ export const playlistState = atom({
   key: "playlistState",
   default: null,
 });
+
