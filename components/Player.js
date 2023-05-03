@@ -1,8 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import Image from 'next/image';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
-import useSongInfo from '@/hooks/useSongInfo';
 import { useSession } from 'next-auth/react';
 import { debounce } from 'lodash';
 // import state management recoil
@@ -12,8 +10,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-// import noAlbum from '@/public/images/blank.svg';
-
+// import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
 import {

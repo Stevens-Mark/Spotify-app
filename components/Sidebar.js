@@ -21,48 +21,33 @@ function Sidebar() {
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
-  const [currentPlaylistId, setCurrentPlaylistId] = useState(null);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.getUserPlaylists().then((data) => {
-        setPlaylists(data.body.items);
-        setPlaylistId(data.body.items[0].id);
-      });
+      spotifyApi
+        .getUserPlaylists()
+        .then((data) => {
+          setPlaylists(data.body.items);
+          setPlaylistId(data.body.items[0].id); // base - set page to first playlist in list
+        })
+        .then(() => {
+          spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+            // check if the user is currently playing a track & set page to this playlist
+            if (data.body && data.body.is_playing) {
+              const playlist = data.body?.context.uri.split(':');
+              const playingId = playlist[playlist.length - 1];
+              setPlaylistId(playingId);
+            }
+          });
+        })
+        .catch((error) => {
+          console.error(
+            'Failed to get current playing track / playlist ID',
+            error
+          );
+        });
     }
-    // retrieve the current playing track
-    spotifyApi
-      .getMyCurrentPlayingTrack()
-      .then((data) => {
-        // check if the user is currently playing a track
-        if (data.body && data.body.is_playing) {
-          const playlist = data.body?.context.uri.split(':');
-          const id = playlist[playlist.length - 1];
-          setCurrentPlaylistId(id);
-        } else {
-          console.log('User is not currently playing a track');
-        }
-      })
-      .catch((error) => {
-        console.error('Failed to get current playing track', error);
-      });
-    // .then(
-    //   setTimeout(() => {
-    //     spotifyApi
-    //       .getPlaylist(currentPlaylistId)
-    //       .then((data) => {
-    //         console.log(data.body.name);
-    //       })
-    //       // )
-    //       .catch((error) => {
-    //         console.error('Failed to get current playing track', error);
-    //       });
-    //   }, '1000')
-    // );
-  }, [currentPlaylistId, session, setPlaylistId, spotifyApi]);
-
-  // console.log(playlists);
-  // console.log("you clicked >>>>> ", playlistId);
+  }, [setPlaylistId, session, spotifyApi]);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">

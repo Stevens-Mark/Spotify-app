@@ -27,9 +27,20 @@ function Song({ order, track }) {
     currentSongIndexState
   );
 
+  console.log('playing state in Song: ', isPlaying);
+  console.log('current track Id state in Song: ', currentrackId);
+
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;
   }, [currentrackId, isPlaying, song.id]);
+
+  // function indexPosition(list, trackPlayingId) {
+  //   const indexPosition = list?.tracks.items.findIndex(
+  //     (x) => x.track.id === trackPlayingId
+  //   );
+  //   console.log('index: ', index);
+  //   return indexPosition;
+  // }
 
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {

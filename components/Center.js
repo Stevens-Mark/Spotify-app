@@ -12,6 +12,7 @@ import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
+import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -33,6 +34,7 @@ function Center() {
   const [randomColor, setRandomColor] = useState(null);
   const playlistId = useRecoilValue(playlistIdState);
   const [playlist, setPlaylist] = useRecoilState(playlistState);
+  // const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
@@ -55,7 +57,7 @@ function Center() {
               images: [{ height: 60, url: likedImage, width: 60 }],
               tracks: data.body,
             });
-            console.log('liked ', data);
+            // console.log('liked ', data);
           })
           .catch(console.error);
       } else {
@@ -64,13 +66,36 @@ function Center() {
             .getPlaylist(playlistId)
             .then((data) => {
               setPlaylist(data.body);
-              console.log('normal: ', data.body);
+              // console.log('normal: ', data.body?.tracks.items);
+              // const list = data.body.tracks.items;
             })
-            .catch((err) => console.log('Something went wrong! ', err));
+            .catch((err) => console.log('Something went wrong - Get Playlist Failed! ', err));
+
+          spotifyApi
+            .getMyCurrentPlaybackState()
+            .then((data) => {
+              if (data.body?.is_playing) {
+                console.log('state of playback ', data.body);
+                // const trackPlayingId = data.body?.item.id;
+              } else {
+                console.log('User is not currently playing a track');
+              }
+            })
+            .catch((err) =>
+              console.error('Get Current Track ID failed: ', err)
+            );
         }
       }
     }
   }, [spotifyApi, playlistId, setPlaylist]);
+
+  // function indexPosition(list, trackPlayingId) {
+  //   const indexPosition = list?.tracks.items.findIndex(
+  //     (x) => x.track.id === trackPlayingId
+  //   );
+  //   console.log('index: ', index);
+  //   return indexPosition;
+  // }
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">

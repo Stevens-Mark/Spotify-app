@@ -13,11 +13,12 @@ function PlayingInfo() {
   const songInfo = useSongInfo();
   const [currenTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
-      // fetch the song info
+      // fetch the song info & set isPlaying & currentTrackId states
       const fetchCurrentSong = () => {
         if (!songInfo) {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
