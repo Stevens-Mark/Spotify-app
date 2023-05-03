@@ -13,7 +13,6 @@ function PlayingInfo() {
   const songInfo = useSongInfo();
   const [currenTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   useEffect(() => {

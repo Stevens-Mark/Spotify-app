@@ -12,7 +12,7 @@ import {
 } from '@/atoms/songAtom';
 import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
 // import icon
-import { PlayIcon, PauseIcon, ChartBarIcon } from '@heroicons/react/24/solid';
+import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
 
 function Song({ order, track }) {
@@ -29,21 +29,9 @@ function Song({ order, track }) {
   );
   const [isShown, setIsShown] = useState(false);
 
-
-  console.log('playing state in Song: ', isPlaying);
-  // console.log('current track Id state in Song: ', currentrackId);
-
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;
   }, [currentrackId, isPlaying, song.id]);
-
-  const currentSongId = useMemo(() => {
-    const indexPosition = playlist?.tracks.items.findIndex(
-      (x) => x.track.id === currentrackId
-    );
-    setCurrentSongIndex(indexPosition);
-    return indexPosition;
-  }, [currentrackId, playlist?.tracks.items, setCurrentSongIndex]);
 
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -79,8 +67,8 @@ function Song({ order, track }) {
       <div className="flex items-center space-x-4">
         <p className="w-2 md:w-4">
           {!isShown ? (
-            activeStatus && order == currentSongId ? (
-              <Equaliser /> // <ChartBarIcon className="h-4 text-green-500" />
+            activeStatus && order == currentSongIndex ? (
+              <Equaliser />
             ) : (
               order + 1
             )

@@ -69,7 +69,9 @@ function Center() {
               // console.log('normal: ', data.body?.tracks.items);
               // const list = data.body.tracks.items;
             })
-            .catch((err) => console.log('Something went wrong - Get Playlist Failed! ', err));
+            .catch((err) =>
+              console.log('Something went wrong - Get Playlist Failed! ', err)
+            );
 
           // spotifyApi
           //   .getMyCurrentPlaybackState()
@@ -88,14 +90,6 @@ function Center() {
       }
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
-
-  // function indexPosition(list, trackPlayingId) {
-  //   const indexPosition = list?.tracks.items.findIndex(
-  //     (x) => x.track.id === trackPlayingId
-  //   );
-  //   console.log('index: ', index);
-  //   return indexPosition;
-  // }
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">

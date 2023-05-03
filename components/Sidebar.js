@@ -3,7 +3,8 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { playlistIdState } from '@/atoms/playlistAtom';
+import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
+import { currentTrackIdState, currentSongIndexState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -21,6 +22,12 @@ function Sidebar() {
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const [currentrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  const [playlist, setPlaylist] = useRecoilState(playlistState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -34,6 +41,8 @@ function Sidebar() {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
             // check if the user is currently playing a track & set page to this playlist
             if (data.body && data.body.is_playing) {
+              console.log('sidebar: ', data.body);
+              setCurrentTrackId(data.body.item.id);
               const playlist = data.body?.context.uri.split(':');
               const playingId = playlist[playlist.length - 1];
               setPlaylistId(playingId);
@@ -47,7 +56,14 @@ function Sidebar() {
           );
         });
     }
-  }, [setPlaylistId, session, spotifyApi]);
+  }, [setPlaylistId, session, spotifyApi, setCurrentTrackId]);
+
+  useEffect(() => {
+    const indexPosition = playlist?.tracks.items.findIndex(
+      (x) => x.track.id == currentrackId
+    );
+    setCurrentSongIndex(indexPosition);
+  }, [currentrackId, playlist?.tracks.items, setCurrentSongIndex]);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
