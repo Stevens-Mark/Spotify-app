@@ -71,23 +71,23 @@ function Center() {
             })
             .catch((err) => console.log('Something went wrong - Get Playlist Failed! ', err));
 
-          spotifyApi
-            .getMyCurrentPlaybackState()
-            .then((data) => {
-              if (data.body?.is_playing) {
-                console.log('state of playback ', data.body);
-                // const trackPlayingId = data.body?.item.id;
-              } else {
-                console.log('User is not currently playing a track');
-              }
-            })
-            .catch((err) =>
-              console.error('Get Current Track ID failed: ', err)
-            );
+          // spotifyApi
+          //   .getMyCurrentPlaybackState()
+          //   .then((data) => {
+          //     if (data.body?.is_playing) {
+          //       console.log('state of playback ', data.body);
+          //       // const trackPlayingId = data.body?.item.id;
+          //     } else {
+          //       console.log('User is not currently playing a track');
+          //     }
+          //   })
+          //   .catch((err) =>
+          //     console.error('Get Current Track ID failed: ', err)
+          //   );
         }
       }
     }
-  }, [spotifyApi, playlistId, setPlaylist]);
+  }, [spotifyApi, session, playlistId, setPlaylist]);
 
   // function indexPosition(list, trackPlayingId) {
   //   const indexPosition = list?.tracks.items.findIndex(
