@@ -11,8 +11,8 @@ import likedImage from '@/public/images/likedSongs.png';
 import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { playlistIdState, playlistState } from '@/atoms/playlistAtom';
-import { isPlayState } from '@/atoms/songAtom';
+import { playlistIdState, playlistState } from '@/atoms/playListAtom';
+// import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -72,20 +72,6 @@ function Center() {
             .catch((err) =>
               console.log('Something went wrong - Get Playlist Failed! ', err)
             );
-
-          // spotifyApi
-          //   .getMyCurrentPlaybackState()
-          //   .then((data) => {
-          //     if (data.body?.is_playing) {
-          //       console.log('state of playback ', data.body);
-          //       // const trackPlayingId = data.body?.item.id;
-          //     } else {
-          //       console.log('User is not currently playing a track');
-          //     }
-          //   })
-          //   .catch((err) =>
-          //     console.error('Get Current Track ID failed: ', err)
-          //   );
         }
       }
     }

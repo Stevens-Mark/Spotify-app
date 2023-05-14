@@ -22,10 +22,7 @@ function PlayingInfo() {
         if (!songInfo) {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
             setCurrentTrackId(data.body?.item?.id);
-
-            spotifyApi.getMyCurrentPlaybackState().then((data) => {
-              setIsPlaying(data.body?.is_playing);
-            });
+            setIsPlaying(data.body?.is_playing);
           });
         }
       };
