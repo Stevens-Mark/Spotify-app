@@ -95,10 +95,10 @@ function Center() {
       </header>
 
       <session
-        className={`flex items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
+        className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
       >
         <Image
-          className="h-44 w-44 shadow-2xl"
+          className="h-16 w-16 sm:h-44 sm:w-44 shadow-2xl ml-7"
           src={playlist?.images?.[0]?.url || noAlbum}
           alt="album cover"
           width={100}
@@ -108,7 +108,7 @@ function Center() {
         <div>
           {playlist && (
             <>
-              <p>Playlist</p>
+              <p className='pt-2'>Playlist</p>
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1">
                 {playlist?.name}
               </h1>
