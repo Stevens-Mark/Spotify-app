@@ -1,3 +1,4 @@
+import {format} from 'date-fns';
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
@@ -115,8 +116,9 @@ function Song({ order, track }) {
         </div>
       </div>
       <div className="flex items-center justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden md:inline">{song.album.name}</p>
-        <p>{millisToMinutesAndSeconds(song.duration_ms)}</p>
+        <p className="w-40 hidden md:inline pr-3">{song.album.name}</p>
+        <p className="w-48 hidden md:inline">{format(new Date(track.added_at), 'p, dd/MM/yyyy')}</p>
+        <p className='pl-5'>{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>
   );
