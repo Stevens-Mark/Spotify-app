@@ -34,7 +34,6 @@ function Center() {
   const [randomColor, setRandomColor] = useState(null);
   const playlistId = useRecoilValue(playlistIdState);
   const [playlist, setPlaylist] = useRecoilState(playlistState);
-  // const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
@@ -66,8 +65,6 @@ function Center() {
             .getPlaylist(playlistId)
             .then((data) => {
               setPlaylist(data.body);
-              // console.log('normal: ', data.body?.tracks.items);
-              // const list = data.body.tracks.items;
             })
             .catch((err) =>
               console.log('Something went wrong - Get Playlist Failed! ', err)

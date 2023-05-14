@@ -24,7 +24,6 @@ function Sidebar() {
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  // const [playlist, setPlaylist] = useRecoilState(playlistState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
@@ -41,7 +40,6 @@ function Sidebar() {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
             // check if the user is currently playing a track & set page to this playlist
             if (data.body && data.body.is_playing) {
-              // console.log('sidebar: ', data.body);
               setCurrentTrackId(data.body.item.id);
               const currentplaylistId = data.body?.context.uri.split(':');
               const playingId = currentplaylistId[currentplaylistId.length - 1];
