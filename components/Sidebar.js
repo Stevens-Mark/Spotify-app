@@ -38,10 +38,10 @@ function Sidebar() {
         })
         .then(() => {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-            // check if the user is currently playing a track & set page to this playlist
-            if (data.body && data.body.is_playing) {
+            // check if the user is currently playing a track from their playlist & set page to this playlist
+            if (data.body && data.body.is_playing && data.body.context !== null) {
               setCurrentTrackId(data.body.item.id);
-              const currentplaylistId = data.body?.context.uri.split(':');
+              const currentplaylistId = data.body.context.uri.split(':');
               const playingId = currentplaylistId[currentplaylistId.length - 1];
               setPlaylistId(playingId);
             }
@@ -55,21 +55,6 @@ function Sidebar() {
         });
     }
   }, [setPlaylistId, session, spotifyApi, setCurrentTrackId]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentrackId !== null &&
-  //       playlist !== null
-  //     ) {
-  //       const indexPosition = playlist?.tracks.items.findIndex(
-  //         (x) => x.track.id == currentrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, '1500');
-  // }, [currentSongIndex, currentrackId, playlist, setCurrentSongIndex]);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
