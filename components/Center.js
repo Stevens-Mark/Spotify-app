@@ -76,31 +76,17 @@ function Center() {
 
   useEffect(() => {
     if (playlistId !== null) {
-      if (playlistId == 99999) {
-        // Get the user's liked songs
+      if (spotifyApi.getAccessToken()) {
         spotifyApi
-          .getMySavedTracks({ limit: 50 })
+          .getPlaylist(playlistId)
           .then((data) => {
-            setPlaylist({
-              name: 'Liked Songs',
-              images: [{ height: 60, url: likedImage, width: 60 }],
-              tracks: data.body,
-            });
-            console.log('liked ', data);
+            setPlaylist(data.body);
           })
-          .catch(console.error);
-      } else {
-        if (spotifyApi.getAccessToken()) {
-          spotifyApi
-            .getPlaylist(playlistId)
-            .then((data) => {
-              setPlaylist(data.body);
-            })
-            .catch((err) =>
-              console.log('Something went wrong - Get Playlist Failed! ', err)
-            );
-        }
+          .catch((err) =>
+            console.log('Something went wrong - Get Playlist Failed! ', err)
+          );
       }
+      // }
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
 

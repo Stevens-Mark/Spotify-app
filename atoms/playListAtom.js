@@ -11,3 +11,7 @@ export const playlistState = atom({
   default: null,
 });
 
+export const activePlaylistState = atom({
+  key: "activePlaylistState",
+  default: null,
+});

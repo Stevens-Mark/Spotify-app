@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { playlistIdState, playlistState } from '@/atoms/playListAtom';
+import { playlistIdState, playlistState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, currentSongIndexState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
@@ -27,6 +27,7 @@ function Sidebar() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+  const [activePlaylist, setActivePlaylist] = useRecoilState(activePlaylistState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -44,6 +45,7 @@ function Sidebar() {
               const currentplaylistId = data.body.context.uri.split(':');
               const playingId = currentplaylistId[currentplaylistId.length - 1];
               setPlaylistId(playingId);
+              setActivePlaylist(playingId);
             }
           });
         })
@@ -54,7 +56,7 @@ function Sidebar() {
           );
         });
     }
-  }, [setPlaylistId, session, spotifyApi, setCurrentTrackId]);
+  }, [setPlaylistId, session, spotifyApi, setCurrentTrackId, setActivePlaylist]);
 
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
@@ -86,17 +88,9 @@ function Sidebar() {
         </button>
         <button
           className="flex items-center space-x-2 hover:text-white"
-          onClick={() => setPlaylistId(99999)}
         >
           <HeartIcon className="h-5 w-5" />
           <p>Liked Songs</p>
-          <span className="pl-2">
-            {playlistId == 99999 ? (
-              <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
-            ) : (
-              ' '
-            )}
-          </span>
         </button>
         <button className="flex items-center space-x-2 hover:text-white">
           <RssIcon className="h-5 w-5" />
@@ -113,7 +107,7 @@ function Sidebar() {
           >
             {playlist.name}
             <span className="pl-2">
-              {playlist.id == playlistId ? (
+              {activePlaylist == playlist.id ? (
                 <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
               ) : (
                 ' '

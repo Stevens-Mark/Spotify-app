@@ -11,7 +11,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playlistIdState, playlistState } from '@/atoms/playListAtom';
+import { playlistIdState, playlistState, activePlaylistState } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
@@ -28,6 +28,7 @@ function Song({ order, track }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+  const [activePlaylist, setActivePlaylist] = useRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
@@ -66,6 +67,7 @@ function Song({ order, track }) {
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
+            setActivePlaylist(playlistId);
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
