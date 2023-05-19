@@ -12,7 +12,7 @@ import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { playlistIdState, playlistState } from '@/atoms/playListAtom';
-import { isPlayState } from '@/atoms/songAtom';
+// import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -34,7 +34,7 @@ function Center() {
   const [randomColor, setRandomColor] = useState(null);
   const playlistId = useRecoilValue(playlistIdState);
   const [playlist, setPlaylist] = useRecoilState(playlistState);
-  // const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const [message, setMessage] = useState(null);
 
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
@@ -44,6 +44,35 @@ function Center() {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
     setRandomColor(shuffle(colors).pop());
   }, [playlistId]);
+
+  useEffect(() => {
+    // check whether there is an active device connected to spotify account.
+    // if not this app will not be fully functional.
+    // Inform user to connect to spotify
+    spotifyApi
+      .getMyDevices()
+      .then((data) => {
+        // check if there is an active device
+        const activeDevice = data.body.devices.find(
+          (device) => device.is_active
+        );
+
+        if (activeDevice) {
+          console.log(`Active device found: ${activeDevice.name}`);
+        } else {
+          // console.log('No active device found');
+          setMessage(
+            'No active device found! Please connect to Spotify & reload the page.'
+          );
+        }
+      })
+      .catch((error) => {
+        console.error('Failed to get devices', error);
+        setMessage(
+          'Failed to get devices! Please connect to Spotify & reload the page.'
+        );
+      });
+  }, [spotifyApi]);
 
   useEffect(() => {
     if (playlistId !== null) {
@@ -57,7 +86,7 @@ function Center() {
               images: [{ height: 60, url: likedImage, width: 60 }],
               tracks: data.body,
             });
-            // console.log('liked ', data);
+            console.log('liked ', data);
           })
           .catch(console.error);
       } else {
@@ -66,26 +95,10 @@ function Center() {
             .getPlaylist(playlistId)
             .then((data) => {
               setPlaylist(data.body);
-              // console.log('normal: ', data.body?.tracks.items);
-              // const list = data.body.tracks.items;
             })
             .catch((err) =>
               console.log('Something went wrong - Get Playlist Failed! ', err)
             );
-
-          // spotifyApi
-          //   .getMyCurrentPlaybackState()
-          //   .then((data) => {
-          //     if (data.body?.is_playing) {
-          //       console.log('state of playback ', data.body);
-          //       // const trackPlayingId = data.body?.item.id;
-          //     } else {
-          //       console.log('User is not currently playing a track');
-          //     }
-          //   })
-          //   .catch((err) =>
-          //     console.error('Get Current Track ID failed: ', err)
-          //   );
         }
       }
     }
@@ -111,11 +124,14 @@ function Center() {
         </div>
       </header>
 
-      <session
-        className={`flex items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
+      <div
+        className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
       >
+        <h2 className="text-white absolute top-0 left-1/2 transform -translate-x-1/2">
+          {message}
+        </h2>
         <Image
-          className="h-44 w-44 shadow-2xl"
+          className="h-16 w-16 sm:h-44 sm:w-44 shadow-2xl ml-7"
           src={playlist?.images?.[0]?.url || noAlbum}
           alt="album cover"
           width={100}
@@ -125,7 +141,7 @@ function Center() {
         <div>
           {playlist && (
             <>
-              <p>Playlist</p>
+              <p className="pt-2">Playlist</p>
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1">
                 {playlist?.name}
               </h1>
@@ -140,7 +156,7 @@ function Center() {
             </>
           )}
         </div>
-      </session>
+      </div>
 
       <div className="pb-20">
         <Songs />

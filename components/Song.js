@@ -1,3 +1,4 @@
+import {format} from 'date-fns';
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
@@ -29,11 +30,25 @@ function Song({ order, track }) {
   );
   const [isShown, setIsShown] = useState(false);
 
-  console.log(currentSongIndex)
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        currentSongIndex == null &&
+        currentrackId !== null &&
+        playlist !== null
+      ) {
+        const indexPosition = playlist?.tracks.items.findIndex(
+          (x) => x.track.id == currentrackId
+        );
+        setCurrentSongIndex(indexPosition);
+      }
+    }, '750');
+  }, [currentSongIndex, currentrackId, playlist, setCurrentSongIndex]);
 
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;
   }, [currentrackId, isPlaying, song.id]);
+
 
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -67,7 +82,7 @@ function Song({ order, track }) {
       onMouseLeave={() => setIsShown(false)}
     >
       <div className="flex items-center space-x-4">
-        <p className="w-2 md:w-4">
+        <span className="w-2 md:w-4">
           {!isShown ? (
             activeStatus && order == currentSongIndex ? (
               <Equaliser />
@@ -79,7 +94,7 @@ function Song({ order, track }) {
           ) : (
             <PlayIcon className="h-4" />
           )}
-        </p>
+        </span>
         <Image
           className="h-10 w-10"
           src={song.album.images[0].url}
@@ -100,9 +115,10 @@ function Song({ order, track }) {
           <p className="w-40 ">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-center justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden md:inline">{song.album.name}</p>
-        <p>{millisToMinutesAndSeconds(song.duration_ms)}</p>
+      <div className="flex items-end md:items-center justify-between ml-auto md:ml-0">
+        <p className="w-40 hidden md:inline pr-3">{song.album.name}</p>
+        <p className="w-48 hidden md:inline">{format(new Date(track.added_at), 'p, dd/MM/yyyy')}</p>
+        <p className='pl-5'>{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>
   );

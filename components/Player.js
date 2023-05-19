@@ -126,7 +126,7 @@ function Player() {
       <PlayingInfo /> {/* left hand side - album photo/info */}
       {/* center */}
       <div className="flex items-center justify-evenly">
-        <span className="relative">
+        <span className="hidden sm:inline relative">
           <ArrowsRightLeftIcon
             onClick={() => setShuffle()}
             className={`button ${
@@ -154,7 +154,7 @@ function Player() {
 
         <ForwardIcon onClick={() => skipToNext()} className="button" />
 
-        <span className="relative">
+        <span className="hidden sm:inline relative">
           <ArrowPathRoundedSquareIcon
             onClick={() => handleRepeatToggle()}
             className={`button w-6 h-6 ${
