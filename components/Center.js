@@ -30,14 +30,22 @@ const colors = [
 function Center() {
   const { data: session } = useSession();
   const spotifyApi = useSpotify();
-  const [randomColor, setRandomColor] = useState(null);
   const playlistId = useRecoilValue(playlistIdState);
   const [playlist, setPlaylist] = useRecoilState(playlistState);
   const [message, setMessage] = useState(null);
+  const [randomColor, setRandomColor] = useState(null);
 
   const total = playlist?.tracks.items.reduce((prev, current) => {
     return prev + current.track.duration_ms;
   }, 0);
+
+  const [myAlert, setMyAlert] = useState(false);
+  const handleMyAlert = () => {
+    setMyAlert(true);
+    setTimeout(() => {
+      setMyAlert(false);
+    }, 5000);
+  };
 
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
@@ -57,19 +65,26 @@ function Center() {
         );
 
         if (activeDevice) {
-          console.log(`Active device found: ${activeDevice.name}`);
+          console.log(
+            `Active device found: ${activeDevice.name}. PREMIUM ACCOUNT needed for most features!`
+          );
+          setMessage(
+            `Active device found: ${activeDevice.name}. PREMIUM ACCOUNT needed for most features!`
+          );
         } else {
-          // console.log('No active device found');
+          console.log('No active device found');
           setMessage(
             'No active device found! Please connect to Spotify & reload the page.'
           );
         }
+        handleMyAlert();
       })
       .catch((error) => {
         console.error('Failed to get devices', error);
         setMessage(
           'Failed to get devices! Please connect to Spotify & reload the page.'
         );
+        handleMyAlert();
       });
   }, [spotifyApi]);
 
@@ -111,7 +126,10 @@ function Center() {
       <div
         className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
       >
-        <h2 className="text-white absolute top-0 left-1/2 transform -translate-x-1/2">
+        <h2
+          style={myAlert ? { display: 'block' } : { display: 'none' }}
+          className="text-white absolute top-0 left-1/2 transform -translate-x-1/2"
+        >
           {message}
         </h2>
         <Image

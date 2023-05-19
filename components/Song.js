@@ -5,7 +5,7 @@ import Image from 'next/image';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -20,9 +20,9 @@ function Song({ order, track }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
-  const [playlist, setPlaylist] = useRecoilState(playlistState);
+  const playlist= useRecoilValue(playlistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const playlistId= useRecoilValue(playlistIdState);
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
