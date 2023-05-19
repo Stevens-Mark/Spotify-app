@@ -111,11 +111,13 @@ function Sidebar() {
         {playlists.map((playlist) => (
           <span
             className={`flex items-center p-3 rounded-lg cursor-pointer ${
-              activePlaylist == playlist.id ? 'text-green-500' : 'text-white'
+              activePlaylist == playlist.id
+                ? 'text-green-500'
+                : 'hover:text-white'
             } 
             ${
-              playlistId == playlist.id
-                ? 'bg-gray-900 hover:bg-gray-800'
+              playlistId == playlist.id && activePlaylist !== playlist.id
+                ? 'bg-gray-900 hover:bg-gray-800 text-slate-300'
                 : 'hover:bg-gray-900'
             }`}
             key={playlist.id}
