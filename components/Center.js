@@ -6,7 +6,6 @@ import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 import noAlbum from '@/public/images/noImageAvailable.svg';
-import likedImage from '@/public/images/likedSongs.png';
 // import component
 import Songs from './Songs';
 // import state management recoil
@@ -86,7 +85,6 @@ function Center() {
             console.log('Something went wrong - Get Playlist Failed! ', err)
           );
       }
-      // }
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
 

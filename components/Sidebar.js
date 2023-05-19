@@ -3,8 +3,8 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { playlistIdState, playlistState, activePlaylistState } from '@/atoms/playListAtom';
-import { currentTrackIdState, currentSongIndexState } from '@/atoms/songAtom';
+import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
+import { currentTrackIdState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -24,9 +24,6 @@ function Sidebar() {
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
   const [activePlaylist, setActivePlaylist] = useRecoilState(activePlaylistState);
 
   useEffect(() => {
@@ -59,7 +56,7 @@ function Sidebar() {
   }, [setPlaylistId, session, spotifyApi, setCurrentTrackId, setActivePlaylist]);
 
   return (
-    <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:max-w-[12rem] lg:max-w-[15rem] hidden md:inline-flex pb-36">
+    <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:w-[12rem] lg:w-[15rem] hidden md:inline-flex pb-36">
       <div className="space-y-4">
         <button
           className="flex items-center space-x-2 hover:text-white"
