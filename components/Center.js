@@ -35,10 +35,6 @@ function Center() {
   const [message, setMessage] = useState(null);
   const [randomColor, setRandomColor] = useState(null);
 
-  const total = playlist?.tracks.items.reduce((prev, current) => {
-    return prev + current.track.duration_ms;
-  }, 0);
-
   const [myAlert, setMyAlert] = useState(false);
   const handleMyAlert = () => {
     setMyAlert(true);
@@ -46,6 +42,10 @@ function Center() {
       setMyAlert(false);
     }, 5000);
   };
+
+  const totalDuration = playlist?.tracks.items.reduce((prev, current) => {
+    return prev + current.track.duration_ms;
+  }, 0);
 
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
@@ -154,7 +154,7 @@ function Center() {
                 {playlist?.tracks.items.length}{' '}
                 {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-gray-400 text-sm">{msToTime(total)}</span>
+              <span className="text-gray-400 text-sm">{msToTime(totalDuration)}</span>
             </>
           )}
         </div>

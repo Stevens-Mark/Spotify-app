@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import Link from 'next/link';
 import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
@@ -19,6 +21,7 @@ import {
 } from '@heroicons/react/24/outline';
 
 function Sidebar() {
+  const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
@@ -67,6 +70,11 @@ function Sidebar() {
     setActivePlaylist,
   ]);
 
+  const handleClick = (id) => {
+    setPlaylistId(id);
+    router.push('/');
+  };
+
   console.log(playlists);
 
   return (
@@ -79,14 +87,26 @@ function Sidebar() {
           <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
           <p>Logout</p>
         </button>
-        <button className="flex items-center space-x-2 hover:text-white">
+        {/* <button className="flex items-center space-x-2 hover:text-white">
           <HomeIcon className="h-5 w-5 ml-3" />
           <p>Home</p>
-        </button>
-        <button className="flex items-center space-x-2 hover:text-white">
+        </button> */}
+        <Link href="/" className="flex items-center space-x-2 hover:text-white">
+          <HomeIcon className="h-5 w-5 ml-3" />
+          <p>Home</p>
+        </Link>
+        {/* <button className="flex items-center space-x-2 hover:text-white">
           <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
           <p>Search</p>
-        </button>
+        </button> */}
+        <Link
+          href="/Search"
+          className="flex items-center space-x-2 hover:text-white"
+        >
+          <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
+          <p>Search</p>
+        </Link>
+
         <button className="flex items-center space-x-2 hover:text-white">
           <BuildingLibraryIcon className="h-5 w-5 ml-3" />
           <p>Your Library</p>
@@ -110,6 +130,7 @@ function Sidebar() {
         {/* Playlists.. */}
         {playlists.map((playlist) => (
           <span
+            onClick={() => handleClick(playlist.id)}
             className={`flex items-center p-3 rounded-lg cursor-pointer ${
               activePlaylist == playlist.id
                 ? 'text-green-500'
@@ -129,7 +150,7 @@ function Sidebar() {
               width={100}
               height={100}
             />
-            <p onClick={() => setPlaylistId(playlist.id)}>{playlist.name}</p>
+            <p>{playlist.name}</p>
             <span className="pl-2">
               {activePlaylist == playlist.id ? (
                 <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
