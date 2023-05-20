@@ -75,8 +75,6 @@ function Sidebar() {
     router.push('/');
   };
 
-  console.log(playlists);
-
   return (
     <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:w-[15rem] lg:w-[17rem] hidden md:inline-flex pb-36">
       <div className="space-y-4 w-full">
