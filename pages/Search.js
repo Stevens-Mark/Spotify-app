@@ -5,6 +5,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRecoilState } from 'recoil';
 import { searchResultState } from '@/atoms/searchAtom';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import Layout from '@/components/Layout';
 
 function Search() {
   const spotifyApi = useSpotify();
@@ -49,32 +50,36 @@ function Search() {
     }
   };
 
-  console.log(query, queryResults)
+  console.log(query, queryResults);
 
   return (
     <>
-    <div className="bg-red-800 sticky h-20 w-full">
-      <form className="ml-8 mt-5" onSubmit={handleSubmit}>
-        <label
-          className="relative text-gray-500 hover:text-white"
-          htmlFor="search"
-        >
-          <MagnifyingGlassIcon className="pointer-events-none w-5 h-6 absolute top-1/2 transform -translate-y-1/2 left-3" />
-          <input
-            className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm sm:w-[15rem] lg:w-[16.5rem] cursor-pointer appearance-none block py-3 px-4 pl-10 placeholder-gray-500 hover:placeholder-white"
-            type="search"
-            id="search"
-            value={query}
-            placeholder="What do you want to listen to ?"
-            // required={true}
-            maxLength={30}
-            onChange={(e) => handleText(e)}
-          />
-        </label>
-      </form>
+      <div className="bg-red-800 sticky h-20 w-full">
+        <form className="ml-8 mt-5" onSubmit={handleSubmit}>
+          <label
+            className="relative text-gray-500 hover:text-white"
+            htmlFor="search"
+          >
+            <MagnifyingGlassIcon className="pointer-events-none w-5 h-6 absolute top-1/2 transform -translate-y-1/2 left-3" />
+            <input
+              className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm sm:w-[15rem] lg:w-[16.5rem] cursor-pointer appearance-none block py-3 px-4 pl-10 placeholder-gray-500 hover:placeholder-white"
+              type="search"
+              id="search"
+              value={query}
+              placeholder="What do you want to listen to ?"
+              // required={true}
+              maxLength={30}
+              onChange={(e) => handleText(e)}
+            />
+          </label>
+        </form>
       </div>
     </>
   );
 }
 
 export default Search;
+
+Search.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};

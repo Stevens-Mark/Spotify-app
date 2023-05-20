@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 // import components
+import Layout from '@/components/Layout';
 import Center from '@/components/Center';
 
 export async function getServerSideProps(context) {
@@ -16,7 +17,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Spotify App</title>
+        <title>Spotify</title>
         <link rel="icon" href="/favicon.ico"></link>
       </Head>
 
@@ -24,3 +25,7 @@ export default function Home() {
     </>
   );
 }
+
+Home.getLayout = function getLayout(page) {
+  return <Layout>{page}</Layout>;
+};
