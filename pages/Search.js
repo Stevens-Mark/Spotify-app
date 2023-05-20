@@ -53,7 +53,8 @@ function Search() {
 
   return (
     <>
-      <form className="m-3" onSubmit={handleSubmit}>
+    <div className="bg-red-800 sticky h-20 w-full">
+      <form className="ml-8 mt-5" onSubmit={handleSubmit}>
         <label
           className="relative text-gray-500 hover:text-white"
           htmlFor="search"
@@ -71,6 +72,7 @@ function Search() {
           />
         </label>
       </form>
+      </div>
     </>
   );
 }

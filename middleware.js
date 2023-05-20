@@ -15,7 +15,11 @@ export async function middleware(req) {
   }
 }
 
-export const config = { matcher: ['/'] };
+// export const config = { matcher: ['/', '/search'] };
+
+export const config = {
+  matcher: ['/', '/search/:path*'],
+};
 
 // export async function middleware(req) {
 //   const pathname = req.nextUrl.pathname;
