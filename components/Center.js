@@ -105,7 +105,7 @@ function Center() {
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
-      <header className="absolute top-5 right-8">
+      {/* <header className="absolute top-5 right-8">
         <div
           className="flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2 text-white"
           onClick={signOut}
@@ -121,7 +121,7 @@ function Center() {
           <h2>{session?.user.name}</h2>
           <ChevronDownIcon className="h-5 w-5" />
         </div>
-      </header>
+      </header> */}
 
       <div
         className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
