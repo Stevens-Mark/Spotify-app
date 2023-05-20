@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 // import components
-import Layout from '@/components/Layout';
 import Center from '@/components/Center';
 
 export async function getServerSideProps(context) {
@@ -21,9 +20,7 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico"></link>
       </Head>
 
-      <Layout>
-        <Center />
-      </Layout>
+      <Center />
     </>
   );
 }
