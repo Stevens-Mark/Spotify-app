@@ -3,9 +3,10 @@ import { useSession, signOut } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import icon/images
 import Image from 'next/image';
-import { ChevronDownIcon } from '@heroicons/react/24/outline';
-import noUserImage from '@/public/images/user_noImage.svg';
+// import { ChevronDownIcon } from '@heroicons/react/24/outline';
+// import noUserImage from '@/public/images/user_noImage.svg';
 import noAlbum from '@/public/images/noImageAvailable.svg';
+import { colors } from '@/styles/colors';
 // import component
 import Songs from './Songs';
 // import state management recoil
@@ -15,17 +16,6 @@ import { playlistIdState, playlistState } from '@/atoms/playListAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
-
-// random color options for top background
-const colors = [
-  'from-indigo-500',
-  'from-blue-500',
-  'from-green-500',
-  'from-red-500',
-  'from-yellow-500',
-  'from-pink-500',
-  'from-purple-500',
-];
 
 function Center() {
   const { data: session } = useSession();

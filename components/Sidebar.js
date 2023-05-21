@@ -142,7 +142,7 @@ function Sidebar() {
             key={playlist.id}
           >
             <Image
-              className="h-8 w-8 mr-1 rounded-sm"
+              className="h-8 w-8 mr-1 rounded-sm "
               src={playlist.images[0].url}
               alt="track"
               width={100}

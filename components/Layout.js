@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <div className="sticky bottom-0">
+      <div className="sticky bottom-0 z-20">
         <Player />
       </div>
     </div>
