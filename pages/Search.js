@@ -113,7 +113,7 @@ function Search() {
         </div>
         <div className="overflow-y-scroll h-screen text-white scrollbar-hide p-8 pb-48">
           {/* song playlist here */}
-          <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-6">
+          <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {genres?.categories.items.map((genre, i) => (
               <div
                 key={`${genre.id}-${i}`}
