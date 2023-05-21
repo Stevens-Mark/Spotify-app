@@ -1,6 +1,6 @@
 import React from 'react';
 import Image from 'next/image';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
@@ -41,23 +41,24 @@ function Genre() {
   const [genres, setGenres] = useRecoilState(genreState);
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getCategories({
-          limit: 50,
-          offset: 0,
-          country: 'US', // FR, US, GB
-          locale: 'en_US', // fr_FR, en_US, en_GB
-        })
-        .then(
-          function (data) {
-            setGenres(data.body);
-          },
-          function (err) {
-            console.log('Failed to get genres!', err);
-          }
-        );
-
+    if (genres === null) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getCategories({
+            limit: 50,
+            offset: 0,
+            country: 'US', // FR, US, GB
+            locale: 'en_US', // fr_FR, en_US, en_GB
+          })
+          .then(
+            function (data) {
+              setGenres(data.body.categories.items);
+            },
+            function (err) {
+              console.log('Failed to get genres!', err);
+            }
+          );
+      }
       // spotifyApi.getAvailableGenreSeeds().then(
       //   function (data) {
       //     let genreSeeds = data.body;
@@ -68,14 +69,39 @@ function Genre() {
       //   }
       // );
     }
-  }, [setGenres, spotifyApi]);
+  }, [genres, setGenres, spotifyApi]);
+
+  const [offset, setOffset] = useState(51);
+  const fetchGenre = () => {
+    spotifyApi
+      .getCategories({
+        limit: 50,
+        offset: offset,
+        country: 'US', // FR, US, GB
+        locale: 'en_US', // fr_FR, en_US, en_GB
+      })
+      .then(
+        function (data) {
+          setGenres([...genres, ...data.body.categories.items]);
+        },
+        function (err) {
+          console.log('Failed to get genres!', err);
+        }
+      );
+  };
+
+  const genrleList = [...new Set(genres)];
+
+  console.log(genrleList);
 
   return (
     <div className="overflow-y-scroll h-screen text-white scrollbar-hide p-8 pb-48">
       {/* genres list here */}
-      <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">Browse all</h2>
+      <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
+        Browse all {genrleList?.length} Genres
+      </h2>
       <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-        {genres?.categories.items.map((genre, i) => (
+        {genrleList?.map((genre, i) => (
           <div
             key={`${genre.id}-${i}`}
             className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
@@ -95,6 +121,16 @@ function Genre() {
           </div>
         ))}
       </div>
+      <button
+        className="flex items-center space-x-2 hover:text-white"
+        onClick={() => {
+          setOffset(offset + 50);
+          fetchGenre();
+        }}
+        // onClick={() => fetchGenre()}
+      >
+        <p>Add More</p>
+      </button>
     </div>
   );
 }
