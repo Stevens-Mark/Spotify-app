@@ -1,21 +1,28 @@
 import React, { useState, useEffect } from 'react';
-import { useSession, signOut } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import icon/images
 import Image from 'next/image';
-// import { ChevronDownIcon } from '@heroicons/react/24/outline';
-// import noUserImage from '@/public/images/user_noImage.svg';
 import noAlbum from '@/public/images/noImageAvailable.svg';
-import { colors } from '@/styles/colors';
 // import component
 import Songs from './Songs';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { playlistIdState, playlistState } from '@/atoms/playListAtom';
-// import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
+
+// random color options for top background
+const colors = [
+  'from-indigo-500',
+  'from-blue-500',
+  'from-green-500',
+  'from-red-500',
+  'from-yellow-500',
+  'from-pink-500',
+  'from-purple-500',
+];
 
 function Center() {
   const { data: session } = useSession();
@@ -95,24 +102,6 @@ function Center() {
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
-      {/* <header className="absolute top-5 right-8">
-        <div
-          className="flex items-center bg-black space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 pr-2 text-white"
-          onClick={signOut}
-        >
-          <Image
-            className="rounded-full w-10 h-10"
-            src={session?.user.image || noUserImage}
-            alt="user"
-            width={100}
-            height={100}
-            priority
-          />
-          <h2>{session?.user.name}</h2>
-          <ChevronDownIcon className="h-5 w-5" />
-        </div>
-      </header> */}
-
       <div
         className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white p-8`}
       >
@@ -144,7 +133,9 @@ function Center() {
                 {playlist?.tracks.items.length}{' '}
                 {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-gray-400 text-sm">{msToTime(totalDuration)}</span>
+              <span className="text-gray-400 text-sm">
+                {msToTime(totalDuration)}
+              </span>
             </>
           )}
         </div>
