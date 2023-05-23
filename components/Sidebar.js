@@ -127,19 +127,21 @@ function Sidebar() {
 
         {/* Playlists.. */}
         {playlists.map((playlist) => (
-          <span
-            onClick={() => handleClick(playlist.id)}
-            className={`flex items-center p-3 rounded-lg cursor-pointer ${
-              activePlaylist == playlist.id
-                ? 'text-green-500'
-                : 'hover:text-white'
-            } 
-            ${
-              playlistId == playlist.id && activePlaylist !== playlist.id
-                ? 'bg-gray-900 hover:bg-gray-800 text-slate-300'
-                : 'hover:bg-gray-900'
-            }`}
+          <button
             key={playlist.id}
+            onClick={() => handleClick(playlist.id)}
+            className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer 
+              ${
+                activePlaylist == playlist.id
+                  ? 'text-green-500'
+                  : 'hover:text-white'
+              } 
+              ${
+                playlistId == playlist.id && activePlaylist /*!== playlist.id*/
+                  ? 'bg-gray-900 hover:bg-gray-800 text-slate-300'
+                  : 'hover:bg-gray-900'
+              }
+            `}
           >
             <Image
               className="h-8 w-8 mr-1 rounded-sm "
@@ -156,7 +158,7 @@ function Sidebar() {
                 ' '
               )}
             </span>
-          </span>
+          </button>
         ))}
         <hr className="border-t-[0.1px] border-gray-900 pb-36" />
       </div>

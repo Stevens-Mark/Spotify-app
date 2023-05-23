@@ -1,4 +1,4 @@
-import {format} from 'date-fns';
+import { format } from 'date-fns';
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
@@ -11,7 +11,11 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playlistIdState, playlistState, activePlaylistState } from '@/atoms/playListAtom';
+import {
+  playlistIdState,
+  playlistState,
+  activePlaylistState,
+} from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
@@ -20,15 +24,16 @@ function Song({ order, track }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
-  const playlist= useRecoilValue(playlistState);
+  const playlist = useRecoilValue(playlistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const playlistId= useRecoilValue(playlistIdState);
+  const playlistId = useRecoilValue(playlistIdState);
   const [currentrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-  const [activePlaylist, setActivePlaylist] = useRecoilState(activePlaylistState);
+  const [activePlaylist, setActivePlaylist] =
+    useRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
@@ -49,7 +54,6 @@ function Song({ order, track }) {
   const activeStatus = useMemo(() => {
     return song.id == currentrackId && isPlaying ? true : false;
   }, [currentrackId, isPlaying, song.id]);
-
 
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -77,14 +81,16 @@ function Song({ order, track }) {
   return (
     <div
       className="grid grid-cols-2 text-gray-500 py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
-      onClick={(event) => {
-        handlePlayPause(event, order);
-      }}
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
       <div className="flex items-center space-x-4">
-        <span className="w-2 md:w-4">
+        <button
+          className="w-2 md:w-4"
+          onClick={(event) => {
+            handlePlayPause(event, order);
+          }}
+        >
           {!isShown ? (
             activeStatus && order == currentSongIndex ? (
               <Equaliser />
@@ -96,7 +102,7 @@ function Song({ order, track }) {
           ) : (
             <PlayIcon className="h-4" />
           )}
-        </span>
+        </button>
         <Image
           className="h-10 w-10"
           src={song.album.images[0].url}
@@ -119,8 +125,10 @@ function Song({ order, track }) {
       </div>
       <div className="flex items-end md:items-center justify-between ml-auto md:ml-0">
         <p className="w-40 hidden md:inline pr-3">{song.album.name}</p>
-        <p className="w-48 hidden md:inline">{format(new Date(track.added_at), 'p, dd/MM/yyyy')}</p>
-        <p className='pl-5'>{millisToMinutesAndSeconds(song.duration_ms)}</p>
+        <p className="w-48 hidden md:inline">
+          {format(new Date(track.added_at), 'p, dd/MM/yyyy')}
+        </p>
+        <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>
   );

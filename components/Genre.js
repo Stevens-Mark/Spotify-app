@@ -1,6 +1,7 @@
 import React from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
@@ -39,39 +40,29 @@ const bgColors = [
 function Genre() {
   const spotifyApi = useSpotify();
   const [genres, setGenres] = useRecoilState(genreState);
-
-  useEffect(() => {
-    if (genres === null) {
-      if (spotifyApi.getAccessToken()) {
-        spotifyApi
-          .getCategories({
-            limit: 50,
-            offset: 0,
-            country: 'US', // FR, US, GB
-            locale: 'en_US', // fr_FR, en_US, en_GB
-          })
-          .then(
-            function (data) {
-              setGenres(data.body.categories.items);
-            },
-            function (err) {
-              console.log('Failed to get genres!', err);
-            }
-          );
-      }
-      // spotifyApi.getAvailableGenreSeeds().then(
-      //   function (data) {
-      //     let genreSeeds = data.body;
-      //     console.log('genreSeeds ', genreSeeds);
-      //   },
-      //   function (err) {
-      //     console.log('Something went wrong!', err);
-      //   }
-      // );
-    }
-  }, [genres, setGenres, spotifyApi]);
-
   const [offset, setOffset] = useState(51);
+
+  if (genres === null) {
+    console.log('call api');
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi
+        .getCategories({
+          limit: 50,
+          offset: 0,
+          country: 'US', // FR, US, GB
+          locale: 'en_US', // fr_FR, en_US, en_GB
+        })
+        .then(
+          function (data) {
+            setGenres(data.body.categories.items);
+          },
+          function (err) {
+            console.log('Failed to get genres!', err);
+          }
+        );
+    }
+  }
+
   const fetchGenre = () => {
     spotifyApi
       .getCategories({
@@ -82,7 +73,13 @@ function Genre() {
       })
       .then(
         function (data) {
-          setGenres([...genres, ...data.body.categories.items]);
+          const updatedList = [...genres, ...data.body.categories.items];
+          // Always ensure there are no dublicate objects in the list of categories
+          const genreList = updatedList.filter(
+            (genre, index) =>
+              index === updatedList.findIndex((other) => genre.id === other.id)
+          );
+          setGenres(genreList);
         },
         function (err) {
           console.log('Failed to get genres!', err);
@@ -90,19 +87,15 @@ function Genre() {
       );
   };
 
-  const genrleList = [...new Set(genres)];
-
-  console.log(genrleList);
-
   return (
     <div className="overflow-y-scroll h-screen text-white scrollbar-hide p-8 pb-48">
       {/* genres list here */}
       <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-        Browse all {genrleList?.length} Genres
+        Browse all {genres?.length} Genres
       </h2>
       <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-        {genrleList?.map((genre, i) => (
-          <div
+        {genres?.map((genre, i) => (
+          <Link href=""
             key={`${genre.id}-${i}`}
             className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
               bgColors[i % bgColors.length]
@@ -118,18 +111,17 @@ function Genre() {
               width={100}
               height={100}
             />
-          </div>
+          </Link>
         ))}
       </div>
       <button
-        className="flex items-center space-x-2 hover:text-white"
+        className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-gray-500  hover:text-green-500"
         onClick={() => {
           setOffset(offset + 50);
           fetchGenre();
         }}
-        // onClick={() => fetchGenre()}
       >
-        <p>Add More</p>
+        <span>Add More</span>
       </button>
     </div>
   );
