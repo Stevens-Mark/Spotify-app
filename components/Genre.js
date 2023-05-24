@@ -88,7 +88,7 @@ function Genre() {
   };
 
   return (
-    <div className="overflow-y-scroll h-screen text-white scrollbar-hide p-8 pb-48">
+    <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-48">
       {/* genres list here */}
       <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
         Browse all Genres

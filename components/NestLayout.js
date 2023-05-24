@@ -49,12 +49,12 @@ const NestedLayout = ({ children }) => {
       }
     }
   };
-  console.log ("inital ", queryResults)
+  console.log('inital ', queryResults);
 
   return (
     <>
-      <div className="flex flex-col w-full">
-        <div className="sticky h-20">
+      <div className="flex flex-col w-full relative">
+        <div className="sticky h-24">
           <form className="ml-8 mt-5" onSubmit={handleSubmit}>
             <label
               className="relative text-gray-500 hover:text-white"
@@ -72,15 +72,19 @@ const NestedLayout = ({ children }) => {
               />
             </label>
           </form>
+
+          <div className="mt-1.5 py-[3px] px-8 absolute">
+            {queryResults.length !== 0 && query !== '' && (
+              <Link
+                href="/search/albums"
+                className="text-sm bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-full"
+              >
+                Albums
+              </Link>
+            )}
+          </div>
         </div>
-        {(queryResults.length !== 0 && query !=='') && (
-          <Link
-            href="/search/albums"
-            className="flex items-center space-x-2 hover:text-white"
-          >
-            <p className="text-white">Albums</p>
-          </Link>
-        )}
+
         {children}
       </div>
     </>
