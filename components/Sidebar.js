@@ -7,7 +7,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
-import { currentTrackIdState } from '@/atoms/songAtom';
+import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -30,6 +30,7 @@ function Sidebar() {
     useRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
+    const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -76,7 +77,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="text-gray-500 p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:w-[15rem] lg:w-[17rem] hidden md:inline-flex pb-36">
+    <div className="text-pink-swan p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:w-[15rem] lg:w-[17rem] hidden md:inline-flex pb-36">
       <div className="space-y-4 w-full">
         <button
           className="flex items-center space-x-2 hover:text-white"
@@ -132,13 +133,13 @@ function Sidebar() {
             onClick={() => handleClick(playlist.id)}
             className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer 
               ${
-                activePlaylist == playlist.id
+                activePlaylist == playlist.id && isPlaying
                   ? 'text-green-500'
                   : 'hover:text-white'
               } 
               ${
-                playlistId == playlist.id && activePlaylist /*!== playlist.id*/
-                  ? 'bg-gray-900 hover:bg-gray-800 text-slate-300'
+                playlistId == playlist.id
+                  ?` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }
             `}
@@ -152,7 +153,7 @@ function Sidebar() {
             />
             <p>{playlist.name}</p>
             <span className="pl-2">
-              {activePlaylist == playlist.id ? (
+              {activePlaylist == playlist.id && isPlaying ? (
                 <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
               ) : (
                 ' '

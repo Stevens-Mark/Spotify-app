@@ -115,7 +115,7 @@ function Genre() {
         ))}
       </div>
       <button
-        className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-gray-500  hover:text-green-500"
+        className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
         onClick={() => {
           setOffset(offset + 50);
           fetchGenre();

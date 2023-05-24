@@ -126,14 +126,14 @@ function Center() {
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1">
                 {playlist?.name}
               </h1>
-              <h2 className="text-gray-400 text-sm pb-2">
+              <h2 className=" text-sm pb-2">
                 {playlist?.description}
               </h2>
               <span className="text-sm">
                 {playlist?.tracks.items.length}{' '}
                 {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-gray-400 text-sm">
+              <span className="text-sm">
                 {msToTime(totalDuration)}
               </span>
             </>

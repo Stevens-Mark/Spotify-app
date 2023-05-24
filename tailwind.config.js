@@ -12,6 +12,12 @@ export const theme = {
       'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
     },
+    colors: {
+      'pink-swan': '#B3B3B3',
+      'gray-seven': '#121212',
+      'textsubdued':'#a7a7a7',
+      'highlight': 'hsla(0,0%,100%,.07)'
+    },
     keyframes: {
       equaliser: {
         '0%': { transform: 'scaleY(0)' },

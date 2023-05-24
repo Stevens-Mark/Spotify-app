@@ -10,7 +10,7 @@ function Songs() {
   const playlist = useRecoilValue(playlistState);
   return (
     <>
-      <div className="grid grid-cols-2 text-gray-400 px-8  ">
+      <div className="grid grid-cols-2 text-pink-swan px-8  ">
         <span className="flex px-5">
           <p>#</p>
           <p className="w-36 lg:w-64 pl-2">Title</p>

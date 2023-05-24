@@ -4,12 +4,16 @@ import useSpotify from '@/hooks/useSpotify';
 import { useSession } from 'next-auth/react';
 import { debounce } from 'lodash';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
-  isPlayState,
+  isPlayState
 } from '@/atoms/songAtom';
+import {
+  activePlaylistState,
+   playlistIdState
+} from '@/atoms/playListAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -26,6 +30,7 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 function Player() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
+  const playlistId = useRecoilValue(playlistIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
   const [currentrackId, setCurrentTrackId] =
@@ -33,6 +38,8 @@ function Player() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+    const [activePlaylist, setActivePlaylist] =
+    useRecoilState(activePlaylistState);
 
   const [shuffleState, setShuffletState] = useState(false);
   const setShuffle = () => {
@@ -67,6 +74,7 @@ function Player() {
           .play()
           .catch((err) => console.error('Playback failed: ', err));
         setIsPlaying(true);
+        setActivePlaylist(playlistId);
       }
     });
   };
