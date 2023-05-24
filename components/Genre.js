@@ -90,9 +90,9 @@ function Genre() {
   return (
     <div className="overflow-y-scroll h-screen text-white scrollbar-hide p-8 pb-48">
       {/* genres list here */}
-      <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-        Browse all {genres?.length} Genres
-      </h2>
+      <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
+        Browse all Genres
+      </h1>
       <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
         {genres?.map((genre, i) => (
           <Link href=""
