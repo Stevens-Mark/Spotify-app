@@ -45,4 +45,5 @@ export const theme = {
 export const plugins = [
   require('tailwind-scrollbar-hide'),
   require("tailwindcss-animation-delay"),
+  require('@tailwindcss/line-clamp'),
 ];

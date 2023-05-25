@@ -124,7 +124,7 @@ function Song({ order, track }) {
           >
             {song.name}
           </p>
-          <p className="w-40 ">{song.artists[0].name}</p>
+          <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
       <div className="flex items-end md:items-center justify-between ml-auto md:ml-0">
