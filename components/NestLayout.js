@@ -30,20 +30,34 @@ const NestedLayout = ({ children }) => {
    * @function handleSubmit
    * @param {object} e
    */
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   const itemsPerPage = 20;
+  //   if (query.length > 0) {
+  //     try {
+  //       const res = await fetch(
+  //         `https://api.spotify.com/v1/search?q=${query}&type=album,artist,playlist,track,show,episode&limit=${itemsPerPage}`,
+  //         {
+  //           headers: {
+  //             Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
+  //           },
+  //         }
+  //       );
+  //       const data = await res.json();
+  //       setQueryResults(data);
+  //     } catch (err) {
+  //       console.error('Search failed: ', err);
+  //     }
+  //   }
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const itemsPerPage = 20;
     if (query.length > 0) {
       try {
-        const res = await fetch(
-          `https://api.spotify.com/v1/search?q=${query}&type=album,artist,playlist,track,show,episode&limit=${itemsPerPage}`,
-          {
-            headers: {
-              Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
-            },
-          }
-        );
-        const data = await res.json();
+        // Search for albums, artists, playlists, tracks, shows, and episodes
+        const response = await spotifyApi.search(query, ['album', 'artist', 'playlist', 'track', 'show', 'episode'], { limit: itemsPerPage });
+        const data = response.body;
         setQueryResults(data);
       } catch (err) {
         console.error('Search failed: ', err);
@@ -56,7 +70,7 @@ const NestedLayout = ({ children }) => {
     <>
       <div className="flex flex-col w-full relative">
         <div className="sticky h-28">
-          <form className="ml-8 mt-5" onSubmit={handleSubmit}>
+          <form className="ml-8 mt-5" onChange={handleSubmit}>
             <label
               className="relative text-gray-500 hover:text-white"
               htmlFor="search"

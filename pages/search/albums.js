@@ -57,7 +57,6 @@ function Albums() {
   }, [query, router]);
 
   function mergeObjects(queryResults, data) {
-    console.log("data " ,data.albums.items)
     const existingItems = queryResults.albums.items;
     const newItems = data.albums.items.filter(newAlbum => {
       return !existingItems.some(existingAlbum => existingAlbum.name == newAlbum.name);
