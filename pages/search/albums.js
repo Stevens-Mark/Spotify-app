@@ -9,6 +9,7 @@ import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
+import { PlayCircleIcon } from '@heroicons/react/24/solid';
 
 function Albums() {
   const spotifyApi = useSpotify();
@@ -86,21 +87,25 @@ function Albums() {
           <Link
             href=""
             key={`${item.id}-${i}`}
-            className={`relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out`}
+            className={`group relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out`}
           >
             <Image
-              className=" w-full p-5 pb-20 h-full"
+              className="w-full p-5 pb-20 h-full"
               src={item.images[0].url}
               alt="user"
               width={100}
               height={100}
             />
-            <h2 className="text-white absolute z-10 bottom-8 capitalize px-3 pt-4 line-clamp-1">
+            <button class="absolute bottom-20 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100">
+              <PlayCircleIcon className="w-12 h-12 -m-2" />
+            </button>
+
+            <h2 className="text-white absolute bottom-8 capitalize px-3 pt-4 line-clamp-1">
               {item.name.replace('/', ' & ')}
             </h2>
-            <span className="flex flex-wrap absolute bottom-2 px-2 z-10 text-pink-swan">
+            <span className="flex flex-wrap absolute bottom-2 px-2 text-pink-swan">
               <span>{item.release_date.slice(0, 4)}</span>
-              <span className="">&nbsp;• {item.artists[0].name}</span>
+              <span>&nbsp;• {item.artists[0].name}</span>
               {/* {item.artists.map((item) => (
                 <span key={item.id}>&nbsp;• {item.name}</span>
               ))} */}

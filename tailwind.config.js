@@ -18,6 +18,10 @@ export const theme = {
       'textsubdued':'#a7a7a7',
       'highlight': 'hsla(0,0%,100%,.07)'
     },
+    boxShadow: {
+      '3xl': '5px 5px 5px black',
+      'custom': 'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
+    },
     keyframes: {
       equaliser: {
         '0%': { transform: 'scaleY(0)' },
