@@ -40,14 +40,15 @@ const bgColors = [
 function Genre() {
   const spotifyApi = useSpotify();
   const [genres, setGenres] = useRecoilState(genreState);
-  const [offset, setOffset] = useState(51);
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const itemsPerPage = 50;
 
   if (genres === null) {
     console.log('call api');
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getCategories({
-          limit: 50,
+          limit: itemsPerPage,
           offset: 0,
           country: 'US', // FR, US, GB
           locale: 'en_US', // fr_FR, en_US, en_GB
@@ -64,10 +65,12 @@ function Genre() {
   }
 
   const fetchGenre = () => {
+    const nextOffset = currentOffset + itemsPerPage;
+    setCurrentOffset(nextOffset);
     spotifyApi
       .getCategories({
-        limit: 50,
-        offset: offset,
+        limit: itemsPerPage,
+        offset: nextOffset,
         country: 'US', // FR, US, GB
         locale: 'en_US', // fr_FR, en_US, en_GB
       })
@@ -88,14 +91,15 @@ function Genre() {
   };
 
   return (
-    <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-48">
+    <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-56">
       {/* genres list here */}
       <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
         Browse all Genres
       </h1>
       <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
         {genres?.map((genre, i) => (
-          <Link href=""
+          <Link
+            href=""
             key={`${genre.id}-${i}`}
             className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
               bgColors[i % bgColors.length]
@@ -117,7 +121,6 @@ function Genre() {
       <button
         className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
         onClick={() => {
-          setOffset(offset + 50);
           fetchGenre();
         }}
       >

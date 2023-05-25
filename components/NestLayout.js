@@ -32,10 +32,11 @@ const NestedLayout = ({ children }) => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const itemsPerPage = 20;
     if (query.length > 0) {
       try {
         const res = await fetch(
-          `https://api.spotify.com/v1/search?q=${query}&type=album,artist,playlist,track,show,episode&limit=25`,
+          `https://api.spotify.com/v1/search?q=${query}&type=album,artist,playlist,track,show,episode&limit=${itemsPerPage}`,
           {
             headers: {
               Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
@@ -49,12 +50,12 @@ const NestedLayout = ({ children }) => {
       }
     }
   };
-  console.log('inital ', queryResults);
+  console.log('inital query ', queryResults);
 
   return (
     <>
       <div className="flex flex-col w-full relative">
-        <div className="sticky h-24">
+        <div className="sticky h-28">
           <form className="ml-8 mt-5" onSubmit={handleSubmit}>
             <label
               className="relative text-gray-500 hover:text-white"
