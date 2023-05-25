@@ -58,8 +58,12 @@ function Song({ order, track }) {
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentrackId) {
-        spotifyApi.pause();
-        setIsPlaying(false);
+        spotifyApi
+          .pause()
+          .then(() => {
+            setIsPlaying(false);
+          })
+          .catch((err) => console.error('Pause failed: ', err));
       } else {
         spotifyApi
           .play({

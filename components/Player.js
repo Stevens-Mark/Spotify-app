@@ -8,12 +8,9 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
-  isPlayState
+  isPlayState,
 } from '@/atoms/songAtom';
-import {
-  activePlaylistState,
-   playlistIdState
-} from '@/atoms/playListAtom';
+import { activePlaylistState, playlistIdState } from '@/atoms/playListAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -38,7 +35,7 @@ function Player() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-    const [activePlaylist, setActivePlaylist] =
+  const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
   const [shuffleState, setShuffletState] = useState(false);
@@ -67,8 +64,12 @@ function Player() {
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing) {
-        spotifyApi.pause();
-        setIsPlaying(false);
+        spotifyApi
+          .pause()
+          .then(() => {
+            setIsPlaying(false);
+          })
+          .catch((err) => console.error('Pause failed: ', err));
       } else {
         spotifyApi
           .play()
