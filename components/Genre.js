@@ -6,6 +6,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { genreState } from '@/atoms/genreAtom';
+import RecentSearches from './Recent';
 
 // color options for genre card backgrounds: total: 26
 const bgColors = [
@@ -91,42 +92,45 @@ function Genre() {
   };
 
   return (
-    <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-56">
-      {/* genres list here */}
-      <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-        Browse all Genres
-      </h1>
-      <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-        {genres?.map((genre, i) => (
-          <Link
-            href=""
-            key={`${genre.id}-${i}`}
-            className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
-              bgColors[i % bgColors.length]
-            }`}
-          >
-            <h2 className="relative z-10 capitalize px-3 py-4 text-xl md:text-2xl2xl:text-3xl">
-              {genre.name.replace('/', ' & ')}
-            </h2>
-            <Image
-              className="absolute bottom-3 right-0 origin-bottom-left rotate-[30deg] w-3/4 h-3/4"
-              src={genre.icons[0].url}
-              alt="user"
-              width={100}
-              height={100}
-            />
-          </Link>
-        ))}
+    <>
+      <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-56">
+        <RecentSearches />
+        {/* genres list here */}
+        <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
+          Browse all Genres
+        </h1>
+        <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+          {genres?.map((genre, i) => (
+            <Link
+              href=""
+              key={`${genre.id}-${i}`}
+              className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
+                bgColors[i % bgColors.length]
+              }`}
+            >
+              <h2 className="relative z-10 capitalize px-3 py-4 text-xl md:text-2xl2xl:text-3xl">
+                {genre.name.replace('/', ' & ')}
+              </h2>
+              <Image
+                className="absolute bottom-3 right-0 origin-bottom-left rotate-[30deg] w-3/4 h-3/4"
+                src={genre.icons[0].url}
+                alt="user"
+                width={100}
+                height={100}
+              />
+            </Link>
+          ))}
+        </div>
+        <button
+          className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
+          onClick={() => {
+            fetchGenre();
+          }}
+        >
+          <span>Add More</span>
+        </button>
       </div>
-      <button
-        className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
-        onClick={() => {
-          fetchGenre();
-        }}
-      >
-        <span>Add More</span>
-      </button>
-    </div>
+    </>
   );
 }
 

@@ -87,7 +87,7 @@ function Albums() {
           <Link
             href=""
             key={`${item.id}-${i}`}
-            className={`group relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out`}
+            className={`group relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
           >
             <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
               <Image
@@ -98,7 +98,7 @@ function Albums() {
                 height={100}
               />
 
-              <button className="absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100">
+              <button className=" absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">
                 <PlayCircleIcon className="w-12 h-12 -m-2" />
               </button>
 
