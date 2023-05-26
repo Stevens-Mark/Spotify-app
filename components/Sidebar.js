@@ -30,7 +30,7 @@ function Sidebar() {
     useRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-    const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -77,7 +77,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="text-pink-swan p-5 text-xs lg:text-sm border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide  sm:w-[15rem] lg:w-[17rem] hidden md:inline-flex pb-36">
+    <div className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[15rem] xl:min-w-[17rem]">
       <div className="space-y-4 w-full">
         <button
           className="flex items-center space-x-2 hover:text-white"
@@ -86,18 +86,12 @@ function Sidebar() {
           <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
           <p>Logout</p>
         </button>
-        {/* <button className="flex items-center space-x-2 hover:text-white">
-          <HomeIcon className="h-5 w-5 ml-3" />
-          <p>Home</p>
-        </button> */}
+
         <Link href="/" className="flex items-center space-x-2 hover:text-white">
           <HomeIcon className="h-5 w-5 ml-3" />
           <p>Home</p>
         </Link>
-        {/* <button className="flex items-center space-x-2 hover:text-white">
-          <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
-          <p>Search</p>
-        </button> */}
+
         <Link
           href="/search"
           className="flex items-center space-x-2 hover:text-white"
@@ -139,13 +133,13 @@ function Sidebar() {
               } 
               ${
                 playlistId == playlist.id
-                  ?` bg-gray-900 hover:bg-gray-800`
+                  ? ` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }
             `}
           >
             <Image
-              className="h-8 w-8 mr-1 rounded-sm "
+              className="h-8 w-8 mr-1 rounded-sm"
               src={playlist.images[0].url}
               alt="track"
               width={100}
