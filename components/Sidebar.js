@@ -5,7 +5,7 @@ import Image from 'next/image';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
@@ -26,11 +26,10 @@ function Sidebar() {
   const { data: session } = useSession();
   const [playlists, setPlaylists] = useState([]);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
-  const [currentrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const isPlaying = useRecoilValue(isPlayState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {

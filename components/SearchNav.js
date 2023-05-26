@@ -2,18 +2,18 @@ import React, { useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 // import state management recoil
-import { useRecoilState } from 'recoil';
-import { searchResultState, queryState } from '@/atoms/searchAtom';
+import { useRecoilValue } from 'recoil';
+import { searchResultState, querySubmittedState} from '@/atoms/searchAtom';
 
 function SearchNav() {
-  const [queryResults, setQueryResults] = useRecoilState(searchResultState);
-  const [query, setQuery] = useRecoilState(queryState);
+  const queryResults = useRecoilValue(searchResultState);
+  const submitted = useRecoilValue(querySubmittedState);
   const router = useRouter();
   const path = router?.asPath; // URL from router.
-
+ 
   return (
     <div className="mt-1.5 py-[3px] px-8 absolute space-x-2">
-    {queryResults.length !== 0 && query !== '' && (
+    {queryResults.length !== 0 && submitted && (
       <>
         <Link
           href="/search/albums"

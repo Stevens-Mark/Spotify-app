@@ -4,7 +4,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useSession } from 'next-auth/react';
 import { debounce } from 'lodash';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -30,8 +30,7 @@ function Player() {
   const playlistId = useRecoilValue(playlistIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
-  const [currentrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
@@ -133,7 +132,7 @@ function Player() {
   return (
     <div className="h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
       <PlayingInfo /> {/* left hand side - album photo/info */}
-      {/* center */}
+      {/* player controls */}
       <div className="flex items-center justify-evenly">
         <span className="hidden sm:inline relative">
           <ArrowsRightLeftIcon
@@ -185,7 +184,7 @@ function Player() {
           )}
         </span>
       </div>
-      {/* right hand side */}
+      {/* volume control */}
       <div className="flex items-center space-x-3 md:space-x-4 justify-end pr-5">
         <SpeakerXMarkIcon
           className="button "

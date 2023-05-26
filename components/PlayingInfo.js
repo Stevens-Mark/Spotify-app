@@ -5,15 +5,14 @@ import noAlbum from '@/public/images/blank.svg';
 import useSpotify from '@/hooks/useSpotify';
 import useSongInfo from '@/hooks/useSongInfo';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 
 function PlayingInfo() {
   const spotifyApi = useSpotify();
   const songInfo = useSongInfo();
-  const [currenTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
+  const setIsPlaying = useSetRecoilState(isPlayState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {

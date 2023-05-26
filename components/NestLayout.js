@@ -1,16 +1,19 @@
 import React from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import { useRouter } from 'next/router';
 // import state management recoil
-import { useRecoilState } from 'recoil';
-import { searchResultState, queryState } from '@/atoms/searchAtom';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { searchResultState, queryState, querySubmittedState } from '@/atoms/searchAtom';
 // import icons & components
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import SearchNav from './SearchNav';
 
 const NestedLayout = ({ children }) => {
   const spotifyApi = useSpotify();
-  const [queryResults, setQueryResults] = useRecoilState(searchResultState);
+  const  setQueryResults = useSetRecoilState(searchResultState);
   const [query, setQuery] = useRecoilState(queryState);
+  const  setSubmitted = useSetRecoilState(querySubmittedState);
+  const router = useRouter();
 
   /**
    * Restricts what the user can enter in the TEXT search field & saves to local state
@@ -22,6 +25,9 @@ const NestedLayout = ({ children }) => {
       // permits alphanumeric
       e.target.value.replace(/[^0-9a-zA-ZÀ-ÿ-.\s]/g, '').trimStart()
     );
+    if (e.target.value ==="") {
+      setSubmitted(false);
+    }
   };
 
   /**
@@ -32,6 +38,10 @@ const NestedLayout = ({ children }) => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (query) {
+      setSubmitted(true);
+    }
+    
     const itemsPerPage = 20;
     if (query.length > 0) {
       try {
@@ -43,6 +53,7 @@ const NestedLayout = ({ children }) => {
         );
         const data = response.body;
         setQueryResults(data);
+        router.push('/search/albums');
       } catch (err) {
         console.error('Search failed: ', err);
       }
@@ -55,7 +66,7 @@ const NestedLayout = ({ children }) => {
         <div className="sticky h-28">
           <form
             className="ml-8 mt-5"
-            onChange={handleSubmit}
+            // onChange={handleSubmit}
             onSubmit={handleSubmit}
           >
             <label

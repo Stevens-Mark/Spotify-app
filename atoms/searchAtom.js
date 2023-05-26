@@ -9,3 +9,8 @@ export const queryState = atom({
   key: 'queryState',
   default: '',
 });
+
+export const querySubmittedState = atom({
+  key: 'querySubmittedState',
+  default: false,
+});
