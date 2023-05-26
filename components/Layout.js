@@ -12,7 +12,10 @@ import Player from './Player';
 const Layout = ({ children }) => {
   const { data: session } = useSession();
   const router = useRouter();
-  let path = router?.asPath; // URL from router.
+  const path = router?.asPath; // URL from router.
+
+  const excludedPath = ['/search', '/search/albums', 'search/playlists'];
+  const isExcluded = excludedPath.includes(path);
 
   return (
     <div className="bg-black  h-screen overflow-hidden">
@@ -29,13 +32,11 @@ const Layout = ({ children }) => {
             height={100}
             priority
           />
-          <h2 className={`${path === '/search' ? 'hidden sm:inline' : ''}`}>
+          <h2 className={`${isExcluded ? 'hidden sm:inline' : ''}`}>
             {session?.user.name}
           </h2>
           <ChevronDownIcon
-            className={`h-5 w-5 ${
-              path === '/search' ? 'hidden sm:inline' : ''
-            }`}
+            className={`h-5 w-5 ${isExcluded ? 'hidden sm:inline' : ''}`}
           />
         </div>
       </header>

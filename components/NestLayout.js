@@ -1,11 +1,11 @@
 import React from 'react';
-import Link from 'next/link';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import icons & components
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import SearchNav from './SearchNav';
 
 const NestedLayout = ({ children }) => {
   const spotifyApi = useSpotify();
@@ -36,7 +36,11 @@ const NestedLayout = ({ children }) => {
     if (query.length > 0) {
       try {
         // Search for albums, artists, playlists, tracks, shows, and episodes
-        const response = await spotifyApi.search(query, ['album', 'artist', 'playlist', 'track', 'show', 'episode'], { limit: itemsPerPage });
+        const response = await spotifyApi.search(
+          query,
+          ['album', 'artist', 'playlist', 'track', 'show', 'episode'],
+          { limit: itemsPerPage }
+        );
         const data = response.body;
         setQueryResults(data);
       } catch (err) {
@@ -44,12 +48,16 @@ const NestedLayout = ({ children }) => {
       }
     }
   };
-  
+
   return (
     <>
       <div className="flex flex-col w-full relative">
         <div className="sticky h-28">
-          <form className="ml-8 mt-5" onChange={handleSubmit} onSubmit={handleSubmit}>
+          <form
+            className="ml-8 mt-5"
+            onChange={handleSubmit}
+            onSubmit={handleSubmit}
+          >
             <label
               className="relative text-gray-500 hover:text-white"
               htmlFor="search"
@@ -67,16 +75,7 @@ const NestedLayout = ({ children }) => {
             </label>
           </form>
 
-          <div className="mt-1.5 py-[3px] px-8 absolute">
-            {queryResults.length !== 0 && query !== '' && (
-              <Link
-                href="/search/albums"
-                className="text-sm bg-gray-900 hover:bg-gray-800 text-white py-2 px-3 rounded-full"
-              >
-                Albums
-              </Link>
-            )}
-          </div>
+          <SearchNav />
         </div>
 
         {children}
