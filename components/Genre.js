@@ -42,7 +42,7 @@ function Genre() {
   const spotifyApi = useSpotify();
   const [genres, setGenres] = useRecoilState(genreState);
   const [currentOffset, setCurrentOffset] = useState(0);
-  const [totalGenres, setTotalGenres] = useState(0);
+  const [totalGenres, setTotalGenres] = useState(9999);
   const itemsPerPage = 50;
 
   if (genres === null) {
@@ -123,7 +123,7 @@ function Genre() {
             </Link>
           ))}
         </div>
-        {genres?.length !== totalGenres && (
+        {genres?.length < totalGenres && (
           <button
             className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
             onClick={() => {

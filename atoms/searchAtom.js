@@ -14,3 +14,8 @@ export const querySubmittedState = atom({
   key: 'querySubmittedState',
   default: false,
 });
+
+export const searchingState = atom({
+  key: 'searchingState',
+  default: '',
+});

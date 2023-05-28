@@ -3,8 +3,8 @@
 @tailwind utilities;
 
 @layer components {
-   /* custom class for player buttons */
-  .button{
+  /* custom class for player buttons */
+  .button {
     @apply h-5 w-5 cursor-pointer hover:scale-125 transition transform duration-150 ease-in-out;
   }
 }
@@ -13,4 +13,3 @@
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
 }
-
