@@ -15,32 +15,42 @@ function SearchNav() {
 
   return (
     <div className="mt-1.5 py-[3px] px-8 absolute space-x-2">
-    {submitted && !isSearching && !isError && (
-      <>
-        <Link
-          href="/search/albums"
-          className={`text-sm py-1 px-3 rounded-full ${
-            path === '/search/albums'
-              ? 'bg-gray-300 text-gray-900 hover:bg-white'
-              : 'bg-gray-900 text-white hover:bg-gray-800'
-          }`}
-        >
-          Albums
-        </Link>
-        <Link
-          href="/search/playlists"
-          className={`text-sm py-1 px-3 rounded-full ${
-            path === '/search/playlists'
-              ? 'bg-gray-300 text-gray-900 hover:bg-white'
-              : 'bg-gray-900 text-white hover:bg-gray-800'
-          }`}
-        >
-          Playlists
-        </Link>
-      </>
-    )}
-  </div>
-  )
+      {submitted && !isSearching && !isError && (
+        <>
+          <Link
+            href="/search/artists"
+            className={`text-sm py-1 px-3 rounded-full ${
+              path === '/search/artists'
+                ? 'bg-gray-300 text-gray-900 hover:bg-white'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
+          >
+            Artists
+          </Link>
+          <Link
+            href="/search/playlists"
+            className={`text-sm py-1 px-3 rounded-full ${
+              path === '/search/playlists'
+                ? 'bg-gray-300 text-gray-900 hover:bg-white'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
+          >
+            Playlists
+          </Link>
+          <Link
+            href="/search/albums"
+            className={`text-sm py-1 px-3 rounded-full ${
+              path === '/search/albums'
+                ? 'bg-gray-300 text-gray-900 hover:bg-white'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
+          >
+            Albums
+          </Link>
+        </>
+      )}
+    </div>
+  );
 }
 
-export default SearchNav
+export default SearchNav;

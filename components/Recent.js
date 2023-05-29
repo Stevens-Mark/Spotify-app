@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRecoilValue } from 'recoil';
 import { PlayCircleIcon, XMarkIcon } from '@heroicons/react/24/solid';
+import  noImage from '@/public/images/noImageAvailable.svg';
 
 const PreviousSearches = () => {
   const queryResults = useRecoilValue(searchResultState); // Get the queryResults from Recoil
@@ -80,8 +81,8 @@ const PreviousSearches = () => {
                 </button>
                 <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
                   <Image
-                    className="aspect-square w-full rounded-md"
-                    src={item.images[0].url}
+                    className="aspect-square w-full rounded-md shadow-image"
+                    src={item.images?.[0]?.url || noImage}
                     alt="cover"
                     width={100}
                     height={100}

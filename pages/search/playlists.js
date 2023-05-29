@@ -11,6 +11,7 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
+import noImage from '@/public/images/noImageAvailable.svg';
 
 function Playlists() {
   const spotifyApi = useSpotify();
@@ -102,8 +103,8 @@ function Playlists() {
               >
                 <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
                   <Image
-                    className="aspect-square w-full rounded-md"
-                    src={item.images[0].url}
+                    className="aspect-square w-full rounded-md shadow-image"
+                    src={item.images?.[0]?.url || noImage}
                     alt="cover"
                     width={100}
                     height={100}
