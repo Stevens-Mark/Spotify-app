@@ -70,7 +70,7 @@ const PreviousSearches = () => {
               <Link
                 href=""
                 key={`${item.id}-${i}`}
-                className={`group relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
+                className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
               >
                 <button
                   className="text.white absolute top-1 z-10 right-1"

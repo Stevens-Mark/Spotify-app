@@ -98,7 +98,7 @@ function Playlists() {
               <Link
                 href=""
                 key={`${item.id}-${i}`}
-                className={`group relative rounded-lg cursor-pointer hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
+                className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
               >
                 <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
                   <Image
