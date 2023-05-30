@@ -47,6 +47,16 @@ function SearchNav() {
           >
             Albums
           </Link>
+          <Link
+            href="/search/podcastAndEpisodes"
+            className={`text-sm py-1 px-3 rounded-full ${
+              path === '/search/podcastAndEpisodes'
+                ? 'bg-gray-300 text-gray-900 hover:bg-white'
+                : 'bg-gray-900 text-white hover:bg-gray-800'
+            }`}
+          >
+            Podcasts & Shows
+          </Link>
         </>
       )}
     </div>

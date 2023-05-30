@@ -10,7 +10,7 @@ import { searchResultState, queryState } from '@/atoms/searchAtom';
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
-import  noImage from '@/public/images/noImageAvailable.svg';
+import noImage from '@/public/images/noImageAvailable.svg';
 
 function Albums() {
   const spotifyApi = useSpotify();
@@ -18,6 +18,8 @@ function Albums() {
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
+
+  console.log(queryResults);
 
   const albums = queryResults?.albums?.items;
   const totalNumber = queryResults?.albums?.total;
@@ -130,14 +132,16 @@ function Albums() {
             ))}
           </div>
           {totalNumber > currentNumber && (
-            <button
-              className="flex justify-end w-full mt-4 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
-              onClick={() => {
-                fetchMoreAlbums();
-              }}
-            >
-              <span>Add More</span>
-            </button>
+            <span className="flex justify-end w-full mt-4">
+              <button
+                className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
+                onClick={() => {
+                  fetchMoreAlbums();
+                }}
+              >
+                <span>Add More</span>
+              </button>
+            </span>
           )}
         </>
       )}

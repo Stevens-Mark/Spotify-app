@@ -11,7 +11,7 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
-import  noImage from '@/public/images/noImageAvailable.svg';
+import noImage from '@/public/images/noImageAvailable.svg';
 
 function Artists() {
   const spotifyApi = useSpotify();
@@ -23,8 +23,6 @@ function Artists() {
   const artists = queryResults?.artists?.items;
   const totalNumber = queryResults?.artists?.total;
   const currentNumber = queryResults?.artists?.items.length;
-
-  console.log(queryResults?.artists)
 
   useEffect(() => {
     if (!query) {
@@ -127,14 +125,16 @@ function Artists() {
             ))}
           </div>
           {totalNumber > currentNumber && (
-            <button
-              className="flex justify-end w-full mt-4 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
-              onClick={() => {
-                fetchMoreArtists();
-              }}
-            >
-              <span>Add More</span>
-            </button>
+            <span className="flex justify-end w-full mt-4">
+              <button
+                className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
+                onClick={() => {
+                  fetchMoreArtists();
+                }}
+              >
+                <span>Add More</span>
+              </button>
+            </span>
           )}
         </>
       )}
@@ -151,3 +151,4 @@ Artists.getLayout = function getLayout(page) {
     </Layout>
   );
 };
+4

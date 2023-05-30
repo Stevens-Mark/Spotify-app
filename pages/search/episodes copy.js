@@ -6,23 +6,26 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
+// import functions
+import { msToTime, getMonthYear } from '@/lib/time';
+import { capitalize } from '@/lib/capitalize';
 // import layouts
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
-import { PlayCircleIcon } from '@heroicons/react/24/solid';
-import { capitalize } from '@/lib/capitalize';
 import noImage from '@/public/images/noImageAvailable.svg';
 
-function Playlists() {
+function Episodes() {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
 
-  const playlists = queryResults?.playlists?.items;
-  const totalNumber = queryResults?.playlists?.total;
-  const currentNumber = queryResults?.playlists?.items.length;
+  console.log(queryResults);
+
+  const episodes = queryResults?.episodes?.items;
+  const totalNumber = queryResults?.episodes?.total;
+  const currentNumber = queryResults?.episodes?.items.length;
 
   useEffect(() => {
     if (!query) {
@@ -30,72 +33,72 @@ function Playlists() {
     }
   }, [query, router]);
 
-  const mergedPlaylists = (data) => {
-    const existingItems = queryResults.playlists.items;
-    const newItems = data.playlists.items.filter((newItem) => {
+  const mergeEpisodes = (data) => {
+    const existingItems = queryResults.episodes.items;
+    const newItems = data.episodes.items.filter((newItem) => {
       return !existingItems.some(
-        (existingPlaylist) => existingPlaylist.id == newItem.id
+        (existingEpisodes) => existingEpisodes.id == newItem.id
       );
     });
 
-    const playlistsMerged = {
-      playlists: {
-        href: queryResults.playlists.href,
+    const episodesMerged = {
+      episodes: {
+        href: queryResults.episodes.href,
         items: existingItems.concat(newItems),
-        limit: queryResults.playlists.limit,
-        next: queryResults.playlists.next,
-        offset: queryResults.playlists.offset,
-        previous: queryResults.playlists.previous,
-        total: queryResults.playlists.total,
+        limit: queryResults.episodes.limit,
+        next: queryResults.episodes.next,
+        offset: queryResults.episodes.offset,
+        previous: queryResults.episodes.previous,
+        total: queryResults.episodes.total,
       },
       albums: { ...queryResults.albums, ...data.albums },
       artists: { ...queryResults.artists, ...data.artists },
-      episodes: { ...queryResults.episodes, ...data.episodes },
       shows: { ...queryResults.shows, ...data.shows },
+      playlists: { ...queryResults.playlists, ...data.playlists },
       tracks: { ...queryResults.tracks, ...data.tracks },
     };
-    return playlistsMerged;
+    return episodesMerged;
   };
 
-  const fetchMorePlaylists = () => {
+  const fetchMoreEpisodes = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
 
     if (spotifyApi.getAccessToken()) {
       spotifyApi
-        .searchPlaylists(query, {
+        .searchEpisodes(query, {
           offset: nextOffset,
           limit: itemsPerPage,
         })
         .then(
           function (data) {
-            const updatedList = mergedPlaylists(data.body);
+            const updatedList = mergeEpisodes(data.body);
             setQueryResults(updatedList);
           },
           function (err) {
-            console.log('Get more items failed:', err);
+            console.log('Get more album items failed:', err);
           }
         );
     }
   };
 
   return (
-    <div className=" bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
-            Sorry no playlists
+            Sorry no Episodes
           </h1>
         </span>
       ) : (
         <>
-          {/* playlists list here */}
+          {/* album list here */}
           <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-            Playlists
+            Episodes
           </h1>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-            {playlists?.map((item, i) => (
+            {episodes?.map((item, i) => (
               <Link
                 href=""
                 key={`${item.id}-${i}`}
@@ -110,17 +113,13 @@ function Playlists() {
                     height={100}
                   />
 
-                  <button className="absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">
-                    <PlayCircleIcon className="w-12 h-12 -m-2" />
-                  </button>
-
                   <h2 className="text-white capitalize mt-2 line-clamp-1">
                     {item.name.replace('/', ' & ')}
                   </h2>
                   <span className="flex flex-wrap text-pink-swan mt-2 h-10">
-                    <span className=" truncate">
-                      By {capitalize(item.owner.display_name)}
-                    </span>
+                    <p className=" line-clamp-2">{item.description}</p>
+                    <span>{getMonthYear(item.release_date)}&nbsp;•&nbsp;</span>
+                    <span>{msToTime(item.duration_ms)}</span>
                   </span>
                 </div>
               </Link>
@@ -131,7 +130,7 @@ function Playlists() {
               <button
                 className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
                 onClick={() => {
-                  fetchMorePlaylists();
+                  fetchMoreEpisodes();
                 }}
               >
                 <span>Add More</span>
@@ -144,9 +143,9 @@ function Playlists() {
   );
 }
 
-export default Playlists;
+export default Episodes;
 
-Playlists.getLayout = function getLayout(page) {
+Episodes.getLayout = function getLayout(page) {
   return (
     <Layout>
       <NestedLayout>{page}</NestedLayout>

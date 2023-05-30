@@ -76,7 +76,7 @@ function Sidebar() {
   };
 
   return (
-    <div className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[15rem] xl:min-w-[17rem]">
+    <div className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]">
       <div className="space-y-4 w-full">
         <button
           className="flex items-center space-x-2 hover:text-white"

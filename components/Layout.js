@@ -45,9 +45,9 @@ const Layout = ({ children }) => {
         {children}
       </main>
 
-      <div className="sticky bottom-0 z-20">
+      <footer className="sticky bottom-0 z-20">
         <Player />
-      </div>
+      </footer>
     </div>
   );
 };
