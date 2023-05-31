@@ -1,13 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
-import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
-import PodcastCard from '@/components/cards/podcastCard';
+import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 
 function PodcastAndEpisodes() {
@@ -53,7 +52,7 @@ function PodcastAndEpisodes() {
         </div>
         <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
           {shows?.slice(0, 7).map((item, i) => (
-            <PodcastCard key={`${item.id}-${i}`} item={item} />
+            <Card key={`${item.id}-${i}`} type={'podcast'} item={item} />
           ))}
         </div>
       </section>

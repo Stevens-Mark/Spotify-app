@@ -7,7 +7,7 @@ import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
-import PodcastCard from '@/components/cards/podcastCard';
+import Card from '@/components/cards/card';
 
 function PodcastAndEpisodes() {
   const spotifyApi = useSpotify();
@@ -81,7 +81,7 @@ function PodcastAndEpisodes() {
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
-            Sorry no Shows
+            Sorry no Shows/Podcasts
           </h1>
         </span>
       ) : (
@@ -92,7 +92,7 @@ function PodcastAndEpisodes() {
           </h1>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {shows?.map((item, i) => (
-              <PodcastCard key={`${item.id}-${i}`} item={item} />
+              <Card key={`${item.id}-${i}`} type={'podcast'} item={item} />
             ))}
           </div>
           {totalNumber > currentNumber && (

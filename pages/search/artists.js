@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import Image from 'next/image';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
@@ -9,9 +7,7 @@ import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
-import { PlayCircleIcon } from '@heroicons/react/24/solid';
-import { capitalize } from '@/lib/capitalize';
-import noImage from '@/public/images/noImageAvailable.svg';
+import Card from '@/components/cards/card';
 
 function Artists() {
   const spotifyApi = useSpotify();
@@ -81,7 +77,7 @@ function Artists() {
   };
 
   return (
-    <div className=" bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -96,32 +92,7 @@ function Artists() {
           </h1>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {artists?.map((item, i) => (
-              <Link
-                href=""
-                key={`${item.id}-${i}`}
-                className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
-              >
-                <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
-                  <Image
-                    className="aspect-square w-full rounded-full shadow-image"
-                    src={item.images?.[0]?.url || noImage}
-                    alt="cover"
-                    width={100}
-                    height={100}
-                  />
-
-                  <button className="absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">
-                    <PlayCircleIcon className="w-12 h-12 -m-2" />
-                  </button>
-
-                  <h2 className="text-white capitalize mt-2 line-clamp-1">
-                    {item.name.replace('/', ' & ')}
-                  </h2>
-                  <span className="flex flex-wrap text-pink-swan mt-2 h-10">
-                    <span className="truncate">{capitalize(item.type)}</span>
-                  </span>
-                </div>
-              </Link>
+              <Card key={`${item.id}-${i}`} type={'artist'} item={item} />
             ))}
           </div>
           {totalNumber > currentNumber && (
@@ -151,4 +122,4 @@ Artists.getLayout = function getLayout(page) {
     </Layout>
   );
 };
-4
+4;

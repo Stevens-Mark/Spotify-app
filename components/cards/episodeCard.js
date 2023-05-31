@@ -10,7 +10,7 @@ import { PlayCircleIcon } from '@heroicons/react/24/solid';
 function episodeCard({ item }) {
   return (
     <Link href="">
-      <article className="border-b-[0.25px] border-gray-800 max-w-3xl">
+      <div className="border-b-[0.25px] border-gray-800 max-w-3xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
@@ -38,7 +38,7 @@ function episodeCard({ item }) {
             <span className="line-clamp-1">{msToTime(item.duration_ms)}</span>
           </span>
         </div>
-      </article>
+      </div>
     </Link>
   );
 }
