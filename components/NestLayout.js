@@ -75,7 +75,7 @@ const NestedLayout = ({ children }) => {
         const data = response.body;
         setQueryResults(data);
         setIsSearching(false);
-        router.push('/search/albums');
+        router.push('/search/all');
       } catch (err) {
         setIsSearching(false);
         setIsError(true);
@@ -87,7 +87,7 @@ const NestedLayout = ({ children }) => {
   return (
     <>
       <div className="flex flex-col w-full relative">
-        <div className="sticky h-28">
+        <div className="sticky xs:h-28 h-36">
           <div className="flex items-center">
             <form className="ml-8 mt-5" onSubmit={handleSubmit}>
               <label

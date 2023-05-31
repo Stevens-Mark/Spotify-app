@@ -25,10 +25,10 @@ function SearchNav() {
         <nav
           role="navigation"
           aria-label="Search menu"
-          className="mt-1.5 py-[3px]"
+          className=" py-[3px]"
         >
-          <ul className="px-8 space-x-2 flex justify-center xs:justify-start w-full">
-            <li>
+          <ul className="px-8 space-x-3 space-y-2 flex flex-wrap justify-center xs:justify-start w-full">
+            <li className='mt-2'>
               <Link
                 href="/search/all"
                 className={`text-sm py-1 px-3 rounded-full ${
@@ -85,7 +85,7 @@ function SearchNav() {
                     : 'bg-gray-900 text-white hover:bg-gray-800'
                 }`}
               >
-                Shows
+                Shows/Episodes
               </Link>
             </li>
           </ul>

@@ -124,7 +124,7 @@ function Song({ order, track }) {
         />
         <div>
           <h3
-            className={`w-36 sm:w-72 custombreakpoint:w-36 lg:w-64 xl:w-80 pr-2 ${
+            className={`w-36 sm:w-72 mdlg:w-36 lg:w-64 xl:w-80 pr-2 ${
               activeStatus && order == currentSongIndex
                 ? 'text-green-500'
                 : 'text-white'
@@ -135,11 +135,11 @@ function Song({ order, track }) {
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-end md:items-center justify-end custombreakpoint:justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden custombreakpoint:inline pr-3">
+      <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
+        <p className="w-40 hidden mdlg:inline pr-3">
           {song.album.name}
         </p>
-        <p className="w-48 hidden custombreakpoint:inline">
+        <p className="w-48 hidden mdlg:inline">
           {format(new Date(track.added_at), 'p, dd/MM/yyyy')}
         </p>
         <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
