@@ -20,6 +20,13 @@ import {
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
 
+/**
+ * Renders each track in the playlist
+ * @function Song
+ * @param {number} order track index in the list
+ * @param {object} track information
+ * @returns {JSX}
+ */
 function Song({ order, track }) {
   const spotifyApi = useSpotify();
   const song = track.track;
@@ -55,7 +62,8 @@ function Song({ order, track }) {
     return song.id == currentrackId && isPlaying ? true : false;
   }, [currentrackId, isPlaying, song.id]);
 
-  const handlePlayPause = (event, currentTrackIndex) => {
+  /* either play or pause current track */
+  const handlePlayPause = (currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentrackId) {
         spotifyApi
@@ -115,7 +123,7 @@ function Song({ order, track }) {
           height={100}
         />
         <div>
-          <p
+          <h3
             className={`w-36 lg:w-64 ${
               activeStatus && order == currentSongIndex
                 ? 'text-green-500'
@@ -123,7 +131,7 @@ function Song({ order, track }) {
             } truncate`}
           >
             {song.name}
-          </p>
+          </h3>
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>

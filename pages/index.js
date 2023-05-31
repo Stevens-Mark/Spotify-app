@@ -13,6 +13,11 @@ export async function getServerSideProps(context) {
   };
 }
 
+/**
+ * Renders home page
+ * @function Home
+ * @returns {JSX}
+ */
 export default function Home() {
   return (
     <>

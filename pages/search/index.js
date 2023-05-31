@@ -4,8 +4,17 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Genre from '@/components/Genre';
 
+/**
+ * Renders search page
+ * @function Search
+ * @returns {JSX}
+ */
 function Search() {
-  return <Genre />;
+  return (
+    <>
+    <h1 className='sr-only'>Search Page</h1>
+  <Genre />);
+  </>)
 }
 
 export default Search;

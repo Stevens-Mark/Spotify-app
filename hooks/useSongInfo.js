@@ -4,6 +4,11 @@ import useSpotify from './useSpotify';
 import { useRecoilState } from 'recoil';
 import { currentTrackIdState } from '@/atoms/songAtom';
 
+/**
+ * Custom hook to return the current playing track information
+ * @function useSongInfo
+ * @returns {object} playing track information
+ */
 function useSongInfo() {
   const spotifyApi = useSpotify();
   const [currentTrackId, setCurrentTrackId] = useRecoilState(currentTrackIdState);

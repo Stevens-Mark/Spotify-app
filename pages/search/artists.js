@@ -9,6 +9,11 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
 
+/**
+ * Renders the list of Artists from search.
+ * @function Artists
+ * @returns {JSX}
+ */
 function Artists() {
   const spotifyApi = useSpotify();
   const router = useRouter();
@@ -26,6 +31,12 @@ function Artists() {
     }
   }, [query, router]);
 
+  /**
+   * merges next set of fetched Artists into current Artists list
+   * @function mergedArtists
+   * @param {object} data next set of fetched Artists
+   * @returns {object} updated queryResults
+   */
   const mergedArtists = (data) => {
     const existingItems = queryResults.artists.items;
     const newItems = data.artists.items.filter((newItem) => {
@@ -53,6 +64,11 @@ function Artists() {
     return artistsMerged;
   };
 
+  /**
+   * Fetches more Artists & updates the list of Artists
+   * @function fetchMoreArtists
+   * @returns {object} updated list of artists in queryResults
+   */
   const fetchMoreArtists = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
@@ -77,7 +93,7 @@ function Artists() {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -109,7 +125,7 @@ function Artists() {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }
 

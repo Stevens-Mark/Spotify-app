@@ -9,14 +9,17 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
 
+/**
+ * Renders the list of Albums from search.
+ * @function Albums
+ * @returns {JSX}
+ */
 function Albums() {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
-
-  console.log(queryResults);
 
   const albums = queryResults?.albums?.items;
   const totalNumber = queryResults?.albums?.total;
@@ -28,7 +31,14 @@ function Albums() {
     }
   }, [query, router]);
 
+  /**
+   * merges next set of fetched albums into current album list
+   * @function mergeAlbums
+   * @param {object} data next set of fetched albums
+   * @returns {object} updated queryResults
+   */
   const mergeAlbums = (data) => {
+    console.log(data);
     const existingItems = queryResults.albums.items;
     const newItems = data.albums.items.filter((newItem) => {
       return !existingItems.some(
@@ -55,6 +65,11 @@ function Albums() {
     return albumMerged;
   };
 
+  /**
+   * Fetches more albums & updates the list of albums
+   * @function fetchMoreAlbums
+   * @returns {object} updated list of albums in queryResults
+   */
   const fetchMoreAlbums = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
@@ -79,7 +94,7 @@ function Albums() {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -111,7 +126,7 @@ function Albums() {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }
 

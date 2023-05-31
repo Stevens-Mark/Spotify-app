@@ -11,6 +11,12 @@ export async function getServerSideProps() {
   };
 }
 
+/**
+ * Renders login page
+ * @function Login
+ * @param {object} providers spotify provider information.
+ * @returns {JSX}
+ */
 function Login({ providers }) {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center">

@@ -4,6 +4,12 @@ import { useRecoilValue } from 'recoil';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import Card from './cards/card';
 
+/**
+ * Fetches recent searches from local storage to be displayed & 
+ * handles deletion of a recent search also
+ * @function PreviousSearches
+ * @returns {JSX}
+ */
 const PreviousSearches = () => {
   const queryResults = useRecoilValue(searchResultState); // Get the queryResults from Recoil
   const [recent, setRecent] = useState('');
@@ -47,7 +53,7 @@ const PreviousSearches = () => {
     const storedSearches = localStorage.getItem('previousSearches');
     let previousSearches = storedSearches ? JSON.parse(storedSearches) : [];
 
-    // Filter out the item with the matching itemId
+    // Filter out the item with the matching itemId (ie, delete item)
     previousSearches = previousSearches.filter((album) => album.id !== itemId);
 
     localStorage.setItem('previousSearches', JSON.stringify(previousSearches));

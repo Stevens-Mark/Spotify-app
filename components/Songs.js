@@ -6,6 +6,11 @@ import { playlistState } from '@/atoms/playListAtom';
 import Song from './Song';
 import { ClockIcon } from '@heroicons/react/24/outline';
 
+/**
+ * Renders the list of tracks in playlist
+ * @function SongS
+ * @returns {JSX}
+ */
 function Songs() {
   const playlist = useRecoilValue(playlistState);
   return (

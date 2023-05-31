@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Renders a spinning status icon during search
+ * @function Loader
+ * @returns {JSX}
+ */
 function Loader() {
   return (
     <div role="status">

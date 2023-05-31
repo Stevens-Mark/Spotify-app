@@ -9,14 +9,17 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import EpisodeCard from '@/components/cards/episodeCard';
 
+/**
+ * Renders the list of Episodes from search.
+ * @function Episodes
+ * @returns {JSX}
+ */
 function Episodes() {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
-
-  console.log(queryResults);
 
   const episodes = queryResults?.episodes?.items;
   const totalNumber = queryResults?.episodes?.total;
@@ -28,6 +31,12 @@ function Episodes() {
     }
   }, [query, router]);
 
+  /**
+   * merges next set of fetched episodes into current episodes list
+   * @function mergedEpisodes
+   * @param {object} data next set of fetched episodes
+   * @returns {object} updated queryResults
+   */
   const mergeEpisodes = (data) => {
     const existingItems = queryResults.episodes.items;
     const newItems = data.episodes.items.filter((newItem) => {
@@ -55,6 +64,11 @@ function Episodes() {
     return episodesMerged;
   };
 
+  /**
+   * Fetches more episodes & updates the list of episodes
+   * @function fetchMoreEpisodes
+   * @returns {object} updated list of episodes in queryResults
+   */
   const fetchMoreEpisodes = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
@@ -79,7 +93,7 @@ function Episodes() {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -111,7 +125,7 @@ function Episodes() {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }
 

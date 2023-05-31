@@ -9,6 +9,11 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
 
+/**
+ * Renders the list of Playlists from search.
+ * @function Playlists
+ * @returns {JSX}
+ */
 function Playlists() {
   const spotifyApi = useSpotify();
   const router = useRouter();
@@ -26,6 +31,12 @@ function Playlists() {
     }
   }, [query, router]);
 
+    /**
+   * merges next set of fetched Playlists into current Playlists list
+   * @function mergedPlaylists
+   * @param {object} data next set of fetched Playlists
+   * @returns {object} updated queryResults
+   */
   const mergedPlaylists = (data) => {
     const existingItems = queryResults.playlists.items;
     const newItems = data.playlists.items.filter((newItem) => {
@@ -53,6 +64,11 @@ function Playlists() {
     return playlistsMerged;
   };
 
+  /**
+   * Fetches more playlists & updates the list of playlists
+   * @function fetchMorePlaylists
+   * @returns {object} updated list of playlists in queryResults
+   */
   const fetchMorePlaylists = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
@@ -77,7 +93,7 @@ function Playlists() {
   };
 
   return (
-    <div className=" bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section className=" bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -109,7 +125,7 @@ function Playlists() {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }
 

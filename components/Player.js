@@ -24,6 +24,11 @@ import {
 } from '@heroicons/react/24/solid';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
+/**
+ * Renders the track player at the bottom of screen
+ * @function Player
+ * @returns {JSX}
+ */
 function Player() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
@@ -37,6 +42,7 @@ function Player() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
+  /* set shuffle of tracks on or off */
   const [shuffleState, setShuffletState] = useState(false);
   const setShuffle = () => {
     setShuffletState((prevState) => !prevState);
@@ -45,6 +51,7 @@ function Player() {
       .catch((err) => console.error('Shuffle failed:'));
   };
 
+  /* go back a track */
   const skipToPrevious = () => {
     spotifyApi.skipToPrevious().catch((err) => console.error('Rewind failed:'));
     setTimeout(() => {
@@ -60,6 +67,7 @@ function Player() {
     }, '750');
   };
 
+  /* either play or pause a track */
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing) {
@@ -79,6 +87,7 @@ function Player() {
     });
   };
 
+  /* go forward a track */
   const skipToNext = () => {
     spotifyApi
       .skipToNext()

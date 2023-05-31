@@ -8,6 +8,11 @@ import RecentSearches from './Recent';
 // import component
 import GenreCard from './cards/genreCard';
 
+/**
+ * Renders the list of genres & previous searches (if any).
+ * @function Genre
+ * @returns {JSX}
+ */
 function Genre() {
   const spotifyApi = useSpotify();
   const [genres, setGenres] = useRecoilState(genreState);
@@ -16,7 +21,6 @@ function Genre() {
   const itemsPerPage = 50;
 
   if (genres === null) {
-    console.log('call api');
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getCategories({
@@ -37,6 +41,11 @@ function Genre() {
     }
   }
 
+/**
+ * Fetches more genres & updates the list of genres
+ * @function fetchGenre
+ * @returns {object} updated list of genres
+ */
   const fetchGenre = () => {
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);

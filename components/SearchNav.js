@@ -6,6 +6,12 @@ import { useRecoilValue } from 'recoil';
 import { errorState } from '@/atoms/errorAtom';
 import { querySubmittedState, searchingState } from '@/atoms/searchAtom';
 
+/**
+ * Renders album, playlist, artists etc under search input when results found
+ * (used to navigate between search results)
+ * @function SearchNav
+ * @returns {JSX}
+ */
 function SearchNav() {
   const submitted = useRecoilValue(querySubmittedState);
   const isSearching = useRecoilValue(searchingState);

@@ -5,9 +5,14 @@ import noAlbum from '@/public/images/blank.svg';
 import useSpotify from '@/hooks/useSpotify';
 import useSongInfo from '@/hooks/useSongInfo';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 
+/**
+ * Renders track info bottom left side
+ * @function PlayingInfo
+ * @returns {JSX}
+ */
 function PlayingInfo() {
   const spotifyApi = useSpotify();
   const songInfo = useSongInfo();

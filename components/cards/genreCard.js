@@ -32,6 +32,13 @@ const bgColors = [
   'bg-blue-700',
 ];
 
+/**
+ * Render a card for a genre
+ * @function GenreCard
+ * @param {object} item (genre info)
+ * @param {number} idx (index)
+ * @returns {JSX}
+ */
 function GenreCard({ item, idx }) {
   return (
     <Link

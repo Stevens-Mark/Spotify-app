@@ -20,6 +20,11 @@ import {
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
+/**
+ * Renders Sidebar for navigation
+ * @function Sidebar
+ * @returns {JSX}
+ */
 function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
@@ -70,13 +75,17 @@ function Sidebar() {
     setActivePlaylist,
   ]);
 
+  /** navigates to chosen playlist
+   * @function handleClick
+   * @param {string} id of playlist
+   */
   const handleClick = (id) => {
     setPlaylistId(id);
     router.push('/');
   };
 
   return (
-    <div className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]">
+    <nav className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]">
       <div className="space-y-4 w-full">
         <button
           className="flex items-center space-x-2 hover:text-white"
@@ -156,7 +165,7 @@ function Sidebar() {
         ))}
         <hr className="border-t-[0.1px] border-gray-900 pb-36" />
       </div>
-    </div>
+    </nav>
   );
 }
 

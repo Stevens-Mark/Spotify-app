@@ -9,6 +9,11 @@ import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 
+/**
+ * Renders the list of Podcasts & Episodes from search.
+ * @function PodcastAndEpisodes
+ * @returns {JSX}
+ */
 function PodcastAndEpisodes() {
   const router = useRouter();
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);

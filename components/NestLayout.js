@@ -15,6 +15,13 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import SearchNav from './SearchNav';
 import StatusSpinner from './StatusSpinner';
 
+/**
+ * Renders the search bar (for all search pages: genres, album, playlist, artists, podcasts & episodes)
+ * as part of the nested layout.
+ * @function NestedLayout
+ * @param {object} children components related to search/results
+ * @returns {JSX}
+ */
 const NestedLayout = ({ children }) => {
   const spotifyApi = useSpotify();
   const setQueryResults = useSetRecoilState(searchResultState);

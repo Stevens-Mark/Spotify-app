@@ -5,6 +5,13 @@ import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { capitalize } from '@/lib/capitalize';
 
+/**
+ * Render a card for either album, playlist, podcast, artist, or recentsearch
+ * @function Card
+ * @param {object} item (album, playlist, podcast, artist, or recentsearch info)
+ * @param {string} type of card
+ * @returns {JSX}
+ */
 function Card({ item, type }) {
   return (
     <Link

@@ -7,6 +7,12 @@ import { msToTime, getMonthYear } from '@/lib/time';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 
+/**
+ * Render a card for an episode
+ * @function episodeCard
+ * @param {object} item (episode info)
+ * @returns {JSX}
+ */
 function episodeCard({ item }) {
   return (
     <Link href="">

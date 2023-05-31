@@ -9,7 +9,12 @@ import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
 
-function PodcastAndEpisodes() {
+/**
+ * Renders the list of Podcasts/shows from search.
+ * @function Podcasts
+ * @returns {JSX}
+ */
+function Podcasts() {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
@@ -26,6 +31,12 @@ function PodcastAndEpisodes() {
     }
   }, [query, router]);
 
+  /**
+   * merges next set of fetched Podcasts/shows into current Podcasts/shows  list
+   * @function mergeShows
+   * @param {object} data next set of fetched Podcasts/shows
+   * @returns {object} updated queryResults
+   */
   const mergeShows = (data) => {
     const existingItems = queryResults.shows.items;
     const newItems = data.shows.items.filter((newItem) => {
@@ -53,6 +64,11 @@ function PodcastAndEpisodes() {
     return showsMerged;
   };
 
+  /**
+   * Fetches more Podcasts/shows & updates the list of Podcasts/shows
+   * @function fetchMoreShows
+   * @returns {object} updated list of Podcasts/shows in queryResults
+   */
   const fetchMoreShows = () => {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
@@ -77,7 +93,7 @@ function PodcastAndEpisodes() {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -109,13 +125,13 @@ function PodcastAndEpisodes() {
           )}
         </>
       )}
-    </div>
+    </section>
   );
 }
 
-export default PodcastAndEpisodes;
+export default Podcasts;
 
-PodcastAndEpisodes.getLayout = function getLayout(page) {
+Podcasts.getLayout = function getLayout(page) {
   return (
     <Layout>
       <NestedLayout>{page}</NestedLayout>

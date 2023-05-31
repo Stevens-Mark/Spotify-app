@@ -1,5 +1,10 @@
 import React from 'react';
 
+/**
+ * Renders a moving equiliser next to the track which is playing
+ * @function Equaliser
+ * @returns {JSX}
+ */
 function Equaliser() {
   return (
     <div className="grid gap-[1px] grid-cols-5 w-3.5 h-3.5">
