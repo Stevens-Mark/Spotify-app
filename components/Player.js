@@ -143,9 +143,11 @@ function Player() {
       <PlayingInfo /> {/* left hand side - album photo/info */}
       {/* player controls */}
       <div className="flex items-center justify-evenly">
-        <span className="hidden sm:inline relative">
+        <button
+          className="hidden sm:inline relative"
+          onClick={() => setShuffle()}
+        >
           <ArrowsRightLeftIcon
-            onClick={() => setShuffle()}
             className={`button ${
               shuffleState === false ? 'text-white' : 'text-green-500'
             }`}
@@ -153,27 +155,31 @@ function Player() {
           {shuffleState && (
             <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
           )}
-        </span>
+        </button>
 
-        <BackwardIcon onClick={() => skipToPrevious()} className="button" />
+        <button onClick={() => skipToPrevious()}>
+          <BackwardIcon className="button" />
+        </button>
 
         {isPlaying ? (
-          <PauseCircleIcon
-            className="button w-10 h-10"
-            onClick={handlePlayPause}
-          />
+          <button onClick={handlePlayPause}>
+            <PauseCircleIcon className="button w-10 h-10" />
+          </button>
         ) : (
-          <PlayCircleIcon
-            className="button w-10 h-10"
-            onClick={handlePlayPause}
-          />
+          <button onClick={handlePlayPause}>
+            <PlayCircleIcon className="button w-10 h-10" />
+          </button>
         )}
 
-        <ForwardIcon onClick={() => skipToNext()} className="button" />
+        <button onClick={() => skipToNext()}>
+          <ForwardIcon className="button" />
+        </button>
 
-        <span className="hidden sm:inline relative">
+        <button
+          className="hidden sm:inline relative"
+          onClick={() => handleRepeatToggle()}
+        >
           <ArrowPathRoundedSquareIcon
-            onClick={() => handleRepeatToggle()}
             className={`button w-6 h-6 ${
               repeatState === 0 ? 'text-white' : 'text-green-500'
             }`}
@@ -191,12 +197,12 @@ function Player() {
           ) : (
             ''
           )}
-        </span>
+        </button>
       </div>
       {/* volume control */}
       <div className="flex items-center space-x-3 md:space-x-4 justify-end pr-5">
         <SpeakerXMarkIcon
-          className="button "
+          className="button"
           onClick={() => volume > 0 && setVolume(volume - 10)}
         />
         <input

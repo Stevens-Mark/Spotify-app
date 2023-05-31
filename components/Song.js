@@ -63,7 +63,7 @@ function Song({ order, track }) {
   }, [currentrackId, isPlaying, song.id]);
 
   /* either play or pause current track */
-  const handlePlayPause = (currentTrackIndex) => {
+  const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentrackId) {
         spotifyApi
@@ -136,7 +136,9 @@ function Song({ order, track }) {
         </div>
       </div>
       <div className="flex items-end md:items-center justify-end custombreakpoint:justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden custombreakpoint:inline pr-3">{song.album.name}</p>
+        <p className="w-40 hidden custombreakpoint:inline pr-3">
+          {song.album.name}
+        </p>
         <p className="w-48 hidden custombreakpoint:inline">
           {format(new Date(track.added_at), 'p, dd/MM/yyyy')}
         </p>

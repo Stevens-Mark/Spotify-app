@@ -85,55 +85,78 @@ function Sidebar() {
   };
 
   return (
-    <nav className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]">
-      <div className="space-y-4 w-full">
-        <button
-          className="flex items-center space-x-2 hover:text-white"
-          onClick={() => signOut()}
-        >
-          <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
-          <p>Logout</p>
-        </button>
+    <nav
+      role="navigation"
+      aria-label="Playlist menu"
+      className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]"
+    >
+      <ul className="space-y-4 w-full">
+        <li>
+          <button
+            className="flex items-center space-x-2 hover:text-white"
+            onClick={() => signOut()}
+          >
+            <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
+            <p>Logout</p>
+          </button>
+        </li>
 
-        <Link href="/" className="flex items-center space-x-2 hover:text-white">
-          <HomeIcon className="h-5 w-5 ml-3" />
-          <p>Home</p>
-        </Link>
+        <li>
+          <Link
+            href="/"
+            className="flex items-center space-x-2 hover:text-white"
+          >
+            <HomeIcon className="h-5 w-5 ml-3" />
+            <p>Home</p>
+          </Link>
+        </li>
 
-        <Link
-          href="/search"
-          className="flex items-center space-x-2 hover:text-white"
-        >
-          <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
-          <p>Search</p>
-        </Link>
+        <li>
+          <Link
+            href="/search"
+            className="flex items-center space-x-2 hover:text-white"
+          >
+            <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
+            <p>Search</p>
+          </Link>
+        </li>
 
-        <button className="flex items-center space-x-2 hover:text-white">
-          <BuildingLibraryIcon className="h-5 w-5 ml-3" />
-          <p>Your Library</p>
-        </button>
+        <li>
+          <button className="flex items-center space-x-2 hover:text-white">
+            <BuildingLibraryIcon className="h-5 w-5 ml-3" />
+            <p>Your Library</p>
+          </button>
+        </li>
         <hr className="border-t-[0.1px] border-gray-900" />
 
-        <button className="flex items-center space-x-2 hover:text-white">
-          <PlusCircleIcon className="h-5 w-5 ml-3" />
-          <p>Create Playlist</p>
-        </button>
-        <button className="flex items-center space-x-2 hover:text-white">
-          <HeartIcon className="h-5 w-5 ml-3" />
-          <p>Liked Songs</p>
-        </button>
-        <button className="flex items-center space-x-2 hover:text-white">
-          <RssIcon className="h-5 w-5 ml-3" />
-          <p>Your Episodes</p>
-        </button>
+        <li>
+          <button className="flex items-center space-x-2 hover:text-white">
+            <PlusCircleIcon className="h-5 w-5 ml-3" />
+            <p>Create Playlist</p>
+          </button>
+        </li>
+        <li>
+          {' '}
+          <button className="flex items-center space-x-2 hover:text-white">
+            <HeartIcon className="h-5 w-5 ml-3" />
+            <p>Liked Songs</p>
+          </button>
+        </li>
+        <li>
+          {' '}
+          <button className="flex items-center space-x-2 hover:text-white">
+            <RssIcon className="h-5 w-5 ml-3" />
+            <p>Your Episodes</p>
+          </button>
+        </li>
         <hr className="border-t-[0.1px] border-gray-900" />
 
         {/* Playlists.. */}
         {playlists.map((playlist) => (
-          <button
-            key={playlist.id}
-            onClick={() => handleClick(playlist.id)}
-            className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer 
+          <li key={playlist.id}>
+            <button
+              onClick={() => handleClick(playlist.id)}
+              className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer 
               ${
                 activePlaylist == playlist.id && isPlaying
                   ? 'text-green-500'
@@ -145,26 +168,27 @@ function Sidebar() {
                   : 'hover:bg-gray-900'
               }
             `}
-          >
-            <Image
-              className="h-8 w-8 mr-1 rounded-sm"
-              src={playlist.images[0].url}
-              alt="track"
-              width={100}
-              height={100}
-            />
-            <p>{playlist.name}</p>
-            <span className="pl-2">
-              {activePlaylist == playlist.id && isPlaying ? (
-                <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
-              ) : (
-                ' '
-              )}
-            </span>
-          </button>
+            >
+              <Image
+                className="h-8 w-8 mr-1 rounded-sm"
+                src={playlist.images[0].url}
+                alt="track"
+                width={100}
+                height={100}
+              />
+              <p>{playlist.name}</p>
+              <span className="pl-2">
+                {activePlaylist == playlist.id && isPlaying ? (
+                  <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+                ) : (
+                  ' '
+                )}
+              </span>
+            </button>
+          </li>
         ))}
         <hr className="border-t-[0.1px] border-gray-900 pb-36" />
-      </div>
+      </ul>
     </nav>
   );
 }
