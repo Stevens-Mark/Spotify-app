@@ -30,6 +30,18 @@ function SearchNav() {
           <ul className="px-8 space-x-2 flex justify-center xs:justify-start w-full">
             <li>
               <Link
+                href="/search/all"
+                className={`text-sm py-1 px-3 rounded-full ${
+                  path === '/search/all'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                }`}
+              >
+                All
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/search/artists"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/artists'

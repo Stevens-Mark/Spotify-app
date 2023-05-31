@@ -92,16 +92,6 @@ function Sidebar() {
     >
       <ul className="space-y-4 w-full">
         <li>
-          <button
-            className="flex items-center space-x-2 hover:text-white"
-            onClick={() => signOut()}
-          >
-            <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
-            <p>Logout</p>
-          </button>
-        </li>
-
-        <li>
           <Link
             href="/"
             className="flex items-center space-x-2 hover:text-white"
@@ -143,10 +133,12 @@ function Sidebar() {
           </button>
         </li>
         <li>
-          {' '}
-          <button className="flex items-center space-x-2 hover:text-white">
-            <RssIcon className="h-5 w-5 ml-3" />
-            <p>Your Episodes</p>
+          <button
+            className="flex items-center space-x-2 hover:text-white"
+            onClick={() => signOut()}
+          >
+            <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
+            <p>Logout</p>
           </button>
         </li>
         <hr className="border-t-[0.1px] border-gray-900" />

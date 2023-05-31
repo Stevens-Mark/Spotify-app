@@ -3,6 +3,8 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 import noImage from '@/public/images/noImageAvailable.svg';
+// import functions
+import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
 
 /**
@@ -28,7 +30,7 @@ function Card({ item, type }) {
           width={100}
           height={100}
         />
-        {type !== 'podcast' && (
+        {type !== 'podcast' && type !== 'episode' && (
           <button className=" absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">
             <PlayCircleIcon className="w-12 h-12 -m-2" />
           </button>
@@ -66,6 +68,17 @@ function Card({ item, type }) {
           {/* podcast */}
           {type === 'podcast' && (
             <span className="truncate">{capitalize(item.publisher)}</span>
+          )}
+          {/* episode */}
+          {type === 'episode' && (
+            <>
+              <span className="line-clamp-1">
+                {getMonthYear(item.release_date)}&nbsp;•&nbsp;
+              </span>
+              <span className="line-clamp-1">
+                {millisecondsToMinutes(item.duration_ms)}
+              </span>
+            </>
           )}
         </div>
       </div>
