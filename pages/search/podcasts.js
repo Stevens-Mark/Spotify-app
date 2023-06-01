@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { searchResultState, queryState } from '@/atoms/searchAtom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  searchResultState,
+  queryState,
+  searchingState,
+} from '@/atoms/searchAtom';
+import { errorState } from '@/atoms/errorAtom';
 // import functions
 import { mergeObject } from '@/lib/merge';
 // import layouts/components
@@ -22,6 +27,8 @@ function Podcasts() {
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
+  const setIsSearching = useSetRecoilState(searchingState);
+  const setIsError = useSetRecoilState(errorState);
 
   const shows = queryResults?.shows?.items;
   const totalNumber = queryResults?.shows?.total;
@@ -42,7 +49,7 @@ function Podcasts() {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
-
+    setIsSearching(true);
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .searchShows(query, {
@@ -53,8 +60,11 @@ function Podcasts() {
           function (data) {
             const updatedList = mergeObject(data.body, queryResults, 'shows');
             setQueryResults(updatedList);
+            setIsSearching(false);
           },
           function (err) {
+            setIsSearching(false);
+            setIsError(true);
             console.log('Get more album items failed:', err);
           }
         );

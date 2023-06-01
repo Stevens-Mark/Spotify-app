@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const path = router?.asPath; // URL from router.
 
-  const excludedPath = ['/search', '/search/albums', '/search/artists', '/search/epsiodes', '/search/playlists', '/search/podcasts', '/search/podcastAndEpisodes'];
+  const excludedPath = ['/search', '/search/all', '/search/albums', '/search/artists', '/search/episodes', '/search/playlists', '/search/podcasts', '/search/podcastAndEpisodes'];
   const isExcluded = excludedPath.includes(path);
 
   return (

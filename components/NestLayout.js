@@ -99,7 +99,7 @@ const NestedLayout = ({ children }) => {
                   className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm sm:w-[15rem] lg:w-[16.5rem] cursor-pointer appearance-none block py-3 px-3 pl-10 placeholder-gray-500 hover:placeholder-white"
                   type="search"
                   id="search"
-                  value={query}
+                  value={isError ? "Loading Error !" : query}
                   placeholder="What to listen to ?"
                   maxLength={30}
                   onChange={(e) => handleText(e)}
@@ -107,7 +107,6 @@ const NestedLayout = ({ children }) => {
               </label>
             </form>
             {isSearching && <StatusSpinner />}
-            {isError && <span className="text-white mt-5 ml-5">Error !</span>}
           </div>
           <SearchNav />
         </div>

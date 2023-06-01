@@ -2,8 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { searchResultState, queryState } from '@/atoms/searchAtom';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import {
+  searchResultState,
+  queryState,
+  searchingState,
+} from '@/atoms/searchAtom';
+import { errorState } from '@/atoms/errorAtom';
 // import functions
 import { mergeObject } from '@/lib/merge';
 // import layouts/components
@@ -22,6 +27,8 @@ function Playlists() {
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
+  const setIsSearching = useSetRecoilState(searchingState);
+  const setIsError = useSetRecoilState(errorState);
 
   const playlists = queryResults?.playlists?.items;
   const totalNumber = queryResults?.playlists?.total;
@@ -42,7 +49,7 @@ function Playlists() {
     const itemsPerPage = 50;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
-
+    setIsSearching(true);
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .searchPlaylists(query, {
@@ -51,10 +58,17 @@ function Playlists() {
         })
         .then(
           function (data) {
-            const updatedList = mergeObject(data.body, queryResults, 'playlists');
+            const updatedList = mergeObject(
+              data.body,
+              queryResults,
+              'playlists'
+            );
             setQueryResults(updatedList);
+            setIsSearching(false);
           },
           function (err) {
+            setIsSearching(false);
+            setIsError(true);
             console.log('Get more items failed:', err);
           }
         );
@@ -66,7 +80,7 @@ function Playlists() {
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
-            Sorry no playlists
+            Sorry no Playlists
           </h1>
         </span>
       ) : (
