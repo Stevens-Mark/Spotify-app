@@ -35,39 +35,6 @@ function Albums() {
   }, [query, router]);
 
   /**
-   * merges next set of fetched albums into current album list
-   * @function mergeAlbums
-   * @param {object} data next set of fetched albums
-   * @returns {object} updated queryResults
-   */
-  // const mergeAlbums = (data) => {
-  //   const existingItems = queryResults.albums.items;
-  //   const newItems = data.albums.items.filter((newItem) => {
-  //     return !existingItems.some(
-  //       (existingAlbum) => existingAlbum.name == newItem.name
-  //     );
-  //   });
-
-  //   const albumMerged = {
-  //     albums: {
-  //       href: queryResults.albums.href,
-  //       items: existingItems.concat(newItems),
-  //       limit: queryResults.albums.limit,
-  //       next: queryResults.albums.next,
-  //       offset: queryResults.albums.offset,
-  //       previous: queryResults.albums.previous,
-  //       total: queryResults.albums.total,
-  //     },
-  //     artists: { ...queryResults.artists, ...data.artists },
-  //     episodes: { ...queryResults.episodes, ...data.episodes },
-  //     playlists: { ...queryResults.playlists, ...data.playlists },
-  //     shows: { ...queryResults.shows, ...data.shows },
-  //     tracks: { ...queryResults.tracks, ...data.tracks },
-  //   };
-  //   return albumMerged;
-  // };
-
-  /**
    * Fetches more albums & updates the list of albums
    * @function fetchMoreAlbums
    * @returns {object} updated list of albums in queryResults
@@ -85,7 +52,6 @@ function Albums() {
         })
         .then(
           function (data) {
-            // const updatedList = mergeAlbums(data.body);
             const updatedList = mergeObject(data.body, queryResults, 'albums');
             setQueryResults(updatedList);
           },

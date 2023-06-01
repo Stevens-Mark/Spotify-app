@@ -34,39 +34,6 @@ function Episodes() {
   }, [query, router]);
 
   /**
-   * merges next set of fetched episodes into current episodes list
-   * @function mergedEpisodes
-   * @param {object} data next set of fetched episodes
-   * @returns {object} updated queryResults
-   */
-  // const mergeEpisodes = (data) => {
-  //   const existingItems = queryResults.episodes.items;
-  //   const newItems = data.episodes.items.filter((newItem) => {
-  //     return !existingItems.some(
-  //       (existingEpisodes) => existingEpisodes.id == newItem.id
-  //     );
-  //   });
-
-  //   const episodesMerged = {
-  //     episodes: {
-  //       href: queryResults.episodes.href,
-  //       items: existingItems.concat(newItems),
-  //       limit: queryResults.episodes.limit,
-  //       next: queryResults.episodes.next,
-  //       offset: queryResults.episodes.offset,
-  //       previous: queryResults.episodes.previous,
-  //       total: queryResults.episodes.total,
-  //     },
-  //     albums: { ...queryResults.albums, ...data.albums },
-  //     artists: { ...queryResults.artists, ...data.artists },
-  //     shows: { ...queryResults.shows, ...data.shows },
-  //     playlists: { ...queryResults.playlists, ...data.playlists },
-  //     tracks: { ...queryResults.tracks, ...data.tracks },
-  //   };
-  //   return episodesMerged;
-  // };
-
-  /**
    * Fetches more episodes & updates the list of episodes
    * @function fetchMoreEpisodes
    * @returns {object} updated list of episodes in queryResults
@@ -84,7 +51,6 @@ function Episodes() {
         })
         .then(
           function (data) {
-            // const updatedList = mergeEpisodes(data.body);
             const updatedList = mergeObject(data.body, queryResults, 'episodes');
             setQueryResults(updatedList);
           },

@@ -34,39 +34,6 @@ function Podcasts() {
   }, [query, router]);
 
   /**
-   * merges next set of fetched Podcasts/shows into current Podcasts/shows  list
-   * @function mergeShows
-   * @param {object} data next set of fetched Podcasts/shows
-   * @returns {object} updated queryResults
-   */
-  // const mergeShows = (data) => {
-  //   const existingItems = queryResults.shows.items;
-  //   const newItems = data.shows.items.filter((newItem) => {
-  //     return !existingItems.some(
-  //       (existingShows) => existingShows.id == newItem.id
-  //     );
-  //   });
-
-  //   const showsMerged = {
-  //     shows: {
-  //       href: queryResults.shows.href,
-  //       items: existingItems.concat(newItems),
-  //       limit: queryResults.shows.limit,
-  //       next: queryResults.shows.next,
-  //       offset: queryResults.shows.offset,
-  //       previous: queryResults.shows.previous,
-  //       total: queryResults.shows.total,
-  //     },
-  //     albums: { ...queryResults.albums, ...data.albums },
-  //     artists: { ...queryResults.artists, ...data.artists },
-  //     episodes: { ...queryResults.episodes, ...data.episodes },
-  //     playlists: { ...queryResults.playlists, ...data.playlists },
-  //     tracks: { ...queryResults.tracks, ...data.tracks },
-  //   };
-  //   return showsMerged;
-  // };
-
-  /**
    * Fetches more Podcasts/shows & updates the list of Podcasts/shows
    * @function fetchMoreShows
    * @returns {object} updated list of Podcasts/shows in queryResults
@@ -84,7 +51,6 @@ function Podcasts() {
         })
         .then(
           function (data) {
-            // const updatedList = mergeShows(data.body);
             const updatedList = mergeObject(data.body, queryResults, 'shows');
             setQueryResults(updatedList);
           },
