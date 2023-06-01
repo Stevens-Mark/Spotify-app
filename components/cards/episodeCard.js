@@ -21,9 +21,10 @@ function episodeCard({ item }) {
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
             src={item.images?.[0]?.url || noImage}
-            alt="cover"
+            alt=""
             width={100}
             height={100}
+            style={{objectFit:"cover"}}
           />
 
           <h2 className="col-span-3 row-start-1 text-white capitalize line-clamp-2 self-center">

@@ -4,7 +4,9 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
-// import layouts
+// import functions
+import { mergeObject } from '@/lib/merge';
+// import layouts/components
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import EpisodeCard from '@/components/cards/episodeCard';
@@ -37,32 +39,32 @@ function Episodes() {
    * @param {object} data next set of fetched episodes
    * @returns {object} updated queryResults
    */
-  const mergeEpisodes = (data) => {
-    const existingItems = queryResults.episodes.items;
-    const newItems = data.episodes.items.filter((newItem) => {
-      return !existingItems.some(
-        (existingEpisodes) => existingEpisodes.id == newItem.id
-      );
-    });
+  // const mergeEpisodes = (data) => {
+  //   const existingItems = queryResults.episodes.items;
+  //   const newItems = data.episodes.items.filter((newItem) => {
+  //     return !existingItems.some(
+  //       (existingEpisodes) => existingEpisodes.id == newItem.id
+  //     );
+  //   });
 
-    const episodesMerged = {
-      episodes: {
-        href: queryResults.episodes.href,
-        items: existingItems.concat(newItems),
-        limit: queryResults.episodes.limit,
-        next: queryResults.episodes.next,
-        offset: queryResults.episodes.offset,
-        previous: queryResults.episodes.previous,
-        total: queryResults.episodes.total,
-      },
-      albums: { ...queryResults.albums, ...data.albums },
-      artists: { ...queryResults.artists, ...data.artists },
-      shows: { ...queryResults.shows, ...data.shows },
-      playlists: { ...queryResults.playlists, ...data.playlists },
-      tracks: { ...queryResults.tracks, ...data.tracks },
-    };
-    return episodesMerged;
-  };
+  //   const episodesMerged = {
+  //     episodes: {
+  //       href: queryResults.episodes.href,
+  //       items: existingItems.concat(newItems),
+  //       limit: queryResults.episodes.limit,
+  //       next: queryResults.episodes.next,
+  //       offset: queryResults.episodes.offset,
+  //       previous: queryResults.episodes.previous,
+  //       total: queryResults.episodes.total,
+  //     },
+  //     albums: { ...queryResults.albums, ...data.albums },
+  //     artists: { ...queryResults.artists, ...data.artists },
+  //     shows: { ...queryResults.shows, ...data.shows },
+  //     playlists: { ...queryResults.playlists, ...data.playlists },
+  //     tracks: { ...queryResults.tracks, ...data.tracks },
+  //   };
+  //   return episodesMerged;
+  // };
 
   /**
    * Fetches more episodes & updates the list of episodes
@@ -82,7 +84,8 @@ function Episodes() {
         })
         .then(
           function (data) {
-            const updatedList = mergeEpisodes(data.body);
+            // const updatedList = mergeEpisodes(data.body);
+            const updatedList = mergeObject(data.body, queryResults, 'episodes');
             setQueryResults(updatedList);
           },
           function (err) {

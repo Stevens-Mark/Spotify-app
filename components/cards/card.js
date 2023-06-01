@@ -26,9 +26,10 @@ function Card({ item, type }) {
             type === 'artist' ? 'rounded-full' : 'rounded-md'
           }`}
           src={item.images?.[0]?.url || noImage}
-          alt="cover"
+          alt=""
           width={100}
           height={100}
+          // style={{objectFit:"cover"}}
         />
         {type !== 'podcast' && type !== 'episode' && (
           <button className=" absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">

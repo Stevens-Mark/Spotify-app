@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
           <Image
             className="rounded-full w-9 h-9"
             src={session?.user.image || noUserImage}
-            alt="user"
+            alt=""
             width={100}
             height={100}
             priority

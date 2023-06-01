@@ -4,7 +4,9 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
-// import layouts
+// import functions
+import { mergeObject } from '@/lib/merge';
+// import layouts/components
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
@@ -37,32 +39,32 @@ function Artists() {
    * @param {object} data next set of fetched Artists
    * @returns {object} updated queryResults
    */
-  const mergedArtists = (data) => {
-    const existingItems = queryResults.artists.items;
-    const newItems = data.artists.items.filter((newItem) => {
-      return !existingItems.some(
-        (existingArtists) => existingArtists.id == newItem.id
-      );
-    });
+  // const mergedArtists = (data) => {
+  //   const existingItems = queryResults.artists.items;
+  //   const newItems = data.artists.items.filter((newItem) => {
+  //     return !existingItems.some(
+  //       (existingArtists) => existingArtists.id == newItem.id
+  //     );
+  //   });
 
-    const artistsMerged = {
-      artists: {
-        href: queryResults.artists.href,
-        items: existingItems.concat(newItems),
-        limit: queryResults.artists.limit,
-        next: queryResults.artists.next,
-        offset: queryResults.artists.offset,
-        previous: queryResults.artists.previous,
-        total: queryResults.artists.total,
-      },
-      albums: { ...queryResults.albums, ...data.albums },
-      episodes: { ...queryResults.episodes, ...data.episodes },
-      playlists: { ...queryResults.playlists, ...data.playlists },
-      shows: { ...queryResults.shows, ...data.shows },
-      tracks: { ...queryResults.tracks, ...data.tracks },
-    };
-    return artistsMerged;
-  };
+  //   const artistsMerged = {
+  //     artists: {
+  //       href: queryResults.artists.href,
+  //       items: existingItems.concat(newItems),
+  //       limit: queryResults.artists.limit,
+  //       next: queryResults.artists.next,
+  //       offset: queryResults.artists.offset,
+  //       previous: queryResults.artists.previous,
+  //       total: queryResults.artists.total,
+  //     },
+  //     albums: { ...queryResults.albums, ...data.albums },
+  //     episodes: { ...queryResults.episodes, ...data.episodes },
+  //     playlists: { ...queryResults.playlists, ...data.playlists },
+  //     shows: { ...queryResults.shows, ...data.shows },
+  //     tracks: { ...queryResults.tracks, ...data.tracks },
+  //   };
+  //   return artistsMerged;
+  // };
 
   /**
    * Fetches more Artists & updates the list of Artists
@@ -82,7 +84,8 @@ function Artists() {
         })
         .then(
           function (data) {
-            const updatedList = mergedArtists(data.body);
+            // const updatedList = mergedArtists(data.body);
+            const updatedList = mergeObject(data.body, queryResults, 'artists');
             setQueryResults(updatedList);
           },
           function (err) {

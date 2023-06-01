@@ -119,7 +119,7 @@ function Center() {
         <Image
           className="h-16 w-16 sm:h-44 sm:w-44 shadow-2xl ml-7"
           src={playlist?.images?.[0]?.url || noAlbum}
-          alt="album cover"
+          alt=""
           width={100}
           height={100}
           priority

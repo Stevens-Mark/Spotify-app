@@ -164,7 +164,7 @@ function Sidebar() {
               <Image
                 className="h-8 w-8 mr-1 rounded-sm"
                 src={playlist.images[0].url}
-                alt="track"
+                alt=""
                 width={100}
                 height={100}
               />

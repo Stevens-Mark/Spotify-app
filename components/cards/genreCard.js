@@ -53,9 +53,10 @@ function GenreCard({ item, idx }) {
       <Image
         className="absolute bottom-3 right-0 origin-bottom-left rotate-[30deg] w-3/4 h-3/4"
         src={item.icons[0].url}
-        alt="user"
+        alt=""
         width={100}
         height={100}
+        style={{objectFit:"cover"}}
       />
     </Link>
   );

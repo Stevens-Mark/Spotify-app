@@ -39,7 +39,7 @@ function PlayingInfo() {
       <Image
         className="hidden md:inline h-10 w-10"
         src={songInfo?.album.images?.[0]?.url || noAlbum}
-        alt="Track playing ..."
+        alt=""
         width={100}
         height={100}
       />

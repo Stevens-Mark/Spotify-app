@@ -4,11 +4,12 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
-// import layouts
+// import functions
+import { mergeObject } from '@/lib/merge';
+// import layouts/components
 import Layout from '@/components/Layout';
 import NestedLayout from '@/components/NestLayout';
 import Card from '@/components/cards/card';
-
 /**
  * Renders the list of Playlists from search.
  * @function Playlists
@@ -37,32 +38,32 @@ function Playlists() {
    * @param {object} data next set of fetched Playlists
    * @returns {object} updated queryResults
    */
-  const mergedPlaylists = (data) => {
-    const existingItems = queryResults.playlists.items;
-    const newItems = data.playlists.items.filter((newItem) => {
-      return !existingItems.some(
-        (existingPlaylist) => existingPlaylist.id == newItem.id
-      );
-    });
+  // const mergedPlaylists = (data) => {
+  //   const existingItems = queryResults.playlists.items;
+  //   const newItems = data.playlists.items.filter((newItem) => {
+  //     return !existingItems.some(
+  //       (existingPlaylist) => existingPlaylist.id == newItem.id
+  //     );
+  //   });
 
-    const playlistsMerged = {
-      playlists: {
-        href: queryResults.playlists.href,
-        items: existingItems.concat(newItems),
-        limit: queryResults.playlists.limit,
-        next: queryResults.playlists.next,
-        offset: queryResults.playlists.offset,
-        previous: queryResults.playlists.previous,
-        total: queryResults.playlists.total,
-      },
-      albums: { ...queryResults.albums, ...data.albums },
-      artists: { ...queryResults.artists, ...data.artists },
-      episodes: { ...queryResults.episodes, ...data.episodes },
-      shows: { ...queryResults.shows, ...data.shows },
-      tracks: { ...queryResults.tracks, ...data.tracks },
-    };
-    return playlistsMerged;
-  };
+  //   const playlistsMerged = {
+  //     playlists: {
+  //       href: queryResults.playlists.href,
+  //       items: existingItems.concat(newItems),
+  //       limit: queryResults.playlists.limit,
+  //       next: queryResults.playlists.next,
+  //       offset: queryResults.playlists.offset,
+  //       previous: queryResults.playlists.previous,
+  //       total: queryResults.playlists.total,
+  //     },
+  //     albums: { ...queryResults.albums, ...data.albums },
+  //     artists: { ...queryResults.artists, ...data.artists },
+  //     episodes: { ...queryResults.episodes, ...data.episodes },
+  //     shows: { ...queryResults.shows, ...data.shows },
+  //     tracks: { ...queryResults.tracks, ...data.tracks },
+  //   };
+  //   return playlistsMerged;
+  // };
 
   /**
    * Fetches more playlists & updates the list of playlists
@@ -82,7 +83,8 @@ function Playlists() {
         })
         .then(
           function (data) {
-            const updatedList = mergedPlaylists(data.body);
+            // const updatedList = mergedPlaylists(data.body);
+            const updatedList = mergeObject(data.body, queryResults, 'playlists');
             setQueryResults(updatedList);
           },
           function (err) {
