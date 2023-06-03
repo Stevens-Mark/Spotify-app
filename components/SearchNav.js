@@ -85,7 +85,7 @@ function SearchNav() {
                     : 'bg-gray-900 text-white hover:bg-gray-800'
                 }`}
               >
-                Shows/Episodes
+                Podcasts & Episodes
               </Link>
             </li>
           </ul>

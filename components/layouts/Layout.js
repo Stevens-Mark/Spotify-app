@@ -6,8 +6,8 @@ import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 // import component
-import Sidebar from './Sidebar';
-import Player from './Player';
+import Sidebar from '../Sidebar';
+import Player from '../Player';
 
 /**
  * Renders the user picture & sidebar (for all pages) as part of the general layout.
@@ -21,7 +21,16 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const path = router?.asPath; // URL from router.
 
-  const excludedPath = ['/search', '/search/all', '/search/albums', '/search/artists', '/search/episodes', '/search/playlists', '/search/podcasts', '/search/podcastAndEpisodes'];
+  const excludedPath = [
+    '/search',
+    '/search/all',
+    '/search/albums',
+    '/search/artists',
+    '/search/episodes',
+    '/search/playlists',
+    '/search/podcasts',
+    '/search/podcastAndEpisodes',
+  ];
   const isExcluded = excludedPath.includes(path);
 
   return (

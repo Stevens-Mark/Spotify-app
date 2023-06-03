@@ -9,11 +9,14 @@ import {
   queryState,
   querySubmittedState,
   searchingState,
+  topResultState,
 } from '@/atoms/searchAtom';
+// import function
+import { getRandomTopResult } from '@/lib/randomTopResult';
 // import icons & components
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import SearchNav from './SearchNav';
-import StatusSpinner from './StatusSpinner';
+import SearchNav from '../SearchNav';
+import StatusSpinner from '../StatusSpinner';
 
 /**
  * Renders the search bar (for all search pages: genres, album, playlist, artists, podcasts & episodes)
@@ -25,6 +28,7 @@ import StatusSpinner from './StatusSpinner';
 const NestedLayout = ({ children }) => {
   const spotifyApi = useSpotify();
   const setQueryResults = useSetRecoilState(searchResultState);
+  const setTopResults = useSetRecoilState(topResultState);
   const [query, setQuery] = useRecoilState(queryState);
   const setSubmitted = useSetRecoilState(querySubmittedState);
   const [isSearching, setIsSearching] = useRecoilState(searchingState);
@@ -73,14 +77,16 @@ const NestedLayout = ({ children }) => {
           { limit: itemsPerPage }
         );
         const data = response.body;
+        const topResults = getRandomTopResult(data);
         setQueryResults(data);
         setIsSearching(false);
+        setTopResults(topResults);
         router.push('/search/all');
       } catch (err) {
         setIsSearching(false);
         setIsError(true);
         console.error('Search failed: ', err);
-      } 
+      }
     }
   };
 
@@ -99,7 +105,7 @@ const NestedLayout = ({ children }) => {
                   className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm sm:w-[15rem] lg:w-[16.5rem] cursor-pointer appearance-none block py-3 px-3 pl-10 placeholder-gray-500 hover:placeholder-white"
                   type="search"
                   id="search"
-                  value={isError ? "Loading Error !" : query}
+                  value={isError ? 'Loading Error !' : query}
                   placeholder="What to listen to ?"
                   maxLength={30}
                   onChange={(e) => handleText(e)}

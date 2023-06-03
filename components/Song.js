@@ -117,7 +117,7 @@ function Song({ order, track }) {
         </button>
         <Image
           className="h-10 w-10"
-          src={song.album.images[0].url}
+          src={song.album?.images[0].url}
           alt=""
           width={100}
           height={100}

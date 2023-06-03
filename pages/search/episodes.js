@@ -12,8 +12,8 @@ import { errorState } from '@/atoms/errorAtom';
 // import functions
 import { mergeObject } from '@/lib/merge';
 // import layouts/components
-import Layout from '@/components/Layout';
-import NestedLayout from '@/components/NestLayout';
+import Layout from '@/components/layouts/Layout';
+import NestedLayout from '@/components/layouts/NestedLayout';
 import EpisodeCard from '@/components/cards/episodeCard';
 
 /**

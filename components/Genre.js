@@ -4,8 +4,8 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { genreState } from '@/atoms/genreAtom';
-import RecentSearches from './Recent';
 // import component
+import RecentSearches from './Recent';
 import GenreCard from './cards/genreCard';
 
 /**

@@ -1,7 +1,7 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 // import components
-import Layout from '@/components/Layout';
+import Layout from '@/components/layouts/Layout';
 import Center from '@/components/Center';
 
 export async function getServerSideProps(context) {

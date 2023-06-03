@@ -1,7 +1,7 @@
 import React from 'react';
 // import icons & components
-import Layout from '@/components/Layout';
-import NestedLayout from '@/components/NestLayout';
+import Layout from '@/components/layouts/Layout';
+import NestedLayout from '@/components/layouts/NestedLayout';
 import Genre from '@/components/Genre';
 
 /**
@@ -12,9 +12,11 @@ import Genre from '@/components/Genre';
 function Search() {
   return (
     <>
-    <h1 className='sr-only'>Search Page</h1>
-  <Genre />);
-  </>)
+      <h1 className="sr-only">Search Page</h1>
+      <Genre />
+      );
+    </>
+  );
 }
 
 export default Search;

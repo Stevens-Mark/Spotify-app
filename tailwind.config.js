@@ -50,6 +50,8 @@ export const theme = {
   screens: {
     xs: '525px',
     xxs: '375px',
+    isSm: '525px',
+    isMd: '640px',
     mdlg: '900px',
     ..._screens,
   },

@@ -25,11 +25,10 @@ function Card({ item, type }) {
           className={`aspect-square w-full shadow-image ${
             type === 'artist' ? 'rounded-full' : 'rounded-md'
           }`}
-          src={item.images?.[0]?.url || noImage}
+          src={item?.images?.[0]?.url || noImage}
           alt=""
           width={100}
           height={100}
-          // style={{objectFit:"cover"}}
         />
         {type !== 'podcast' && type !== 'episode' && (
           <button className=" absolute bottom-24 right-7 bg-black rounded-full opacity-0 shadow-3xl text-green-500 group-hover:-translate-y-2 transition delay-100 duration-300 ease-in-out group-hover:opacity-100 hover:scale-110">
@@ -37,18 +36,18 @@ function Card({ item, type }) {
           </button>
         )}
 
-        <h2 className="text-white capitalize mt-2 line-clamp-1">
-          {item.name.replace('/', ' & ')}
+        <h2 className="text-white capitalize mt-2 truncate">
+          {item?.name.replace('/', ' & ')}
         </h2>
 
         <div className="flex flex-wrap text-pink-swan mt-2 h-10">
           {/* album */}
           {type === 'album' && (
             <>
-              <span>{item.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
-              {item.artists.slice(0, 2).map((item) => (
-                <span className="truncate" key={item.id}>
-                  {item.name}.&nbsp;
+              <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
+              {item?.artists.slice(0, 2).map((item) => (
+                <span className="truncate" key={item?.id}>
+                  {item?.name}.&nbsp;
                 </span>
               ))}
             </>
@@ -57,27 +56,27 @@ function Card({ item, type }) {
           {/* playlist*/}
           {type === 'playlist' && (
             <span className="truncate">
-              By {capitalize(item.owner.display_name)}
+              By {capitalize(item?.owner.display_name)}
             </span>
           )}
 
           {/*artist*/}
           {type === 'artist' && (
-            <span className="truncate">{capitalize(item.type)}</span>
+            <span className="truncate">{capitalize(item?.type)}</span>
           )}
 
           {/* podcast */}
           {type === 'podcast' && (
-            <span className="truncate">{capitalize(item.publisher)}</span>
+            <span className="truncate">{capitalize(item?.publisher)}</span>
           )}
           {/* episode */}
           {type === 'episode' && (
             <>
               <span className="line-clamp-1">
-                {getMonthYear(item.release_date)}&nbsp;•&nbsp;
+                {getMonthYear(item?.release_date)}&nbsp;•&nbsp;
               </span>
               <span className="line-clamp-1">
-                {millisecondsToMinutes(item.duration_ms)}
+                {millisecondsToMinutes(item?.duration_ms)}
               </span>
             </>
           )}

@@ -4,8 +4,8 @@ import { useRouter } from 'next/router';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
-import Layout from '@/components/Layout';
-import NestedLayout from '@/components/NestLayout';
+import Layout from '@/components/layouts/Layout';
+import NestedLayout from '@/components/layouts/NestedLayout';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 
@@ -46,7 +46,9 @@ function PodcastAndEpisodes() {
           <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
             Podcasts & Shows
           </h2>
-          <h3 className="text-white mb-10">Sorry no Shows/Podcasts</h3>
+          <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
+            <h3 className="text-white">Sorry no Shows/Podcasts</h3>
+          </div>
         </section>
       ) : (
         <section>
@@ -76,7 +78,9 @@ function PodcastAndEpisodes() {
           <h2 className="text-white mt-4 mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
             Episodes
           </h2>
-          <h3 className="text-white mb-10">Sorry no Episodes</h3>
+          <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
+            <h3 className="text-white">Sorry no Episodes</h3>
+          </div>
         </section>
       ) : (
         <section>
