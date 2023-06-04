@@ -46,7 +46,7 @@ const TopSongCard = ({ song }) => {
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
             // setCurrentSongIndex(currentTrackIndex);
-            // setActivePlaylist(null);
+            setActivePlaylist(null);
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
