@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
@@ -20,32 +20,34 @@ function Genre() {
   const [totalGenres, setTotalGenres] = useState(99999);
   const itemsPerPage = 50;
 
-  if (genres === null) {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getCategories({
-          limit: itemsPerPage,
-          offset: 0,
-          country: 'US', // FR, US, GB
-          locale: 'en_US', // fr_FR, en_US, en_GB
-        })
-        .then(
-          function (data) {
-            setTotalGenres(data.body.categories.total);
-            setGenres(data.body.categories.items);
-          },
-          function (err) {
-            console.log('Failed to get genres!', err);
-          }
-        );
+  useEffect(() => {
+    if (genres === null) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getCategories({
+            limit: itemsPerPage,
+            offset: 0,
+            country: 'US', // FR, US, GB
+            locale: 'en_US', // fr_FR, en_US, en_GB
+          })
+          .then(
+            function (data) {
+              setTotalGenres(data.body.categories.total);
+              setGenres(data.body.categories.items);
+            },
+            function (err) {
+              console.log('Failed to get genres!', err);
+            }
+          );
+      }
     }
-  }
+  });
 
-/**
- * Fetches more genres & updates the list of genres
- * @function fetchGenre
- * @returns {object} updated list of genres
- */
+  /**
+   * Fetches more genres & updates the list of genres
+   * @function fetchGenre
+   * @returns {object} updated list of genres
+   */
   const fetchGenre = () => {
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
