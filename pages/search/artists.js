@@ -91,6 +91,7 @@ function Artists() {
             ))}
           </div>
           {totalNumber > currentNumber && (
+            <>
             <span className="flex justify-end w-full mt-4">
               <button
                 className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
@@ -101,6 +102,17 @@ function Artists() {
                 <span>Add More</span>
               </button>
             </span>
+            <span className="flex justify-end w-full mt-4">
+              <button
+                className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
+                onClick={() => {
+                  fetchMoreArtists();
+                }}
+              >
+                <span>Add More</span>
+              </button>
+            </span>
+            </>
           )}
         </>
       )}
