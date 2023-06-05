@@ -55,6 +55,24 @@ function Card({ item, type }) {
     }
   };
 
+  const [uris, setUris] = useState(null);
+  const getArtistTopTracks = (artistId, market) => {
+    spotifyApi
+      .getArtistTopTracks(artistId, market)
+      .then((data) => {
+        // Access the top track of the artist
+        const TrackId = data.body?.tracks[0]?.id;
+        const topTracks = data.body.tracks;
+        const trackUris = topTracks.map((track) => track.uri);
+        setUris(trackUris);
+        setCurrentTrackId(TrackId);
+        setFirstTrackId(TrackId);
+      })
+      .catch((err) => {
+        console.error('Error retrieving artist top tracks:', err);
+      });
+  };
+
   const HandleDetails = async (type, item) => {
     let address;
     if (type === 'playlist') {
@@ -63,6 +81,11 @@ function Card({ item, type }) {
     } else if (type === 'album') {
       address = `spotify:album:${item.id}`;
       getAlbumTrack(item.id);
+    } else if (type === 'artist') {
+      address = `spotify:artist:${item.id}`;
+
+      getArtistTopTracks(item.id, ['US', 'FR']);
+      // return;
     }
     // console.log('item ', item);
     // spotifyApi
@@ -82,9 +105,12 @@ function Card({ item, type }) {
     //   .then(() => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
-        data.body?.is_playing &&
-        firstTrackId === currentTrackId &&
-        item?.uri === data.body?.context?.uri
+        (data.body?.is_playing &&
+          firstTrackId === currentTrackId &&
+          item?.uri === data.body?.context?.uri) ||
+        (data.body?.is_playing &&
+          firstTrackId === currentTrackId &&
+          item?.id !== data.body?.id)
       ) {
         spotifyApi
           .pause()
@@ -93,18 +119,23 @@ function Card({ item, type }) {
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
-        spotifyApi
-          .play({
-            context_uri: address,
-            offset: { position: 0 },
-          })
-          .then(() => {
-            console.log('Playback Success');
-            setIsPlaying(true);
-            setCurrentTrackId(firstTrackId);
-            setActivePlaylist(item.id);
-          });
-        // .catch((err) => console.error('Playback failed: ', err));
+        if (spotifyApi.getAccessToken()) {
+          spotifyApi
+            .play({
+              ...(type !== 'artist'
+                ? { context_uri: address }
+                : { uris: uris }),
+              offset: { position: 0 },
+              // ...(type !== 'artist' ? { offset: { position: 0 } } : {}),
+            })
+            .then(() => {
+              console.log('Playback Success');
+              setIsPlaying(true);
+              setCurrentTrackId(firstTrackId);
+              setActivePlaylist(item.id);
+            })
+            .catch((err) => console.error('Playback failed: ', err));
+        }
       }
     });
     // });
