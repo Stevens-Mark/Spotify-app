@@ -16,7 +16,6 @@ import {
   MagnifyingGlassIcon,
   HeartIcon,
   PlusCircleIcon,
-  RssIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
@@ -60,10 +59,10 @@ function Sidebar() {
             }
           });
         })
-        .catch((error) => {
+        .catch((err) => {
           console.error(
             'Failed to get current playing track / playlist ID',
-            error
+            err
           );
         });
     }

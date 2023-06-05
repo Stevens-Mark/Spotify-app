@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -11,7 +11,7 @@ import {
 } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 // import icons/images
-import { PlayCircleIcon } from '@heroicons/react/24/solid';
+import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import noImage from '@/public/images/noImageAvailable.svg';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
@@ -32,7 +32,9 @@ function Card({ item, type }) {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const [firstTrackId, setFirstTrackId] = useState(null);
+  const [uris, setUris] = useState(null); // for artist playback
 
+  // fetch playlist track
   const getPlaylistTrack = async (playlistId) => {
     try {
       const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 1 });
@@ -40,10 +42,11 @@ function Card({ item, type }) {
       setCurrentTrackId(TrackId);
       setFirstTrackId(TrackId);
     } catch (err) {
-      console.error('Error retrieving playlist track:', err);
+      console.error('Error retrieving playlist track:');
     }
   };
 
+  // fetch album track
   const getAlbumTrack = async (AlbumId) => {
     try {
       const data = await spotifyApi.getAlbumTracks(AlbumId, { limit: 1 });
@@ -51,11 +54,11 @@ function Card({ item, type }) {
       setCurrentTrackId(TrackId);
       setFirstTrackId(TrackId);
     } catch (err) {
-      console.error('Error retrieving Album track:', err);
+      console.error('Error retrieving Album track:');
     }
   };
 
-  const [uris, setUris] = useState(null);
+  // fetch artists tracks
   const getArtistTopTracks = (artistId, market) => {
     spotifyApi
       .getArtistTopTracks(artistId, market)
@@ -64,15 +67,17 @@ function Card({ item, type }) {
         const TrackId = data.body?.tracks[0]?.id;
         const topTracks = data.body.tracks;
         const trackUris = topTracks.map((track) => track.uri);
+        // set uris for playback
         setUris(trackUris);
         setCurrentTrackId(TrackId);
         setFirstTrackId(TrackId);
       })
       .catch((err) => {
-        console.error('Error retrieving artist top tracks:', err);
+        console.error('Error retrieving artist top tracks:');
       });
   };
 
+  /* either play or pause current track */
   const HandleDetails = async (type, item) => {
     let address;
     if (type === 'playlist') {
@@ -83,26 +88,9 @@ function Card({ item, type }) {
       getAlbumTrack(item.id);
     } else if (type === 'artist') {
       address = `spotify:artist:${item.id}`;
-
       getArtistTopTracks(item.id, ['US', 'FR']);
-      // return;
     }
-    // console.log('item ', item);
-    // spotifyApi
-    //   .getPlaylistTracks(item.id)
-    //   .then((data) => {
-    //     // Access the ID of the first track
-    //     // console.log(data)
-    //     const TrackId = data.body.items[0].track.id;
-    //     console.log(TrackId);
-    //     console.log('First track ID:', data.body.items[0].track.name);
-    //     setCurrentTrackId(TrackId);
-    //     setFirstTrackId(TrackId);
-    //   })
-    //   .catch((err) => {
-    //     console.error('Error retrieving playlist tracks:', err);
-    //   })
-    //   .then(() => {
+
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
         (data.body?.is_playing &&
@@ -117,7 +105,7 @@ function Card({ item, type }) {
           .then(() => {
             setIsPlaying(false);
           })
-          .catch((err) => console.error('Pause failed: ', err));
+          .catch((err) => console.error('Pause failed: '));
       } else {
         if (spotifyApi.getAccessToken()) {
           spotifyApi
@@ -138,8 +126,12 @@ function Card({ item, type }) {
         }
       }
     });
-    // });
   };
+
+  // used to set play/pause icons
+  const activeStatus = useMemo(() => {
+    return firstTrackId === currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, firstTrackId, isPlaying]);
 
   return (
     <Link
@@ -163,7 +155,11 @@ function Card({ item, type }) {
               HandleDetails(type, item);
             }}
           >
-            <PlayCircleIcon className="w-12 h-12 -m-2" />
+            {activeStatus ? (
+              <PauseCircleIcon className="w-12 h-12 -m-2" />
+            ) : (
+              <PlayCircleIcon className="w-12 h-12 -m-2" />
+            )}
           </button>
         )}
 

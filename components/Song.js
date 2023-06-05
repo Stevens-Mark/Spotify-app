@@ -58,13 +58,8 @@ function Song({ order, track }) {
     }, '750');
   }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
 
-  const activeStatus = useMemo(() => {
-    return song.id == currentTrackId && isPlaying ? true : false;
-  }, [currentTrackId, isPlaying, song.id]);
-
   /* either play or pause current track */
   const handlePlayPause = (event, currentTrackIndex) => {
-   
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentTrackId) {
         spotifyApi
@@ -72,7 +67,7 @@ function Song({ order, track }) {
           .then(() => {
             setIsPlaying(false);
           })
-          .catch((err) => console.error('Pause failed: ', err));
+          .catch((err) => console.error('Pause failed: '));
       } else {
         spotifyApi
           .play({
@@ -90,6 +85,11 @@ function Song({ order, track }) {
       }
     });
   };
+
+  // used to set play/pause icons
+  const activeStatus = useMemo(() => {
+    return song.id === currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, isPlaying, song.id]);
 
   return (
     <div

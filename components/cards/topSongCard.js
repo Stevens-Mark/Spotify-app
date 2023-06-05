@@ -2,23 +2,25 @@ import React, { useState, useMemo } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import {
-  playlistIdState,
-  playlistState,
-  activePlaylistState,
-} from '@/atoms/playListAtom';
+import { activePlaylistState } from '@/atoms/playListAtom';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 
+/**
+ * Renders the 4 songs next to top result
+ * @function TopSongCard
+ * @param {object} song innformation
+ * @returns {JSX}
+ */
 const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
   const [currentTrackId, setCurrentTrackId] =
@@ -27,6 +29,7 @@ const TopSongCard = ({ song }) => {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
+  /* either play or pause current track */
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id === currentTrackId) {
@@ -53,6 +56,7 @@ const TopSongCard = ({ song }) => {
     });
   };
 
+  // used to set play/pause icons
   const activeStatus = useMemo(() => {
     return song.id === currentTrackId && isPlaying ? true : false;
   }, [currentTrackId, isPlaying, song.id]);

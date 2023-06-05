@@ -7,9 +7,9 @@ import noImage from '@/public/images/noImageAvailable.svg';
 import { capitalize } from '@/lib/capitalize';
 
 /**
- * Render a card for either album, playlist, podcast, artist, or recentsearch
+ * Render a card for either album, playlist, artist, or track in top result
  * @function TopResultCard
- * @param {object} item (album, playlist, podcast, artist, or recentsearch info)
+ * @param {object} item (album, playlist, artist, or track)
  * @param {string} type of card
  * @returns {JSX}
  */
