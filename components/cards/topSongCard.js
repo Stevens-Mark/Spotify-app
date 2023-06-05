@@ -21,7 +21,7 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 
 const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
-  const [currentrackId, setCurrentTrackId] =
+  const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
@@ -29,7 +29,7 @@ const TopSongCard = ({ song }) => {
 
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id === currentrackId) {
+      if (data.body?.is_playing && song.id === currentTrackId) {
         spotifyApi
           .pause()
           .then(() => {
@@ -54,8 +54,8 @@ const TopSongCard = ({ song }) => {
   };
 
   const activeStatus = useMemo(() => {
-    return song.id === currentrackId && isPlaying ? true : false;
-  }, [currentrackId, isPlaying, song.id]);
+    return song.id === currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, isPlaying, song.id]);
 
   return (
     <div

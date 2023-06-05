@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import noAlbum from '@/public/images/blank.svg';
 // import custom hooks
@@ -18,6 +18,8 @@ function PlayingInfo() {
   const songInfo = useSongInfo();
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const setIsPlaying = useSetRecoilState(isPlayState);
+
+
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {

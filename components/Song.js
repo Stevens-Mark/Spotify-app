@@ -34,7 +34,7 @@ function Song({ order, track }) {
   const playlist = useRecoilValue(playlistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const playlistId = useRecoilValue(playlistIdState);
-  const [currentrackId, setCurrentTrackId] =
+  const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
@@ -47,25 +47,26 @@ function Song({ order, track }) {
     setTimeout(() => {
       if (
         currentSongIndex == null &&
-        currentrackId !== null &&
+        currentTrackId !== null &&
         playlist !== null
       ) {
         const indexPosition = playlist?.tracks.items.findIndex(
-          (x) => x.track.id == currentrackId
+          (x) => x.track.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '750');
-  }, [currentSongIndex, currentrackId, playlist, setCurrentSongIndex]);
+  }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
 
   const activeStatus = useMemo(() => {
-    return song.id == currentrackId && isPlaying ? true : false;
-  }, [currentrackId, isPlaying, song.id]);
+    return song.id == currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, isPlaying, song.id]);
 
   /* either play or pause current track */
   const handlePlayPause = (event, currentTrackIndex) => {
+   
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id == currentrackId) {
+      if (data.body?.is_playing && song.id == currentTrackId) {
         spotifyApi
           .pause()
           .then(() => {
@@ -136,9 +137,7 @@ function Song({ order, track }) {
         </div>
       </div>
       <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden mdlg:inline pr-3">
-          {song.album.name}
-        </p>
+        <p className="w-40 hidden mdlg:inline pr-3">{song.album.name}</p>
         <p className="w-48 hidden mdlg:inline">
           {format(new Date(track.added_at), 'p, dd/MM/yyyy')}
         </p>
