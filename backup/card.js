@@ -3,8 +3,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState } from 'recoil';
-import { activePlaylistState, playlistNameState } from '@/atoms/playListAtom';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  playlistIdState,
+  playlistState,
+  activePlaylistState,
+  playlistNameState,
+} from '@/atoms/playListAtom';
 import {
   currentTrackIdState,
   currentTrackNameState,
@@ -14,6 +19,7 @@ import {
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
+
 // import icons/images
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import noImage from '@/public/images/noImageAvailable.svg';
@@ -25,8 +31,7 @@ import noImage from '@/public/images/noImageAvailable.svg';
  * @param {string} type of card
  * @returns {JSX}
  */
-function Card({ item, type, order }) {
-  console.log(type);
+function Card({ item, type }) {
   const spotifyApi = useSpotify();
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
@@ -43,6 +48,8 @@ function Card({ item, type, order }) {
   const [currentPlaylistName, setcurrentPlaylistName] =
     useRecoilState(playlistNameState);
   const [firstTrackId, setFirstTrackId] = useState(null);
+  const [firstTrackName, setFirstTrackName] = useState(null);
+  const [firstTrackType, setFirstTrackType] = useState(null);
   const [firstPlaylistName, setFirstPlaylistName] = useState(null);
   const [uris, setUris] = useState(null); // for artist playback
 
@@ -53,8 +60,12 @@ function Card({ item, type, order }) {
       const TrackId = data.body?.items[0]?.track.id;
       setCurrentTrackId(TrackId);
       setFirstTrackId(TrackId);
-      setcurrentPlaylistName(playlistId);
-      setFirstPlaylistName(playlistId);
+      setcurrentPlaylistName(playlistName);
+      setFirstPlaylistName(playlistName);
+      setCurrentTrackName(data.body?.items[0]?.track.name);
+      setFirstTrackName(data.body?.items[0]?.track.name);
+      setCurrentTrackType(type);
+      setFirstTrackType(data.body?.items[0]?.track.type);
     } catch (err) {
       console.error('Error retrieving playlist track:');
     }
@@ -68,6 +79,10 @@ function Card({ item, type, order }) {
       const TrackId = data.body?.items[0]?.id;
       setCurrentTrackId(TrackId);
       setFirstTrackId(TrackId);
+      setCurrentTrackName(data.body?.items[0]?.name);
+      setFirstTrackName(data.body?.items[0]?.name);
+      setCurrentTrackType(data.body?.items[0]?.type);
+      setFirstTrackType(data.body?.items[0]?.type);
     } catch (err) {
       console.error('Error retrieving Album track:');
     }
@@ -86,6 +101,10 @@ function Card({ item, type, order }) {
         setUris(trackUris);
         setCurrentTrackId(TrackId);
         setFirstTrackId(TrackId);
+        setCurrentTrackName(data.body?.tracks[0]?.name);
+        setFirstTrackName(data.body?.tracks[0]?.name);
+        setCurrentTrackType(data.body?.tracks[0]?.type);
+        setFirstTrackType(data.body?.tracks[0]?.type);
       })
       .catch((err) => {
         console.error('Error retrieving artist top tracks:');
@@ -93,7 +112,7 @@ function Card({ item, type, order }) {
   };
 
   /* either play or pause current track */
-  const HandleDetails = (event, type, item, order) => {
+  const HandleDetails = async (type, item) => {
     console.log('item', item);
     let address;
     if (type === 'playlist') {
@@ -109,13 +128,9 @@ function Card({ item, type, order }) {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
         (data.body?.is_playing &&
-          firstTrackId === currentTrackId )
-          // &&  item?.uri === data.body?.context?.uri) 
-          ||
-        (data.body?.is_playing &&
           firstTrackId === currentTrackId &&
-          item?.id == data.body?.id) ||
-        (data.body?.is_playing && item.id === data.body?.item?.artists[0]?.id) // for artists
+          item?.id === data.body?.id) ||
+        (data.body?.is_playing && firstPlaylistName === currentPlaylistName)
       ) {
         spotifyApi
           .pause()
@@ -125,19 +140,22 @@ function Card({ item, type, order }) {
           .catch((err) => console.error('Pause failed: '));
       } else {
         if (spotifyApi.getAccessToken()) {
+          
           spotifyApi
             .play({
               ...(type !== 'artist'
                 ? { context_uri: address }
                 : { uris: uris }),
-              // offset: { position: 0 },
+              offset: { position: 0 },
               // ...(type !== 'artist' ? { offset: { position: 0 } } : {}),
             })
             .then(() => {
               console.log('Playback Success');
               setIsPlaying(true);
               // setCurrentTrackId(firstTrackId);
-              setActivePlaylist(item.id);
+              // setActivePlaylist(item.id);
+              // setCurrentTrackName(firstTrackName);
+              // setCurrentTrackType(firstTrackType);
             })
             .catch((err) => console.error('Playback failed: ', err));
         }
@@ -147,10 +165,27 @@ function Card({ item, type, order }) {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return (firstTrackId === currentTrackId && isPlaying)
+    return (firstTrackId === currentTrackId &&
+      firstTrackName === currentTrackName &&
+      firstTrackType === currentTrackType &&
+      isPlaying) ||
+      (firstPlaylistName === currentPlaylistName &&
+        firstTrackId === currentTrackId &&
+        firstTrackName === currentTrackName &&
+        isPlaying)
       ? true
       : false;
-  }, [currentTrackId, firstTrackId, isPlaying]);
+  }, [
+    currentPlaylistName,
+    currentTrackId,
+    currentTrackName,
+    currentTrackType,
+    firstPlaylistName,
+    firstTrackId,
+    firstTrackName,
+    firstTrackType,
+    isPlaying,
+  ]);
 
   return (
     <Link
@@ -174,10 +209,8 @@ function Card({ item, type, order }) {
                 ? '-translate-y-2'
                 : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
             }`}
-            onClick={(event) => {
-              HandleDetails(event, type, item, order);
-            // onClick={() => {
-            //   HandleDetails(type, item);
+            onClick={() => {
+              HandleDetails(type, item);
             }}
           >
             {activeStatus ? (
