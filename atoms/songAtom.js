@@ -19,3 +19,13 @@ export const currentTrackIdState = atom({
   key: 'currentTrackIdState',
   default: null,
 });
+
+export const currentTrackNameState = atom({
+  key: 'currentTrackNameState',
+  default: null,
+});
+
+export const currentTrackTypeState = atom({
+  key: 'currentTrackTypeState',
+  default: null,
+});

@@ -18,7 +18,7 @@ function TopSongs() {
     <div className=" flex flex-col justify-between h-60 text-sm text-pink-swan px-4 py-2 rounded-lg cursor-pointer">
       {/* 4 songs here */}
       {songs?.slice(0, 4).map((song, i) => (
-        <TopSongCard song={song} key={song.id} />
+        <TopSongCard key={song.id} song={song} order={i} />
       ))}
     </div>
   );

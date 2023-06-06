@@ -21,12 +21,10 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
  * @param {object} song innformation
  * @returns {JSX}
  */
-const TopSongCard = ({ order, song }) => {
+const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
@@ -39,7 +37,6 @@ const TopSongCard = ({ order, song }) => {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            setCurrentSongIndex(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -51,7 +48,7 @@ const TopSongCard = ({ order, song }) => {
             console.log('Playback Success');
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
-            setCurrentSongIndex(currentTrackIndex);
+            // setCurrentSongIndex(currentTrackIndex);
             setActivePlaylist(null);
           })
           .catch((err) => console.error('Playback failed: ', err));
@@ -61,8 +58,8 @@ const TopSongCard = ({ order, song }) => {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && order === currentSongIndex && isPlaying ? true : false;
-  }, [currentSongIndex, currentTrackId, isPlaying, order, song.id]);
+    return song.id === currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, isPlaying, song.id]);
 
   return (
     <div
@@ -70,7 +67,7 @@ const TopSongCard = ({ order, song }) => {
         activeStatus ? 'text-white bg-gray-800' : ''
       }`}
       onClick={(event) => {
-        handlePlayPause(event, order);
+        handlePlayPause(event);
       }}
     >
       <div className="flex relative">
