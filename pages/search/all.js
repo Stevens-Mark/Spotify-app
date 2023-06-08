@@ -182,7 +182,7 @@ function All() {
           </div>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {artists?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'artist'} item={item} />
+              <Card key={`${item.id}-${i}`} type={'artist'} item={item} order={i} />
             ))}
           </div>
         </section>
@@ -206,7 +206,7 @@ function All() {
           </div>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {albums?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'album'} item={item} />
+              <Card key={`${item.id}-${i}`} type={'album'} item={item} order={i} />
             ))}
           </div>
         </section>
@@ -230,7 +230,7 @@ function All() {
           </div>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {playlists?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'playlist'} item={item} />
+              <Card key={`${item.id}-${i}`} type={'playlist'} item={item} order={i} />
             ))}
           </div>
         </section>
@@ -254,7 +254,7 @@ function All() {
           </div>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {shows?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'podcast'} item={item} />
+              <Card key={`${item.id}-${i}`} type={'podcast'} item={item} order={i}/>
             ))}
           </div>
         </section>
@@ -278,7 +278,7 @@ function All() {
           </div>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {episodes?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'episode'} item={item} />
+              <Card key={`${item.id}-${i}`} type={'episode'} item={item} order={i} />
             ))}
           </div>
         </section>

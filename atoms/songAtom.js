@@ -20,12 +20,12 @@ export const currentTrackIdState = atom({
   default: null,
 });
 
-export const currentTrackNameState = atom({
-  key: 'currentTrackNameState',
-  default: null,
-});
+// export const currentTrackNameState = atom({
+//   key: 'currentTrackNameState',
+//   default: null,
+// });
 
-export const currentTrackTypeState = atom({
-  key: 'currentTrackTypeState',
-  default: null,
-});
+// export const currentTrackTypeState = atom({
+//   key: 'currentTrackTypeState',
+//   default: null,
+// });
