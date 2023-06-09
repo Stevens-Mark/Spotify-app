@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
@@ -9,6 +9,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
+import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -18,28 +19,37 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 /**
  * Renders the 4 songs next to top result
  * @function TopSongCard
- * @param {object} song innformation
+ * @param {number} order track index
+ * @param {object} song information
  * @returns {JSX}
  */
 const TopSongCard = ({ order, song }) => {
   const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState);
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
+  // used to set play/pause icons
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 
   /* either play or pause current track */
-  const handlePlayPause = (event, currentTrackIndex) => {
+  const handlePlayPause = (event, order) => {
+    setCurrentItemId(song.id);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id === currentTrackId) {
+      if (currentItemId === song.id && data.body?.is_playing) {
         spotifyApi
           .pause()
           .then(() => {
             setIsPlaying(false);
             setCurrentSongIndex(null);
+            setCurrentAlbumId(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -51,8 +61,9 @@ const TopSongCard = ({ order, song }) => {
             console.log('Playback Success');
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
-            setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(null);
+            setCurrentAlbumId(song.album.id);
+            setCurrentSongIndex(order);
+            setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
@@ -60,14 +71,17 @@ const TopSongCard = ({ order, song }) => {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && order === currentSongIndex && isPlaying ? true : false;
-  }, [currentSongIndex, currentTrackId, isPlaying, order, song.id]);
+  const activeSongStatus = useMemo(() => {
+    return (song.id === currentItemId && isPlaying) ||
+      (currentAlbumId === song.id && isPlaying)
+      ? true
+      : false;
+  }, [song.id, currentItemId, currentAlbumId, isPlaying]);
 
   return (
     <div
       className={`group flex justify-between text-pink-swan p-2 rounded-md hover:text-white hover:bg-gray-800 transition delay-100 duration-300 ease-in-out overflow-hidden ${
-        activeStatus ? 'text-white bg-gray-800' : ''
+        activeSongStatus ? 'text-white bg-gray-800' : ''
       }`}
       onClick={(event) => {
         handlePlayPause(event, order);
@@ -83,20 +97,20 @@ const TopSongCard = ({ order, song }) => {
         />
         <span
           className={`absolute inset-0 w-10 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
-            activeStatus ? 'opacity-100' : ''
+            activeSongStatus ? 'opacity-100' : ''
           }`}
         />
 
-        {activeStatus ? (
+        {activeSongStatus ? (
           <PauseIcon
             className={`absolute text-white top-2.5 left-3 h-5 ${
-              activeStatus ? 'opacity-100' : ''
+              activeSongStatus ? 'opacity-100' : ''
             }`}
           />
         ) : (
           <PlayIcon
             className={`absolute text-white top-2.5 left-3 h-5 group-hover:opacity-100 opacity-0 transition delay-100 duration-300 ${
-              activeStatus ? 'opacity-100' : ''
+              activeSongStatus ? 'opacity-100' : ''
             }`}
           />
         )}
@@ -104,7 +118,7 @@ const TopSongCard = ({ order, song }) => {
         <div>
           <h3
             className={`w-36 xxs:w-60 md:w-80 pr-2 truncate ${
-              activeStatus ? 'text-green-500' : 'text-white'
+              activeSongStatus ? 'text-green-500' : 'text-white'
             }`}
           >
             {song.album.name}

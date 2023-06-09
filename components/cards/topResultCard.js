@@ -5,15 +5,12 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
-  playlistIdState,
-  playlistState,
-  activePlaylistState,
-} from '@/atoms/playListAtom';
-import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { activePlaylistState } from '@/atoms/playListAtom';
+import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 // import icons/images
@@ -29,15 +26,19 @@ import noImage from '@/public/images/noImageAvailable.svg';
  */
 function TopResultCard({ item, type }) {
   const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState); // used to stop topsong duplicate? setting active status in this case
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [firstTrackId, setFirstTrackId] = useState(null);
-  const [uris, setUris] = useState(null); // for artist playback
-  const [cardActivated, setCardActivated] = useState(false); 
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
+  // used to set play/pause icons
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 
   // fetch playlist track
   const getPlaylistTrack = async (playlistId) => {
@@ -45,7 +46,6 @@ function TopResultCard({ item, type }) {
       const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 1 });
       const TrackId = data.body?.items[0]?.track.id;
       setCurrentTrackId(TrackId);
-      setFirstTrackId(TrackId);
     } catch (err) {
       console.error('Error retrieving playlist track:');
     }
@@ -57,94 +57,98 @@ function TopResultCard({ item, type }) {
       const data = await spotifyApi.getAlbumTracks(AlbumId, { limit: 1 });
       const TrackId = data.body?.items[0]?.id;
       setCurrentTrackId(TrackId);
-      setFirstTrackId(TrackId);
+      setCurrentAlbumId(AlbumId);
     } catch (err) {
       console.error('Error retrieving Album track:');
     }
   };
 
-  // fetch artists tracks
-  const getArtistTopTracks = (artistId, market) => {
-    spotifyApi
-      .getArtistTopTracks(artistId, market)
-      .then((data) => {
-        // Access the top track of the artist
-        const TrackId = data.body?.tracks[0]?.id;
-        const topTracks = data.body.tracks;
-        const trackUris = topTracks.map((track) => track.uri);
-        // set uris for playback
-        setUris(trackUris);
-        setCurrentTrackId(TrackId);
-        setFirstTrackId(TrackId);
-      })
-      .catch((err) => {
-        console.error('Error retrieving artist top tracks:');
-      });
-  };
-
-  // set track
-  const getTrack = (trackId) => {
-    setCurrentTrackId(trackId);
-    setFirstTrackId(trackId);
-    setUris(item.uri);
-  };
-
   /* either play or pause current track */
-  const HandleDetails = async (type, item) => {
+  const HandlePlayPause = (event, item, type, order) => {
     let address;
-    if (type === 'playlist') {
-      address = `spotify:playlist:${item.id}`;
-      getPlaylistTrack(item.id);
-    } else if (type === 'album') {
-      address = `spotify:album:${item.id}`;
-      getAlbumTrack(item.id);
-    } else if (type === 'artist') {
-      // address = `spotify:artist:${item.id}`;
-      getArtistTopTracks(item.id, ['US', 'FR']);
-    } else if (type === 'track') {
-      address = `${item.uri}`;
-      console.log(address);
-      // setUris(item.uri);
-      getTrack(item.id);
-    }
+    let playPromise;
+    setCurrentItemId(item.id);
 
+    // set states when a track can play successfully
+    const handlePlaybackSuccess = () => {
+      console.log('Playback Success');
+      setIsPlaying(true);
+      setCurrentSongIndex(order);
+      setActivePlaylist(item.id);
+      // setActivePlaylist(null);
+    };
+
+    // check if current playing track matches the one chosen by the user
+    // if "yes" pause if "no" play the new track selected
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (
-        (data.body?.is_playing &&
-          firstTrackId === currentTrackId &&
-          item?.uri === data.body?.context?.uri) ||
-        (data.body?.is_playing &&
-          firstTrackId === currentTrackId &&
-          item?.id !== data.body?.id)
-      ) {
+      if (currentItemId === item.id && data.body?.is_playing) {
         spotifyApi
           .pause()
           .then(() => {
             setIsPlaying(false);
-            // setCardActivated(false);
+            setCurrentSongIndex(null);
+            setCurrentAlbumId(null);
+            // setActivePlaylist(null);
           })
-          .catch((err) => console.error('Pause failed: '));
+          .catch((err) => {
+            console.error('Pause failed: ', err);
+          });
       } else {
-        if (spotifyApi.getAccessToken()) {
-          spotifyApi
-            .play({
-              ...(type === 'track' ? { uris: [uris] } : {}),
-              // ...(type !== 'artist'
-              //   ? { context_uri: address, offset: { position: 0 }, }
-              //   : { uris: uris, offset: { position: 0 }, }),
+        if (type === 'artist' || type === 'track') {
+          // if artist selected get tracks Uris & play in player
+          if (type === 'artist') {
+            if (spotifyApi.getAccessToken()) {
+              playPromise = spotifyApi
+                .getArtistTopTracks(item.id, ['US', 'FR'])
+                .then((data) => {
+                  setCurrentTrackId(data.body?.tracks[0]?.id); // will trigger playerInfo to update
+                  return data.body.tracks.map((track) => track.uri);
+                })
+                .then((trackUris) => {
+                  return spotifyApi.play({ uris: trackUris });
+                })
+                .catch((err) => {
+                  console.error(
+                    'Either Artist retrieval or playback failed:',
+                    err
+                  );
+                });
+            }
+            // if track selected get track Uri & play in player
+          } else if (type === 'track') {
+            if (spotifyApi.getAccessToken()) {
+              playPromise = spotifyApi
+                .play({
+                  uris: [item.uri],
+                })
+                .then(() => {
+                  setCurrentTrackId(item.id); // will trigger playerInfo to update
+                })
+                .catch((err) => {
+                  console.error('Track playback failed:', err);
+                });
+            }
+          }
 
-              // offset: { position: 0 },
-              // ...(type !== 'artist' ? { offset: { position: 0 } } : {}),
-            })
-            .then(() => {
-              console.log('Playback Success');
-              setIsPlaying(true);
-              setCurrentTrackId(firstTrackId);
-              setActivePlaylist(item.id);
-              setCurrentSongIndex(null); // set null to stop topsong duplicate? setting active status
-              // setCardActivated(true);
-            })
-            .catch((err) => console.error('Playback failed: ', err));
+          // else get corresponding context_uri depending on if album or playlist
+        } else if (type === 'playlist') {
+          address = `spotify:playlist:${item.id}`;
+          getPlaylistTrack(item.id);
+        } else if (type === 'album') {
+          address = `spotify:album:${item.id}`;
+          getAlbumTrack(item.id);
+        }
+        // context_uri exists then play it
+        if (address && spotifyApi.getAccessToken()) {
+          playPromise = spotifyApi.play({ context_uri: address });
+        }
+        // if possible to play a track then call function to set states otherwise fail
+        if (playPromise) {
+          playPromise
+            .then(handlePlaybackSuccess)
+            .catch((err) =>
+              console.error('Either lbum or Playlist Playback failed: ', err)
+            );
         }
       }
     });
@@ -152,8 +156,11 @@ function TopResultCard({ item, type }) {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return firstTrackId === currentTrackId && isPlaying ? true : false;
-  }, [currentTrackId, firstTrackId, isPlaying]);
+    return (currentItemId === item.id && isPlaying) ||
+      (currentAlbumId === item.id && isPlaying)
+      ? true
+      : false;
+  }, [currentAlbumId, currentItemId, isPlaying, item.id]);
 
   return (
     <Link href="" className="group">
@@ -171,13 +178,13 @@ function TopResultCard({ item, type }) {
         />
 
         <button
-          className={`absolute bottom-4 right-7 bg-black rounded-full shadow-3xl text-green-500 hover:scale-110 transition delay-100 duration-300 ease-in-out ${
+          className={`absolute bottom-4 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 ${
             activeStatus
               ? '-translate-y-2'
-              : 'opacity-0 group-hover:opacity-100 group-hover:-translate-y-2'
+              : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
           }`}
-          onClick={() => {
-            HandleDetails(type, item);
+          onClick={(event) => {
+            HandlePlayPause(event, item, type);
           }}
         >
           {activeStatus ? (

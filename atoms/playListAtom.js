@@ -1,22 +1,20 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
+// current playlist id
 export const playlistIdState = atom({
-  key: "playlistIdState",
+  key: 'playlistIdState',
   // default: "1beJKiTTWHdetZqGFyBeAN",
-  default: null
+  default: null,
 });
 
+// list of user's playlists retrieved
 export const playlistState = atom({
-  key: "playlistState",
+  key: 'playlistState',
   default: null,
 });
 
+// playlist playing or not
 export const activePlaylistState = atom({
-  key: "activePlaylistState",
-  default: null,
-});
-
-export const playlistNameState = atom({
-  key: "playlistNameState",
+  key: 'activePlaylistState',
   default: null,
 });

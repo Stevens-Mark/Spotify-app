@@ -1,12 +1,16 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  currentTrackIdState,
+  currentSongIndexState,
+  isPlayState,
+} from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import { currentItemState, currentItemIdState } from '@/atoms/idAtom';
+import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
@@ -24,16 +28,17 @@ import noImage from '@/public/images/noImageAvailable.svg';
  */
 function Card({ item, type, order }) {
   const spotifyApi = useSpotify();
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-
-  const [currentItemIndex, setCurrentItemIndex] =
-    useRecoilState(currentItemState);
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 
@@ -54,13 +59,14 @@ function Card({ item, type, order }) {
       const data = await spotifyApi.getAlbumTracks(AlbumId, { limit: 1 });
       const TrackId = data.body?.items[0]?.id;
       setCurrentTrackId(TrackId);
+      setCurrentAlbumId(AlbumId);
     } catch (err) {
       console.error('Error retrieving Album track:');
     }
   };
 
   /* either play or pause current track */
-  const HandleDetails = (event, type, item, order) => {
+  const HandlePlayPause = (event, item, type, order) => {
     let address;
     let playPromise;
     setCurrentItemId(item.id);
@@ -69,8 +75,9 @@ function Card({ item, type, order }) {
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
       setIsPlaying(true);
-      setCurrentItemIndex(order);
       setActivePlaylist(item.id);
+      setCurrentSongIndex(order);
+      // setActivePlaylist(null);
     };
 
     // check if current playing track matches the one chosen by the user
@@ -81,7 +88,9 @@ function Card({ item, type, order }) {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            setCurrentItemIndex(null);
+            setCurrentSongIndex(null);
+            setCurrentAlbumId(null);
+            // setActivePlaylist(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -128,8 +137,11 @@ function Card({ item, type, order }) {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return currentItemId === item.id && isPlaying ? true : false;
-  }, [currentItemId, isPlaying, item.id]);
+    return (currentItemId === item.id && isPlaying) ||
+      (currentAlbumId === item.id && isPlaying)
+      ? true
+      : false;
+  }, [currentAlbumId, currentItemId, isPlaying, item.id]);
 
   return (
     <Link
@@ -154,9 +166,7 @@ function Card({ item, type, order }) {
                 : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
             }`}
             onClick={(event) => {
-              HandleDetails(event, type, item, order);
-              // onClick={() => {
-              //   HandleDetails(type, item);
+              HandlePlayPause(event, item, type, order);
             }}
           >
             {activeStatus ? (

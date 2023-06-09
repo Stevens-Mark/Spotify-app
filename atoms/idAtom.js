@@ -1,22 +1,13 @@
-import { atom } from "recoil";
+import { atom } from 'recoil';
 
-export const currentItemState = atom({
-  key: 'currentItemState',
-  default: null,
-});
-
+// track which card has been selected by user: help play/pause icon activation
 export const currentItemIdState = atom({
   key: 'currentPlaylistIdState',
   default: null,
 });
 
-// export const currentArtistIdState = atom({
-//   key: 'currentArtistIdState',
-//   default: null,
-// });
-
-
-// export const currentAlbumIdState = atom({
-//   key: 'currentAlbumIdState',
-//   default: null,
-// });
+// track album id:  used to "sync" song & album highlights activation
+export const currentAlbumIdState = atom({
+  key: 'currentAlbumIdState',
+  default: null,
+});
