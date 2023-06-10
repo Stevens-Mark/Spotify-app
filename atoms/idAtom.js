@@ -12,7 +12,3 @@ export const currentAlbumIdState = atom({
   default: null,
 });
 
-export const activeTopSongState = atom({
-  key: 'activeTopSongState',
-  default: false,
-});
