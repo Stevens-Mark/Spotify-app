@@ -98,6 +98,7 @@ function Card({ item, order }) {
       } else {
         // if artist selected get tracks Uris & play in player
         if (item?.type === 'artist') {
+          setCurrentAlbumId(null);
           if (spotifyApi.getAccessToken()) {
             playPromise = spotifyApi
               .getArtistTopTracks(item.id, ['US', 'FR'])

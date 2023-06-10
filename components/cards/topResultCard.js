@@ -97,6 +97,7 @@ function TopResultCard({ item }) {
         if (item?.type === 'artist' || item?.type === 'track') {
           // if artist selected get tracks Uris & play in player
           if (item?.type === 'artist') {
+            setCurrentAlbumId(null);
             if (spotifyApi.getAccessToken()) {
               playPromise = spotifyApi
                 .getArtistTopTracks(item.id, ['US', 'FR'])
@@ -147,7 +148,7 @@ function TopResultCard({ item }) {
           playPromise
             .then(handlePlaybackSuccess)
             .catch((err) =>
-              console.error('Either lbum or Playlist Playback failed: ', err)
+              console.error('Either album or Playlist Playback failed: ', err)
             );
         }
       }
@@ -156,8 +157,8 @@ function TopResultCard({ item }) {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return (currentItemId === item.id && isPlaying) 
-    || (currentAlbumId === item.id && isPlaying)
+    return (currentItemId === item.id && isPlaying) ||
+      (currentAlbumId === item.id && isPlaying)
       ? true
       : false;
   }, [currentAlbumId, currentItemId, isPlaying, item.id]);
