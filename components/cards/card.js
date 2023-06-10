@@ -31,7 +31,8 @@ function Card({ item, order }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
@@ -79,7 +80,12 @@ function Card({ item, order }) {
     // check if current playing track matches the one chosen by the user
     // if "yes" pause if "no" play the new track selected
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (currentItemId === item.id && data.body?.is_playing) {
+      if (
+        (item.type !== 'album' &&
+          currentItemId === item.id &&
+          data.body?.is_playing) ||
+        (item.type === 'album' && currentAlbumId === item.id && isPlaying)
+      ) {
         spotifyApi
           .pause()
           .then(() => {

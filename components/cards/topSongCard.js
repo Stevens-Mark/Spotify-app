@@ -40,7 +40,10 @@ const TopSongCard = ({ order, song }) => {
   const handlePlayPause = (event, order) => {
     setCurrentItemId(song.id);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (currentItemId === song.id && data.body?.is_playing) {
+      if (
+        (currentItemId === song.id && data.body?.is_playing) ||
+        (currentAlbumId === song.album.id && isPlaying)
+      ) {
         spotifyApi
           .pause()
           .then(() => {
@@ -70,10 +73,10 @@ const TopSongCard = ({ order, song }) => {
   // used to set play/pause icons
   const activeSongStatus = useMemo(() => {
     return (song.id === currentItemId && isPlaying) ||
-      (currentAlbumId === song.id && isPlaying)
+      (currentAlbumId === song.album.id && isPlaying)
       ? true
       : false;
-  }, [song.id, currentItemId, currentAlbumId, isPlaying]);
+  }, [song.id, song.album.id, currentItemId, isPlaying, currentAlbumId]);
 
   return (
     <div

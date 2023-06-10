@@ -30,12 +30,12 @@ function TopResultCard({ item }) {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
-  const [currentAlbumId, setCurrentAlbumId] =
-    useRecoilState(currentAlbumIdState);
+
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
   // fetch playlist track
   const getPlaylistTrack = async (playlistId) => {
     try {
@@ -76,7 +76,12 @@ function TopResultCard({ item }) {
     // check if current playing track matches the one chosen by the user
     // if "yes" pause if "no" play the new track selected
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (currentItemId === item.id && data.body?.is_playing) {
+      if (
+        (item.type !== 'album' &&
+          currentItemId === item.id &&
+          data.body?.is_playing) ||
+        (item.type === 'album' && currentAlbumId === item.id && isPlaying)
+      ) {
         spotifyApi
           .pause()
           .then(() => {
@@ -151,8 +156,8 @@ function TopResultCard({ item }) {
 
   // used to set play/pause icons
   const activeStatus = useMemo(() => {
-    return (currentItemId === item.id && isPlaying) ||
-      (currentAlbumId === item.id && isPlaying)
+    return (currentItemId === item.id && isPlaying) 
+    || (currentAlbumId === item.id && isPlaying)
       ? true
       : false;
   }, [currentAlbumId, currentItemId, isPlaying, item.id]);
