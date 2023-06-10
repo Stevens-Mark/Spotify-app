@@ -29,12 +29,14 @@ const TopSongCard = ({ order, song }) => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+
 
   /* either play or pause current track */
   const handlePlayPause = (event, order) => {
@@ -42,7 +44,7 @@ const TopSongCard = ({ order, song }) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
         (currentItemId === song.id && data.body?.is_playing) ||
-        (currentAlbumId === song.album.id && isPlaying)
+        (currentAlbumId === song.album.id && currentTrackId === song.id  && isPlaying)
       ) {
         spotifyApi
           .pause()
@@ -73,10 +75,10 @@ const TopSongCard = ({ order, song }) => {
   // used to set play/pause icons
   const activeSongStatus = useMemo(() => {
     return (song.id === currentItemId && isPlaying) ||
-      (currentAlbumId === song.album.id && isPlaying)
+      (currentAlbumId === song.album.id && currentTrackId === song.id && isPlaying)
       ? true
       : false;
-  }, [song.id, song.album.id, currentItemId, isPlaying, currentAlbumId]);
+  }, [song.id, song.album.id, currentItemId, isPlaying, currentAlbumId, currentTrackId]);
 
   return (
     <div
