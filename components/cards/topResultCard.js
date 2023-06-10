@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -21,22 +21,18 @@ import noImage from '@/public/images/noImageAvailable.svg';
  * Render a card for either album, playlist, artist, or track in top result
  * @function TopResultCard
  * @param {object} item (album, playlist, artist, or track)
- * @param {string} type of card
  * @returns {JSX}
  */
-function TopResultCard({ item, type }) {
+function TopResultCard({ item }) {
   const spotifyApi = useSpotify();
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 
@@ -64,16 +60,15 @@ function TopResultCard({ item, type }) {
   };
 
   /* either play or pause current track */
-  const HandlePlayPause = (event, item, type, order) => {
-    let address;
-    let playPromise;
+  const HandlePlayPause = (event, item, order) => {
+    let address, playPromise;
     setCurrentItemId(item.id);
 
     // set states when a track can play successfully
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
       setIsPlaying(true);
-      setCurrentSongIndex(order);
+      // setCurrentSongIndex(order);
       setActivePlaylist(item.id);
       // setActivePlaylist(null);
     };
@@ -94,9 +89,9 @@ function TopResultCard({ item, type }) {
             console.error('Pause failed: ', err);
           });
       } else {
-        if (type === 'artist' || type === 'track') {
+        if (item?.type === 'artist' || item?.type === 'track') {
           // if artist selected get tracks Uris & play in player
-          if (type === 'artist') {
+          if (item?.type === 'artist') {
             if (spotifyApi.getAccessToken()) {
               playPromise = spotifyApi
                 .getArtistTopTracks(item.id, ['US', 'FR'])
@@ -115,7 +110,7 @@ function TopResultCard({ item, type }) {
                 });
             }
             // if track selected get track Uri & play in player
-          } else if (type === 'track') {
+          } else if (item?.type === 'track') {
             if (spotifyApi.getAccessToken()) {
               playPromise = spotifyApi
                 .play({
@@ -131,10 +126,10 @@ function TopResultCard({ item, type }) {
           }
 
           // else get corresponding context_uri depending on if album or playlist
-        } else if (type === 'playlist') {
+        } else if (item?.type === 'playlist') {
           address = `spotify:playlist:${item.id}`;
           getPlaylistTrack(item.id);
-        } else if (type === 'album') {
+        } else if (item?.type === 'album') {
           address = `spotify:album:${item.id}`;
           getAlbumTrack(item.id);
         }
@@ -167,7 +162,7 @@ function TopResultCard({ item, type }) {
       <div className="relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60">
         <Image
           className={`aspect-square shadow-image ${
-            type === 'artist' ? 'rounded-full' : 'rounded-md'
+            item?.type === 'artist' ? 'rounded-full' : 'rounded-md'
           }`}
           src={
             item?.images?.[0]?.url || item?.album?.images?.[0]?.url || noImage
@@ -184,7 +179,7 @@ function TopResultCard({ item, type }) {
               : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
           }`}
           onClick={(event) => {
-            HandlePlayPause(event, item, type);
+            HandlePlayPause(event, item);
           }}
         >
           {activeStatus ? (
@@ -200,7 +195,7 @@ function TopResultCard({ item, type }) {
 
         <div className="flex flex-wrap text-pink-swan mt-2">
           {/* album */}
-          {type === 'album' && (
+          {item?.type === 'album' && (
             <>
               <span className="truncate">
                 <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
@@ -218,7 +213,7 @@ function TopResultCard({ item, type }) {
           )}
 
           {/* playlist*/}
-          {type === 'playlist' && (
+          {item?.type === 'playlist' && (
             <>
               <span className="truncate mr-5">
                 By {capitalize(item?.owner.display_name)}
@@ -230,14 +225,14 @@ function TopResultCard({ item, type }) {
           )}
 
           {/*artist*/}
-          {type === 'artist' && (
+          {item?.type === 'artist' && (
             <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px]">
               {capitalize(item?.type)}
             </span>
           )}
 
           {/* track */}
-          {type === 'track' && (
+          {item?.type === 'track' && (
             <>
               <span className="truncate mr-5">
                 {capitalize(item?.artists?.[0]?.name)}

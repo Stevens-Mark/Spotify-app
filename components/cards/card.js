@@ -19,26 +19,22 @@ import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import noImage from '@/public/images/noImageAvailable.svg';
 
 /**
- * Render a card for either album, playlist, podcast, artist, or recentsearch
+ * Render a card for either album, playlist, show, artist, or recentsearch
  * @function Card
- * @param {object} item (album, playlist, podcast, artist, or recentsearch info)
- * @param {string} type of card
+ * @param {object} item (album, playlist, show, artist, or recentsearch info)
  * @param {number} order track index in the list
  * @returns {JSX}
  */
-function Card({ item, type, order }) {
+function Card({ item, order }) {
   const spotifyApi = useSpotify();
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 
@@ -66,7 +62,7 @@ function Card({ item, type, order }) {
   };
 
   /* either play or pause current track */
-  const HandlePlayPause = (event, item, type, order) => {
+  const HandlePlayPause = (event, item, order) => {
     let address;
     let playPromise;
     setCurrentItemId(item.id);
@@ -95,7 +91,7 @@ function Card({ item, type, order }) {
           .catch((err) => console.error('Pause failed: ', err));
       } else {
         // if artist selected get tracks Uris & play in player
-        if (type === 'artist') {
+        if (item?.type === 'artist') {
           if (spotifyApi.getAccessToken()) {
             playPromise = spotifyApi
               .getArtistTopTracks(item.id, ['US', 'FR'])
@@ -114,10 +110,10 @@ function Card({ item, type, order }) {
               });
           }
           // else get corresponding context_uri depending on if album or playlist
-        } else if (type === 'playlist') {
+        } else if (item?.type === 'playlist') {
           address = `spotify:playlist:${item.id}`;
           getPlaylistTrack(item.id);
-        } else if (type === 'album') {
+        } else if (item?.type === 'album') {
           address = `spotify:album:${item.id}`;
           getAlbumTrack(item.id);
         }
@@ -151,14 +147,14 @@ function Card({ item, type, order }) {
       <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
         <Image
           className={`aspect-square w-full shadow-image ${
-            type === 'artist' ? 'rounded-full' : 'rounded-md'
+            item?.type === 'artist' ? 'rounded-full' : 'rounded-md'
           }`}
           src={item?.images?.[0]?.url || noImage}
           alt=""
           width={100}
           height={100}
         />
-        {type !== 'podcast' && type !== 'episode' && (
+        {item?.type !== 'show' && item?.type !== 'episode' && (
           <button
             className={`absolute bottom-24 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 ${
               activeStatus
@@ -166,7 +162,7 @@ function Card({ item, type, order }) {
                 : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
             }`}
             onClick={(event) => {
-              HandlePlayPause(event, item, type, order);
+              HandlePlayPause(event, item, order);
             }}
           >
             {activeStatus ? (
@@ -183,7 +179,7 @@ function Card({ item, type, order }) {
 
         <div className="flex flex-wrap text-pink-swan mt-2 h-10">
           {/* album */}
-          {type === 'album' && (
+          {item?.type === 'album' && (
             <>
               <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
               {item?.artists.slice(0, 2).map((item) => (
@@ -195,23 +191,23 @@ function Card({ item, type, order }) {
           )}
 
           {/* playlist*/}
-          {type === 'playlist' && (
+          {item?.type === 'playlist' && (
             <span className="truncate">
               By {capitalize(item?.owner.display_name)}
             </span>
           )}
 
           {/*artist*/}
-          {type === 'artist' && (
+          {item?.type === 'artist' && (
             <span className="truncate">{capitalize(item?.type)}</span>
           )}
 
-          {/* podcast */}
-          {type === 'podcast' && (
+          {/* show */}
+          {item?.type === 'show' && (
             <span className="truncate">{capitalize(item?.publisher)}</span>
           )}
           {/* episode */}
-          {type === 'episode' && (
+          {item?.type === 'episode' && (
             <>
               <span className="line-clamp-1">
                 {getMonthYear(item?.release_date)}&nbsp;•&nbsp;

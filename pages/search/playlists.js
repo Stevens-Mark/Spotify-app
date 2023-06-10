@@ -91,7 +91,7 @@ function Playlists() {
           </h1>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {playlists?.map((item, i) => (
-              <Card key={`${item.id}-${i}`} type={'playlist'} item={item} />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
           {totalNumber > currentNumber && (

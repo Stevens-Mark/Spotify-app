@@ -6,7 +6,7 @@ import TopResultCard from '@/components/cards/topResultCard';
 
 /**
  * Identifies the type: artist, tracks etc... of the search
- * & calls for corresponding card to be rendered 
+ * & calls for corresponding card to be rendered
  * @function TopResult
  * @returns {JSX}
  */
@@ -35,22 +35,19 @@ function TopResult() {
     <div>
       <>
         {type === 'tracks' && (
-          <TopResultCard type={'track'} item={topResult?.tracks?.items[0]} />
+          <TopResultCard item={topResult?.tracks?.items[0]} />
         )}
 
         {type === 'playlists' && (
-          <TopResultCard
-            type={'playlist'}
-            item={topResult?.playlists?.items[0]}
-          />
+          <TopResultCard item={topResult?.playlists?.items[0]} />
         )}
 
         {type === 'albums' && (
-          <TopResultCard type={'album'} item={topResult?.albums?.items[0]} />
+          <TopResultCard item={topResult?.albums?.items[0]} />
         )}
 
         {type === 'artists' && (
-          <TopResultCard type={'artist'} item={topResult?.artists?.items[0]} />
+          <TopResultCard item={topResult?.artists?.items[0]} />
         )}
       </>
     </div>

@@ -6,6 +6,7 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 // please vist https://heroicons.com/ for icon details
@@ -34,6 +35,9 @@ function Sidebar() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const isPlaying = useRecoilValue(isPlayState);
+  // needed to reset search when user changes to thier saved playlists
+  const setSubmitted = useSetRecoilState(querySubmittedState);
+  const setQuery = useSetRecoilState(queryState);
 
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
@@ -74,12 +78,14 @@ function Sidebar() {
     setActivePlaylist,
   ]);
 
-  /** navigates to chosen playlist
+  /** navigates to chosen playlist & clear search (if any)
    * @function handleClick
    * @param {string} id of playlist
    */
   const handleClick = (id) => {
     setPlaylistId(id);
+    setSubmitted(false);
+    setQuery('');
     router.push('/');
   };
 

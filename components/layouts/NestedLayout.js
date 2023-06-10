@@ -19,7 +19,7 @@ import SearchNav from '../SearchNav';
 import StatusSpinner from '../StatusSpinner';
 
 /**
- * Renders the search bar (for all search pages: genres, album, playlist, artists, podcasts & episodes)
+ * Renders the search bar (for all search pages: genres, album, playlist, artists, shows & episodes)
  * as part of the nested layout.
  * @function NestedLayout
  * @param {object} children components related to search/results

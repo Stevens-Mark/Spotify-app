@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -29,13 +29,10 @@ const TopSongCard = ({ order, song }) => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
 

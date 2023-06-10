@@ -31,7 +31,7 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
  */
 function Player() {
   const spotifyApi = useSpotify();
-  const { data: session } = useSession();
+  // const { data: session } = useSession();
   const playlistId = useRecoilValue(playlistIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
