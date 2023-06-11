@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -22,7 +22,7 @@ import noImage from '@/public/images/noImageAvailable.svg';
  * Render a card for either album, playlist, show, artist, or recentsearch
  * @function Card
  * @param {object} item (album, playlist, show, artist, or recentsearch info)
- * @param {number} order track index in the list
+ * @param {number} order index in the list (ONLY BEING PASSED IN ALL.js - this param may NOT be needed)
  * @returns {JSX}
  */
 function Card({ item, order }) {
@@ -73,10 +73,8 @@ function Card({ item, order }) {
    * Either play or pause current track
    * @function HandlePlayPause
    * @param {event object} event NO IN USE CURRENTLY
-   * @param {object} item
-   * @param {number} order
    */
-  const HandlePlayPause = (event, item, order) => {
+  const HandlePlayPause = (event) => {
     let address, playPromise;
     setCurrentItemId(item.id);
 
@@ -85,7 +83,7 @@ function Card({ item, order }) {
       console.log('Playback Success');
       setIsPlaying(true);
       setActivePlaylist(item.id);
-      setCurrentSongIndex(order);
+      // setCurrentSongIndex(order); //ONLY BEING PASSED IN ALL.js - this may NOT be needed)
       // setActivePlaylist(null);
     };
 
@@ -102,7 +100,7 @@ function Card({ item, order }) {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            setCurrentSongIndex(null);
+            // setCurrentSongIndex(null);
             // setCurrentAlbumId(null);
             // setActivePlaylist(null);
           })
@@ -184,7 +182,7 @@ function Card({ item, order }) {
                 : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
             }`}
             onClick={(event) => {
-              HandlePlayPause(event, item, order);
+              HandlePlayPause(event);
             }}
           >
             {activeStatus ? (

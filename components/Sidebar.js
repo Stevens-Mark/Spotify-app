@@ -9,6 +9,7 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -35,11 +36,14 @@ function Sidebar() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const isPlaying = useRecoilValue(isPlayState);
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
   // needed to reset search when user changes to thier saved playlists
   const setSubmitted = useSetRecoilState(querySubmittedState);
   const setQuery = useSetRecoilState(queryState);
 
   useEffect(() => {
+    console.log('called');
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getUserPlaylists()
@@ -78,15 +82,35 @@ function Sidebar() {
     setActivePlaylist,
   ]);
 
-  /** navigates to chosen playlist & clear search (if any)
+  /**
+   * clear search (if any) & redirect to homepage
+   * @function resetValues
+   */
+  const resetValues = () => {
+    setSubmitted(false);
+    setQuery('');
+    setCurrentItemId(null); // reset these 2 states from search page that may have been set previously
+    setCurrentAlbumId(null); // otherwise playpause icon not deactivated for that search
+    router.push('/');
+  };
+
+  /**
+   * navigates back to homepage & reset
+   * @function handleHome
+   */
+  const handleHome = () => {
+    setPlaylistId(null);
+    resetValues();
+  };
+
+  /**
+   * navigates to chosen playlist & reset
    * @function handleClick
    * @param {string} id of playlist
    */
   const handleClick = (id) => {
     setPlaylistId(id);
-    setSubmitted(false);
-    setQuery('');
-    router.push('/');
+    resetValues();
   };
 
   return (
@@ -97,13 +121,13 @@ function Sidebar() {
     >
       <ul className="space-y-4 w-full">
         <li>
-          <Link
-            href="/"
+          <button
             className="flex items-center space-x-2 hover:text-white"
+            onClick={() => handleHome()}
           >
             <HomeIcon className="h-5 w-5 ml-3" />
             <p>Home</p>
-          </Link>
+          </button>
         </li>
 
         <li>

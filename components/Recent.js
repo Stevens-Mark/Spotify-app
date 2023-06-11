@@ -82,7 +82,7 @@ const PreviousSearches = () => {
                 >
                   <XMarkIcon className="relative z-100 p-[3px] w-7 h-7 rounded-full  bg-gray-800" />
                 </button>
-                <Card type={'album'} item={item} />
+                <Card item={item} />
               </div>
             ))}
           </div>

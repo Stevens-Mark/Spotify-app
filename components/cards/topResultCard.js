@@ -31,7 +31,8 @@ function TopResultCard({ item }) {
     useRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
 
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+  // const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
@@ -72,10 +73,9 @@ function TopResultCard({ item }) {
    * Either play or pause current track
    * @function HandlePlayPause
    * @param {event object} event NO IN USE CURRENTLY
-   * @param {object} item
    * @param {number} order NO IN USE CURRENTLY
    */
-  const HandlePlayPause = (event, item, order) => {
+  const HandlePlayPause = (event, order) => {
     let address, playPromise;
     setCurrentItemId(item.id);
 
@@ -103,7 +103,7 @@ function TopResultCard({ item }) {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            setCurrentSongIndex(null);
+            // setCurrentSongIndex(null);
             // setCurrentAlbumId(null);
             // setActivePlaylist(null);
           })
@@ -202,7 +202,7 @@ function TopResultCard({ item }) {
               : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
           }`}
           onClick={(event) => {
-            HandlePlayPause(event, item);
+            HandlePlayPause(event);
           }}
         >
           {activeStatus ? (

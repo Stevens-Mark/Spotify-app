@@ -19,7 +19,7 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 /**
  * Renders the 4 songs next to top result
  * @function TopSongCard
- * @param {number} order track index
+ * @param {number} order track index NOT IN USE CURRENTLY AS MAY NOT BE NEEDED
  * @param {object} song information
  * @returns {JSX}
  */
@@ -31,7 +31,9 @@ const TopSongCard = ({ order, song }) => {
     useRecoilState(activePlaylistState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+    
+  // const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+
   // used to set play/pause icons
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
@@ -41,9 +43,8 @@ const TopSongCard = ({ order, song }) => {
    * Either play or pause current track
    * @function handlePlayPause
    * @param {event object} event NO IN USE CURRENTLY
-   * @param {number} order
    */
-  const handlePlayPause = (event, order) => {
+  const handlePlayPause = (event) => {
     setCurrentItemId(song.id);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
@@ -56,7 +57,7 @@ const TopSongCard = ({ order, song }) => {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            setCurrentSongIndex(null);
+            // setCurrentSongIndex(null);
             // setCurrentAlbumId(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
@@ -70,7 +71,7 @@ const TopSongCard = ({ order, song }) => {
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
             setCurrentAlbumId(song.album.id);
-            setCurrentSongIndex(order);
+            // setCurrentSongIndex(order);
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));
@@ -101,7 +102,7 @@ const TopSongCard = ({ order, song }) => {
         activeSongStatus ? 'text-white bg-gray-800' : ''
       }`}
       onClick={(event) => {
-        handlePlayPause(event, order);
+        handlePlayPause(event);
       }}
     >
       <div className="flex relative">

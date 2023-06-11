@@ -82,9 +82,9 @@ function Player() {
           .play()
           .catch((err) => console.error('Playback failed: ', err));
         setIsPlaying(true);
-        if (data.body?.context !== null) {   // set ID if current track is part of a playlist
-          setActivePlaylist(playlistId);
-        }
+        // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
+        //   setActivePlaylist(playlistId);
+        // }
       }
     });
   };
