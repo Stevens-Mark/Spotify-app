@@ -29,29 +29,35 @@ const TopSongCard = ({ order, song }) => {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [currentAlbumId, setCurrentAlbumId] =
-    useRecoilState(currentAlbumIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
 
-
-  /* either play or pause current track */
+  /**
+   * Either play or pause current track
+   * @function handlePlayPause
+   * @param {event object} event NO IN USE CURRENTLY
+   * @param {number} order
+   */
   const handlePlayPause = (event, order) => {
     setCurrentItemId(song.id);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
         (currentItemId === song.id && data.body?.is_playing) ||
-        (currentAlbumId === song.album.id && currentTrackId === song.id  && isPlaying)
+        (currentAlbumId === song.album.id &&
+          currentTrackId === song.id &&
+          isPlaying)
       ) {
         spotifyApi
           .pause()
           .then(() => {
             setIsPlaying(false);
             setCurrentSongIndex(null);
-            setCurrentAlbumId(null);
+            // setCurrentAlbumId(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -75,10 +81,19 @@ const TopSongCard = ({ order, song }) => {
   // used to set play/pause icons
   const activeSongStatus = useMemo(() => {
     return (song.id === currentItemId && isPlaying) ||
-      (currentAlbumId === song.album.id && currentTrackId === song.id && isPlaying)
+      (currentAlbumId === song.album.id &&
+        currentTrackId === song.id &&
+        isPlaying)
       ? true
       : false;
-  }, [song.id, song.album.id, currentItemId, isPlaying, currentAlbumId, currentTrackId]);
+  }, [
+    song.id,
+    song.album.id,
+    currentItemId,
+    isPlaying,
+    currentAlbumId,
+    currentTrackId,
+  ]);
 
   return (
     <div
@@ -123,7 +138,7 @@ const TopSongCard = ({ order, song }) => {
               activeSongStatus ? 'text-green-500' : 'text-white'
             }`}
           >
-            {song.album.name}
+            {song.name}
           </h3>
           <p className="w-36 xxs:w-60 md:w-80 pr-2 truncate">
             {song.artists[0].name}

@@ -31,15 +31,18 @@ function Card({ item, order }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  const [currentAlbumId, setCurrentAlbumId] =
-    useRecoilState(currentAlbumIdState);
+  const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const [currentAlbumId, setCurrentAlbumId] =
+    useRecoilState(currentAlbumIdState);
 
-  // fetch playlist track
+  /**
+   * fetch playlist track & set TrackId state
+   *@function getPlaylistTrack
+   * @param {string} playlistId
+   */
   const getPlaylistTrack = async (playlistId) => {
     try {
       const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 1 });
@@ -50,7 +53,11 @@ function Card({ item, order }) {
     }
   };
 
-  // fetch album track
+  /**
+   * fetch album track & set states accordingly
+   * @function getAlbumTrack
+   * @param {string} AlbumId
+   */
   const getAlbumTrack = async (AlbumId) => {
     try {
       const data = await spotifyApi.getAlbumTracks(AlbumId, { limit: 1 });
@@ -62,10 +69,15 @@ function Card({ item, order }) {
     }
   };
 
-  /* either play or pause current track */
+  /**
+   * Either play or pause current track
+   * @function HandlePlayPause
+   * @param {event object} event NO IN USE CURRENTLY
+   * @param {object} item
+   * @param {number} order
+   */
   const HandlePlayPause = (event, item, order) => {
-    let address;
-    let playPromise;
+    let address, playPromise;
     setCurrentItemId(item.id);
 
     // set states when a track can play successfully
@@ -91,7 +103,7 @@ function Card({ item, order }) {
           .then(() => {
             setIsPlaying(false);
             setCurrentSongIndex(null);
-            setCurrentAlbumId(null);
+            // setCurrentAlbumId(null);
             // setActivePlaylist(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
@@ -111,7 +123,7 @@ function Card({ item, order }) {
               })
               .catch((err) => {
                 console.error(
-                  'Either tracks retrieval or playback failed:',
+                  'Either Artist retrieval or playback failed:',
                   err
                 );
               });
@@ -119,6 +131,7 @@ function Card({ item, order }) {
           // else get corresponding context_uri depending on if album or playlist
         } else if (item?.type === 'playlist') {
           address = `spotify:playlist:${item.id}`;
+          setCurrentAlbumId(null);
           getPlaylistTrack(item.id);
         } else if (item?.type === 'album') {
           address = `spotify:album:${item.id}`;
@@ -132,7 +145,9 @@ function Card({ item, order }) {
         if (playPromise) {
           playPromise
             .then(handlePlaybackSuccess)
-            .catch((err) => console.error('Playback failed: ', err));
+            .catch((err) =>
+              console.error('Either album or Playlist Playback failed: ', err)
+            );
         }
       }
     });

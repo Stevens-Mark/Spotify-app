@@ -36,7 +36,12 @@ function TopResultCard({ item }) {
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
-  // fetch playlist track
+
+  /**
+   * fetch playlist track & set TrackId state accordingly
+   * @function getPlaylistTrack
+   * @param {string} playlistId
+   */
   const getPlaylistTrack = async (playlistId) => {
     try {
       const data = await spotifyApi.getPlaylistTracks(playlistId, { limit: 1 });
@@ -47,7 +52,11 @@ function TopResultCard({ item }) {
     }
   };
 
-  // fetch album track
+  /**
+   * fetch album track & set states accordingly
+   * @function getAlbumTrack
+   * @param {string} AlbumId
+   */
   const getAlbumTrack = async (AlbumId) => {
     try {
       const data = await spotifyApi.getAlbumTracks(AlbumId, { limit: 1 });
@@ -59,7 +68,13 @@ function TopResultCard({ item }) {
     }
   };
 
-  /* either play or pause current track */
+  /**
+   * Either play or pause current track
+   * @function HandlePlayPause
+   * @param {event object} event NO IN USE CURRENTLY
+   * @param {object} item
+   * @param {number} order NO IN USE CURRENTLY
+   */
   const HandlePlayPause = (event, item, order) => {
     let address, playPromise;
     setCurrentItemId(item.id);
@@ -80,14 +95,16 @@ function TopResultCard({ item }) {
         (item.type !== 'album' &&
           currentItemId === item.id &&
           data.body?.is_playing) ||
-        (item.type === 'album' && currentAlbumId === item.id && isPlaying)
+        (item.type === 'album' &&
+          currentAlbumId === item.id &&
+          data.body?.is_playing)
       ) {
         spotifyApi
           .pause()
           .then(() => {
             setIsPlaying(false);
             setCurrentSongIndex(null);
-            setCurrentAlbumId(null);
+            // setCurrentAlbumId(null);
             // setActivePlaylist(null);
           })
           .catch((err) => {
@@ -130,10 +147,10 @@ function TopResultCard({ item }) {
                 });
             }
           }
-
           // else get corresponding context_uri depending on if album or playlist
         } else if (item?.type === 'playlist') {
           address = `spotify:playlist:${item.id}`;
+          setCurrentAlbumId(null);
           getPlaylistTrack(item.id);
         } else if (item?.type === 'album') {
           address = `spotify:album:${item.id}`;
