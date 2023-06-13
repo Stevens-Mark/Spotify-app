@@ -7,7 +7,7 @@ export const playlistIdState = atom({
   default: null,
 });
 
-// list of user's playlists retrieved
+// list of playlists retrieved
 export const playlistState = atom({
   key: 'playlistState',
   default: null,
@@ -18,3 +18,10 @@ export const activePlaylistState = atom({
   key: 'activePlaylistState',
   default: null,
 });
+
+
+// // list of user's playlists retrieved
+// export const myPlaylistState = atom({
+//   key: 'myPlaylistState',
+//   default: null,
+// });

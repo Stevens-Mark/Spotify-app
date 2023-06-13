@@ -94,7 +94,6 @@ function Center() {
 
   /* fetch playlist which is currently playing */
   useEffect(() => {
-    console.log('centre playlist id ', playlistId);
     if (playlistId !== null) {
       if (spotifyApi.getAccessToken()) {
         spotifyApi

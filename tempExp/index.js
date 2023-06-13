@@ -19,6 +19,7 @@ import Center from '@/components/Center';
  * @returns {JSX}
  */
 export default function Home() {
+
   return (
     <>
       <Head>

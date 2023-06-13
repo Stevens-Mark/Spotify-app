@@ -70,7 +70,6 @@ function Player() {
   /* either play or pause a track */
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      console.log('player in ', data);
       if (data.body?.is_playing) {
         spotifyApi
           .pause()

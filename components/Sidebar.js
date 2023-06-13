@@ -30,7 +30,7 @@ function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
-  const [playlists, setPlaylists] = useState([]);
+  const [myPlaylists, setMyPlaylists] = useState([]);
   const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
@@ -43,12 +43,11 @@ function Sidebar() {
   const setQuery = useSetRecoilState(queryState);
 
   useEffect(() => {
-    console.log('called');
     if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getUserPlaylists()
         .then((data) => {
-          setPlaylists(data.body.items);
+          setMyPlaylists(data.body.items);
           setPlaylistId(data.body.items[0].id); // base - set page to first playlist in list
         })
         .then(() => {
@@ -173,7 +172,7 @@ function Sidebar() {
         <hr className="border-t-[0.1px] border-gray-900" />
 
         {/* Playlists.. */}
-        {playlists.map((playlist) => (
+        {myPlaylists.map((playlist) => (
           <li key={playlist.id}>
             <button
               onClick={() => handleClick(playlist.id)}
