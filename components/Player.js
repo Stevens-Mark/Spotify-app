@@ -70,6 +70,7 @@ function Player() {
   /* either play or pause a track */
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      console.log('player in ', data);
       if (data.body?.is_playing) {
         spotifyApi
           .pause()
@@ -80,11 +81,14 @@ function Player() {
       } else {
         spotifyApi
           .play()
+          .then(() => {
+            setIsPlaying(true);
+            setCurrentTrackId(data.body.item.id);
+            // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
+            //   setActivePlaylist(playlistId);
+            // }
+          })
           .catch((err) => console.error('Playback failed: ', err));
-        setIsPlaying(true);
-        // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
-        //   setActivePlaylist(playlistId);
-        // }
       }
     });
   };
