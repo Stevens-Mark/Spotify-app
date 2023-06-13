@@ -38,7 +38,7 @@ function Sidebar() {
   const isPlaying = useRecoilValue(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
-  // needed to reset search when user changes to thier saved playlists
+  // needed to reset search when user changes to their saved playlists
   const setSubmitted = useSetRecoilState(querySubmittedState);
   const setQuery = useSetRecoilState(queryState);
 
@@ -75,9 +75,9 @@ function Sidebar() {
         });
     }
   }, [
-    setPlaylistId,
-    session,
     spotifyApi,
+    session,
+    setPlaylistId,
     setCurrentTrackId,
     setActivePlaylist,
   ]);

@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
@@ -92,6 +93,10 @@ const NestedLayout = ({ children }) => {
 
   return (
     <>
+      <Head>
+        <title>Search</title>
+      </Head>
+
       <div className="flex flex-col w-full relative">
         <div className="sticky xs:h-28 h-36">
           <div className="flex items-center">

@@ -26,10 +26,10 @@ const colors = [
 
 /**
  * Renders the chosen playlist heading with the associated song tracks
- * @function Center
+ * @function Album
  * @returns {JSX}
  */
-function Center() {
+function Album() {
   const { data: session } = useSession();
   const spotifyApi = useSpotify();
   const playlistId = useRecoilValue(playlistIdState);
@@ -143,11 +143,11 @@ function Center() {
       </div>
 
       <section className="pb-20">
-        <h2 className="sr-only">Track List</h2>
+        <h2 className='sr-only'>Track List</h2>
         <Songs />
       </section>
     </div>
   );
 }
 
-export default Center;
+export default Album;

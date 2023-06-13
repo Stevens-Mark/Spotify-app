@@ -5,7 +5,7 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 import Card from './cards/card';
 
 /**
- * Fetches recent searches from local storage to be displayed & 
+ * Fetches recent searches from local storage to be displayed &
  * handles deletion of a recent search also
  * @function PreviousSearches
  * @returns {JSX}

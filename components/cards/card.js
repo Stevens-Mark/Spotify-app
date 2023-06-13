@@ -75,6 +75,8 @@ function Card({ item, order }) {
    * @param {event object} event NO IN USE CURRENTLY
    */
   const HandlePlayPause = (event) => {
+    event.preventDefault(); // to prevent the default link behavior
+    event.stopPropagation(); // to stop the event from propagating to parent elements.
     let address, playPromise;
     setCurrentItemId(item.id);
 
@@ -161,7 +163,7 @@ function Card({ item, order }) {
 
   return (
     <Link
-      href=""
+      href={`/album/${item.id}`}
       className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
     >
       <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
