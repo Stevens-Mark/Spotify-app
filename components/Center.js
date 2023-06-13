@@ -59,38 +59,42 @@ function Center() {
     // check whether there is an active device connected to spotify account.
     // if not this app will not be fully functional.
     // Inform user to connect to spotify
-    spotifyApi
-      .getMyDevices()
-      .then((data) => {
-        // check if there is an active device
-        const activeDevice = data.body.devices.find(
-          (device) => device.is_active
-        );
-
-        if (activeDevice) {
-          console.log(
-            `Active device found: ${activeDevice.name}. PREMIUM ACCOUNT needed for most features!`
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi
+        .getMyDevices()
+        .then((data) => {
+          // check if there is an active device
+          const activeDevice = data.body.devices.find(
+            (device) => device.is_active
           );
-          setMessage(`PREMIUM ACCOUNT needed for most features!`);
-        } else {
-          console.log(
-            'No active device found: Connect to Spotify & reload the page'
+
+          if (activeDevice) {
+            console.log(
+              `Active device found: ${activeDevice.name}. PREMIUM ACCOUNT needed for most features!`
+            );
+            setMessage(`PREMIUM ACCOUNT needed for most features!`);
+          } else {
+            console.log(
+              'No active device found: Connect to Spotify & reload the page'
+            );
+            setMessage('Connect to Spotify & reload the page.');
+          }
+          handleMyAlert();
+        })
+        .catch((err) => {
+          console.error(
+            'Failed to find active devices. Connect to Spotify & reload the page.',
+            err
           );
           setMessage('Connect to Spotify & reload the page.');
-        }
-        handleMyAlert();
-      })
-      .catch((error) => {
-        console.error(
-          'Failed to find active devices. Connect to Spotify & reload the page.'
-        );
-        setMessage('Connect to Spotify & reload the page.');
-        handleMyAlert();
-      });
+          handleMyAlert();
+        });
+    }
   }, [spotifyApi]);
 
   /* fetch playlist which is currently playing */
   useEffect(() => {
+    console.log('centre playlist id ', playlistId);
     if (playlistId !== null) {
       if (spotifyApi.getAccessToken()) {
         spotifyApi
@@ -104,6 +108,25 @@ function Center() {
       }
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
+
+
+  // useEffect(() => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     spotifyApi
+  //       .getUserPlaylists()
+  //       .then((data) => {
+  //         spotifyApi.getPlaylist(data.body.items[0].id).then((data) => {
+  //           setPlaylist(data.body);
+  //         });
+  //       })
+  //       .catch((err) => {
+  //         console.error(
+  //           'Failed to get current playing track / playlist ID',
+  //           err
+  //         );
+  //       });
+  //   }
+  // }, [spotifyApi, session, setPlaylist]);
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
