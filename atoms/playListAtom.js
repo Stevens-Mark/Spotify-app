@@ -3,13 +3,12 @@ import { atom } from 'recoil';
 // current playlist id
 export const playlistIdState = atom({
   key: 'playlistIdState',
-  // default: "1beJKiTTWHdetZqGFyBeAN",
   default: null,
 });
 
-// list of playlists retrieved
-export const playlistState = atom({
-  key: 'playlistState',
+// list of tracks in playlist
+export const playlistTrackListState = atom({
+  key: 'playlistTrackListState',
   default: null,
 });
 

@@ -38,7 +38,8 @@ function Card({ item, order }) {
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
 
-  const linkAddress = item.type === 'album' ? `/album/${item.id}` : "/";
+  const linkAddress =
+    item.type === 'album' ? `/album/${item.id}` : `/playlist/${item.id}`;
 
   /**
    * fetch playlist track & set TrackId state
@@ -74,7 +75,7 @@ function Card({ item, order }) {
   /**
    * Either play or pause current track
    * @function HandlePlayPause
-   * @param {event object} event 
+   * @param {event object} event
    */
   const HandlePlayPause = (event) => {
     event.preventDefault(); // to prevent the default link behavior
@@ -233,7 +234,7 @@ function Card({ item, order }) {
           {/* episode */}
           {item?.type === 'episode' && (
             <>
-              <span className="line-clamp-1">
+              <span className="-1">
                 {getMonthYear(item?.release_date)}&nbsp;•&nbsp;
               </span>
               <span className="line-clamp-1">

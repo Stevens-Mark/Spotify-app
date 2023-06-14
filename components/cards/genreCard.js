@@ -1,7 +1,37 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { bgColors } from '@/styles/colors';
+// import { bgColors } from '@/styles/colors';
+
+// color options for genre card backgrounds: total: 26
+const bgColors = [
+  'bg-cyan-600',
+  'bg-lime-600',
+  'bg-red-700',
+  'bg-amber-400',
+  'bg-stone-400',
+  'bg-cyan-400',
+  'bg-yellow-500',
+  'bg-teal-600',
+  'bg-lime-400',
+  'bg-fuchsia-500',
+  'bg-orange-600',
+  'bg-green-600',
+  'bg-teal-400',
+  'bg-blue-500',
+  'bg-emerald-400',
+  'bg-yellow-700',
+  'bg-amber-600',
+  'bg-sky-600',
+  'bg-red-600',
+  'bg-orange-400',
+  'bg-emerald-600',
+  'bg-violet-400',
+  'bg-pink-500',
+  'bg-purple-400',
+  'bg-gray-500',
+  'bg-blue-700',
+];
 
 /**
  * Render a card for a genre
@@ -27,7 +57,7 @@ function GenreCard({ item, idx }) {
         alt=""
         width={100}
         height={100}
-        style={{objectFit:"cover"}}
+        style={{ objectFit: 'cover' }}
       />
     </Link>
   );

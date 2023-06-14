@@ -32,7 +32,7 @@ function episodeCard({ item }) {
           </h2>
 
           <div className="col-span-4 md:col-span-3 row-start-2 text-pink-swan pt-2 pb-3">
-            <span className=" line-clamp-2">{item.description}</span>
+            <span className="mb-2 line-clamp-2">{item.description}</span>
           </div>
           <div className="col-start-1 md:col-start-2 col-span-1">
             <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />

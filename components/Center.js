@@ -4,7 +4,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import icon/images
 import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
-import { colors } from '@/styles/colors';
+// import { colors } from '@/styles/colors';
 // import component
 import UserTracks from './trackListUser/userTracks';
 // import state management recoil
@@ -14,6 +14,18 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalDuration } from '@/lib/totalTrackDuration';
+import { capitalize } from '@/lib/capitalize';
+
+// random color options for top background
+const colors = [
+  'from-indigo-500',
+  'from-blue-500',
+  'from-green-500',
+  'from-red-500',
+  'from-yellow-500',
+  'from-pink-500',
+  'from-purple-500',
+];
 
 /**
  * Renders the chosen user's playlist heading with the associated tracks
@@ -138,12 +150,13 @@ function Center() {
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1  truncate">
                 {myPlaylist?.name}
               </h1>
-              <p className=" text-sm pb-2">{myPlaylist?.description}</p>
+              <p className=" text-sm mb-2 line-clamp-2">{myPlaylist?.description}</p>
+              <span>{capitalize(myPlaylist?.owner?.display_name)}&nbsp;•&nbsp;</span>
               <span className="text-sm">
                 {myPlaylist?.tracks.items.length}{' '}
                 {myPlaylist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-sm truncate">
+              <span className="text-sm truncate text-pink-swan">
                 {msToTime(totalDuration(myPlaylist))}
               </span>
             </>

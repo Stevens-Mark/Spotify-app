@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-// current albumt id
+// current album id
 export const albumIdState = atom({
   key: 'albumIdState',
   default: null,
