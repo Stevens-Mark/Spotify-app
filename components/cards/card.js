@@ -38,6 +38,8 @@ function Card({ item, order }) {
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
 
+  const linkAddress = item.type === 'album' ? `/album/${item.id}` : "/";
+
   /**
    * fetch playlist track & set TrackId state
    *@function getPlaylistTrack
@@ -163,7 +165,7 @@ function Card({ item, order }) {
 
   return (
     <Link
-      href={`/album/${item.id}`}
+      href={linkAddress}
       className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
     >
       <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">

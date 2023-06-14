@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -27,16 +27,15 @@ function TopResultCard({ item }) {
   const spotifyApi = useSpotify();
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
-
-  // const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
+
+  const linkAddress = item.type === 'album' ? `/album/${item.id}` : '/';
 
   /**
    * fetch playlist track & set TrackId state accordingly
@@ -72,10 +71,11 @@ function TopResultCard({ item }) {
   /**
    * Either play or pause current track
    * @function HandlePlayPause
-   * @param {event object} event NO IN USE CURRENTLY
-   * @param {number} order NO IN USE CURRENTLY
+   * @param {event object} event
    */
-  const HandlePlayPause = (event, order) => {
+  const HandlePlayPause = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
     let address, playPromise;
     setCurrentItemId(item.id);
 
@@ -83,9 +83,9 @@ function TopResultCard({ item }) {
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
       setIsPlaying(true);
-      // setCurrentSongIndex(order);
+      setCurrentSongIndex(0); // top result is always the first item in array hence value zero
       setActivePlaylist(item.id);
-      // setActivePlaylist(null);
+      setActivePlaylist(null);
     };
 
     // check if current playing track matches the one chosen by the user
@@ -181,7 +181,7 @@ function TopResultCard({ item }) {
   }, [currentAlbumId, currentItemId, isPlaying, item.id]);
 
   return (
-    <Link href="" className="group">
+    <Link href={linkAddress} className="group">
       <div className="relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60">
         <Image
           className={`aspect-square shadow-image ${

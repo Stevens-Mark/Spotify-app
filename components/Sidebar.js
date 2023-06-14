@@ -7,7 +7,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
-import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
+import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
 // please vist https://heroicons.com/ for icon details
@@ -31,7 +31,7 @@ function Sidebar() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const [myPlaylists, setMyPlaylists] = useState([]);
-  const [playlistId, setPlaylistId] = useRecoilState(playlistIdState);
+  const [myPlaylistId, setMyPlaylistId] = useRecoilState(myPlaylistIdState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
@@ -48,7 +48,7 @@ function Sidebar() {
         .getUserPlaylists()
         .then((data) => {
           setMyPlaylists(data.body.items);
-          setPlaylistId(data.body.items[0].id); // base - set page to first playlist in list
+          setMyPlaylistId(data.body.items[0].id); // base - set page to first playlist in list
         })
         .then(() => {
           spotifyApi.getMyCurrentPlayingTrack().then((data) => {
@@ -61,7 +61,7 @@ function Sidebar() {
               setCurrentTrackId(data.body.item.id);
               const currentplaylistId = data.body.context.uri.split(':');
               const playingId = currentplaylistId[currentplaylistId.length - 1];
-              setPlaylistId(playingId);
+              setMyPlaylistId(playingId);
               setActivePlaylist(playingId);
             }
           });
@@ -73,13 +73,7 @@ function Sidebar() {
           );
         });
     }
-  }, [
-    spotifyApi,
-    session,
-    setPlaylistId,
-    setCurrentTrackId,
-    setActivePlaylist,
-  ]);
+  }, [spotifyApi, session, setCurrentTrackId, setActivePlaylist, setMyPlaylistId]);
 
   /**
    * clear search (if any) & redirect to homepage
@@ -98,7 +92,7 @@ function Sidebar() {
    * @function handleHome
    */
   const handleHome = () => {
-    setPlaylistId(null);
+    setMyPlaylistId(null);
     resetValues();
   };
 
@@ -108,7 +102,7 @@ function Sidebar() {
    * @param {string} id of playlist
    */
   const handleClick = (id) => {
-    setPlaylistId(id);
+    setMyPlaylistId(id);
     resetValues();
   };
 
@@ -183,7 +177,7 @@ function Sidebar() {
                   : 'hover:text-white'
               } 
               ${
-                playlistId == playlist.id
+                myPlaylistId == playlist.id
                   ? ` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }

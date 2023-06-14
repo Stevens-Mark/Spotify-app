@@ -13,8 +13,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import {
-  playlistIdState,
-  playlistState,
+  myPlaylistIdState,
+  myPlaylistState,
   activePlaylistState,
 } from '@/atoms/playListAtom';
 // import icon
@@ -22,7 +22,7 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from './Equaliser';
 
 /**
- * Renders each track in the playlist
+ * Renders each track in the user's playlist
  * @function Song
  * @param {number} order track index in the list
  * @param {object} track information
@@ -33,9 +33,9 @@ function Song({ order, track }) {
   // const song = track.track;
   const song =track
 
-  const playlist = useRecoilValue(playlistState);
+  const myPlaylist = useRecoilValue(myPlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const playlistId = useRecoilValue(playlistIdState);
+  const myPlaylistId = useRecoilValue(myPlaylistIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
@@ -50,15 +50,15 @@ function Song({ order, track }) {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        playlist !== null
+        myPlaylist !== null
       ) {
-        const indexPosition = playlist?.tracks.items.findIndex(
+        const indexPosition = myPlaylist?.tracks.items.findIndex(
           (x) => x.track.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '750');
-  }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
+  }, [currentSongIndex, currentTrackId, myPlaylist, setCurrentSongIndex]);
 
   /* either play or pause current track */
   const handlePlayPause = (event, currentTrackIndex) => {
@@ -81,7 +81,7 @@ function Song({ order, track }) {
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(playlistId);
+            setActivePlaylist(myPlaylistId);
           })
           .catch((err) => console.error('Playback failed: ', err));
       }

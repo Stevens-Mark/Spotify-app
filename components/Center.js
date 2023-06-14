@@ -6,25 +6,25 @@ import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
 import { colors } from '@/styles/colors';
 // import component
-import Songs from './Songs';
+import UserTracks from './trackListUser/userTracks';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { playlistIdState, playlistState } from '@/atoms/playListAtom';
+import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalDuration } from '@/lib/totalTrackDuration';
 
 /**
- * Renders the chosen playlist heading with the associated song tracks
+ * Renders the chosen user's playlist heading with the associated tracks
  * @function Center
  * @returns {JSX}
  */
 function Center() {
   const { data: session } = useSession();
   const spotifyApi = useSpotify();
-  const playlistId = useRecoilValue(playlistIdState);
-  const [playlist, setPlaylist] = useRecoilState(playlistState);
+  const myPlaylistId = useRecoilValue(myPlaylistIdState);
+  const [myPlaylist, setMyPlaylist] = useRecoilState(myPlaylistState);
   const [message, setMessage] = useState(null);
   const [randomColor, setRandomColor] = useState(null);
 
@@ -39,7 +39,7 @@ function Center() {
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
     setRandomColor(shuffle(colors).pop());
-  }, [playlistId]);
+  }, [myPlaylistId]);
 
   useEffect(() => {
     // check whether there is an active device connected to spotify account.
@@ -80,19 +80,19 @@ function Center() {
 
   /* fetch playlist which is currently playing */
   useEffect(() => {
-    if (playlistId !== null) {
+    if (myPlaylistId !== null) {
       if (spotifyApi.getAccessToken()) {
         spotifyApi
-          .getPlaylist(playlistId)
+          .getPlaylist(myPlaylistId)
           .then((data) => {
-            setPlaylist(data.body);
+            setMyPlaylist(data.body);
           })
           .catch((err) =>
             console.log('Something went wrong - Get Playlist Failed! ', err)
           );
       }
     }
-  }, [spotifyApi, session, playlistId, setPlaylist]);
+  }, [spotifyApi, session, myPlaylistId, setMyPlaylist]);
 
   // useEffect(() => {
   //   if (spotifyApi.getAccessToken()) {
@@ -100,7 +100,7 @@ function Center() {
   //       .getUserPlaylists()
   //       .then((data) => {
   //         spotifyApi.getPlaylist(data.body.items[0].id).then((data) => {
-  //           setPlaylist(data.body);
+  //           setMyPlaylist(data.body);
   //         });
   //       })
   //       .catch((err) => {
@@ -110,7 +110,7 @@ function Center() {
   //         );
   //       });
   //   }
-  // }, [spotifyApi, session, setPlaylist]);
+  // }, [spotifyApi, session, setMyPlaylist]);
 
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
@@ -125,25 +125,27 @@ function Center() {
       >
         <Image
           className="h-16 w-16 sm:h-44 sm:w-44 shadow-2xl ml-7"
-          src={playlist?.images?.[0]?.url || noAlbum}
+          src={myPlaylist?.images?.[0]?.url || noAlbum}
           alt=""
           width={100}
           height={100}
           priority
         />
         <div>
-          {playlist && (
+          {myPlaylist && (
             <>
               <p className="pt-2">Playlist</p>
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1  truncate">
-                {playlist?.name}
+                {myPlaylist?.name}
               </h1>
-              <p className=" text-sm pb-2">{playlist?.description}</p>
+              <p className=" text-sm pb-2">{myPlaylist?.description}</p>
               <span className="text-sm">
-                {playlist?.tracks.items.length}{' '}
-                {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
+                {myPlaylist?.tracks.items.length}{' '}
+                {myPlaylist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-sm truncate">{msToTime(totalDuration(playlist))}</span>
+              <span className="text-sm truncate">
+                {msToTime(totalDuration(myPlaylist))}
+              </span>
             </>
           )}
         </div>
@@ -151,7 +153,7 @@ function Center() {
 
       <section className="pb-20">
         <h2 className="sr-only">Track List</h2>
-        <Songs />
+        <UserTracks />
       </section>
     </div>
   );

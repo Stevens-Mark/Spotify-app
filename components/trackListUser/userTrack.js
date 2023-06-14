@@ -13,27 +13,27 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import {
-  playlistIdState,
-  playlistState,
+  myPlaylistIdState,
+  myPlaylistState,
   activePlaylistState,
 } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import Equaliser from './Equaliser';
+import Equaliser from '../Equaliser';
 
 /**
- * Renders each track in the playlist
- * @function Song
+ * Renders each track in the user's playlist
+ * @function UserTrack
  * @param {object} track information
  * @param {number} order track index in the playlist list
  * @returns {JSX}
  */
-function Song({ track, order }) {
+function UserTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
-  const playlistId = useRecoilValue(playlistIdState);
-  const playlist = useRecoilValue(playlistState);
+  const myPlaylistId = useRecoilValue(myPlaylistIdState);
+  const myPlaylist = useRecoilValue(myPlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const [currentTrackId, setCurrentTrackId] =
@@ -50,15 +50,15 @@ function Song({ track, order }) {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        playlist !== null
+        myPlaylist !== null
       ) {
-        const indexPosition = playlist?.tracks.items.findIndex(
+        const indexPosition = myPlaylist?.tracks.items.findIndex(
           (x) => x.track.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '500');
-  }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
+  }, [currentSongIndex, currentTrackId, myPlaylist, setCurrentSongIndex]);
 
   /* either play or pause current track */
   const handlePlayPause = (event, currentTrackIndex) => {
@@ -73,7 +73,7 @@ function Song({ track, order }) {
       } else {
         spotifyApi
           .play({
-            context_uri: `spotify:playlist:${playlistId}`,
+            context_uri: `spotify:playlist:${myPlaylistId}`,
             offset: { position: currentTrackIndex },
           })
           .then(() => {
@@ -81,7 +81,7 @@ function Song({ track, order }) {
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(playlistId);
+            setActivePlaylist(myPlaylistId);
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
@@ -150,4 +150,4 @@ function Song({ track, order }) {
   );
 }
 
-export default Song;
+export default UserTrack;

@@ -1,18 +1,18 @@
 import React from 'react';
 // import state management recoil
 import { useRecoilValue } from 'recoil';
-import { playlistState } from '@/atoms/playListAtom';
+import { myPlaylistState } from '@/atoms/playListAtom';
 // import component/icons
-import Song from './Song';
+import UserTrack from './userTrack';
 import { ClockIcon } from '@heroicons/react/24/outline';
 
 /**
- * Renders the list of tracks in playlist
- * @function Songs
+ * Renders the list of tracks in user's playlist
+ * @function UserTracks
  * @returns {JSX}
  */
-function Songs() {
-  const playlist = useRecoilValue(playlistState);
+function UserTracks() {
+  const myPlaylist = useRecoilValue(myPlaylistState);
   return (
     <>
       <div className="grid grid-cols-2 text-pink-swan px-8  ">
@@ -31,13 +31,13 @@ function Songs() {
       </div>
       <hr className="border-t-1 text-gray-400 mx-12" />
       <div className="p-8 flex flex-col space-y-1 bp-28 text-white">
-        {/* song playlist here */}
-        {playlist?.tracks.items.map((track, i) => (
-          <Song key={`${track.track.id}-${i}`} track={track} order={i} />
+        {/* user's playlist here */}
+        {myPlaylist?.tracks.items.map((track, i) => (
+          <UserTrack key={`${track.track.id}-${i}`} track={track} order={i} />
         ))}
       </div>
     </>
   );
 }
 
-export default Songs;
+export default UserTracks;

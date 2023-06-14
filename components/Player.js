@@ -10,7 +10,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { activePlaylistState, playlistIdState } from '@/atoms/playListAtom';
+import { activePlaylistState, myPlaylistIdState } from '@/atoms/playListAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -32,7 +32,7 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 function Player() {
   const spotifyApi = useSpotify();
   // const { data: session } = useSession();
-  const playlistId = useRecoilValue(playlistIdState);
+  const myPlaylistId = useRecoilValue(myPlaylistIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
