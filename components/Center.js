@@ -4,6 +4,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import icon/images
 import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
+import { colors } from '@/styles/colors';
 // import component
 import Songs from './Songs';
 // import state management recoil
@@ -12,17 +13,7 @@ import { playlistIdState, playlistState } from '@/atoms/playListAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
-
-// random color options for top background
-const colors = [
-  'from-indigo-500',
-  'from-blue-500',
-  'from-green-500',
-  'from-red-500',
-  'from-yellow-500',
-  'from-pink-500',
-  'from-purple-500',
-];
+import { totalDuration } from '@/lib/totalTrackDuration';
 
 /**
  * Renders the chosen playlist heading with the associated song tracks
@@ -44,11 +35,6 @@ function Center() {
       setMyAlert(false);
     }, 5000);
   };
-
-  /* calculate total duration of playlist tracks */
-  const totalDuration = playlist?.tracks.items.reduce((prev, current) => {
-    return prev + current.track.duration_ms;
-  }, 0);
 
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
@@ -108,6 +94,7 @@ function Center() {
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
 
+  console.log("playlist ",playlist)
 
   // useEffect(() => {
   //   if (spotifyApi.getAccessToken()) {
@@ -150,7 +137,7 @@ function Center() {
           {playlist && (
             <>
               <p className="pt-2">Playlist</p>
-              <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1">
+              <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1  truncate">
                 {playlist?.name}
               </h1>
               <p className=" text-sm pb-2">{playlist?.description}</p>
@@ -158,7 +145,7 @@ function Center() {
                 {playlist?.tracks.items.length}{' '}
                 {playlist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
               </span>
-              <span className="text-sm">{msToTime(totalDuration)}</span>
+              <span className="text-sm truncate">{msToTime(totalDuration(playlist))}</span>
             </>
           )}
         </div>

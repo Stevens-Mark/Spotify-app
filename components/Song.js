@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
+import { getMonthDayYear } from '@/lib/time';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -139,7 +140,8 @@ function Song({ order, track }) {
       <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
         <p className="w-40 hidden mdlg:inline pr-3">{song.album.name}</p>
         <p className="w-48 hidden mdlg:inline">
-          {format(new Date(track.added_at), 'p, dd/MM/yyyy')}
+          {/* {format(new Date(track.added_at), 'MMMM d, yyyy')} */}
+          {getMonthDayYear(track.added_at)}
         </p>
         <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
