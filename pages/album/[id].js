@@ -1,6 +1,9 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
+// import state management recoil
+import { useRecoilState, useRecoilValue } from 'recoil';
+import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -10,7 +13,9 @@ import { capitalize } from '@/lib/capitalize';
 import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
 import { colors } from '@/styles/colors';
+// import components
 import Layout from '@/components/layouts/Layout';
+import AlbumTracks from '@/components/trackListAlbum/albumTracks';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -41,16 +46,23 @@ export async function getServerSideProps(context) {
   };
 }
 
+/**
+ * Renders Album page with tracks
+ * @function AlbumPage
+ * @param {object} album 
+ * @returns {JSX}
+ */
 const AlbumPage = ({ album }) => {
-  const mediaList = album;
-
-  console.log('mediaList ', mediaList);
+  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+  const [albumTracklist, setAlbumTracklist] =
+    useRecoilState(albumTrackListState);
   const [randomColor, setRandomColor] = useState(null);
 
   useEffect(() => {
-    // setRandomColor(colors[Math.floor(Math.random() * 7)]);
     setRandomColor(shuffle(colors).pop());
-  }, []);
+    setCurrentAlbumId(album?.id);
+    setAlbumTracklist(album);
+  }, [album, album?.id, setAlbumTracklist, setCurrentAlbumId]);
 
   return (
     <>
@@ -63,33 +75,37 @@ const AlbumPage = ({ album }) => {
         >
           <Image
             className="h-16 w-16 sm:h-44 sm:w-44 shadow-2xl ml-7"
-            src={mediaList?.images?.[0]?.url || noAlbum}
+            src={album?.images?.[0]?.url || noAlbum}
             alt=""
             width={100}
             height={100}
             priority
           />
           <div>
-            {mediaList && (
+            {album && (
               <>
-                <p className="pt-2">{capitalize(mediaList?.album_type)}</p>
+                <p className="pt-2">{capitalize(album?.album_type)}</p>
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1 truncate">
-                  {mediaList?.name}
+                  {album?.name}
                 </h1>
-                <p className=" text-sm pb-2">{mediaList?.description}</p>
-                <span>{mediaList?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
-                <span>{mediaList?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
+                <p className=" text-sm pb-2">{album?.description}</p>
+                <span>{album?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
+                <span>{album?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
                 <span className="text-sm">
-                  {mediaList?.tracks.items.length}{' '}
-                  {mediaList?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
+                  {album?.tracks.items.length}{' '}
+                  {album?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
                 <span className="text-sm truncate">
-                  {msToTime(totalAlbumDuration(mediaList))}
+                  {msToTime(totalAlbumDuration(album))}
                 </span>
               </>
             )}
           </div>
         </div>
+        <section className="pb-20">
+          <h2 className="sr-only">Track List</h2>
+          <AlbumTracks/>
+        </section>
       </div>
     </>
   );

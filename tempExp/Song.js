@@ -24,18 +24,18 @@ import Equaliser from './Equaliser';
 /**
  * Renders each track in the playlist
  * @function Song
+ * @param {number} order track index in the list
  * @param {object} track information
- * @param {number} order track index in the playlist list
  * @returns {JSX}
  */
-function Song({ track, order }) {
+function Song({ order, track }) {
   const spotifyApi = useSpotify();
-  const song = track.track;
+  // const song = track.track;
+  const song =track
 
-  const playlistId = useRecoilValue(playlistIdState);
   const playlist = useRecoilValue(playlistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-
+  const playlistId = useRecoilValue(playlistIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
@@ -57,7 +57,7 @@ function Song({ track, order }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, '750');
   }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
 
   /* either play or pause current track */

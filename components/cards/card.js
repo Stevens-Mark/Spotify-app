@@ -72,7 +72,7 @@ function Card({ item, order }) {
   /**
    * Either play or pause current track
    * @function HandlePlayPause
-   * @param {event object} event NO IN USE CURRENTLY
+   * @param {event object} event 
    */
   const HandlePlayPause = (event) => {
     event.preventDefault(); // to prevent the default link behavior

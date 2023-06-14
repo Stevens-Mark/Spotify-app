@@ -134,6 +134,18 @@ function Player() {
     }
   }, [debounceAdjustVolume, volume]);
 
+  useEffect(() => {
+    setTimeout(() => {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi.getMyCurrentPlaybackState().then((data) => {
+          if (data.body?.is_playing) {
+            setIsPlaying(true);
+          }
+        });
+      }
+    }, '500');
+  }, [setIsPlaying, spotifyApi]);
+
   // const renderCount = useMemo(() => {
   //   let count = 0;
   //   return () => ++count;

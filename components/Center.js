@@ -94,8 +94,6 @@ function Center() {
     }
   }, [spotifyApi, session, playlistId, setPlaylist]);
 
-  console.log("playlist ",playlist)
-
   // useEffect(() => {
   //   if (spotifyApi.getAccessToken()) {
   //     spotifyApi
