@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
@@ -49,13 +49,12 @@ export async function getServerSideProps(context) {
 /**
  * Renders Album page with tracks
  * @function AlbumPage
- * @param {object} album 
+ * @param {object} album
  * @returns {JSX}
  */
 const AlbumPage = ({ album }) => {
-  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
-  const [albumTracklist, setAlbumTracklist] =
-    useRecoilState(albumTrackListState);
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
+  const setAlbumTracklist = useSetRecoilState(albumTrackListState);
   const [randomColor, setRandomColor] = useState(null);
 
   useEffect(() => {
@@ -88,7 +87,9 @@ const AlbumPage = ({ album }) => {
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1 truncate">
                   {album?.name}
                 </h1>
-                <p className=" text-sm mb-2 line-clamp-2">{album?.description}</p>
+                <p className=" text-sm mb-2 line-clamp-2">
+                  {album?.description}
+                </p>
                 <span>{album?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
                 <span>{album?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
                 <span className="text-sm">
@@ -104,7 +105,7 @@ const AlbumPage = ({ album }) => {
         </div>
         <section className="pb-20">
           <h2 className="sr-only">Track List</h2>
-          <AlbumTracks/>
+          <AlbumTracks />
         </section>
       </div>
     </>

@@ -2,7 +2,7 @@ import { atom } from 'recoil';
 
 // track which card has been selected by user: help play/pause icon activation
 export const currentItemIdState = atom({
-  key: 'currentItemIdState', //currentPlaylistIdState'
+  key: 'currentItemIdState', 
   default: null,
 });
 

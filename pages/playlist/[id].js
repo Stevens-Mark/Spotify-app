@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
@@ -53,13 +53,8 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const PlaylistPage = ({ playlist }) => {
-
-  console.log("playlstpage ", playlist)
-  const [currentPlaylistId, setCurrentPlaylistId] =
-    useRecoilState(playlistIdState);
-  const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
-    playlistTrackListState
-  );
+  const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
+  const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
   const [randomColor, setRandomColor] = useState(null);
 
   useEffect(() => {
@@ -92,8 +87,12 @@ const PlaylistPage = ({ playlist }) => {
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1 truncate">
                   {playlist?.name}
                 </h1>
-                <p className=" text-sm mb-2 line-clamp-2">{playlist?.description}</p>
-                <span>{capitalize(playlist?.owner?.display_name)}&nbsp;•&nbsp;</span>
+                <p className=" text-sm mb-2 line-clamp-2">
+                  {playlist?.description}
+                </p>
+                <span>
+                  {capitalize(playlist?.owner?.display_name)}&nbsp;•&nbsp;
+                </span>
                 <span>
                   {(playlist?.followers?.total).toLocaleString()}{' '}
                   likes&nbsp;•&nbsp;

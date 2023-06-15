@@ -38,8 +38,31 @@ function Card({ item, order }) {
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
 
+  // let linkAddress;
+
+  // switch (item.type) {
+  //   case 'album':
+  //     linkAddress = `/album/${item.id}`;
+  //     break;
+  //   case 'playlist':
+  //     linkAddress = `/playlist/${item.id}`;
+  //     break;
+  //   case 'artist':
+  //     linkAddress = `/artist/${item.id}`;
+  //     break;
+  //   default:
+  //     linkAddress = null;
+  //     break;
+  // }
+
   const linkAddress =
-    item.type === 'album' ? `/album/${item.id}` : `/playlist/${item.id}`;
+    item.type === 'album'
+      ? `/album/${item.id}`
+      : item.type === 'playlist'
+      ? `/playlist/${item.id}`
+      : item.type === 'artist'
+      ? `/artist/${item.id}`
+      : '';
 
   /**
    * fetch playlist track & set TrackId state

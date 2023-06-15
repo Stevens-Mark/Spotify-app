@@ -35,7 +35,14 @@ function TopResultCard({ item }) {
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
 
-  const linkAddress = item.type === 'album' ? `/album/${item.id}` : `/playlist/${item.id}`;
+  const linkAddress =
+    item.type === 'album'
+      ? `/album/${item.id}`
+      : item.type === 'playlist'
+      ? `/playlist/${item.id}`
+      : item.type === 'artist'
+      ? `/artist/${item.id}`
+      : '';
 
   /**
    * fetch playlist track & set TrackId state accordingly

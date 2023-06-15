@@ -1,43 +1,39 @@
-import { format } from 'date-fns';
-import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
+import useSpotify from '@/hooks/useSpotify';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
-import { getMonthDayYear } from '@/lib/time';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import {
-  myPlaylistIdState,
-  myPlaylistState,
-  activePlaylistState,
-} from '@/atoms/playListAtom';
+import { activePlaylistState } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import Equaliser from './Equaliser';
+import Equaliser from '@/components/Equaliser';
 
 /**
- * Renders each track in the user's playlist
- * @function Song
- * @param {number} order track index in the list
+ * Renders each track in the artist
+ * @function ArtistTrack
  * @param {object} track information
+ * @param {number} order track index in the artist list
  * @returns {JSX}
  */
-function Song({ order, track }) {
+function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
-  // const song = track.track;
-  const song =track
+  const song = track;
 
-  const myPlaylist = useRecoilValue(myPlaylistState);
+  const artistTracklist = useRecoilValue(artistTrackListState);
+  const artistTrackUris = useRecoilValue(artistTrackUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const myPlaylistId = useRecoilValue(myPlaylistIdState);
+
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
+  // to identify the track position for the green highlight of the active track
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
@@ -50,17 +46,22 @@ function Song({ order, track }) {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        myPlaylist !== null
+        artistTracklist !== null
       ) {
-        const indexPosition = myPlaylist?.tracks.items.findIndex(
-          (x) => x.track.id == currentTrackId
+        const indexPosition = artistTracklist?.tracks?.findIndex(
+          (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '750');
-  }, [currentSongIndex, currentTrackId, myPlaylist, setCurrentSongIndex]);
+    }, '500');
+  }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
-  /* either play or pause current track */
+  /**
+   * Either play or pause current artist track
+   * @function HandlePlayPause
+   * @param {event object} event
+   * @param {number} currentTrackIndex (offset) in artist track list
+   */
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentTrackId) {
@@ -73,15 +74,14 @@ function Song({ order, track }) {
       } else {
         spotifyApi
           .play({
-            context_uri: `spotify:playlist:${playlistId}`,
-            offset: { position: currentTrackIndex },
+            uris: artistTrackUris,
           })
           .then(() => {
             console.log('Playback Success');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(myPlaylistId);
+            setActivePlaylist(null); //artist playing so user's playlist null
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
@@ -120,7 +120,7 @@ function Song({ order, track }) {
         </button>
         <Image
           className="h-10 w-10"
-          src={song.album?.images[0].url}
+          src={song?.album.images[0].url}
           alt=""
           width={100}
           height={100}
@@ -138,16 +138,11 @@ function Song({ order, track }) {
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden mdlg:inline pr-3">{song.album.name}</p>
-        <p className="w-48 hidden mdlg:inline">
-          {/* {format(new Date(track.added_at), 'MMMM d, yyyy')} */}
-          {getMonthDayYear(track.added_at)}
-        </p>
+      <div className="flex items-end md:items-center justify-end ml-auto md:ml-0">
         <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>
   );
 }
 
-export default Song;
+export default ArtistTrack;
