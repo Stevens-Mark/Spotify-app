@@ -46,7 +46,7 @@ function Episodes() {
    * @returns {object} updated list of episodes in queryResults
    */
   const fetchMoreEpisodes = () => {
-    const itemsPerPage = 50;
+    const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
     setIsSearching(true);

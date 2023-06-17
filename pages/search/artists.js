@@ -46,7 +46,7 @@ function Artists() {
    * @returns {object} updated list of artists in queryResults
    */
   const fetchMoreArtists = () => {
-    const itemsPerPage = 50;
+    const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
     setIsSearching(true);
@@ -85,13 +85,12 @@ function Artists() {
           <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
             Artists
           </h1>
-          <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+          <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {artists?.map((item, i) => (
               <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
           {totalNumber > currentNumber && (
-            <>
             <span className="flex justify-end w-full mt-4">
               <button
                 className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
@@ -102,17 +101,6 @@ function Artists() {
                 <span>Add More</span>
               </button>
             </span>
-            <span className="flex justify-end w-full mt-4">
-              <button
-                className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
-                onClick={() => {
-                  fetchMoreArtists();
-                }}
-              >
-                <span>Add More</span>
-              </button>
-            </span>
-            </>
           )}
         </>
       )}

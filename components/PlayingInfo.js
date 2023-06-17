@@ -43,7 +43,7 @@ function PlayingInfo() {
         width={100}
         height={100}
       />
-      <div c>
+      <div>
         <h3 className='line-clamp-1'>{songInfo?.name}</h3>
         <span className='line-clamp-1' >{songInfo?.artists?.[0]?.name}</span>
       </div>

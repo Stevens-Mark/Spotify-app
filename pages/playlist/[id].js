@@ -87,7 +87,7 @@ const PlaylistPage = ({ playlist }) => {
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                   {playlist?.name}
                 </h1>
-                <span className=" text-sm mt-5 mb-2 line-clamp-2">
+                <span className=" text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
                   {playlist?.description}
                 </span>
                 <span>

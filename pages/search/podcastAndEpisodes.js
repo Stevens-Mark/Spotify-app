@@ -58,7 +58,7 @@ function PodcastAndEpisodes() {
               Podcasts & Shows
             </h2>
             <button
-              className="mb-5 text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
+              className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
               onClick={() => {
                 handlePodcasts();
               }}
@@ -66,7 +66,7 @@ function PodcastAndEpisodes() {
               <span>show all</span>
             </button>
           </div>
-          <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+          <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {shows?.slice(0, 7).map((item, i) => (
               <Card key={`${item.id}-${i}`} item={item} />
             ))}
@@ -90,7 +90,7 @@ function PodcastAndEpisodes() {
               Episodes
             </h2>
             <button
-              className="mb-5 text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
+              className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
               onClick={() => {
                 handleEpisodes();
               }}
@@ -99,7 +99,7 @@ function PodcastAndEpisodes() {
             </button>
           </div>
           <div className="flex flex-col">
-            {episodes?.slice(0, 25).map((item, i) => (
+            {episodes?.slice(0, 30).map((item, i) => (
               <EpisodeCard key={`${item.id}-${i}`} item={item} />
             ))}
           </div>

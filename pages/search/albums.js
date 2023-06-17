@@ -46,7 +46,7 @@ function Albums() {
    * @returns {object} updated list of albums in queryResults
    */
   const fetchMoreAlbums = () => {
-    const itemsPerPage = 50;
+    const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
     setIsSearching(true);
@@ -85,7 +85,7 @@ function Albums() {
           <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
             Albums
           </h1>
-          <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+          <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {albums?.map((item, i) => (
               <Card key={`${item.id}-${i}`} item={item} />
             ))}

@@ -48,6 +48,15 @@ function Center() {
     }, 5000);
   };
 
+  // const renderCount = useMemo(() => {
+  //   let count = 0;
+  //   return () => ++count;
+  // }, []);
+
+  // useEffect(() => {
+  //   console.log(`Component has rendered ${renderCount()} times`);
+  // }, [renderCount]);
+
   useEffect(() => {
     // setRandomColor(colors[Math.floor(Math.random() * 7)]);
     setRandomColor(shuffle(colors).pop());
@@ -70,21 +79,21 @@ function Center() {
             console.log(
               `Active device found: ${activeDevice.name}. PREMIUM ACCOUNT needed for most features!`
             );
-            setMessage(`PREMIUM ACCOUNT needed for most features!`);
+            setMessage(`PREMIUM ACCOUNT needed !`);
           } else {
             console.log(
-              'No active device found: Connect to Spotify & reload the page'
+              'No active device found: Connect to Spotify & reload page'
             );
-            setMessage('Connect to Spotify & reload the page.');
+            setMessage('Connect to Spotify & reload page.');
           }
           handleMyAlert();
         })
         .catch((err) => {
           console.error(
-            'Failed to find active devices. Connect to Spotify & reload the page.',
+            'Failed to find active devices. Connect to Spotify & reload page.',
             err
           );
-          setMessage('Connect to Spotify & reload the page.');
+          setMessage('Connect to Spotify & reload page.');
           handleMyAlert();
         });
     }
@@ -128,7 +137,7 @@ function Center() {
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <p
         style={myAlert ? { display: 'block' } : { display: 'none' }}
-        className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-96"
+        className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-64"
       >
         {message}
       </p>
@@ -150,8 +159,12 @@ function Center() {
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                 {myPlaylist?.name}
               </h1>
-              <p className="text-sm mt-5 mb-2 line-clamp-2">{myPlaylist?.description}</p>
-              <span>{capitalize(myPlaylist?.owner?.display_name)}&nbsp;•&nbsp;</span>
+              <p className="text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
+                {myPlaylist?.description}
+              </p>
+              <span>
+                {capitalize(myPlaylist?.owner?.display_name)}&nbsp;•&nbsp;
+              </span>
               <span className="text-sm">
                 {myPlaylist?.tracks.items.length}{' '}
                 {myPlaylist?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}

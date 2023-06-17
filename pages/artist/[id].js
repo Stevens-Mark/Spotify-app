@@ -111,7 +111,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                   {artistInfo?.name}
                 </h1>
-                {/* <p className="text-sm mt-5 mb-2 line-clamp-2">
+                {/* <p className="text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
                   {artistInfo?.description}
                 </p> */}
                 <span>
