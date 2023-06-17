@@ -138,7 +138,7 @@ function ArtistTrack({ track, order }) {
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-end md:items-center justify-end ml-auto md:ml-0">
+      <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
         <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>

@@ -73,7 +73,13 @@ function Sidebar() {
           );
         });
     }
-  }, [spotifyApi, session, setCurrentTrackId, setActivePlaylist, setMyPlaylistId]);
+  }, [
+    spotifyApi,
+    session,
+    setCurrentTrackId,
+    setActivePlaylist,
+    setMyPlaylistId,
+  ]);
 
   /**
    * clear search (if any) & redirect to homepage
@@ -110,7 +116,8 @@ function Sidebar() {
     <nav
       role="navigation"
       aria-label="Playlist menu"
-      className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline-flex min-w-[16rem]"
+      className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline
+       min-w-[16rem] w-[21%]"
     >
       <ul className="space-y-4 w-full">
         <li>
@@ -170,7 +177,7 @@ function Sidebar() {
           <li key={playlist.id}>
             <button
               onClick={() => handleClick(playlist.id)}
-              className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer 
+              className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
               ${
                 activePlaylist == playlist.id && isPlaying
                   ? 'text-green-500'
@@ -190,7 +197,7 @@ function Sidebar() {
                 width={100}
                 height={100}
               />
-              <p>{playlist.name}</p>
+              <p className='line-clamp-1'>{playlist.name}</p>
               <span className="pl-2">
                 {activePlaylist == playlist.id && isPlaying ? (
                   <SpeakerWaveIcon className="w-4 h-4 text-green-500" />

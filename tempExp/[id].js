@@ -93,42 +93,46 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
         <title>Artists</title>
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
-        <div
-          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white py-4 px-5 xs:p-8`}
-        >
-          <Image
-            className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
-            src={artistInfo?.images?.[0]?.url || noArtist}
-            alt=""
-            width={100}
-            height={100}
-            priority
-          />
-          <div>
-            {artistInfo && (
-              <>
-                <p className="pt-2">{capitalize(artistInfo?.type)}</p>
-                <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
-                  {artistInfo?.name}
-                </h1>
-                {/* <p className="text-sm mt-5 mb-2 line-clamp-2">
+        <div className="relative h-[40vh] overflow-hidden">
+          <div
+            className="absolute top-0 left-0 w-full h-full bg-fixed bg-cover bg-no-repeat bg-center"
+            style={{
+              backgroundImage: `url("${
+                artistInfo?.images?.[0]?.url || noArtist
+              }")`,
+              // backgroundSize: '100% 100%',
+            }}
+          ></div>
+          <div
+            className={`flex flex-col justify-end sm:flex-row sm:justify-start sm:items-end space-x-7 h-[40vh] text-white p-8 relative z-10`}
+          >
+            <div>
+              {artistInfo && (
+                <>
+                  <p className="pt-2">{capitalize(artistInfo?.type)}</p>
+                  <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pb-5 pt-1 truncate">
+                    {artistInfo?.name}
+                  </h1>
+                  {/* <p className=" text-sm mb-2 line-clamp-2">
                   {artistInfo?.description}
                 </p> */}
-                <span>
-                  {(artistInfo?.followers?.total).toLocaleString()}{' '}
-                  followers&nbsp;•&nbsp;
-                </span>
-                <span className="text-sm">
-                  {artistTracks?.tracks?.length}{' '}
-                  {artistTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
-                </span>
-                <span className="text-sm truncate text-pink-swan">
-                  {msToTime(totalArtistTrackDuration(artistTracks))}
-                </span>
-              </>
-            )}
+                  <span>
+                    {(artistInfo?.followers?.total).toLocaleString()}{' '}
+                    followers&nbsp;•&nbsp;
+                  </span>
+                  <span className="text-sm">
+                    {artistTracks?.tracks?.length}{' '}
+                    {artistTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
+                  </span>
+                  <span className="text-sm truncate text-pink-swan">
+                    {msToTime(totalArtistTrackDuration(artistTracks))}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         </div>
+
         <section className="pb-20">
           <h2 className="sr-only">Track List</h2>
           <ArtistTracks />

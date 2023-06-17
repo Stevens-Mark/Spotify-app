@@ -121,7 +121,7 @@ function AlbumTrack({ track, order }) {
 
         <div>
           <h3
-            className={`w-36 sm:w-72 mdlg:w-36 lg:w-64 xl:w-80 pr-2 ${
+            className={`w-36 xs:w-48 sm:w-72 xl:w-auto pr-2 ${
               activeStatus && order == currentSongIndex
                 ? 'text-green-500'
                 : 'text-white'
@@ -132,7 +132,7 @@ function AlbumTrack({ track, order }) {
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-end md:items-center justify-end ml-auto md:ml-0">
+      <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
         <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
       </div>
     </div>

@@ -137,7 +137,7 @@ function UserTrack({ track, order }) {
           <p className="w-40">{song.artists[0].name}</p>
         </div>
       </div>
-      <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
+      <div className="flex items-end xs:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
         <p className="w-40 hidden mdlg:inline pr-3">{song.album.name}</p>
         <p className="w-48 hidden mdlg:inline">
           {getMonthDayYear(track.added_at)}
