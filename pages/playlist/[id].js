@@ -9,6 +9,7 @@ import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalDuration } from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
+import { analyseImageColor } from '@/lib/rgbToHex.js';
 // import icon/images
 import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
@@ -56,12 +57,28 @@ const PlaylistPage = ({ playlist }) => {
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
   const [randomColor, setRandomColor] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState();
 
   useEffect(() => {
     setRandomColor(shuffle(colors).pop());
     setCurrentPlaylistId(playlist?.id);
     setPlaylistTracklist(playlist);
   }, [playlist, setCurrentPlaylistId, setPlaylistTracklist]);
+
+  useEffect(() => {
+    const imageUrl = playlist?.images?.[0]?.url;
+    if (imageUrl) {
+      analyseImageColor(imageUrl).then((color) => {
+        setBackgroundColor(color);
+      });
+    } else {
+      setBackgroundColor(null);
+    }
+  }, [playlist?.images]);
+
+  const imageColorMatch = {
+    background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+  };
 
   return (
     <>
@@ -70,7 +87,10 @@ const PlaylistPage = ({ playlist }) => {
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
-          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white py-4 px-5 xs:p-8`}
+          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
+            backgroundColor ? '' : randomColor
+          }`}
+          style={imageColorMatch}
         >
           <Image
             className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"

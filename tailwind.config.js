@@ -17,17 +17,20 @@ export const theme = {
       'pink-swan': '#B3B3B3',
       'background-base': '#121212',
       'gray-seven': '#121212',
-      'textsubdued': '#a7a7a7',
-      'highlight': 'hsla(0,0%,100%,.07)',
+      textsubdued: '#a7a7a7',
+      highlight: 'hsla(0,0%,100%,.07)',
       gray: {
         900: '#181818',
       },
     },
     boxShadow: {
       '3xl': '5px 5px 5px black',
-      'image':'0 8px 24px rgba(0,0,0,.5)',
+      'image': '0 8px 24px rgba(0,0,0,.5)',
       custom:
         'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
+    },
+    dropShadow: {
+      text: '0 1.2px 1.2px rgba(0,0,0,0.8)',
     },
     keyframes: {
       equaliser: {

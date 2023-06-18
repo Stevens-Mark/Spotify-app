@@ -9,6 +9,7 @@ import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalAlbumDuration } from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
+import { analyseImageColor } from '@/lib/rgbToHex.js';
 // import icon/images
 import Image from 'next/image';
 import noAlbum from '@/public/images/noImageAvailable.svg';
@@ -56,12 +57,45 @@ const AlbumPage = ({ album }) => {
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setAlbumTracklist = useSetRecoilState(albumTrackListState);
   const [randomColor, setRandomColor] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState();
 
   useEffect(() => {
     setRandomColor(shuffle(colors).pop());
     setCurrentAlbumId(album?.id);
     setAlbumTracklist(album);
   }, [album, setAlbumTracklist, setCurrentAlbumId]);
+
+  // useEffect(() => {
+  //   const analyseImageColor = async () => {
+  //     const imageUrl = album?.images?.[0]?.url;
+  //     if (imageUrl) {
+  //       const colorArray = await analyze(imageUrl, {
+  //         scale: 0.6,
+  //         ignore: ['rgb(0,0,0)'],
+  //       });
+  //       const dominantColor = extractDominantColor(colorArray);
+  //       setBackgroundColor(dominantColor ? rgbToHex(dominantColor) : null);
+  //     } else {
+  //       setBackgroundColor(null);
+  //     }
+  //   };
+  //   analyseImageColor();
+  // }, [album?.images]);
+
+  useEffect(() => {
+    const imageUrl = album?.images?.[0]?.url;
+    if (imageUrl) {
+      analyseImageColor(imageUrl).then((color) => {
+        setBackgroundColor(color);
+      });
+    } else {
+      setBackgroundColor(null);
+    }
+  }, [album?.images]);
+
+  const imageColorMatch = {
+    background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+  };
 
   return (
     <>
@@ -70,7 +104,10 @@ const AlbumPage = ({ album }) => {
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
-          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white py-4 px-5 xs:p-8`}
+          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
+            backgroundColor ? '' : randomColor
+          }`}
+          style={imageColorMatch}
         >
           <Image
             className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
@@ -82,7 +119,7 @@ const AlbumPage = ({ album }) => {
           />
           <div>
             {album && (
-              <>
+              <div className="drop-shadow-text">
                 <p className="pt-2">{capitalize(album?.album_type)}</p>
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                   {album?.name}
@@ -99,7 +136,7 @@ const AlbumPage = ({ album }) => {
                 <span className="text-sm truncate text-pink-swan">
                   {msToTime(totalAlbumDuration(album))}
                 </span>
-              </>
+              </div>
             )}
           </div>
         </div>
