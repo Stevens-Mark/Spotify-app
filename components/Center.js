@@ -154,8 +154,8 @@ function Center() {
         />
         <div>
           {myPlaylist && (
-            <>
-              <p className="pt-2">Playlist</p>
+            <div className="drop-shadow-text">
+              <span className="pt-2">Playlist</span>
               <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                 {myPlaylist?.name}
               </h1>
@@ -172,7 +172,7 @@ function Center() {
               <span className="text-sm truncate text-pink-swan">
                 {msToTime(totalDuration(myPlaylist))}
               </span>
-            </>
+            </div>
           )}
         </div>
       </div>

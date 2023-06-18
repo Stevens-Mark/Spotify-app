@@ -76,10 +76,6 @@ const PlaylistPage = ({ playlist }) => {
     }
   }, [playlist?.images]);
 
-  const imageColorMatch = {
-    background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
-  };
-
   return (
     <>
       <Head>
@@ -88,9 +84,11 @@ const PlaylistPage = ({ playlist }) => {
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
           className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-            backgroundColor ? '' : randomColor
+            backgroundColor!== null ? '' : randomColor
           }`}
-          style={imageColorMatch}
+          style={{
+            background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+          }}
         >
           <Image
             className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
@@ -102,14 +100,14 @@ const PlaylistPage = ({ playlist }) => {
           />
           <div>
             {playlist && (
-              <>
-                <p className="pt-2">{capitalize(playlist?.type)}</p>
+              <div className="drop-shadow-text">
+                <span className="pt-2">{capitalize(playlist?.type)}</span>
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                   {playlist?.name}
                 </h1>
-                <span className=" text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
+                <p className=" text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
                   {playlist?.description}
-                </span>
+                </p>
                 <span>
                   {capitalize(playlist?.owner?.display_name)}&nbsp;•&nbsp;
                 </span>
@@ -124,7 +122,7 @@ const PlaylistPage = ({ playlist }) => {
                 <span className="text-sm truncate text-pink-swan">
                   {msToTime(totalDuration(playlist))}
                 </span>
-              </>
+              </div>
             )}
           </div>
         </div>

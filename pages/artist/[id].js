@@ -100,10 +100,6 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
     }
   }, [artistInfo?.images]);
 
-  const imageColorMatch = {
-    background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
-  };
-
   return (
     <>
       <Head>
@@ -112,9 +108,11 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
           className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-            backgroundColor ? '' : randomColor
+            backgroundColor!== null ? '' : randomColor
           }`}
-          style={imageColorMatch}
+          style={{
+            background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+          }}
         >
           <Image
             className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
@@ -127,7 +125,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
           <div>
             {artistInfo && (
               <div className="drop-shadow-text">
-                <p className="pt-2">{capitalize(artistInfo?.type)}</p>
+                <span className="pt-2">{capitalize(artistInfo?.type)}</span>
                 <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
                   {artistInfo?.name}
                 </h1>
