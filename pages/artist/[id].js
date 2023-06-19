@@ -84,16 +84,17 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
   const [backgroundColor, setBackgroundColor] = useState();
 
   useEffect(() => {
-    setRandomColor(shuffle(colors).pop());
     setArtistTracklist(artistTracks);
     setArtistTrackUris(artistTracks?.tracks.map((track) => track.uri)); // set uris to be used in player
   }, [artistTracks, setArtistTrackUris, setArtistTracklist]);
 
+  // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
+    setRandomColor(shuffle(colors).pop());
     const imageUrl = artistInfo?.images?.[0]?.url;
     if (imageUrl) {
-      analyseImageColor(imageUrl).then((color) => {
-        setBackgroundColor(color);
+      analyseImageColor(imageUrl).then((dominantColor) => {
+        setBackgroundColor(dominantColor);
       });
     } else {
       setBackgroundColor(null);
@@ -108,7 +109,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
           className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-            backgroundColor!== null ? '' : randomColor
+            backgroundColor !== null ? '' : randomColor
           }`}
           style={{
             background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,

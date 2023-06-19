@@ -60,16 +60,17 @@ const AlbumPage = ({ album }) => {
   const [backgroundColor, setBackgroundColor] = useState();
 
   useEffect(() => {
-    setRandomColor(shuffle(colors).pop());
     setCurrentAlbumId(album?.id);
     setAlbumTracklist(album);
   }, [album, setAlbumTracklist, setCurrentAlbumId]);
 
+  // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
+    setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
     const imageUrl = album?.images?.[0]?.url;
-    if (imageUrl) {
-      analyseImageColor(imageUrl).then((color) => {
-        setBackgroundColor(color);
+    if (imageUrl) { // custom background color (css style)
+      analyseImageColor(imageUrl).then((dominantColor) => {
+        setBackgroundColor(dominantColor);
       });
     } else {
       setBackgroundColor(null);
