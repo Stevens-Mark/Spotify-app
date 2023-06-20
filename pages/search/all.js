@@ -63,7 +63,7 @@ function All() {
   });
 
   const isXXl = useMediaQuery({
-    minWidth: '1281px',
+    minWidth: '1280px',
     maxWidth: '1680px',
   });
 
