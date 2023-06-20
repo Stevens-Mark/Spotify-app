@@ -11,6 +11,7 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 // import icons/images
@@ -26,6 +27,8 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function TopResultCard({ item }) {
   const spotifyApi = useSpotify();
 
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
@@ -89,6 +92,7 @@ function TopResultCard({ item }) {
     // set states when a track can play successfully
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
+      setPlayerInfoType('tracks');
       setIsPlaying(true);
       setCurrentSongIndex(0); // top result is always the first item in array hence value zero
       setActivePlaylist(item.id);
@@ -148,6 +152,7 @@ function TopResultCard({ item }) {
                 })
                 .then(() => {
                   setCurrentTrackId(item.id); // will trigger playerInfo to update
+                  setPlayerInfoType('tracks');
                 })
                 .catch((err) => {
                   console.error('Track playback failed:', err);

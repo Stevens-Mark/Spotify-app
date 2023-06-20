@@ -15,7 +15,7 @@ import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
  */
 function PlayingInfo() {
   const spotifyApi = useSpotify();
-  const songInfo = useSongInfo();
+  const songInfo = useSongInfo('episode');
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const setIsPlaying = useSetRecoilState(isPlayState);
 
@@ -38,14 +38,16 @@ function PlayingInfo() {
     <div className="flex items-center space-x-4">
       <Image
         className="hidden md:inline h-10 w-10"
-        src={songInfo?.album?.images?.[0]?.url || noAlbum}
+        src={songInfo?.album?.images?.[0]?.url || songInfo?.images?.[0]?.url || noAlbum}
         alt=""
         width={100}
         height={100}
       />
       <div>
         <h3 className='line-clamp-1'>{songInfo?.name}</h3>
-        <span className='line-clamp-1' >{songInfo?.artists?.[0]?.name}</span>
+        {songInfo?.artist && (<span className='text-sm line-clamp-1' >{songInfo?.artists?.[0]?.name}</span>)}
+        {songInfo?.show && (<span className='text-xs text-pink-swan line-clamp-1' >{songInfo?.show?.name}</span>)}
+        
       </div>
     </div>
   );

@@ -6,12 +6,13 @@ import Image from 'next/image';
 import { millisToMinutesAndSeconds } from '@/lib/time';
 import { getMonthDayYear } from '@/lib/time';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 import {
   playlistIdState,
   playlistTrackListState,
@@ -32,6 +33,8 @@ function PlaylistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const playlistId = useRecoilValue(playlistIdState);
   const playlist = useRecoilValue(playlistTrackListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -78,6 +81,7 @@ function PlaylistTrack({ track, order }) {
           })
           .then(() => {
             console.log('Playback Success');
+            setPlayerInfoType('tracks');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
@@ -135,15 +139,17 @@ function PlaylistTrack({ track, order }) {
           >
             {song.name}
           </h3>
-          <p className="w-40">{song.artists[0].name}</p>
+          <span className="w-40">{song.artists[0].name}</span>
         </div>
       </div>
       <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-        <p className="w-40 hidden mdlg:inline pr-3">{song.album.name}</p>
-        <p className="w-48 hidden mdlg:inline">
+        <span className="w-40 hidden mdlg:inline pr-3">{song.album.name}</span>
+        <span className="w-48 hidden mdlg:inline">
           {getMonthDayYear(track.added_at)}
-        </p>
-        <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
+        </span>
+        <span className="pl-5">
+          {millisToMinutesAndSeconds(song.duration_ms)}
+        </span>
       </div>
     </div>
   );

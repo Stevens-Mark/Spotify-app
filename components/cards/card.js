@@ -11,6 +11,7 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
@@ -28,6 +29,8 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function Card({ item, order }) {
   const spotifyApi = useSpotify();
 
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
@@ -62,6 +65,8 @@ function Card({ item, order }) {
       ? `/playlist/${item.id}`
       : item.type === 'artist'
       ? `/artist/${item.id}`
+      : item.type === 'show'
+      ? `/show/${item.id}`
       : '';
 
   /**
@@ -109,6 +114,7 @@ function Card({ item, order }) {
     // set states when a track can play successfully
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
+      setPlayerInfoType('tracks');
       setIsPlaying(true);
       setActivePlaylist(item.id);
       // setCurrentSongIndex(order); //ONLY BEING PASSED IN ALL.js - this may NOT be needed)

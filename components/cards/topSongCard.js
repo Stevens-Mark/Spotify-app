@@ -10,6 +10,7 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -26,12 +27,14 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 const TopSongCard = ({ order, song }) => {
   const spotifyApi = useSpotify();
 
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
-    
+
   // const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
   // used to set play/pause icons
@@ -68,6 +71,7 @@ const TopSongCard = ({ order, song }) => {
           })
           .then(() => {
             console.log('Playback Success');
+            setPlayerInfoType('tracks');
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
             setCurrentAlbumId(song.album.id);

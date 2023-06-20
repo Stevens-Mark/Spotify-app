@@ -12,3 +12,8 @@ export const currentAlbumIdState = atom({
   default: null,
 });
 
+// used to set what type of player info to display
+export const playerInfoTypeState = atom({
+  key: 'playerInfoTypeState',
+  default: null,
+});

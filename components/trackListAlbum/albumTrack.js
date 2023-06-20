@@ -3,13 +3,14 @@ import React, { useState, useMemo, useEffect } from 'react';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
@@ -26,6 +27,8 @@ function AlbumTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
+    // used to determine what type of info to load
+    const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const currentAlbumId = useRecoilValue(albumIdState);
   const albumTracklist = useRecoilValue(albumTrackListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -78,6 +81,7 @@ function AlbumTrack({ track, order }) {
           })
           .then(() => {
             console.log('Playback Success');
+            setPlayerInfoType('tracks');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);

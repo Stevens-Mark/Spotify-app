@@ -17,8 +17,8 @@ function PlaylistTracks() {
     <>
       <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8">
         <span className="flex px-5">
-          <p>#</p>
-          <p className="w-36 lg:w-64 pl-2">Title</p>
+          <span>#</span>
+          <span className="w-36 lg:w-64 pl-2">Title</span>
         </span>
         <span className="flex justify-end mdlg:justify-between ml-auto md:ml-0 pr-5">
           <span className="w-40 hidden mdlg:inline pr-1">Album</span>

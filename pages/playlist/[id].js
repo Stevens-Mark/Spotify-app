@@ -55,6 +55,7 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const PlaylistPage = ({ playlist }) => {
+
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
   const [randomColor, setRandomColor] = useState(null);
@@ -107,7 +108,7 @@ const PlaylistPage = ({ playlist }) => {
           }}
         >
           <Image
-            className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
+            className="h-16 w-16 xs:h-44 xs:w-44 ml-0 xs:ml-7 shadow-image2"
             src={playlist?.images?.[0]?.url || noAlbum}
             alt=""
             width={100}

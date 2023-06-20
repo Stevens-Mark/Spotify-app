@@ -1,8 +1,9 @@
 import { useEffect, useState } from 'react';
 import useSpotify from './useSpotify';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentTrackIdState } from '@/atoms/songAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 
 /**
  * Custom hook to return the current playing track information
@@ -11,26 +12,40 @@ import { currentTrackIdState } from '@/atoms/songAtom';
  */
 function useSongInfo() {
   const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] = useRecoilState(currentTrackIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+      // used to determine what type of info to load
+  const setPlayerInfoType = useRecoilValue(playerInfoTypeState);
   const [songInfo, setSongInfo] = useState(null);
 
   useEffect(() => {
     const fetchSongInfo = async () => {
       if (currentTrackId) {
-        const trackInfo = await fetch(
-          `https://api.spotify.com/v1/tracks/${currentTrackId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
-            },
-          }
-        ).then((res) => res.json());
-        setSongInfo(trackInfo);
+        if (setPlayerInfoType === 'showInfo') {
+          const trackInfo = await fetch(
+            `https://api.spotify.com/v1/episodes/${currentTrackId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
+              },
+            }
+          ).then((res) => res.json());
+          setSongInfo(trackInfo);
+        } else {
+          const trackInfo = await fetch(
+            `https://api.spotify.com/v1/tracks/${currentTrackId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${spotifyApi.getAccessToken()}`,
+              },
+            }
+          ).then((res) => res.json());
+          setSongInfo(trackInfo);
+        }
       }
     };
     fetchSongInfo();
-  }, [currentTrackId, spotifyApi]);
-
+  }, [currentTrackId, setPlayerInfoType, spotifyApi]);
   return songInfo;
 }
 

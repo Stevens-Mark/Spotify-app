@@ -131,7 +131,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
           }}
         >
           <Image
-            className="h-16 w-16 xs:h-44 xs:w-44 shadow-2xl ml-0 xs:ml-7"
+            className="h-16 w-16 xs:h-44 xs:w-44 ml-0 xs:ml-7 shadow-image2"
             src={artistInfo?.images?.[0]?.url || noArtist}
             alt=""
             width={100}

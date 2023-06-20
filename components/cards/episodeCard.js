@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
-// import layouts
+// import icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon } from '@heroicons/react/24/solid';
 
@@ -15,7 +15,7 @@ import { PlayCircleIcon } from '@heroicons/react/24/solid';
  */
 function episodeCard({ item }) {
   return (
-    <Link href="">
+    <Link href="#">
       <div className="border-b-[0.25px] border-gray-800 max-w-3xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image

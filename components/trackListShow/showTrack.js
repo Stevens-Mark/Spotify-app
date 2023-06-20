@@ -1,0 +1,156 @@
+import React, { useState, useMemo, useEffect } from 'react';
+import Image from 'next/image';
+import Link from 'next/link';
+import useSpotify from '@/hooks/useSpotify';
+// import functions
+import { msToTime, getMonthYear } from '@/lib/time';
+// import state management recoil
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { showEpisodesUrisState, showEpisodesListState } from '@/atoms/showAtom';
+import {
+  currentTrackIdState,
+  currentSongIndexState,
+  isPlayState,
+} from '@/atoms/songAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
+import { activePlaylistState } from '@/atoms/playListAtom';
+// import icons
+import noImage from '@/public/images/noImageAvailable.svg';
+import { PlayCircleIcon, PauseIcon } from '@heroicons/react/24/solid';
+
+/**
+ * Renders each track in the artist
+ * @function ShowTrack
+ * @param {object} track information
+ * @param {number} order track index in the artist list
+ * @returns {JSX}
+ */
+function ShowTrack({ track, order }) {
+  const spotifyApi = useSpotify();
+  const song = track;
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+  const [showEpisodesList, setShowEpisodesList] = useRecoilState(
+    showEpisodesListState
+  );
+  const [showEpisodesUris, setShowEpisodesUris] = useRecoilState(
+    showEpisodesUrisState
+  );
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
+
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  // to identify the track position for the green highlight of the active track
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
+  const [activePlaylist, setActivePlaylist] =
+    useRecoilState(activePlaylistState);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (
+        currentSongIndex == null &&
+        currentTrackId !== null &&
+        showEpisodesList !== null
+      ) {
+        const indexPosition = showEpisodesList?.tracks?.findIndex(
+          (x) => x.id == currentTrackId
+        );
+        setCurrentSongIndex(indexPosition);
+      }
+    }, '500');
+  }, [
+    currentSongIndex,
+    currentTrackId,
+    setCurrentSongIndex,
+    showEpisodesList,
+    showEpisodesList?.tracks,
+  ]);
+
+  /**
+   * Either play or pause current episode track
+   * @function HandlePlayPause
+   * @param {event object} event
+   * @param {number} currentTrackIndex (offset) in  episode list
+   */
+  const handlePlayPause = (event, currentTrackIndex) => {
+    spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      if (data.body?.is_playing && song.id == currentTrackId) {
+        spotifyApi
+          .pause()
+          .then(() => {
+            setIsPlaying(false);
+            
+          })
+          .catch((err) => console.error('Pause failed: '));
+      } else {
+        spotifyApi
+          .play({
+            uris: showEpisodesUris,
+            offset: { position: currentTrackIndex },
+          })
+          .then(() => {
+            console.log('Playback Success');
+            setPlayerInfoType('showInfo');
+            setIsPlaying(true);
+            setCurrentTrackId(song.id);
+            setCurrentSongIndex(currentTrackIndex);
+            setActivePlaylist(null); //episode playing so user's playlist null
+          })
+          .catch((err) => console.error('Playback failed: ', err));
+      }
+    });
+  };
+
+  // used to set play/pause icons
+  const activeStatus = useMemo(() => {
+    return song.id === currentTrackId && isPlaying ? true : false;
+  }, [currentTrackId, isPlaying, song.id]);
+
+  return (
+    <Link href="#">
+      <div className="border-b-[0.25px] border-gray-800 max-w-3xl">
+        <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
+          <Image
+            className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
+            src={song.images?.[0]?.url || noImage}
+            alt=""
+            width={100}
+            height={100}
+            style={{ objectFit: 'cover' }}
+          />
+
+          <h2 className="col-span-3 row-start-1 text-white capitalize line-clamp-2 self-center">
+            {song.name.replace('/', ' & ')}
+          </h2>
+
+          <div className="col-span-4 md:col-span-3 row-start-2 text-pink-swan pt-2 pb-3">
+            <span className="mb-2 line-clamp-2">{song.description}</span>
+          </div>
+          <button
+            className="col-start-1 md:col-start-2 col-span-1"
+            onClick={(event) => {
+              handlePlayPause(event, order);
+            }}
+          >
+            {activeStatus && order == currentSongIndex ? (
+              <PauseIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
+            ) : (
+              <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
+            )}
+          </button>
+
+          <span className="col-start-2 md:col-start-3 col-span-2 row-start-3 flex items-center text-pink-swan -ml-3  md:ml-3">
+            <span className="line-clamp-1">
+              {getMonthYear(song.release_date)}&nbsp;•&nbsp;
+            </span>
+            <span className="line-clamp-1">{msToTime(song.duration_ms)}</span>
+          </span>
+        </div>
+      </div>
+    </Link>
+  );
+}
+
+export default ShowTrack;
