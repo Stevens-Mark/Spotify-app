@@ -137,8 +137,7 @@ function Sidebar() {
     <nav
       role="navigation"
       aria-label="Playlist menu"
-      className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline
-       min-w-[16rem] w-[21%]"
+      className="text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide hidden md:inline min-w-[16rem] md:w-[21%]"
     >
       <ul className="space-y-4 w-full">
         <li>

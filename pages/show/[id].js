@@ -75,17 +75,11 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
-
-  // const setShowEpisodesList = useSetRecoilState(showEpisodesListState);
-  const [showEpisodesList, setShowEpisodesList] = useRecoilState(
-    showEpisodesListState
-  );
-  // const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState);
-  const [showEpisodesUris, setShowEpisodesUris] = useRecoilState(
-    showEpisodesUrisState
-  );
+  const setShowEpisodesList = useSetRecoilState(showEpisodesListState);
+  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState);
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
+  const [isToggleOn, setIsToggleOn] = useState(false);
 
   useEffect(() => {
     setShowEpisodesList(showInfo.episodes.items);
@@ -118,6 +112,10 @@ const ShowPage = ({ showInfo }) => {
       setBackgroundColor(null);
     }
   }, [showInfo?.images]);
+
+  const toggleShow = () => {
+    setIsToggleOn((prevState) => !prevState);
+  };
 
   return (
     <>
@@ -157,7 +155,29 @@ const ShowPage = ({ showInfo }) => {
         </div>
         <section className="pb-24">
           <h2 className="sr-only">Track List</h2>
-          <ShowTracks />
+          <div class="flex  flex-col-reverse xl:flex-row  gap-9  py-4 px-5 xs:p-10">
+            <div class="flex-2">
+              <ShowTracks />
+            </div>
+            <div class="flex-1 px-2 max-w-2xl">
+              <h2 className="text-white text-xl md:text-2xl xl:text-3xl mb-5">
+                About
+              </h2>
+              <p
+                className={`text-pink-swan  ${
+                  !isToggleOn ? 'line-clamp-4' : ''
+                }`}
+              >
+                {showInfo?.description}
+              </p>
+              <button
+                className="mt-3 text-sm md:text-lg text-white hover:text-green-500"
+                onClick={toggleShow}
+              >
+                {!isToggleOn ? '... See more' : 'See less'}
+              </button>
+            </div>
+          </div>
         </section>
       </div>
     </>

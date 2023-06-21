@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 // import state management recoil
-import { useSetRecoilState, useRecoilState } from 'recoil';
-import { showEpisodesUrisState, showEpisodesListState } from '@/atoms/showAtom';
+import { useRecoilValue } from 'recoil';
+import { showEpisodesListState } from '@/atoms/showAtom';
 // import component/icons
 import ShowTrack from './showTrack';
 
@@ -11,7 +11,7 @@ import ShowTrack from './showTrack';
  * @returns {JSX}
  */
 function ShowTracks() {
-  const [showEpisodesList, setShowEpisodesList] = useRecoilState(showEpisodesListState);
+  const showEpisodesList = useRecoilValue(showEpisodesListState);
   const [number, setNumber] = useState(25);
 
   const toggleNumber = () => {
@@ -29,7 +29,7 @@ function ShowTracks() {
           className="self-start mt-3 px-5 text-sm md:text-xl text-white hover:text-green-500"
           onClick={toggleNumber}
         >
-          {number === 25 ? 'See More' : 'See Less'}
+          {number === 25 ? '... See More' : 'See Less'}
         </button>
       </div>
     </>

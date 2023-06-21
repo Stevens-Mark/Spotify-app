@@ -132,7 +132,7 @@ function UserTrack({ track, order }) {
         />
         <div>
           <h3
-            className={`w-36 sm:w-72 mdlg:w-36 lg:w-64 xl:w-80 pr-2 ${
+            className={`w-36 sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 pr-2 ${
               activeStatus && order == currentSongIndex
                 ? 'text-green-500'
                 : 'text-white'
