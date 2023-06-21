@@ -72,6 +72,7 @@ function ShowTrack({ track, order }) {
   const handlePlayPause = (event, currentTrackIndex) => {
     // console.log("show index ",currentSongIndex)
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      console.log('data', showEpisodesList);
       if (data.body?.is_playing && song.id == currentTrackId) {
         spotifyApi
           .pause()
@@ -117,7 +118,14 @@ function ShowTrack({ track, order }) {
             style={{ objectFit: 'cover' }}
           />
 
-          <h2 className="col-span-3 row-start-1 text-white capitalize line-clamp-2 self-center">
+          <h2
+            className={`col-span-3 row-start-1 capitalize line-clamp-2 self-center
+           ${
+             activeStatus && order == currentSongIndex
+               ? 'text-green-500'
+               : 'text-white'
+           }`}
+          >
             {song.name.replace('/', ' & ')}
           </h2>
 

@@ -1,16 +1,15 @@
 import React, { useEffect, useState, useMemo } from 'react';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
-import { useSession } from 'next-auth/react';
 import { debounce } from 'lodash';
 // import state management recoil
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { activePlaylistState, myPlaylistIdState } from '@/atoms/playListAtom';
+import { activePlaylistState } from '@/atoms/playListAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -22,6 +21,7 @@ import {
   PauseCircleIcon,
   PlayCircleIcon,
 } from '@heroicons/react/24/solid';
+import { showEpisodesListState } from '@/atoms/showAtom';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
 /**
@@ -31,11 +31,12 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
  */
 function Player() {
   const spotifyApi = useSpotify();
-  // const { data: session } = useSession();
-  const myPlaylistId = useRecoilValue(myPlaylistIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [volume, setVolume] = useState(50);
-  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
+
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
+  const showEpisodesList = useRecoilValue(showEpisodesListState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
@@ -51,6 +52,20 @@ function Player() {
       .catch((err) => console.error('Shuffle failed:'));
   };
 
+  /**
+   * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
+   * @function findPreviousEpisodeId
+   * @returns the Id for the previous episode
+   */
+  const findPreviousEpisodeId = () => {
+    const episodeIndex = showEpisodesList.findIndex(
+      (episode) => episode.id === currentTrackId
+    );
+    const previousEpisodeId =
+      episodeIndex > 0 ? showEpisodesList[episodeIndex - 1]?.id : null;
+    return previousEpisodeId || currentTrackId;
+  };
+
   /* go back a track */
   const skipToPrevious = () => {
     spotifyApi.skipToPrevious().catch((err) => console.error('Rewind failed:'));
@@ -58,7 +73,11 @@ function Player() {
       spotifyApi
         .getMyCurrentPlayingTrack()
         .then((data) => {
-          setCurrentTrackId(data.body?.item?.id);
+          if (data.body?.currently_playing_type === 'episode') {
+            setCurrentTrackId(findPreviousEpisodeId);
+          } else {
+            setCurrentTrackId(data.body?.item?.id);
+          }
           if (currentSongIndex !== 0) {
             setCurrentSongIndex(currentSongIndex - 1);
           }
@@ -67,9 +86,22 @@ function Player() {
     }, '750');
   };
 
+  /**
+   * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
+   * @function findEpisodeId
+   * @returns the Id for the current episode
+   */
+  const findEpisodeId = () => {
+    const episodeIndex = showEpisodesList.findIndex(
+      (episode) => episode.id === currentTrackId
+    );
+    return episodeIndex !== -1 ? currentTrackId : null;
+  };
+
   /* either play or pause a track */
   const handlePlayPause = () => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
+      const dataType = data.body?.currently_playing_type;
       if (data.body?.is_playing) {
         spotifyApi
           .pause()
@@ -81,8 +113,12 @@ function Player() {
         spotifyApi
           .play()
           .then(() => {
+            if (dataType === 'episode') {
+              setCurrentTrackId(findEpisodeId);
+            } else {
+              setCurrentTrackId(data.body?.item?.id);
+            }
             setIsPlaying(true);
-            setCurrentTrackId(data.body?.item.id);
             // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
             //   setActivePlaylist(playlistId);
             // }
@@ -90,6 +126,22 @@ function Player() {
           .catch((err) => console.error('Playback failed: ', err));
       }
     });
+  };
+
+  /**
+   * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
+   * @function findNextEpisodeId
+   * @returns the Id for the next episode
+   */
+  const findNextEpisodeId = () => {
+    const episodeIndex = showEpisodesList.findIndex(
+      (episode) => episode.id === currentTrackId
+    );
+    const nextEpisodeId =
+      episodeIndex < showEpisodesList.length - 1
+        ? showEpisodesList[episodeIndex + 1]?.id
+        : null;
+    return nextEpisodeId || currentTrackId;
   };
 
   /* go forward a track */
@@ -101,7 +153,11 @@ function Player() {
       spotifyApi
         .getMyCurrentPlayingTrack()
         .then((data) => {
-          setCurrentTrackId(data?.body?.item?.id);
+          if (data.body?.currently_playing_type === 'episode') {
+            setCurrentTrackId(findNextEpisodeId);
+          } else {
+            setCurrentTrackId(data.body?.item?.id);
+          }
           setCurrentSongIndex(currentSongIndex + 1);
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));
