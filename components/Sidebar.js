@@ -67,7 +67,7 @@ function Sidebar() {
             setMyPlaylists(userPlaylists.body.items);
             setMyPlaylistId(userPlaylists.body.items[0].id); // set a default playlist to show as no currently playing
             const recentlyPlayed = await spotifyApi.getMyRecentlyPlayedTracks({
-              limit: 6,
+              limit: 6, // this recently played data can be saved to an atom & used later on another page in the future
             });
             setCurrentTrackId(recentlyPlayed.body?.items?.[0].track.id); // set recent track for player info (as no current playing track)
           }
