@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
@@ -10,7 +10,7 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';
-import { playerInfoTypeState, currentItemIdState} from '@/atoms/idAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -84,13 +84,30 @@ const TopSongCard = ({ order, song }) => {
   };
 
   // used to set play/pause icons
-  const activeSongStatus = useMemo(() => {
-    return (song.id === currentItemId && isPlaying) ||
+  // const activeSongStatus = useMemo(() => {
+  //   return (song.id === currentItemId && isPlaying) ||
+  //     (currentAlbumId === song.album.id &&
+  //       currentTrackId === song.id &&
+  //       isPlaying)
+  //     ? true
+  //     : false;
+  // }, [
+  //   song.id,
+  //   song.album.id,
+  //   currentItemId,
+  //   isPlaying,
+  //   currentAlbumId,
+  //   currentTrackId,
+  // ]);
+  const [activeSongStatus, setActiveSongStatus] = useState(false);
+
+  useEffect(() => {
+    const newActiveSongStatus =
+      (song.id === currentItemId && isPlaying) ||
       (currentAlbumId === song.album.id &&
         currentTrackId === song.id &&
-        isPlaying)
-      ? true
-      : false;
+        isPlaying);
+    setActiveSongStatus(newActiveSongStatus);
   }, [
     song.id,
     song.album.id,

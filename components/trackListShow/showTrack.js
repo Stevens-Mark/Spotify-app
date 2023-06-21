@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import useSpotify from '@/hooks/useSpotify';
@@ -30,12 +30,8 @@ function ShowTrack({ track, order }) {
   const song = track;
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-  const [showEpisodesList, setShowEpisodesList] = useRecoilState(
-    showEpisodesListState
-  );
-  const [showEpisodesUris, setShowEpisodesUris] = useRecoilState(
-    showEpisodesUrisState
-  );
+  const showEpisodesList = useRecoilValue(showEpisodesListState);
+  const showEpisodesUris = useRecoilValue(showEpisodesUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const [currentTrackId, setCurrentTrackId] =
@@ -58,7 +54,6 @@ function ShowTrack({ track, order }) {
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
-        console.log('indexPosition ', indexPosition);
       }
     }, '500');
   }, [currentSongIndex, currentTrackId, setCurrentSongIndex, showEpisodesList]);
@@ -70,9 +65,7 @@ function ShowTrack({ track, order }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
-    // console.log("show index ",currentSongIndex)
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      console.log('data', showEpisodesList);
       if (data.body?.is_playing && song.id == currentTrackId) {
         spotifyApi
           .pause()
@@ -96,14 +89,15 @@ function ShowTrack({ track, order }) {
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
-      console.log('currentTrackIndex ', currentTrackIndex);
     });
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && isPlaying ? true : false;
-  }, [currentTrackId, isPlaying, song.id]);
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    setActiveStatus(newActiveStatus);
+  }, [song.id, currentTrackId, isPlaying]);
 
   return (
     <Link href="#">

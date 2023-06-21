@@ -1,5 +1,5 @@
 import useSpotify from '@/hooks/useSpotify';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
@@ -92,8 +92,10 @@ function UserTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && isPlaying ? true : false;
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    setActiveStatus(newActiveStatus);
   }, [currentTrackId, isPlaying, song.id]);
 
   return (
@@ -146,7 +148,9 @@ function UserTrack({ track, order }) {
         <span className="w-48 hidden mdlg:inline">
           {getMonthDayYear(track.added_at)}
         </span>
-        <span className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</span>
+        <span className="pl-5">
+          {millisToMinutesAndSeconds(song.duration_ms)}
+        </span>
       </div>
     </div>
   );

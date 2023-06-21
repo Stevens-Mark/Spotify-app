@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -10,7 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import {  currentAlbumIdState } from '@/atoms/albumAtom';
+import { currentAlbumIdState } from '@/atoms/albumAtom';
 import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
@@ -114,9 +114,6 @@ function TopResultCard({ item }) {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            // setCurrentSongIndex(null);
-            // setCurrentAlbumId(null);
-            // setActivePlaylist(null);
           })
           .catch((err) => {
             console.error('Pause failed: ', err);
@@ -185,11 +182,13 @@ function TopResultCard({ item }) {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return (currentItemId === item.id && isPlaying) ||
-      (currentAlbumId === item.id && isPlaying)
-      ? true
-      : false;
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus =
+      (currentItemId === item.id && isPlaying) ||
+      (currentAlbumId === item.id && isPlaying);
+
+    setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item.id]);
 
   return (

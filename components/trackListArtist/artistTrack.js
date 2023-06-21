@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import functions
@@ -94,9 +94,11 @@ function ArtistTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && isPlaying ? true : false;
-  }, [currentTrackId, isPlaying, song.id]);
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    setActiveStatus(newActiveStatus);
+  }, [song.id, currentTrackId, isPlaying]);
 
   return (
     <div

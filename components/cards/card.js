@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -35,7 +35,6 @@ function Card({ item, order }) {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
@@ -117,9 +116,6 @@ function Card({ item, order }) {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            // setCurrentSongIndex(null);
-            // setCurrentAlbumId(null);
-            // setActivePlaylist(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -169,11 +165,13 @@ function Card({ item, order }) {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return (currentItemId === item.id && isPlaying) ||
-      (currentAlbumId === item.id && isPlaying)
-      ? true
-      : false;
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus =
+      (currentItemId === item.id && isPlaying) ||
+      (currentAlbumId === item.id && isPlaying);
+
+    setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item.id]);
 
   return (

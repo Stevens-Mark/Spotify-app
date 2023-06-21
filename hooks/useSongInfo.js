@@ -18,8 +18,6 @@ function useSongInfo() {
   const playerInfoType = useRecoilValue(playerInfoTypeState);
   const [songInfo, setSongInfo] = useState(null);
 
-  console.log('infostate ',playerInfoType)
-
   useEffect(() => {
     const fetchSongInfo = async () => {
       if (currentTrackId) {

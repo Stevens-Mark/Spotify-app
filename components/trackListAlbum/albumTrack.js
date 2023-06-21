@@ -1,5 +1,5 @@
 import useSpotify from '@/hooks/useSpotify';
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import state management recoil
@@ -27,8 +27,8 @@ function AlbumTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-    // used to determine what type of info to load
-    const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const currentAlbumId = useRecoilValue(albumIdState);
   const albumTracklist = useRecoilValue(albumTrackListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -61,7 +61,7 @@ function AlbumTrack({ track, order }) {
   /**
    * Either play or pause current album track
    * @function HandlePlayPause
-   * @param {event object} event 
+   * @param {event object} event
    * @param {number} currentTrackIndex (offset) in album track list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
@@ -93,9 +93,11 @@ function AlbumTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const activeStatus = useMemo(() => {
-    return song.id === currentTrackId && isPlaying ? true : false;
-  }, [currentTrackId, isPlaying, song.id]);
+  const [activeStatus, setActiveStatus] = useState(false);
+  useEffect(() => {
+    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    setActiveStatus(newActiveStatus);
+  }, [song.id, currentTrackId, isPlaying]);
 
   return (
     <div
