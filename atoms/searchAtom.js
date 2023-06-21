@@ -6,7 +6,7 @@ export const queryState = atom({
   default: '',
 });
 
-// indicates if a vlaid search query has been submitted? helps control wether search navigation bar is diplayed
+// indicates if a valid search query has been submitted? helps control wether search navigation bar is diplayed
 export const querySubmittedState = atom({
   key: 'querySubmittedState',
   default: false,

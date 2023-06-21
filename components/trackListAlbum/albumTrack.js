@@ -81,7 +81,7 @@ function AlbumTrack({ track, order }) {
           })
           .then(() => {
             console.log('Playback Success');
-            setPlayerInfoType('tracks');
+            setPlayerInfoType('track');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);

@@ -10,8 +10,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import { currentAlbumIdState } from '@/atoms/albumAtom';
+import { currentItemIdState, playerInfoTypeState } from '@/atoms/idAtom';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
@@ -40,23 +40,6 @@ function Card({ item, order }) {
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
-
-  // let linkAddress;
-
-  // switch (item.type) {
-  //   case 'album':
-  //     linkAddress = `/album/${item.id}`;
-  //     break;
-  //   case 'playlist':
-  //     linkAddress = `/playlist/${item.id}`;
-  //     break;
-  //   case 'artist':
-  //     linkAddress = `/artist/${item.id}`;
-  //     break;
-  //   default:
-  //     linkAddress = null;
-  //     break;
-  // }
 
   const linkAddress =
     item.type === 'album'
@@ -114,7 +97,7 @@ function Card({ item, order }) {
     // set states when a track can play successfully
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
-      setPlayerInfoType('tracks');
+      setPlayerInfoType('track');
       setIsPlaying(true);
       setActivePlaylist(item.id);
       // setCurrentSongIndex(order); //ONLY BEING PASSED IN ALL.js - this may NOT be needed)

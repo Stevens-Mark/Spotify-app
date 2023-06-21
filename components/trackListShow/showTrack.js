@@ -16,13 +16,13 @@ import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import icons
 import noImage from '@/public/images/noImageAvailable.svg';
-import { PlayCircleIcon, PauseIcon } from '@heroicons/react/24/solid';
+import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 
 /**
- * Renders each track in the artist
+ * Renders each track in the show
  * @function ShowTrack
  * @param {object} track information
- * @param {number} order track index in the artist list
+ * @param {number} order track index in the episode list
  * @returns {JSX}
  */
 function ShowTrack({ track, order }) {
@@ -54,19 +54,14 @@ function ShowTrack({ track, order }) {
         currentTrackId !== null &&
         showEpisodesList !== null
       ) {
-        const indexPosition = showEpisodesList?.tracks?.findIndex(
+        const indexPosition = showEpisodesList?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
+        console.log('indexPosition ', indexPosition);
       }
     }, '500');
-  }, [
-    currentSongIndex,
-    currentTrackId,
-    setCurrentSongIndex,
-    showEpisodesList,
-    showEpisodesList?.tracks,
-  ]);
+  }, [currentSongIndex, currentTrackId, setCurrentSongIndex, showEpisodesList]);
 
   /**
    * Either play or pause current episode track
@@ -75,13 +70,13 @@ function ShowTrack({ track, order }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
+    // console.log("show index ",currentSongIndex)
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && song.id == currentTrackId) {
         spotifyApi
           .pause()
           .then(() => {
             setIsPlaying(false);
-            
           })
           .catch((err) => console.error('Pause failed: '));
       } else {
@@ -92,7 +87,7 @@ function ShowTrack({ track, order }) {
           })
           .then(() => {
             console.log('Playback Success');
-            setPlayerInfoType('showInfo');
+            setPlayerInfoType('episode');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
@@ -100,6 +95,7 @@ function ShowTrack({ track, order }) {
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
+      console.log('currentTrackIndex ', currentTrackIndex);
     });
   };
 
@@ -135,7 +131,7 @@ function ShowTrack({ track, order }) {
             }}
           >
             {activeStatus && order == currentSongIndex ? (
-              <PauseIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
+              <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
             ) : (
               <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
             )}

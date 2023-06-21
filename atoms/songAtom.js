@@ -11,7 +11,7 @@ export const isPlayState = atom({
   default: false,
 });
 
-// track where in playlist/album a song is playing (ie, order/index) helps for equaliser position etc...
+// track where in playlist/album a song is playing (ie, order/index) helps for equaliser/highlighting card position etc...
 export const currentSongIndexState = atom({
   key: 'currentSongIndexState',
   default: null,

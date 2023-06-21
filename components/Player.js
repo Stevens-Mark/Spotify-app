@@ -58,7 +58,7 @@ function Player() {
       spotifyApi
         .getMyCurrentPlayingTrack()
         .then((data) => {
-          setCurrentTrackId(data.body.item.id);
+          setCurrentTrackId(data.body?.item?.id);
           if (currentSongIndex !== 0) {
             setCurrentSongIndex(currentSongIndex - 1);
           }
@@ -82,7 +82,7 @@ function Player() {
           .play()
           .then(() => {
             setIsPlaying(true);
-            setCurrentTrackId(data.body.item.id);
+            setCurrentTrackId(data.body?.item.id);
             // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
             //   setActivePlaylist(playlistId);
             // }
@@ -101,7 +101,7 @@ function Player() {
       spotifyApi
         .getMyCurrentPlayingTrack()
         .then((data) => {
-          setCurrentTrackId(data.body.item.id);
+          setCurrentTrackId(data?.body?.item?.id);
           setCurrentSongIndex(currentSongIndex + 1);
         })
         .catch((err) => console.error('Get Current Track ID failed: ', err));

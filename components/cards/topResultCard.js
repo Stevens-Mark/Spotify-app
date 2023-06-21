@@ -10,8 +10,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import {  currentAlbumIdState } from '@/atoms/albumAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 // import icons/images
@@ -92,7 +92,7 @@ function TopResultCard({ item }) {
     // set states when a track can play successfully
     const handlePlaybackSuccess = () => {
       console.log('Playback Success');
-      setPlayerInfoType('tracks');
+      setPlayerInfoType('track');
       setIsPlaying(true);
       setCurrentSongIndex(0); // top result is always the first item in array hence value zero
       setActivePlaylist(item.id);
@@ -152,7 +152,7 @@ function TopResultCard({ item }) {
                 })
                 .then(() => {
                   setCurrentTrackId(item.id); // will trigger playerInfo to update
-                  setPlayerInfoType('tracks');
+                  setPlayerInfoType('track');
                 })
                 .catch((err) => {
                   console.error('Track playback failed:', err);

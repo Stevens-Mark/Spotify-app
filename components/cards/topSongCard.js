@@ -9,8 +9,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import { currentAlbumIdState } from '@/atoms/albumAtom';
+import { playerInfoTypeState, currentItemIdState} from '@/atoms/idAtom';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -71,7 +71,7 @@ const TopSongCard = ({ order, song }) => {
           })
           .then(() => {
             console.log('Playback Success');
-            setPlayerInfoType('tracks');
+            setPlayerInfoType('track');
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
             setCurrentAlbumId(song.album.id);

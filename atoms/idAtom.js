@@ -6,11 +6,7 @@ export const currentItemIdState = atom({
   default: null,
 });
 
-// track album id:  used to "sync" song & album highlights activation
-export const currentAlbumIdState = atom({
-  key: 'currentAlbumIdState',
-  default: null,
-});
+
 
 // used to set what type of player info to display
 export const playerInfoTypeState = atom({

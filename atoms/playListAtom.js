@@ -12,22 +12,21 @@ export const playlistTrackListState = atom({
   default: null,
 });
 
-// playlist playing or not
-export const activePlaylistState = atom({
-  key: 'activePlaylistState',
-  default: null,
-});
-
-
-// list of user's playlists retrieved
+// list of (user made) playlists retrieved
 export const myPlaylistState = atom({
   key: 'myPlaylistState',
   default: null,
 });
 
-// current myplaylist id
+// current (user made) myplaylist id
 export const myPlaylistIdState = atom({
   key: 'myPlaylistIdState',
   // default: "1beJKiTTWHdetZqGFyBeAN",
+  default: null,
+});
+
+// wether a track playing or not
+export const activePlaylistState = atom({
+  key: 'activePlaylistState',
   default: null,
 });

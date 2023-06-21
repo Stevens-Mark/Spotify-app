@@ -9,7 +9,8 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import { currentItemIdState, currentAlbumIdState } from '@/atoms/idAtom';
+import { currentAlbumIdState } from '@/atoms/albumAtom';
+import { currentItemIdState, playerInfoTypeState } from '@/atoms/idAtom';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -30,6 +31,7 @@ function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
+
   const [myPlaylists, setMyPlaylists] = useState([]);
   const [myPlaylistId, setMyPlaylistId] = useRecoilState(myPlaylistIdState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
@@ -38,47 +40,64 @@ function Sidebar() {
   const isPlaying = useRecoilValue(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   // needed to reset search when user changes to their saved playlists
   const setSubmitted = useSetRecoilState(querySubmittedState);
   const setQuery = useSetRecoilState(queryState);
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getUserPlaylists()
-        .then((data) => {
-          setMyPlaylists(data.body.items);
-          setMyPlaylistId(data.body.items[0].id); // base - set page to first playlist in list
-        })
-        .then(() => {
-          spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-            // check if the user is currently playing a track from their playlist & set page to this playlist
-            if (
-              data.body &&
-              data.body.is_playing &&
-              data.body.context !== null
-            ) {
-              setCurrentTrackId(data.body.item.id);
-              const currentplaylistId = data.body.context.uri.split(':');
-              const playingId = currentplaylistId[currentplaylistId.length - 1];
-              setMyPlaylistId(playingId);
-              setActivePlaylist(playingId);
-            }
-          });
-        })
-        .catch((err) => {
-          console.error(
-            'Failed to get current playing track / playlist ID',
-            err
-          );
-        });
-    }
+    /**
+     * set player info to the currently playing track or recently played track as default on page load
+     * & loads the currently playing playlist or default playlist to the page
+     * @function fetchCurrentTrack
+     */
+    const fetchCurrentTrack = async () => {
+      try {
+        if (spotifyApi.getAccessToken()) {
+          const data = await spotifyApi.getMyCurrentPlayingTrack();
+          if (data.body && data.body.is_playing && data.body.context !== null) {
+            const currentPlaylistId = data.body?.context?.uri.split(':').pop();
+            setPlayerInfoType(data.body?.currently_playing_type);
+            setCurrentTrackId(data.body?.item?.id); // set current playing track for player info
+            setMyPlaylistId(currentPlaylistId); // set current playlist in use
+            setActivePlaylist(currentPlaylistId);
+          } else {
+            const userPlaylists = await spotifyApi.getUserPlaylists();
+            setMyPlaylists(userPlaylists.body.items);
+            setMyPlaylistId(userPlaylists.body.items[0].id); // set a default playlist to show as no currently playing
+            const recentlyPlayed = await spotifyApi.getMyRecentlyPlayedTracks({
+              limit: 6,
+            });
+            setCurrentTrackId(recentlyPlayed.body?.items?.[0].track.id); // set recent track for player info (as no current playing track)
+          }
+        }
+      } catch (err) {
+        console.error('Failed to get current playing track / playlist ID', err);
+      }
+    };
+
+    /**
+     * ensures the user playlist loads whatever the playback state
+     * @function etchUserPlaylists
+     */
+    const fetchUserPlaylists = async () => {
+      try {
+        const userPlaylists = await spotifyApi.getUserPlaylists();
+        setMyPlaylists(userPlaylists.body.items); // load user playlists
+      } catch (err) {
+        console.error('Failed to get user playlists', err);
+      }
+    };
+    fetchUserPlaylists();
+    fetchCurrentTrack();
   }, [
     spotifyApi,
     session,
     setCurrentTrackId,
     setActivePlaylist,
     setMyPlaylistId,
+    setPlayerInfoType,
   ]);
 
   /**
@@ -197,7 +216,7 @@ function Sidebar() {
                 width={100}
                 height={100}
               />
-              <p className='line-clamp-1'>{playlist.name}</p>
+              <p className="line-clamp-1">{playlist.name}</p>
               <span className="pl-2">
                 {activePlaylist == playlist.id && isPlaying ? (
                   <SpeakerWaveIcon className="w-4 h-4 text-green-500" />

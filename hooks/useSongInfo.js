@@ -15,13 +15,15 @@ function useSongInfo() {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
       // used to determine what type of info to load
-  const setPlayerInfoType = useRecoilValue(playerInfoTypeState);
+  const playerInfoType = useRecoilValue(playerInfoTypeState);
   const [songInfo, setSongInfo] = useState(null);
+
+  console.log('infostate ',playerInfoType)
 
   useEffect(() => {
     const fetchSongInfo = async () => {
       if (currentTrackId) {
-        if (setPlayerInfoType === 'showInfo') {
+        if (playerInfoType === 'episode') {
           const trackInfo = await fetch(
             `https://api.spotify.com/v1/episodes/${currentTrackId}`,
             {
@@ -45,7 +47,7 @@ function useSongInfo() {
       }
     };
     fetchSongInfo();
-  }, [currentTrackId, setPlayerInfoType, spotifyApi]);
+  }, [currentTrackId, playerInfoType, spotifyApi]);
   return songInfo;
 }
 

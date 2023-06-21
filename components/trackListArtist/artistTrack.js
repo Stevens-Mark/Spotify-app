@@ -28,8 +28,8 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-   // used to determine what type of info to load
-   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -82,7 +82,7 @@ function ArtistTrack({ track, order }) {
           })
           .then(() => {
             console.log('Playback Success');
-            setPlayerInfoType('tracks');
+            setPlayerInfoType('track');
             setIsPlaying(true);
             setCurrentTrackId(song.id);
             setCurrentSongIndex(currentTrackIndex);
@@ -144,7 +144,9 @@ function ArtistTrack({ track, order }) {
         </div>
       </div>
       <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
-        <span className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</span>
+        <span className="pl-5">
+          {millisToMinutesAndSeconds(song.duration_ms)}
+        </span>
       </div>
     </div>
   );
