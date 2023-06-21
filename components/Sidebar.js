@@ -82,11 +82,13 @@ function Sidebar() {
      * @function etchUserPlaylists
      */
     const fetchUserPlaylists = async () => {
-      try {
-        const userPlaylists = await spotifyApi.getUserPlaylists();
-        setMyPlaylists(userPlaylists.body.items); // load user playlists
-      } catch (err) {
-        console.error('Failed to get user playlists', err);
+      if (spotifyApi.getAccessToken()) {
+        try {
+          const userPlaylists = await spotifyApi.getUserPlaylists();
+          setMyPlaylists(userPlaylists.body.items); // load user playlists
+        } catch (err) {
+          console.error('Failed to get user playlists', err);
+        }
       }
     };
     fetchUserPlaylists();
