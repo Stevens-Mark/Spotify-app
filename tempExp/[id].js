@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { showEpisodesUrisState, showEpisodesListState } from '@/atoms/showAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
@@ -44,6 +44,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
+      // session,
       showInfo,
     },
   };
@@ -59,34 +60,22 @@ const ShowPage = ({ showInfo }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;
+
+  console.log(showInfo);
+
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
-  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
+  // const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
+  const [showEpisodesUris, setShowEpisodesUris] = useRecoilState(showEpisodesUrisState); // show episodes list
   const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // show episodes uris
-   const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
+  const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
   const [isToggleOn, setIsToggleOn] = useState(false); // show expand/collapse text
 
+  // console.log(showEpisodesUris)
   useEffect(() => {
-    // avoid epsisode list being reset on page reload
-    setShowEpisodesList((prevEpisodesList) => {
-      const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
-      // Remove duplicates
-      const uniqueList = Array.from(
-        new Set(mergedList.map((item) => item.id))
-      ).map((id) => mergedList.find((item) => item.id === id));
-      return uniqueList;
-    });
-    // avoid uris list being reset on page reload
-    setShowEpisodesUris((prevUris) => {
-      const mergedUris = [
-        ...prevUris,
-        ...showInfo.episodes.items.map((track) => track.uri),
-      ];
-      // Remove duplicates
-      const uniqueUris = Array.from(new Set(mergedUris));
-      return uniqueUris;
-    });
+    setShowEpisodesList(showInfo.episodes.items);
+    setShowEpisodesUris(showInfo.episodes.items.map((track) => track.uri)); // set uris to be used in player
   }, [setShowEpisodesList, setShowEpisodesUris, showInfo.episodes.items]);
 
   // analyse image colors for custom background & set default random background color (in case)
@@ -143,7 +132,7 @@ const ShowPage = ({ showInfo }) => {
         console.error('Retrieving more items failed:', err);
       });
   };
-  const containerRef = useInfiniteScroll(fetchMoreData); // infinite scroll load more data
+  const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
     <>
