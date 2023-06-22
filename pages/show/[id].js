@@ -1,7 +1,10 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { useSession } from 'next-auth/react';
 import useScrollToTop from '@/hooks/useScrollToTop';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useSetRecoilState } from 'recoil';
 import { showEpisodesUrisState, showEpisodesListState } from '@/atoms/showAtom';
@@ -39,31 +42,10 @@ export async function getServerSideProps(context) {
 
   const showInfo = await fetchShowInfo(id);
 
-  // const fetchShowEpisodes = async (id) => {
-  //   try {
-  //     const res = await fetch(
-  //       `https://api.spotify.com/v1/shows/${id}/episodes`,
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${session.user.accessToken}`,
-  //         },
-  //       }
-  //     );
-  //     const data = await res.json();
-  //     return data;
-  //   } catch (err) {
-  //     console.error('Error retrieving Show Episodes:', err);
-  //     return null;
-  //   }
-  // };
-
-  // const showEpisodes = await fetchShowEpisodes(id);
-
   return {
     props: {
       // session,
       showInfo,
-      // showEpisodes,
     },
   };
 }
@@ -72,18 +54,20 @@ export async function getServerSideProps(context) {
  * Renders Artist page with tracks
  * @function ShowPage
  * @param {object} showInfo information about the show
- * @param {object} showEpisodes (NOT NEEDED)
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
+  const { data: session } = useSession();
+  const router = useRouter();
+  const { id } = router.query;
+
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
-
-  const setShowEpisodesList = useSetRecoilState(showEpisodesListState);
-  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState);
-
+  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
+  const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // show episodes uris
+  const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
-  const [isToggleOn, setIsToggleOn] = useState(false);
+  const [isToggleOn, setIsToggleOn] = useState(false); // show expand/collapse text
 
   useEffect(() => {
     setShowEpisodesList(showInfo.episodes.items);
@@ -103,9 +87,48 @@ const ShowPage = ({ showInfo }) => {
     }
   }, [showInfo?.images]);
 
+  // show expand/collapse text
   const toggleShow = () => {
     setIsToggleOn((prevState) => !prevState);
   };
+
+  /**
+   * Fetches more show episodes/uris & updates the lists
+   * @function fetchMoreData
+   * @returns {object} updated list in showEpisodesUris/showEpisodesList
+   */
+  const fetchMoreData = () => {
+    const itemsPerPage = 30;
+    const nextOffset = currentOffset + itemsPerPage;
+    setCurrentOffset(nextOffset);
+    fetch(
+      `https://api.spotify.com/v1/shows/${id}/episodes?offset=${nextOffset}&limit=${itemsPerPage}`,
+      {
+        headers: {
+          Authorization: `Bearer ${session.user.accessToken}`,
+        },
+      }
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        const { items } = data;
+
+        // Update the ShowEpisodesList by merging the new episodes
+        setShowEpisodesList((prevEpisodesList) => [
+          ...prevEpisodesList,
+          ...items,
+        ]);
+
+        // Extract the URIs of the new episodes
+        const newUris = items.map((track) => track.uri);
+        // Update the ShowEpisodesUris by merging the new URIs
+        setShowEpisodesUris((prevUris) => [...prevUris, ...newUris]);
+      })
+      .catch((err) => {
+        console.error('Retrieving more items failed:', err);
+      });
+  };
+  const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
     <>
@@ -114,7 +137,10 @@ const ShowPage = ({ showInfo }) => {
       </Head>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
-        ref={scrollableSectionRef}
+        ref={(node) => {
+          containerRef.current = node;
+          scrollableSectionRef.current = node;
+        }}
       >
         <div
           className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
