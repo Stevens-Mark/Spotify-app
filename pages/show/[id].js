@@ -148,8 +148,8 @@ const ShowPage = ({ showInfo }) => {
         </div>
         <section className="pb-24">
           <h2 className="sr-only">Track List</h2>
-          <div class="flex  flex-col-reverse xl:flex-row  gap-9  py-4 px-5 xs:p-10">
-            <div class="flex-2">
+          <div class="flex  flex-col-reverse xl:flex-row gap-9 py-4 px-5 xs:p-10">
+            <div class=" w-[100%] xl:w-[70%]">
               <ShowTracks />
             </div>
             <div class="flex-1 px-2 max-w-2xl">

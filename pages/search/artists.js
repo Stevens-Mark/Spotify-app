@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -36,7 +37,6 @@ function Artists() {
 
   const artists = queryResults?.artists?.items;
   const totalNumber = queryResults?.artists?.total;
-  const currentNumber = queryResults?.artists?.items.length;
 
   useEffect(() => {
     if (!query) {
@@ -74,11 +74,15 @@ function Artists() {
         );
     }
   };
+  const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
     <section
       className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
-      ref={scrollableSectionRef}
+      ref={(node) => {
+        containerRef.current = node;
+        scrollableSectionRef.current = node;
+      }}
     >
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
@@ -97,18 +101,6 @@ function Artists() {
               <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
-          {totalNumber > currentNumber && (
-            <span className="flex justify-end w-full mt-4">
-              <button
-                className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
-                onClick={() => {
-                  fetchMoreData();
-                }}
-              >
-                <span>Add More</span>
-              </button>
-            </span>
-          )}
         </>
       )}
       {showButton && (

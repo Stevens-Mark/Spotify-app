@@ -12,25 +12,13 @@ import ShowTrack from './showTrack';
  */
 function ShowTracks() {
   const showEpisodesList = useRecoilValue(showEpisodesListState);
-  const [number, setNumber] = useState(25);
-
-  const toggleNumber = () => {
-    const newNumber = number === 25 ? 50 : 25;
-    setNumber(newNumber);
-  };
 
   return (
     <>
       <div className="flex flex-col">
-        {showEpisodesList?.slice(0, number).map((track, i) => (
+        {showEpisodesList?.map((track, i) => (
           <ShowTrack key={`${track.id}-${i}`} track={track} order={i} />
         ))}
-        <button
-          className="self-start mt-3 px-5 text-sm md:text-xl text-white hover:text-green-500"
-          onClick={toggleNumber}
-        >
-          {number === 25 ? '... See More' : 'See Less'}
-        </button>
       </div>
     </>
   );
