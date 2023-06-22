@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
+import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
 // import state management recoil
 import { useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
@@ -18,6 +19,7 @@ import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
  */
 function PodcastAndEpisodes() {
   const router = useRouter();
+  const numOfItems = useNumOfItems();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const queryResults = useRecoilValue(searchResultState);
@@ -74,7 +76,7 @@ function PodcastAndEpisodes() {
             </button>
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-            {shows?.slice(0, 7).map((item, i) => (
+            {shows?.slice(0, numOfItems).map((item, i) => (
               <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>

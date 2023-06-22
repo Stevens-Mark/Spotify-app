@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
-import { useMediaQuery } from 'react-responsive';
+import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
 // import state management recoil
 import { useRecoilValue } from 'recoil';
 import {
@@ -24,6 +24,7 @@ import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
  */
 function All() {
   const router = useRouter();
+  const numOfItems = useNumOfItems();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const queryResults = useRecoilValue(searchResultState);
@@ -55,67 +56,7 @@ function All() {
     }
   }, [query, router]);
 
-  /* control number of cards shown depending on screen width */
-  const isX2LGlitch = useMediaQuery({
-    minWidth: '1536px',
-    maxWidth: '1680px',
-  });
-
-  const isXXXl = useMediaQuery({
-    minWidth: '1681px',
-    maxWidth: '3840px',
-  });
-
-  const isXXl = useMediaQuery({
-    minWidth: '1280px',
-    maxWidth: '1680px',
-  });
-
-  const isXl = useMediaQuery({
-    minWidth: '1024px',
-    maxWidth: '1280px',
-  });
-  const isLg = useMediaQuery({
-    minWidth: '768px',
-    maxWidth: '1024px',
-  });
-  const isMd = useMediaQuery({
-    minWidth: '640px',
-    maxWidth: '767px',
-  });
-  const isSm = useMediaQuery({
-    minWidth: '525px',
-    maxWidth: '690px',
-  });
-
-  let numOfItems = 7; // Default number of items
-
-  switch (true) {
-    case isXXXl:
-      numOfItems = 7;
-      break;
-    case isX2LGlitch:
-      numOfItems = 7;
-      break;
-    case isXXl:
-      numOfItems = 6;
-      break;
-    case isXl:
-      numOfItems = 5;
-      break;
-    case isLg:
-      numOfItems = 3;
-      break;
-    case isMd:
-      numOfItems = 4;
-      break;
-    case isSm:
-      numOfItems = 3;
-      break;
-    default:
-      numOfItems = 2; // default minimum number of items 2
-      break;
-  }
+ 
 
   return (
     <div

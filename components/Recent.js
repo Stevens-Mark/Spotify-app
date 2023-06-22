@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { searchResultState } from '@/atoms/searchAtom';
 import { useRecoilValue } from 'recoil';
+import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import Card from './cards/card';
 
@@ -11,6 +12,7 @@ import Card from './cards/card';
  * @returns {JSX}
  */
 const PreviousSearches = () => {
+  const numOfItems = useNumOfItems();
   const queryResults = useRecoilValue(searchResultState); // Get the queryResults from Recoil
   const [recent, setRecent] = useState('');
 
@@ -71,7 +73,7 @@ const PreviousSearches = () => {
           </h2>
           <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {/* recent search list here */}
-            {recent.map((item, i) => (
+            {recent?.slice(0, numOfItems).map((item, i) => (
               <div
                 className="relative rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8"
                 key={`${item.id}-${i}`}
