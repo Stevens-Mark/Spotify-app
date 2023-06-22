@@ -1,17 +1,13 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import {
-  showEpisodesUrisState,
-  showEpisodesListState,
-  showEpisodeIdState,
-} from '@/atoms/showAtom';
+import { showEpisodesUrisState, showEpisodesListState, showEpisodeIdState } from '@/atoms/showAtom';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { capitalize } from '@/lib/capitalize';
@@ -64,68 +60,50 @@ const ShowPage = ({ showInfo }) => {
   const router = useRouter();
   const { id } = router.query;
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
-
-  const [showEpisodeId, setShowEpisodeId] = useRecoilState(showEpisodeIdState); // show episodes Id
-
+  const [showEpisodeId, setShowEpisodeId] =
+    useRecoilState(showEpisodeIdState);
   const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
   const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // show episodes uris
   const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
   const [isToggleOn, setIsToggleOn] = useState(false); // show expand/collapse text
+  const [currentid, setCurrentid] = useState(id); 
+
+   const renderCount = useMemo(() => {
+    let count = 0;
+    return () => ++count;
+  }, []);
 
   useEffect(() => {
-    // avoid epsisode list being reset on page reload
-    if (showEpisodeId === id) {
-      setShowEpisodesList((prevEpisodesList) => {
-        const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
-        // Remove duplicates
-        const uniqueList = Array.from(
-          new Set(mergedList.map((item) => item.id))
-        ).map((id) => mergedList.find((item) => item.id === id));
-        return uniqueList;
-      });
-      // avoid uris list being reset on page reload
-      setShowEpisodesUris((prevUris) => {
-        const mergedUris = [
-          ...prevUris,
-          ...showInfo.episodes.items.map((track) => track.uri),
-        ];
-        // Remove duplicates
-        const uniqueUris = Array.from(new Set(mergedUris));
-        return uniqueUris;
-      });
-      setShowEpisodesList((prevEpisodesList) => {
-        const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
-        // Remove duplicates
-        const uniqueList = Array.from(
-          new Set(mergedList.map((item) => item.id))
-        ).map((id) => mergedList.find((item) => item.id === id));
-        return uniqueList;
-      });
-      // avoid uris list being reset on page reload
-      setShowEpisodesUris((prevUris) => {
-        const mergedUris = [
-          ...prevUris,
-          ...showInfo.episodes.items.map((track) => track.uri),
-        ];
-        // Remove duplicates
-        const uniqueUris = Array.from(new Set(mergedUris));
-        return uniqueUris;
-      });
-    } else {
-      setShowEpisodesList(showInfo.episodes.items);
-      setShowEpisodesUris(showInfo.episodes.items.map((track) => track.uri)); // set uris to be used in player
-    }
+    console.log(`Component has rendered ${renderCount()} times`);
+  }, [renderCount]);
+
+  useEffect(() => {
     setShowEpisodeId(id);
-  }, [
-    id,
-    setShowEpisodeId,
-    setShowEpisodesList,
-    setShowEpisodesUris,
-    showEpisodeId,
-    showInfo.episodes.items,
-  ]);
+
+    // avoid epsisode list being reset on page reload
+    setShowEpisodesList((prevEpisodesList) => {
+      const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
+      // Remove duplicates
+      const uniqueList = Array.from(
+        new Set(mergedList.map((item) => item.id))
+      ).map((id) => mergedList.find((item) => item.id === id));
+      return uniqueList;
+    });
+    // avoid uris list being reset on page reload
+    setShowEpisodesUris((prevUris) => {
+      const mergedUris = [
+        ...prevUris,
+        ...showInfo.episodes.items.map((track) => track.uri),
+      ];
+      // Remove duplicates
+      const uniqueUris = Array.from(new Set(mergedUris));
+      return uniqueUris;
+    });
+  }, [id, setShowEpisodeId, setShowEpisodesList, setShowEpisodesUris, showEpisodeId, showInfo.episodes.items]);
+
+ 
 
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
@@ -139,6 +117,8 @@ const ShowPage = ({ showInfo }) => {
       setBackgroundColor(null);
     }
   }, [showInfo?.images]);
+
+  
 
   // show expand/collapse text
   const toggleShow = () => {

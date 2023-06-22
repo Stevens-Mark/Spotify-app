@@ -100,7 +100,7 @@ function ShowTrack({ track, order }) {
   }, [song.id, currentTrackId, isPlaying]);
 
   return (
-    <Link href="#">
+    <Link href="javascript:void(0)">
       <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image
