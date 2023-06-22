@@ -79,7 +79,7 @@ function Sidebar() {
 
     /**
      * ensures the user playlist loads whatever the playback state
-     * @function etchUserPlaylists
+     * @function fetchUserPlaylists
      */
     const fetchUserPlaylists = async () => {
       if (spotifyApi.getAccessToken()) {

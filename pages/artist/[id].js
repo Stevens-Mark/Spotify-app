@@ -9,7 +9,6 @@ import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalArtistTrackDuration } from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
-import { fetchDominantColor } from '@/lib/dominantColor';
 import { analyseImageColor } from '@/lib/analyseImageColor.js';
 // import icon/images
 import Image from 'next/image';
@@ -89,32 +88,18 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
     setArtistTrackUris(artistTracks?.tracks.map((track) => track.uri)); // set uris to be used in player
   }, [artistTracks, setArtistTrackUris, setArtistTracklist]);
 
-  // analyse image colors for custom background
+  // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
-    setRandomColor(shuffle(colors).pop()); // set default color tailwind (in case)
+    setRandomColor(shuffle(colors).pop());
     const imageUrl = artistInfo?.images?.[0]?.url;
     if (imageUrl) {
-      // custom background color (css style)
-      fetchDominantColor(imageUrl).then((dominantColor) => {
+      analyseImageColor(imageUrl).then((dominantColor) => {
         setBackgroundColor(dominantColor);
       });
     } else {
       setBackgroundColor(null);
     }
   }, [artistInfo?.images]);
-
-  // analyse image colors for custom background & set default random background color (in case)
-  // useEffect(() => {
-  //   setRandomColor(shuffle(colors).pop());
-  //   const imageUrl = artistInfo?.images?.[0]?.url;
-  //   if (imageUrl) {
-  //     analyseImageColor(imageUrl).then((dominantColor) => {
-  //       setBackgroundColor(dominantColor);
-  //     });
-  //   } else {
-  //     setBackgroundColor(null);
-  //   }
-  // }, [artistInfo?.images]);
 
   return (
     <>

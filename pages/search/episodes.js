@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
+import useScrollToTop from '@/hooks/useScrollToTop';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -15,6 +16,7 @@ import { mergeObject } from '@/lib/merge';
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
 import EpisodeCard from '@/components/cards/episodeCard';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
  * Renders the list of Episodes from search.
@@ -24,6 +26,8 @@ import EpisodeCard from '@/components/cards/episodeCard';
 function Episodes() {
   const spotifyApi = useSpotify();
   const router = useRouter();
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
@@ -42,10 +46,10 @@ function Episodes() {
 
   /**
    * Fetches more episodes & updates the list of episodes
-   * @function fetchMoreEpisodes
+   * @function fetchMoreData
    * @returns {object} updated list of episodes in queryResults
    */
-  const fetchMoreEpisodes = () => {
+  const fetchMoreData = () => {
     const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
@@ -69,14 +73,17 @@ function Episodes() {
           function (err) {
             setIsSearching(false);
             setIsError(true);
-            console.log('Get more album items failed:', err);
+            console.log('Retrieving more items failed:', err);
           }
         );
     }
   };
 
   return (
-    <section className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <section
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
+      ref={scrollableSectionRef}
+    >
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
           <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
@@ -99,7 +106,7 @@ function Episodes() {
               <button
                 className="text-xl md:text-2xl2xl:text-3xl text-white hover:text-green-500"
                 onClick={() => {
-                  fetchMoreEpisodes();
+                  fetchMoreData();
                 }}
               >
                 <span>Add More</span>
@@ -107,6 +114,14 @@ function Episodes() {
             </span>
           )}
         </>
+      )}
+      {showButton && (
+        <button
+          className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+          onClick={scrollToTop}
+        >
+          <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+        </button>
       )}
     </section>
   );

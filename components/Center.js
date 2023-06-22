@@ -115,24 +115,6 @@ function Center() {
     }
   }, [spotifyApi, session, myPlaylistId, setMyPlaylist]);
 
-  // useEffect(() => {
-  //   if (spotifyApi.getAccessToken()) {
-  //     spotifyApi
-  //       .getUserPlaylists()
-  //       .then((data) => {
-  //         spotifyApi.getPlaylist(data.body.items[0].id).then((data) => {
-  //           setMyPlaylist(data.body);
-  //         });
-  //       })
-  //       .catch((err) => {
-  //         console.error(
-  //           'Failed to get current playing track / playlist ID',
-  //           err
-  //         );
-  //       });
-  //   }
-  // }, [spotifyApi, session, setMyPlaylist]);
-
   return (
     <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
       <p

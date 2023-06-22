@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import useScrollToTop from '@/hooks/useScrollToTop';
 import { useMediaQuery } from 'react-responsive';
 // import state management recoil
 import { useRecoilValue } from 'recoil';
@@ -14,6 +15,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import TopResult from '../../components/topResult';
 import Card from '@/components/cards/card';
 import TopSongs from '@/components/topSongs';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
  * Renders the list of All options from search.
@@ -22,6 +24,8 @@ import TopSongs from '@/components/topSongs';
  */
 function All() {
   const router = useRouter();
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
   const topResults = useRecoilValue(topResultState);
@@ -114,7 +118,10 @@ function All() {
   }
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <div
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
+      ref={scrollableSectionRef}
+    >
       <h1 className="sr-only">All Search Results</h1>
       <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 lg:gap-6">
         <section className="col-start-1 row-start-1 col-span-1 xxs:col-span-2 h-full mb-9">
@@ -254,7 +261,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {shows?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i}/>
+              <Card key={`${item.id}-${i}`} item={item} order={i} />
             ))}
           </div>
         </section>
@@ -282,6 +289,14 @@ function All() {
             ))}
           </div>
         </section>
+      )}
+      {showButton && (
+        <button
+          className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+          onClick={scrollToTop}
+        >
+          <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+        </button>
       )}
     </div>
   );

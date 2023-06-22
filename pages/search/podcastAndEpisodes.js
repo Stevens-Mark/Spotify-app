@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
+import useScrollToTop from '@/hooks/useScrollToTop';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
  * Renders the list of Podcasts & Episodes from search.
@@ -16,6 +18,8 @@ import EpisodeCard from '@/components/cards/episodeCard';
  */
 function PodcastAndEpisodes() {
   const router = useRouter();
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
 
@@ -39,7 +43,10 @@ function PodcastAndEpisodes() {
   };
 
   return (
-    <div className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56">
+    <div
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
+      ref={scrollableSectionRef}
+    >
       <h1 className="sr-only">Podcasts, Shows & Episodes</h1>
       {totalShows === 0 ? (
         <section>
@@ -104,6 +111,14 @@ function PodcastAndEpisodes() {
             ))}
           </div>
         </section>
+      )}
+      {showButton && (
+        <button
+          className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+          onClick={scrollToTop}
+        >
+          <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+        </button>
       )}
     </div>
   );
