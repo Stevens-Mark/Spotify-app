@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, forwardRef, useImperativeHandle } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -26,7 +27,8 @@ import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 function Albums() {
   const spotifyApi = useSpotify();
   const router = useRouter();
-  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+  // const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+ 
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -74,11 +76,13 @@ function Albums() {
         );
     }
   };
-
+  const containerRef = useInfiniteScroll(fetchMoreData);
+ 
   return (
     <section
       className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
-      ref={scrollableSectionRef}
+      // ref={scrollableSectionRef}
+      ref={containerRef}
     >
       {totalNumber === 0 ? (
         <span className="flex items-center h-full justify-center">
@@ -111,14 +115,14 @@ function Albums() {
           )}
         </>
       )}
-      {showButton && (
+      {/* {showButton && (
         <button
           className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
           onClick={scrollToTop}
         >
           <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
         </button>
-      )}
+      )} */}
     </section>
   );
 }
