@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
-import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
+import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
+import { episodesUrisState } from '@/atoms/showAtom';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -24,11 +25,19 @@ function PodcastAndEpisodes() {
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
-
+  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState);
+  
   const shows = queryResults?.shows?.items;
   const totalShows = queryResults?.shows?.total;
   const episodes = queryResults?.episodes?.items;
   const totalEpisodes = queryResults?.episodes?.total;
+
+  useEffect(() => {
+    if (queryResults?.episodes?.items) {
+      const uris = queryResults?.episodes?.items.map((item) => item.uri);
+      setEpisodesUris(uris);
+    }
+  }, [queryResults, setEpisodesUris]);
 
   useEffect(() => {
     if (!query) {
@@ -108,8 +117,8 @@ function PodcastAndEpisodes() {
             </button>
           </div>
           <div className="flex flex-col">
-            {episodes?.slice(0, 30).map((item, i) => (
-              <EpisodeCard key={`${item.id}-${i}`} item={item} />
+            {episodes?.slice(0, 30).map((track, i) => (
+              <EpisodeCard key={`${track.id}-${i}`} track={track} order={i} />
             ))}
           </div>
         </section>

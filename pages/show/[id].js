@@ -60,6 +60,8 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
+
+  console.log('showinfo ',showInfo)
   const { data: session } = useSession();
   const router = useRouter();
   const { id } = router.query;

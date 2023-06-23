@@ -66,24 +66,39 @@ function Player() {
     return previousEpisodeId || currentTrackId;
   };
 
-  /* go back a track */
+  /* go back a track if playing */
   const skipToPrevious = () => {
-    spotifyApi.skipToPrevious().catch((err) => console.error('Rewind failed:'));
-    setTimeout(() => {
-      spotifyApi
-        .getMyCurrentPlayingTrack()
-        .then((data) => {
-          if (data.body?.currently_playing_type === 'episode') {
-            setCurrentTrackId(findPreviousEpisodeId);
-          } else {
-            setCurrentTrackId(data.body?.item?.id);
-          }
-          if (currentSongIndex !== 0) {
-            setCurrentSongIndex(currentSongIndex - 1);
-          }
-        })
-        .catch((err) => console.error('Get Current Track ID failed: ', err));
-    }, '750');
+    spotifyApi
+      .getMyCurrentPlayingTrack()
+      .then((data) => {
+        if (data.body?.is_playing) {
+          spotifyApi
+            .skipToPrevious()
+            .then(() => {
+              setTimeout(() => {
+                spotifyApi
+                  .getMyCurrentPlayingTrack()
+                  .then((data) => {
+                    if (data.body?.currently_playing_type === 'episode') {
+                      setCurrentTrackId(findPreviousEpisodeId);
+                    } else {
+                      setCurrentTrackId(data.body?.item?.id);
+                    }
+                    if (currentSongIndex > 0) {
+                      setCurrentSongIndex(currentSongIndex - 1);
+                    } else {
+                      setCurrentSongIndex(0);
+                    }
+                  })
+                  .catch((err) =>
+                    console.error('Get Current Track ID failed: ')
+                  );
+              }, 750);
+            })
+            .catch((err) => console.error('Skip to Next failed: '));
+        }
+      })
+      .catch((err) => console.error('Get Current Playing Track failed: '));
   };
 
   /**
@@ -144,24 +159,35 @@ function Player() {
     return nextEpisodeId || currentTrackId;
   };
 
-  /* go forward a track */
+  /* go forward a track if playing */
   const skipToNext = () => {
     spotifyApi
-      .skipToNext()
-      .catch((err) => console.error('Forward failed: ', err));
-    setTimeout(() => {
-      spotifyApi
-        .getMyCurrentPlayingTrack()
-        .then((data) => {
-          if (data.body?.currently_playing_type === 'episode') {
-            setCurrentTrackId(findNextEpisodeId);
-          } else {
-            setCurrentTrackId(data.body?.item?.id);
-          }
-          setCurrentSongIndex(currentSongIndex + 1);
-        })
-        .catch((err) => console.error('Get Current Track ID failed: ', err));
-    }, '750');
+      .getMyCurrentPlayingTrack()
+      .then((data) => {
+        if (data.body?.is_playing) {
+          spotifyApi
+            .skipToNext()
+            .then(() => {
+              setTimeout(() => {
+                spotifyApi
+                  .getMyCurrentPlayingTrack()
+                  .then((data) => {
+                    if (data.body?.currently_playing_type === 'episode') {
+                      setCurrentTrackId(findNextEpisodeId);
+                    } else {
+                      setCurrentTrackId(data.body?.item?.id);
+                    }
+                    setCurrentSongIndex(currentSongIndex + 1);
+                  })
+                  .catch((err) =>
+                    console.error('Get Current Track ID failed: ')
+                  );
+              }, 750);
+            })
+            .catch((err) => console.error('Skip to Next failed: '));
+        }
+      })
+      .catch((err) => console.error('Get Current Playing Track failed: '));
   };
 
   // handles 3 way toggle, off, repeat, repeat  once

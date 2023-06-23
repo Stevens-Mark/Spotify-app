@@ -16,3 +16,9 @@ export const showEpisodesUrisState = atom({
   key: 'showEpisodesUrisState',
   default: [],
 });
+
+// list of track uris for episodes
+export const episodesUrisState = atom({
+  key: 'episodesUrisState',
+  default: [],
+});

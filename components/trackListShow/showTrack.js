@@ -17,6 +17,8 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 // import icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
+// import components
+import TrackProgressBar from '../TrackProgressBar';
 
 /**
  * Renders each track in the show
@@ -27,7 +29,7 @@ import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
  */
 function ShowTrack({ track, order }) {
   const spotifyApi = useSpotify();
-  const song = track;
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const showEpisodesList = useRecoilValue(showEpisodesListState);
@@ -66,7 +68,7 @@ function ShowTrack({ track, order }) {
    */
   const handlePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id == currentTrackId) {
+      if (data.body?.is_playing && track.id == currentTrackId) {
         spotifyApi
           .pause()
           .then(() => {
@@ -83,7 +85,7 @@ function ShowTrack({ track, order }) {
             console.log('Playback Success');
             setPlayerInfoType('episode');
             setIsPlaying(true);
-            setCurrentTrackId(song.id);
+            setCurrentTrackId(track.id);
             setCurrentSongIndex(currentTrackIndex);
             setActivePlaylist(null); //episode playing so user's playlist null
           })
@@ -95,17 +97,27 @@ function ShowTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    const newActiveStatus = track.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song.id, currentTrackId, isPlaying]);
+  }, [track.id, currentTrackId, isPlaying]);
+
+  const handleClick = (event) => {
+    event.preventDefault();
+    // temperary to block action
+    // Handle the click event logic here,
+    // use the router to navigate to a different page, for example
+    // import { useRouter } from 'next/router';
+    // const router = useRouter();
+    // router.push('/some-page');
+  };
 
   return (
-    <Link href="javascript:void(0)">
+    <Link href="#" onClick={handleClick}>
       <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
-            src={song.images?.[0]?.url || noImage}
+            src={track.images?.[0]?.url || noImage}
             alt=""
             width={100}
             height={100}
@@ -120,11 +132,11 @@ function ShowTrack({ track, order }) {
                : 'text-white'
            }`}
           >
-            {song.name.replace('/', ' & ')}
+            {track?.name.replace('/', ' & ')}
           </h2>
 
           <div className="col-span-4 md:col-span-3 row-start-2 text-pink-swan pt-2 pb-3">
-            <span className="mb-2 line-clamp-2">{song.description}</span>
+            <span className="mb-2 line-clamp-2">{track?.description}</span>
           </div>
           <button
             className="col-start-1 md:col-start-2 col-span-1"
@@ -139,12 +151,22 @@ function ShowTrack({ track, order }) {
             )}
           </button>
 
-          <span className="col-start-2 md:col-start-3 col-span-2 row-start-3 flex items-center text-pink-swan -ml-3  md:ml-3">
+          <div className="col-start-2 md:col-start-3 col-span-2 row-start-3 flex items-center text-pink-swan -ml-3  md:ml-3">
             <span className="line-clamp-1">
-              {getMonthYear(song.release_date)}&nbsp;•&nbsp;
+              {getMonthYear(track?.release_date)}&nbsp;•&nbsp;
             </span>
-            <span className="line-clamp-1">{msToTime(song.duration_ms)}</span>
-          </span>
+            <span className="line-clamp-1">
+              {msToTime(
+                track?.duration_ms - track?.resume_point?.resume_position_ms
+              )}
+              {track?.resume_point?.fully_played ? '' : ' left'}
+            </span>
+
+            <TrackProgressBar
+              resumePosition={track?.resume_point?.resume_position_ms}
+              duration={track?.duration_ms}
+            />
+          </div>
         </div>
       </div>
     </Link>

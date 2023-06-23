@@ -10,6 +10,7 @@ import {
   queryState,
   searchingState,
 } from '@/atoms/searchAtom';
+import { episodesUrisState } from '@/atoms/showAtom';
 import { errorState } from '@/atoms/errorAtom';
 // import functions
 import { mergeObject } from '@/lib/merge';
@@ -30,6 +31,8 @@ function Episodes() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
+  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState);
+  
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
@@ -49,6 +52,7 @@ function Episodes() {
    * @function fetchMoreData
    * @returns {object} updated list of episodes in queryResults
    */
+
   const fetchMoreData = () => {
     const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
@@ -68,6 +72,9 @@ function Episodes() {
               'episodes'
             );
             setQueryResults(updatedList);
+            // Merge the new URIs into the existing episodesUris state
+            const newUris = data.body.episodes.items.map((item) => item.uri);
+            setEpisodesUris((prevUris) => [...prevUris, ...newUris]);
             setIsSearching(false);
           },
           function (err) {
@@ -101,8 +108,8 @@ function Episodes() {
             Episodes
           </h1>
           <div className="flex flex-col">
-            {episodes?.map((item, i) => (
-              <EpisodeCard key={`${item.id}-${i}`} item={item} />
+            {episodes?.map((track, i) => (
+              <EpisodeCard key={`${track.id}-${i}`} track={track} order={i} />
             ))}
           </div>
         </>
