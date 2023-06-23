@@ -26,11 +26,13 @@ function PodcastAndEpisodes() {
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
   const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState);
-  
+
   const shows = queryResults?.shows?.items;
   const totalShows = queryResults?.shows?.total;
   const episodes = queryResults?.episodes?.items;
   const totalEpisodes = queryResults?.episodes?.total;
+
+  
 
   useEffect(() => {
     if (queryResults?.episodes?.items) {

@@ -32,7 +32,6 @@ function Episodes() {
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState);
-  
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
@@ -74,6 +73,7 @@ function Episodes() {
             setQueryResults(updatedList);
             // Merge the new URIs into the existing episodesUris state
             const newUris = data.body.episodes.items.map((item) => item.uri);
+
             setEpisodesUris((prevUris) => [...prevUris, ...newUris]);
             setIsSearching(false);
           },

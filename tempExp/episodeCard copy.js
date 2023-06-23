@@ -12,7 +12,7 @@ import {
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { searchResultState } from '@/atoms/searchAtom';
-import { episodesUrisState } from '@/atoms/showAtom';
+import { showEpisodesUrisState } from '@/atoms/showAtom';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
 // import icons
@@ -33,13 +33,12 @@ function EpisodeCard({ track, order }) {
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-
+ 
   const queryResults = useRecoilValue(searchResultState);
   const episodesList = queryResults?.episodes?.items;
-  const episodesUris = useRecoilValue(episodesUrisState);
-
+  const episodesUris = useRecoilValue(showEpisodesUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-
+  
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -49,21 +48,6 @@ function EpisodeCard({ track, order }) {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        currentSongIndex == null &&
-        currentTrackId !== null &&
-        episodesList !== null
-      ) {
-        const indexPosition = episodesList?.findIndex(
-          (x) => x.id == currentTrackId
-        );
-        setCurrentSongIndex(indexPosition);
-      }
-    }, '500');
-  }, [currentSongIndex, currentTrackId, episodesList, setCurrentSongIndex]);
-
   /**
    * Either play or pause current episode track
    * @function HandlePlayPause
@@ -71,8 +55,6 @@ function EpisodeCard({ track, order }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
-    console.log("index: " , currentTrackIndex)
-    console.log('uri ', episodesUris[currentTrackIndex])
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track.id == currentTrackId) {
         spotifyApi
@@ -84,8 +66,8 @@ function EpisodeCard({ track, order }) {
       } else {
         spotifyApi
           .play({
-            uris: episodesUris,
-            offset: { position: currentTrackIndex },
+            uris: [track.uri],
+            // offset: { position: currentTrackIndex },
           })
           .then(() => {
             console.log('Playback Success');
@@ -99,34 +81,6 @@ function EpisodeCard({ track, order }) {
       }
     });
   };
-
-  // const handlePlayPause = (event, currentTrackIndex) => {
-  //   spotifyApi.getMyCurrentPlaybackState().then((data) => {
-  //     if (data.body?.is_playing && track.id == currentTrackId) {
-  //       spotifyApi
-  //         .pause()
-  //         .then(() => {
-  //           setIsPlaying(false);
-  //         })
-  //         .catch((err) => console.error('Pause failed: '));
-  //     } else {
-  //       spotifyApi
-  //         .play({
-  //           uris: [track.uri],
-  //           // offset: { position: currentTrackIndex },
-  //         })
-  //         .then(() => {
-  //           console.log('Playback Success');
-  //           setPlayerInfoType('episode');
-  //           setIsPlaying(true);
-  //           setCurrentTrackId(track.id);
-  //           setCurrentSongIndex(currentTrackIndex);
-  //           setActivePlaylist(null); //episode playing so user's playlist null
-  //         })
-  //         .catch((err) => console.error('Playback failed: ', err));
-  //     }
-  //   });
-  // };
 
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);

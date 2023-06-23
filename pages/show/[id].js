@@ -67,7 +67,7 @@ const ShowPage = ({ showInfo }) => {
   const { id } = router.query;
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
-  const [showEpisodeId, setShowEpisodeId] = useRecoilState(showEpisodeIdState); // show episodes Id
+  const [lastShowEpisodeId, setLastShowEpisodeId] = useRecoilState(showEpisodeIdState); // show episodes Id
 
   const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
   const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // show episodes uris
@@ -78,7 +78,7 @@ const ShowPage = ({ showInfo }) => {
 
   useEffect(() => {
     // avoid epsisode list being reset on page reload
-    if (showEpisodeId === id) {
+    if (lastShowEpisodeId === id) {
       setShowEpisodesList((prevEpisodesList) => {
         const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
         // Remove duplicates
@@ -119,15 +119,8 @@ const ShowPage = ({ showInfo }) => {
       setShowEpisodesList(showInfo.episodes.items);
       setShowEpisodesUris(showInfo.episodes.items.map((track) => track.uri)); // set uris to be used in player
     }
-    setShowEpisodeId(id);
-  }, [
-    id,
-    setShowEpisodeId,
-    setShowEpisodesList,
-    setShowEpisodesUris,
-    showEpisodeId,
-    showInfo.episodes.items,
-  ]);
+    setLastShowEpisodeId(id);
+  }, [id, lastShowEpisodeId, setLastShowEpisodeId, setShowEpisodesList, setShowEpisodesUris, showInfo.episodes.items]);
 
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
