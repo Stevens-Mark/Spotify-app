@@ -69,8 +69,8 @@ const ShowPage = ({ showInfo }) => {
 
   const [lastShowEpisodeId, setLastShowEpisodeId] = useRecoilState(showEpisodeIdState); // show episodes Id
 
-  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // show episodes list
-  const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // show episodes uris
+  const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // episodes uris from a SHOW
+  const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // episodes list from a SHOW
   const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
@@ -79,24 +79,6 @@ const ShowPage = ({ showInfo }) => {
   useEffect(() => {
     // avoid epsisode list being reset on page reload
     if (lastShowEpisodeId === id) {
-      setShowEpisodesList((prevEpisodesList) => {
-        const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
-        // Remove duplicates
-        const uniqueList = Array.from(
-          new Set(mergedList.map((item) => item.id))
-        ).map((id) => mergedList.find((item) => item.id === id));
-        return uniqueList;
-      });
-      // avoid uris list being reset on page reload
-      setShowEpisodesUris((prevUris) => {
-        const mergedUris = [
-          ...prevUris,
-          ...showInfo.episodes.items.map((track) => track.uri),
-        ];
-        // Remove duplicates
-        const uniqueUris = Array.from(new Set(mergedUris));
-        return uniqueUris;
-      });
       setShowEpisodesList((prevEpisodesList) => {
         const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
         // Remove duplicates

@@ -11,15 +11,14 @@ import {
 } from '@/atoms/songAtom';
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { searchResultState } from '@/atoms/searchAtom';
-import { episodesUrisState } from '@/atoms/showAtom';
+import { episodesListState, episodesUrisState } from '@/atoms/showAtom';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
 // import icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 // import components
-import TrackProgressBar from '../TrackProgressBar';
+import TrackProgressBar from '../graphics/TrackProgressBar';
 
 /**
  * Render a card for an episode
@@ -33,11 +32,8 @@ function EpisodeCard({ track, order }) {
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-
-  const queryResults = useRecoilValue(searchResultState);
-  const episodesList = queryResults?.episodes?.items;
+  const episodesList = useRecoilValue(episodesListState);
   const episodesUris = useRecoilValue(episodesUrisState);
-
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const [currentTrackId, setCurrentTrackId] =
@@ -71,8 +67,8 @@ function EpisodeCard({ track, order }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
-    console.log("index: " , currentTrackIndex)
-    console.log('uri ', episodesUris[currentTrackIndex])
+    console.log('index: ', currentTrackIndex);
+    console.log('uri ', episodesUris[currentTrackIndex]);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track.id == currentTrackId) {
         spotifyApi

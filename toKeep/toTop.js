@@ -1,5 +1,7 @@
 import { useEffect, useState, useRef } from 'react';
 
+// A GO TO TOP BUTTON COMPONENT (NOT IN USE)
+
 const useScrollToTop = () => {
   const scrollableSectionRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);

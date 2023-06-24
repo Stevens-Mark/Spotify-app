@@ -14,7 +14,7 @@ import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import Equaliser from '@/components/Equaliser';
+import Equaliser from '@/components/graphics/Equaliser';
 
 /**
  * Renders each track in the album

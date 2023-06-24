@@ -19,7 +19,7 @@ import {
 import { playerInfoTypeState } from '@/atoms/idAtom';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import Equaliser from '../Equaliser';
+import Equaliser from '../graphics/Equaliser';
 
 /**
  * Renders each track in the user's playlist

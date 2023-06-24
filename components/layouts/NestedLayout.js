@@ -17,7 +17,7 @@ import { getRandomTopResult } from '@/lib/randomTopResult';
 // import icons & components
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import SearchNav from '../SearchNav';
-import StatusSpinner from '../StatusSpinner';
+import StatusSpinner from '../graphics/StatusSpinner';
 
 /**
  * Renders the search bar (for all search pages: genres, album, playlist, artists, shows & episodes)

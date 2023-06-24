@@ -7,7 +7,7 @@ import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 // import component
 import Sidebar from '../Sidebar';
-import Player from '../Player';
+import Player from '../player/Player';
 
 /**
  * Renders the user picture & sidebar (for all pages) as part of the general layout.
@@ -21,7 +21,7 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const path = router?.asPath; // URL from router.
 
-  const excludedPath = [
+  const excludedPath = [ // used to trigger the collapsing of the user info top right on mobile screens
     '/search',
     '/search/all',
     '/search/albums',

@@ -18,7 +18,7 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 // import components
-import TrackProgressBar from '../TrackProgressBar';
+import TrackProgressBar from '../graphics/TrackProgressBar';
 
 /**
  * Renders each track in the show
