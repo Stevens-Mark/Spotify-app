@@ -6,12 +6,16 @@ import useSpotify from '@/hooks/useSpotify';
 import { msToTime, getMonthYear } from '@/lib/time';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { showEpisodesUrisState, showEpisodesListState } from '@/atoms/showAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import {
+  showEpisodesUrisState,
+  showEpisodesListState,
+  activeListInUseState,
+} from '@/atoms/showAtom';
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import icons
@@ -42,8 +46,11 @@ function ShowTrack({ track, order }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
+  const [activeListInUse, setActiveListInUse] =
+    useRecoilState(activeListInUseState);
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,6 +94,7 @@ function ShowTrack({ track, order }) {
             setIsPlaying(true);
             setCurrentTrackId(track.id);
             setCurrentSongIndex(currentTrackIndex);
+            setActiveListInUse(showEpisodesList); // set list to reference for player
             setActivePlaylist(null); //episode playing so user's playlist null
           })
           .catch((err) => console.error('Playback failed: ', err));

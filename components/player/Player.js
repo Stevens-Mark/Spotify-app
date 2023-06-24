@@ -10,6 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
+import { showEpisodesListState, activeListInUseState } from '@/atoms/showAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -21,7 +22,6 @@ import {
   PauseCircleIcon,
   PlayCircleIcon,
 } from '@heroicons/react/24/solid';
-import { showEpisodesListState } from '@/atoms/showAtom';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 
 /**
@@ -31,20 +31,41 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
  */
 function Player() {
   const spotifyApi = useSpotify();
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [volume, setVolume] = useState(50);
 
+  const [shuffleState, setShuffletState] = useState(false);
+  const [repeatState, setRepeatState] = useState(0);
+  const [volume, setVolume] = useState(50);
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  const showEpisodesList = useRecoilValue(showEpisodesListState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+  // list to reference when finding episode ID
+  const activeListInUse = useRecoilValue(activeListInUseState);
+
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
+  useEffect(() => {
+    if (volume > 0 && volume < 100) {
+      debounceAdjustVolume(volume);
+    }
+  }, [debounceAdjustVolume, volume]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi.getMyCurrentPlaybackState().then((data) => {
+          if (data.body?.is_playing) {
+            setIsPlaying(true);
+          }
+        });
+      }
+    }, '500');
+  }, [setIsPlaying, spotifyApi]);
+
   /* set shuffle of tracks on or off */
-  const [shuffleState, setShuffletState] = useState(false);
   const setShuffle = () => {
     setShuffletState((prevState) => !prevState);
     spotifyApi
@@ -58,11 +79,11 @@ function Player() {
    * @returns the Id for the previous episode
    */
   const findPreviousEpisodeId = () => {
-    const episodeIndex = showEpisodesList.findIndex(
+    const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
     const previousEpisodeId =
-      episodeIndex > 0 ? showEpisodesList[episodeIndex - 1]?.id : null;
+      episodeIndex > 0 ? activeListInUse[episodeIndex - 1]?.id : null;
     return previousEpisodeId || currentTrackId;
   };
 
@@ -107,7 +128,7 @@ function Player() {
    * @returns the Id for the current episode
    */
   const findEpisodeId = () => {
-    const episodeIndex = showEpisodesList.findIndex(
+    const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
     return episodeIndex !== -1 ? currentTrackId : null;
@@ -149,12 +170,12 @@ function Player() {
    * @returns the Id for the next episode
    */
   const findNextEpisodeId = () => {
-    const episodeIndex = showEpisodesList.findIndex(
+    const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
     const nextEpisodeId =
-      episodeIndex < showEpisodesList.length - 1
-        ? showEpisodesList[episodeIndex + 1]?.id
+      episodeIndex < activeListInUse.length - 1
+        ? activeListInUse[episodeIndex + 1]?.id
         : null;
     return nextEpisodeId || currentTrackId;
   };
@@ -191,7 +212,6 @@ function Player() {
   };
 
   // handles 3 way toggle, off, repeat, repeat  once
-  const [repeatState, setRepeatState] = useState(0);
   const handleRepeatToggle = () => {
     let adjusted = repeatState == 0 ? 1 : repeatState == 2 ? 0 : 2;
     let value = adjusted === 0 ? 'off' : adjusted === 1 ? 'context' : 'track';
@@ -209,24 +229,6 @@ function Player() {
       }, 500),
     [spotifyApi]
   );
-
-  useEffect(() => {
-    if (volume > 0 && volume < 100) {
-      debounceAdjustVolume(volume);
-    }
-  }, [debounceAdjustVolume, volume]);
-
-  useEffect(() => {
-    setTimeout(() => {
-      if (spotifyApi.getAccessToken()) {
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          if (data.body?.is_playing) {
-            setIsPlaying(true);
-          }
-        });
-      }
-    }, '500');
-  }, [setIsPlaying, spotifyApi]);
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">

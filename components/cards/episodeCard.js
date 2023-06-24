@@ -11,7 +11,11 @@ import {
 } from '@/atoms/songAtom';
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { episodesListState, episodesUrisState } from '@/atoms/showAtom';
+import {
+  episodesListState,
+  episodesUrisState,
+  activeListInUseState,
+} from '@/atoms/showAtom';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
 // import icons
@@ -42,8 +46,12 @@ function EpisodeCard({ track, order }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
+
+  const [activeListInUse, setActiveListInUse] =
+    useRecoilState(activeListInUseState);
 
   useEffect(() => {
     setTimeout(() => {
@@ -67,8 +75,6 @@ function EpisodeCard({ track, order }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const handlePlayPause = (event, currentTrackIndex) => {
-    console.log('index: ', currentTrackIndex);
-    console.log('uri ', episodesUris[currentTrackIndex]);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track.id == currentTrackId) {
         spotifyApi
@@ -89,6 +95,7 @@ function EpisodeCard({ track, order }) {
             setIsPlaying(true);
             setCurrentTrackId(track.id);
             setCurrentSongIndex(currentTrackIndex);
+            setActiveListInUse(episodesList); // set list to reference for player
             setActivePlaylist(null); //episode playing so user's playlist null
           })
           .catch((err) => console.error('Playback failed: ', err));

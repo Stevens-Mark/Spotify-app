@@ -31,15 +31,17 @@ function Episodes() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
+
   const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState); // episodes uris (from search)
   const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
+
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
   const setIsError = useSetRecoilState(errorState);
 
   const episodes = queryResults?.episodes?.items;
-  setEpisodesList(episodes);
+
   const totalNumber = queryResults?.episodes?.total;
 
   useEffect(() => {

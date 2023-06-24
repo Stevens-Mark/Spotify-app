@@ -33,3 +33,12 @@ export const episodesUrisState = atom({
   key: 'episodesUrisState',
   default: [],
 });
+
+// XXXXXXXXXX FOR BOTH XXXXXXXXXX
+
+// used to set which list to use in the player when identifying the episode ID
+// either showEpisodesList or episodesList
+export const activeListInUseState = atom({
+  key: 'activeListInUseState',
+  default: [],
+});
