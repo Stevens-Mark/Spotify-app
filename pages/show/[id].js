@@ -12,17 +12,11 @@ import {
   showEpisodesListState,
   showEpisodeIdState,
 } from '@/atoms/showAtom';
-// import functions
-import { shuffle } from 'lodash'; // function used to select random color
-import { capitalize } from '@/lib/capitalize';
-import { analyseImageColor } from '@/lib/analyseImageColor.js';
-// import icon/images
-import Image from 'next/image';
-import noArtist from '@/public/images/noImageAvailable.svg';
-import { colors } from '@/styles/colors';
+// import icons
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 // import components
 import Layout from '@/components/layouts/Layout';
+import MediaHeading from '@/components/MediaHero';
 import ShowTracks from '@/components/trackListShow/showTracks';
 
 export async function getServerSideProps(context) {
@@ -60,7 +54,6 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
-  // console.log('showinfo ', showInfo);
   const { data: session } = useSession();
   const router = useRouter();
   const textRef = useRef(null);
@@ -73,8 +66,6 @@ const ShowPage = ({ showInfo }) => {
   const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // episodes uris from a SHOW
   const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // episodes list from a SHOW
   const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
-  const [randomColor, setRandomColor] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState();
   const [expandABoutText, setExpandABoutText] = useState(false); // show expand/collapse About text
   const [expandABoutButton, setExpandABoutButton] = useState(false); // show/hide see more/less button
 
@@ -113,21 +104,8 @@ const ShowPage = ({ showInfo }) => {
     showInfo.episodes.items,
   ]);
 
-  // analyse image colors for custom background & set default random background color (in case)
-  useEffect(() => {
-    setRandomColor(shuffle(colors).pop());
-    const imageUrl = showInfo?.images?.[0]?.url;
-    if (imageUrl) {
-      analyseImageColor(imageUrl).then((dominantColor) => {
-        setBackgroundColor(dominantColor);
-      });
-    } else {
-      setBackgroundColor(null);
-    }
-  }, [showInfo?.images]);
-
   // calculate if About text is more than 4 lines high ?
-  // if not, hide see more button as not needed 
+  // if not, hide see more button as not needed
   useEffect(() => {
     const textElement = textRef.current;
     if (textElement) {
@@ -163,13 +141,11 @@ const ShowPage = ({ showInfo }) => {
       .then((response) => response.json())
       .then((data) => {
         const { items } = data;
-
         // Update the ShowEpisodesList by merging the new episodes
         setShowEpisodesList((prevEpisodesList) => [
           ...prevEpisodesList,
           ...items,
         ]);
-
         // Extract the URIs of the new episodes
         const newUris = items.map((track) => track.uri);
         // Update the ShowEpisodesUris by merging the new URIs
@@ -194,36 +170,9 @@ const ShowPage = ({ showInfo }) => {
           scrollableSectionRef.current = node;
         }}
       >
-        <div
-          className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-            backgroundColor !== null ? '' : randomColor
-          }`}
-          style={{
-            background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
-          }}
-        >
-          <Image
-            className="h-16 w-16 xs:h-44 xs:w-44 ml-0 xs:ml-7 shadow-image2"
-            src={showInfo?.images?.[0]?.url || noArtist}
-            alt=""
-            width={100}
-            height={100}
-            priority
-          />
-          <div>
-            {showInfo && (
-              <div className="drop-shadow-text">
-                <span className="pt-2">{capitalize(showInfo?.type)}</span>
-                <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
-                  {showInfo?.name}
-                </h1>
-                <span className="text-sm mt-5 mb-2 line-clamp-2">
-                  {capitalize(showInfo?.publisher)}
-                </span>
-              </div>
-            )}
-          </div>
-        </div>
+        {/* Hero bar with image, podcast title & author etc */}
+        <MediaHeading item={showInfo} />
+
         <section className="pb-24">
           <h2 className="sr-only">Track List</h2>
           <div className="flex  flex-col-reverse xl:flex-row gap-9 py-4 px-5 xs:p-10">
