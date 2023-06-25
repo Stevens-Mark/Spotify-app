@@ -15,6 +15,7 @@ import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import { totalDuration } from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
+import { analyseImageColor } from '@/lib/analyseImageColor.js';
 
 // random color options for top background
 const colors = [
@@ -39,6 +40,7 @@ function Center() {
   const [myPlaylist, setMyPlaylist] = useRecoilState(myPlaylistState);
   const [message, setMessage] = useState(null);
   const [randomColor, setRandomColor] = useState(null);
+  const [backgroundColor, setBackgroundColor] = useState();
 
   const [myAlert, setMyAlert] = useState(false);
   const handleMyAlert = () => {
@@ -57,10 +59,19 @@ function Center() {
   //   console.log(`Component has rendered ${renderCount()} times`);
   // }, [renderCount]);
 
+  // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
-    // setRandomColor(colors[Math.floor(Math.random() * 7)]);
-    setRandomColor(shuffle(colors).pop());
-  }, [myPlaylistId]);
+    setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
+    const imageUrl = myPlaylist?.images?.[0]?.url;
+    if (imageUrl) {
+      // custom background color (css style)
+      analyseImageColor(imageUrl).then((dominantColor) => {
+        setBackgroundColor(dominantColor);
+      });
+    } else {
+      setBackgroundColor(null);
+    }
+  }, [myPlaylist?.images]);
 
   useEffect(() => {
     // check whether there is an active device connected to spotify account.
@@ -124,7 +135,12 @@ function Center() {
         {message}
       </p>
       <div
-        className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 bg-gradient-to-b to-black ${randomColor} h-80 text-white py-4 px-5 xs:p-8`}
+        className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
+          backgroundColor !== null ? '' : randomColor
+        }`}
+        style={{
+          background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+        }}
       >
         <Image
           className="h-16 w-16 xs:h-44 xs:w-44 ml-0 xs:ml-7 shadow-image2"
