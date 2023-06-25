@@ -138,8 +138,18 @@ function EpisodeCard({ track, order }) {
     setActiveStatus(newActiveStatus);
   }, [track.id, currentTrackId, isPlaying]);
 
+  const handleClick = (event) => {
+    event.preventDefault();
+    // temperary to block action
+    // Handle the click event logic here,
+    // use the router to navigate to a different page, for example
+    // import { useRouter } from 'next/router';
+    // const router = useRouter();
+    // router.push('/some-page');
+  };
+
   return (
-    <Link href="#">
+    <Link href="#" onClick={handleClick}>
       <div className="border-b-[0.25px] border-gray-800 max-w-3xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image

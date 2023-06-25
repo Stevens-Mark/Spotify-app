@@ -71,7 +71,7 @@ function UserTrack({ track, order }) {
           .then(() => {
             setIsPlaying(false);
           })
-          .catch((err) => console.error('Pause failed: '));
+          .catch((err) => console.error('Pause failed: ', err));
       } else {
         spotifyApi
           .play({
