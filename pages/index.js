@@ -23,7 +23,7 @@ export default function Home() {
     <>
       <Head>
         <title>Spotify</title>
-        <link rel="icon" href="/favicon.ico"></link>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
 
       <Center />

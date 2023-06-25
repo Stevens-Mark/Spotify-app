@@ -7,7 +7,7 @@ import PlaylistTrack from './playlistTrack';
 import { ClockIcon } from '@heroicons/react/24/outline';
 
 /**
- * Renders the list of tracks of aplaylist
+ * Renders the list of tracks of a playlist
  * @function PlaylistTracks
  * @returns {JSX}
  */

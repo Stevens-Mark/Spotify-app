@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 // import state management recoil
 import { useRecoilValue } from 'recoil';
 import { showEpisodesListState } from '@/atoms/showAtom';
 // import component/icons
-import ShowTrack from './showTrack';
+import EpisodeCard from '@/components/cards/episodeCard';
 
 /**
  * Renders the list of episodes in a show
@@ -17,7 +17,12 @@ function ShowTracks() {
     <>
       <div className="flex flex-col">
         {showEpisodesList?.map((track, i) => (
-          <ShowTrack key={`${track.id}-${i}`} track={track} order={i} />
+          <EpisodeCard
+            key={`${track.id}-${i}`}
+            whichList={'show'}
+            track={track}
+            order={i}
+          />
         ))}
       </div>
     </>

@@ -4,7 +4,7 @@ const TrackProgressBar = ({ resumePosition, duration }) => {
   const progressPercentage = (resumePosition / duration) * 100;
 
   return (
-    <div className="mx-3 h-1 w-20 rounded-md bg-pink-swan">
+    <div className="mx-3 h-1 w-20 rounded-md bg-pink-swan hidden xs:inline md:hidden lg:inline">
       <div className="h-1 rounded-md bg-white" style={{ width: `${progressPercentage}%` }}></div>
     </div>
   );

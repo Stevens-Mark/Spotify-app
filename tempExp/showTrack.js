@@ -22,7 +22,7 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 // import components
-import TrackProgressBar from '../graphics/TrackProgressBar';
+import TrackProgressBar from '../components/graphics/TrackProgressBar';
 
 /**
  * Renders each track in the show
@@ -46,11 +46,9 @@ function ShowTrack({ track, order }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
-  const [activeListInUse, setActiveListInUse] =
-    useRecoilState(activeListInUseState);
+  const setActivePlaylist = activePlaylistState;
+  // for settting list to reference for player
+  const setActiveListInUse = useSetRecoilState(activeListInUseState);
 
   useEffect(() => {
     setTimeout(() => {

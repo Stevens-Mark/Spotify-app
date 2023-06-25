@@ -47,15 +47,6 @@ function Player() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
-  // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
-  // const debounceAdjustVolume = useMemo(
-  //   () =>
-  //     debounce((volume) => {
-  //       spotifyApi.setVolume(volume).catch((err) => {}); // for now throw error but could check for active device;
-  //     }, 500),
-  //   [spotifyApi]
-  // );
-
   const debounceAdjustVolume = useMemo(
     () =>
       debounce((volume) => {

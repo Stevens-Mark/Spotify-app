@@ -11,12 +11,13 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { playerInfoTypeState } from '@/atoms/idAtom';
 import {
   myPlaylistIdState,
   myPlaylistState,
   activePlaylistState,
 } from '@/atoms/playListAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '../graphics/Equaliser';

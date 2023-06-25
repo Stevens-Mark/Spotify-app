@@ -12,6 +12,8 @@ import {
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import {
+  showEpisodesUrisState,
+  showEpisodesListState,
   episodesListState,
   episodesUrisState,
   activeListInUseState,
@@ -29,13 +31,17 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
  * @function EpisodeCard
  * @param {object} track (episode track info)
  * @param {number} order track index in the episode list
+ * @param {string} whichList (optional) either (a "show"episode/uris otherwise defaults episodeList & uris)
  * @returns {JSX}
  */
-function EpisodeCard({ track, order }) {
+function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
 
-  // used to determine what type of info to load
+  // used to determine what type of info to load/display in plyer window
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+
+  const showEpisodesList = useRecoilValue(showEpisodesListState);
+  const showEpisodesUris = useRecoilValue(showEpisodesUrisState);
   const episodesList = useRecoilValue(episodesListState);
   const episodesUris = useRecoilValue(episodesUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -54,19 +60,27 @@ function EpisodeCard({ track, order }) {
     useRecoilState(activeListInUseState);
 
   useEffect(() => {
+    const listToUse = whichList === 'show' ? showEpisodesList : episodesList;
     setTimeout(() => {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        episodesList !== null
+        listToUse !== null
       ) {
-        const indexPosition = episodesList?.findIndex(
+        const indexPosition = listToUse?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '500');
-  }, [currentSongIndex, currentTrackId, episodesList, setCurrentSongIndex]);
+  }, [
+    currentSongIndex,
+    currentTrackId,
+    episodesList,
+    setCurrentSongIndex,
+    showEpisodesList,
+    whichList,
+  ]);
 
   /**
    * Either play or pause current episode track
@@ -84,9 +98,11 @@ function EpisodeCard({ track, order }) {
           })
           .catch((err) => console.error('Pause failed: '));
       } else {
+        const urisToUse =
+          whichList === 'show' ? showEpisodesUris : episodesUris;
         spotifyApi
           .play({
-            uris: episodesUris,
+            uris: urisToUse,
             offset: { position: currentTrackIndex },
           })
           .then(() => {
@@ -95,41 +111,15 @@ function EpisodeCard({ track, order }) {
             setIsPlaying(true);
             setCurrentTrackId(track.id);
             setCurrentSongIndex(currentTrackIndex);
-            setActiveListInUse(episodesList); // set list to reference for player
+            setActiveListInUse(
+              whichList === 'show' ? showEpisodesList : episodesList
+            ); // set list to reference for player
             setActivePlaylist(null); //episode playing so user's playlist null
           })
           .catch((err) => console.error('Playback failed: ', err));
       }
     });
   };
-
-  // const handlePlayPause = (event, currentTrackIndex) => {
-  //   spotifyApi.getMyCurrentPlaybackState().then((data) => {
-  //     if (data.body?.is_playing && track.id == currentTrackId) {
-  //       spotifyApi
-  //         .pause()
-  //         .then(() => {
-  //           setIsPlaying(false);
-  //         })
-  //         .catch((err) => console.error('Pause failed: '));
-  //     } else {
-  //       spotifyApi
-  //         .play({
-  //           uris: [track.uri],
-  //           // offset: { position: currentTrackIndex },
-  //         })
-  //         .then(() => {
-  //           console.log('Playback Success');
-  //           setPlayerInfoType('episode');
-  //           setIsPlaying(true);
-  //           setCurrentTrackId(track.id);
-  //           setCurrentSongIndex(currentTrackIndex);
-  //           setActivePlaylist(null); //episode playing so user's playlist null
-  //         })
-  //         .catch((err) => console.error('Playback failed: ', err));
-  //     }
-  //   });
-  // };
 
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
@@ -150,7 +140,7 @@ function EpisodeCard({ track, order }) {
 
   return (
     <Link href="#" onClick={handleClick}>
-      <div className="border-b-[0.25px] border-gray-800 max-w-3xl">
+      <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
