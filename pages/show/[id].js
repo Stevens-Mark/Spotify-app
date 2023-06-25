@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/router';
 import { useSession } from 'next-auth/react';
 import useScrollToTop from '@/hooks/useScrollToTop';
@@ -60,21 +60,23 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
-
-  console.log('showinfo ',showInfo)
+  // console.log('showinfo ', showInfo);
   const { data: session } = useSession();
   const router = useRouter();
+  const textRef = useRef(null);
   const { id } = router.query;
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
-  const [lastShowEpisodeId, setLastShowEpisodeId] = useRecoilState(showEpisodeIdState); // show episodes Id
+  const [lastShowEpisodeId, setLastShowEpisodeId] =
+    useRecoilState(showEpisodeIdState); // show episodes Id
 
   const setShowEpisodesUris = useSetRecoilState(showEpisodesUrisState); // episodes uris from a SHOW
   const setShowEpisodesList = useSetRecoilState(showEpisodesListState); // episodes list from a SHOW
   const [currentOffset, setCurrentOffset] = useState(0); // offset for data fetch
   const [randomColor, setRandomColor] = useState(null);
   const [backgroundColor, setBackgroundColor] = useState();
-  const [isToggleOn, setIsToggleOn] = useState(false); // show expand/collapse text
+  const [expandABoutText, setExpandABoutText] = useState(false); // show expand/collapse About text
+  const [expandABoutButton, setExpandABoutButton] = useState(false); // show/hide see more/less button
 
   useEffect(() => {
     // avoid epsisode list being reset on page reload
@@ -102,7 +104,14 @@ const ShowPage = ({ showInfo }) => {
       setShowEpisodesUris(showInfo.episodes.items.map((track) => track.uri)); // set uris to be used in player
     }
     setLastShowEpisodeId(id);
-  }, [id, lastShowEpisodeId, setLastShowEpisodeId, setShowEpisodesList, setShowEpisodesUris, showInfo.episodes.items]);
+  }, [
+    id,
+    lastShowEpisodeId,
+    setLastShowEpisodeId,
+    setShowEpisodesList,
+    setShowEpisodesUris,
+    showInfo.episodes.items,
+  ]);
 
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
@@ -117,9 +126,21 @@ const ShowPage = ({ showInfo }) => {
     }
   }, [showInfo?.images]);
 
-  // show expand/collapse text
-  const toggleShow = () => {
-    setIsToggleOn((prevState) => !prevState);
+  // calculate if About text is more than 4 lines high ?
+  // if not, hide see more button as not needed 
+  useEffect(() => {
+    const textElement = textRef.current;
+    if (textElement) {
+      const lineCount =
+        textElement.clientHeight /
+        parseInt(getComputedStyle(textElement).lineHeight);
+      setExpandABoutButton(lineCount < 4 ? false : true);
+    }
+  }, []);
+
+  // show expand/collapse About text
+  const expandABoutTextToggle = () => {
+    setExpandABoutText((prevState) => !prevState);
   };
 
   /**
@@ -213,18 +234,21 @@ const ShowPage = ({ showInfo }) => {
                 About
               </h2>
               <p
+                ref={textRef}
                 className={`text-pink-swan  ${
-                  !isToggleOn ? 'line-clamp-4' : ''
+                  !expandABoutText ? 'line-clamp-4' : ''
                 }`}
               >
                 {showInfo?.description}
               </p>
-              <button
-                className="mt-3 text-sm md:text-lg text-white hover:text-green-500"
-                onClick={toggleShow}
-              >
-                {!isToggleOn ? '... See more' : 'See less'}
-              </button>
+              {expandABoutButton && (
+                <button
+                  className="mt-3 text-sm md:text-lg text-white hover:text-green-500"
+                  onClick={expandABoutTextToggle}
+                >
+                  {!expandABoutText ? '... See more' : 'See less'}
+                </button>
+              )}
             </div>
           </div>
           {showButton && (

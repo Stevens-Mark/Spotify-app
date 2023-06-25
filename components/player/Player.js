@@ -47,6 +47,40 @@ function Player() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
 
+  // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
+  // const debounceAdjustVolume = useMemo(
+  //   () =>
+  //     debounce((volume) => {
+  //       spotifyApi.setVolume(volume).catch((err) => {}); // for now throw error but could check for active device;
+  //     }, 500),
+  //   [spotifyApi]
+  // );
+
+  const debounceAdjustVolume = useMemo(
+    () =>
+      debounce((volume) => {
+        if (spotifyApi.getAccessToken()) {
+          spotifyApi
+            .getMyDevices()
+            .then((data) => {
+              const activeDevice = data.body.devices.find(
+                (device) => device.is_active
+              );
+              console.log(activeDevice ? 'Device Found' : 'NO Device Found - Connect to Spotify');
+              if (activeDevice) {
+                spotifyApi.setVolume(volume).catch((err) => {
+                  console.error(err);
+                });
+              }
+            })
+            .catch((err) => {
+              console.error('Something went wrong!', err);
+            });
+        }
+      }, 500),
+    [spotifyApi]
+  );
+
   useEffect(() => {
     if (volume > 0 && volume < 100) {
       debounceAdjustVolume(volume);
@@ -220,15 +254,6 @@ function Player() {
       .setRepeat(`${value}`, {})
       .catch((err) => console.error('Repeat failed:'));
   };
-
-  // Debouncing is a programming pattern/ technique to restrict the calling of a time-consuming function frequently, by delaying the execution of the function until a specified time to avoid unnecessary API calls and improve performance.
-  const debounceAdjustVolume = useMemo(
-    () =>
-      debounce((volume) => {
-        spotifyApi.setVolume(volume).catch((err) => {}); // for now throw error but could check for active device;
-      }, 500),
-    [spotifyApi]
-  );
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
