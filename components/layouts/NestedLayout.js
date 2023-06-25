@@ -94,7 +94,8 @@ const NestedLayout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Search</title>
+        <title>Spotify - Search</title>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
 
       <div className="flex flex-col w-full relative">

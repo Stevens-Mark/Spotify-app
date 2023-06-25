@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <>
       <Head>
-        <title>Spotify</title>
+        <title>Spotify - Web Player</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 

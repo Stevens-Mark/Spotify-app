@@ -104,6 +104,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
     <>
       <Head>
         <title>Artists</title>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div

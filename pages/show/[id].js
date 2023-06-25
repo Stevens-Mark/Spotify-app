@@ -184,7 +184,8 @@ const ShowPage = ({ showInfo }) => {
   return (
     <>
       <Head>
-        <title>Shows</title>
+        <title>Spotify - Shows</title>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"

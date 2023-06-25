@@ -80,7 +80,8 @@ const AlbumPage = ({ album }) => {
   return (
     <>
       <Head>
-        <title>Albums</title>
+        <title>Spotify - Albums</title>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div

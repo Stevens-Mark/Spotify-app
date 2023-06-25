@@ -41,7 +41,7 @@ export async function getServerSideProps(context) {
 
   return {
     props: {
-       playlist,
+      playlist,
     },
   };
 }
@@ -53,7 +53,6 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const PlaylistPage = ({ playlist }) => {
-
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
   const [randomColor, setRandomColor] = useState(null);
@@ -81,7 +80,8 @@ const PlaylistPage = ({ playlist }) => {
   return (
     <>
       <Head>
-        <title>Playlists</title>
+        <title>Spotify - Playlists</title>
+        <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
         <div
