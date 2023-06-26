@@ -7,7 +7,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
 import UserTracks from './trackListUser/userTracks';
-import MediaHeading from './MediaHero';
+import MediaHeading from './headerLabels/MediaHero';
 
 // random color options for top background
 const colors = [

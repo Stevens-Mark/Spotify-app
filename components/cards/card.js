@@ -32,8 +32,7 @@ function Card({ item, order }) {
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);

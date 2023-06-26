@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
 // import components
 import Layout from '@/components/layouts/Layout';
-import MediaHeading from '@/components/MediaHero';
+import MediaHeading from '@/components/headerLabels/MediaHero';
 import ArtistTracks from '@/components/trackListArtist/artistTracks';
 
 export async function getServerSideProps(context) {

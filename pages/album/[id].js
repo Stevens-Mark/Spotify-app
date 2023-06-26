@@ -6,7 +6,7 @@ import { useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 // import components
 import Layout from '@/components/layouts/Layout';
-import MediaHeading from '@/components/MediaHero';
+import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
 
 export async function getServerSideProps(context) {

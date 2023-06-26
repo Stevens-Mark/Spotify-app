@@ -16,7 +16,7 @@ import {
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 // import components
 import Layout from '@/components/layouts/Layout';
-import MediaHeading from '@/components/MediaHero';
+import MediaHeading from '@/components/headerLabels/MediaHero';
 import ShowTracks from '@/components/trackListShow/showTracks';
 
 export async function getServerSideProps(context) {
