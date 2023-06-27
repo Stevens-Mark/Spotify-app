@@ -96,7 +96,7 @@ function TopResultCard({ item }) {
       setIsPlaying(true);
       setCurrentSongIndex(0); // top result is always the first item in array hence value zero
       setActivePlaylist(item.id);
-      setActivePlaylist(null);
+      // setActivePlaylist(null);
     };
 
     // check if current playing track matches the one chosen by the user

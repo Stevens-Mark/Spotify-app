@@ -4,7 +4,6 @@ import { useRecoilValue } from 'recoil';
 import { myPlaylistState } from '@/atoms/playListAtom';
 // import component/icons
 import TitleAlbumDateTimeLabel from '../headerLabels/titleAlbumDateTime';
-import UserTrack from '../trackListUser/userTrack';
 import PlaylistTrack from './playlistTrack';
 
 /**
@@ -23,7 +22,7 @@ function UserTracks() {
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
         {/* user's playlist tracks here */}
         {myPlaylist?.tracks.items.map((track, i) => (
-          <UserTrack
+          <PlaylistTrack
             key={`${track.track.id}-${i}`}
             track={track}
             order={i}

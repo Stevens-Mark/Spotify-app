@@ -14,7 +14,7 @@ import EpisodeCard from '@/components/cards/episodeCard';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
- * Renders the list of Podcasts & Episodes from search.
+ * Renders the list of Shows/Podcasts & Episodes from search.
  * @function PodcastAndEpisodes
  * @returns {JSX}
  */

@@ -6,7 +6,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
-import UserTracks from './trackListUser/userTracks';
+import UserTracks from './trackListPlaylist/userTracks';
 import MediaHeading from './headerLabels/MediaHero';
 
 // random color options for top background
