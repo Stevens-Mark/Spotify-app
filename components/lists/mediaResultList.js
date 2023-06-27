@@ -38,7 +38,7 @@ function MediaResultList(props) {
         <>
           {/* list here */}
           <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-            {capitalize(mediaList?.[0].type)}s
+            {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
           </h1>
 
           {mediaList?.[0].type === 'episode' ? (
