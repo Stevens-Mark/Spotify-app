@@ -48,7 +48,7 @@ function PodcastAndEpisodes() {
   }, [query, router]);
 
   const handlePodcasts = () => {
-    router.push('/search/podcasts');
+    router.push('/search/shows');
   };
 
   const handleEpisodes = () => {
@@ -64,7 +64,7 @@ function PodcastAndEpisodes() {
       {totalShows === 0 ? (
         <section>
           <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
-            Podcasts & Shows
+            No Podcasts & Shows
           </h2>
           <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
             <h3 className="text-white">Sorry no Shows/Podcasts</h3>
