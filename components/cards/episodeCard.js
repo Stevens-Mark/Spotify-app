@@ -53,11 +53,8 @@ function EpisodeCard({ track, order, whichList }) {
     currentSongIndexState
   );
 
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
-
-  const [activeListInUse, setActiveListInUse] =
-    useRecoilState(activeListInUseState);
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
+  const setActiveListInUse = useSetRecoilState(activeListInUseState);
 
   useEffect(() => {
     const listToUse = whichList === 'show' ? showEpisodesList : episodesList;
@@ -84,11 +81,11 @@ function EpisodeCard({ track, order, whichList }) {
 
   /**
    * Either play or pause current episode track
-   * @function HandlePlayPause
+   * @function HandleEpisodePlayPause
    * @param {event object} event
    * @param {number} currentTrackIndex (offset) in  episode list
    */
-  const handlePlayPause = (event, currentTrackIndex) => {
+  const HandleEpisodePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track.id == currentTrackId) {
         spotifyApi
@@ -167,7 +164,7 @@ function EpisodeCard({ track, order, whichList }) {
           <button
             className="col-start-1 md:col-start-2 col-span-1"
             onClick={(event) => {
-              handlePlayPause(event, order);
+              HandleEpisodePlayPause(event, order);
             }}
           >
             {activeStatus && order == currentSongIndex ? (

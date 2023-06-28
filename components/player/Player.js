@@ -10,7 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { showEpisodesListState, activeListInUseState } from '@/atoms/showAtom';
+import { activeListInUseState } from '@/atoms/showAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details

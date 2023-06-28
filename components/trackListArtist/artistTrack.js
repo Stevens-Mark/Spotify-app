@@ -40,8 +40,7 @@ function ArtistTrack({ track, order }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {

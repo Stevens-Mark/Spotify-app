@@ -2,7 +2,7 @@ import React from 'react';
 import { ClockIcon } from '@heroicons/react/24/outline';
 
 /**
- * Renders the relevant Heaadings
+ * Renders the relevant Headings
  * @function TitleAlbumDate
  * @returns {JSX} Headings
  */

@@ -3,11 +3,7 @@ import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
-import {
-  currentTrackIdState,
-  currentSongIndexState,
-  isPlayState,
-} from '@/atoms/songAtom';
+import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';
 import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
@@ -20,18 +16,16 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 /**
  * Renders the 4 songs next to top result
  * @function TopSongCard
- * @param {number} order track index NOT IN USE CURRENTLY AS MAY NOT BE NEEDED
  * @param {object} song information
  * @returns {JSX}
  */
-const TopSongCard = ({ order, song }) => {
+const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
 
@@ -60,8 +54,6 @@ const TopSongCard = ({ order, song }) => {
           .pause()
           .then(() => {
             setIsPlaying(false);
-            // setCurrentSongIndex(null);
-            // setCurrentAlbumId(null);
           })
           .catch((err) => console.error('Pause failed: ', err));
       } else {
@@ -75,7 +67,6 @@ const TopSongCard = ({ order, song }) => {
             setIsPlaying(true);
             setCurrentTrackId(song.id); // will trigger playerInfo to update
             setCurrentAlbumId(song.album.id);
-            // setCurrentSongIndex(order);
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));
@@ -83,22 +74,6 @@ const TopSongCard = ({ order, song }) => {
     });
   };
 
-  // used to set play/pause icons
-  // const activeSongStatus = useMemo(() => {
-  //   return (song.id === currentItemId && isPlaying) ||
-  //     (currentAlbumId === song.album.id &&
-  //       currentTrackId === song.id &&
-  //       isPlaying)
-  //     ? true
-  //     : false;
-  // }, [
-  //   song.id,
-  //   song.album.id,
-  //   currentItemId,
-  //   isPlaying,
-  //   currentAlbumId,
-  //   currentTrackId,
-  // ]);
   const [activeSongStatus, setActiveSongStatus] = useState(false);
 
   useEffect(() => {
