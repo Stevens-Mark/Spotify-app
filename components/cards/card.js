@@ -23,10 +23,9 @@ import noImage from '@/public/images/noImageAvailable.svg';
  * Render a card for either album, playlist, show, artist, or recentsearch
  * @function Card
  * @param {object} item (album, playlist, show, artist, or recentsearch info)
- * @param {number} order index in the list (ONLY BEING PASSED IN ALL.js - this param may NOT be needed)
  * @returns {JSX}
  */
-function Card({ item, order }) {
+function Card({ item }) {
   const spotifyApi = useSpotify();
 
   // used to determine what type of info to load
@@ -97,8 +96,8 @@ function Card({ item, order }) {
       console.log('Playback Success');
       setPlayerInfoType('track');
       setIsPlaying(true);
+      setCurrentSongIndex(0);
       setActivePlaylist(item.id);
-      // setCurrentSongIndex(order); //ONLY BEING PASSED IN ALL.js - this may NOT be needed)
       // setActivePlaylist(null);
     };
 

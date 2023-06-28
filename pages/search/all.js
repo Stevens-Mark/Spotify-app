@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
-import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
+import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
 import { useRecoilValue } from 'recoil';
 import {
@@ -55,8 +55,6 @@ function All() {
       router.push('/search');
     }
   }, [query, router]);
-
- 
 
   return (
     <div
@@ -130,7 +128,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {artists?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i} />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
         </section>
@@ -154,7 +152,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {albums?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i} />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
         </section>
@@ -178,7 +176,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {playlists?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i} />
+              <Card key={`${item.id}-${i}`} item={item}  />
             ))}
           </div>
         </section>
@@ -202,7 +200,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {shows?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i} />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
         </section>
@@ -226,7 +224,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {episodes?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} order={i} />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
         </section>
