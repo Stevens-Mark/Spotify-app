@@ -1,5 +1,8 @@
 import { useMediaQuery } from 'react-responsive';
 
+/**
+ * changes the amount of cards that render in a line (grid) depending on screen size
+ */
 const useNumOfItems = () => {
   const isX2LGlitch = useMediaQuery({
     minWidth: '1536px',

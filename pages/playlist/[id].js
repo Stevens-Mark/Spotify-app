@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect } from 'react';
 // import state management recoil
-import { useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
 // import components
 import Layout from '@/components/layouts/Layout';
@@ -45,7 +45,9 @@ export async function getServerSideProps(context) {
  */
 const PlaylistPage = ({ playlist }) => {
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
-  const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
+  const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
+    playlistTrackListState
+  );
 
   useEffect(() => {
     setCurrentPlaylistId(playlist?.id);
@@ -64,7 +66,8 @@ const PlaylistPage = ({ playlist }) => {
 
         <section className="pb-20">
           <h2 className="sr-only">Track List</h2>
-          <PlaylistTracks />
+
+          <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
         </section>
       </div>
     </>

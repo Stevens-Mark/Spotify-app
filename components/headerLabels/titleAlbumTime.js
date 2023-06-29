@@ -3,10 +3,10 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 
 /**
  * Renders the relevant Headings
- * @function TitleAlbumDateTime
+ * @function TitleAlbumDate
  * @returns {JSX} Headings
  */
-const TitleAlbumDateTime = () => {
+const TitleAlbumDate = () => {
   return (
     <>
       <span className="flex px-5">
@@ -15,7 +15,6 @@ const TitleAlbumDateTime = () => {
       </span>
       <span className="flex justify-end mdlg:justify-between ml-auto md:ml-0 pr-5">
         <span className="w-40 hidden mdlg:inline pr-1">Album</span>
-        <span className="w-48 hidden mdlg:inline pr-1">Date Added</span>
         <span className="flex items-center">
           <ClockIcon className="h-5 w-5 pr-1" />
           <span>Time</span>
@@ -25,4 +24,4 @@ const TitleAlbumDateTime = () => {
   );
 };
 
-export default TitleAlbumDateTime;
+export default TitleAlbumDate;

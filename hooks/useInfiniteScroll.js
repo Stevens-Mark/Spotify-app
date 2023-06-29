@@ -1,5 +1,10 @@
 import { useEffect, useRef } from 'react';
 
+/**
+ * infinite scrolling functionality
+ * @param {function} fetchMoreData to laod more items on a page
+ * @returns 
+ */
 const useInfiniteScroll = (fetchMoreData) => {
   const containerRef = useRef(null);
 

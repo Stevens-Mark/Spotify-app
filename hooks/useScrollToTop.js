@@ -1,5 +1,8 @@
 import { useEffect, useState, useRef } from 'react';
 
+/**
+ * Scroll to top button functionality
+ */
 const useScrollToTop = () => {
   const scrollableSectionRef = useRef(null);
   const [scrollPosition, setScrollPosition] = useState(0);

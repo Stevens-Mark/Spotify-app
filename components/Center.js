@@ -6,8 +6,8 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
-import UserTracks from './trackListPlaylist/userTracks';
 import MediaHeading from './headerLabels/MediaHero';
+import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 
 // random color options for top background
 const colors = [
@@ -115,7 +115,7 @@ function Center() {
 
       <section className="pb-20">
         <h2 className="sr-only">Track List</h2>
-        <UserTracks />
+        <PlaylistTracks Tracklist={myPlaylist} whichList="myPlaylist" />
       </section>
     </div>
   );
