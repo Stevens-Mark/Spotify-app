@@ -41,14 +41,14 @@ function Card({ item }) {
     useRecoilState(currentAlbumIdState);
 
   const linkAddress =
-    item.type === 'album'
-      ? `/album/${item.id}`
-      : item.type === 'playlist'
-      ? `/playlist/${item.id}`
-      : item.type === 'artist'
-      ? `/artist/${item.id}`
-      : item.type === 'show'
-      ? `/show/${item.id}`
+    item?.type === 'album'
+      ? `/album/${item?.id}`
+      : item?.type === 'playlist'
+      ? `/playlist/${item?.id}`
+      : item?.type === 'artist'
+      ? `/artist/${item?.id}`
+      : item?.type === 'show'
+      ? `/show/${item?.id}`
       : '';
 
   /**
@@ -79,11 +79,11 @@ function Card({ item }) {
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus =
-      (currentItemId === item.id && isPlaying) ||
-      (currentAlbumId === item.id && isPlaying);
+      (currentItemId === item?.id && isPlaying) ||
+      (currentAlbumId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item.id]);
+  }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 
   return (
     <Link

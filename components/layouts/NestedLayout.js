@@ -66,7 +66,7 @@ const NestedLayout = ({ children }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const itemsPerPage = 30;
-    if (query.length > 0) {
+    if (query?.length > 0) {
       setSubmitted(true);
       try {
         setIsError(false);

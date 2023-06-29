@@ -18,7 +18,7 @@ function ShowTracks() {
       <div className="flex flex-col">
         {showEpisodesList?.map((track, i) => (
           <EpisodeCard
-            key={`${track.id}-${i}`}
+            key={`${track?.id}-${i}`}
             whichList={'show'}
             track={track}
             order={i}

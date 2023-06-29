@@ -22,7 +22,7 @@ function AlbumTracks() {
       <hr className="border-t-1 text-gray-400 mx-4 xs:mx-12" />
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
         {/* album track list here */}
-        {albumTracklist?.tracks.items.map((track, i) => (
+        {albumTracklist?.tracks?.items?.map((track, i) => (
           <AlbumTrack key={`${track.id}-${i}`} track={track} order={i} />
         ))}
       </div>

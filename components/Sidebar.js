@@ -193,18 +193,18 @@ function Sidebar() {
         <hr className="border-t-[0.1px] border-gray-900" />
 
         {/* Playlists.. */}
-        {myPlaylists.map((playlist) => (
-          <li key={playlist.id}>
+        {myPlaylists?.map((playlist) => (
+          <li key={playlist?.id}>
             <button
-              onClick={() => handleClick(playlist.id)}
+              onClick={() => handleClick(playlist?.id)}
               className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
               ${
-                activePlaylist == playlist.id && isPlaying
+                activePlaylist == playlist?.id && isPlaying
                   ? 'text-green-500'
                   : 'hover:text-white'
               } 
               ${
-                myPlaylistId == playlist.id
+                myPlaylistId == playlist?.id
                   ? ` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }
@@ -212,14 +212,14 @@ function Sidebar() {
             >
               <Image
                 className="h-8 w-8 mr-1 rounded-sm"
-                src={playlist.images[0].url}
+                src={playlist?.images?.[0].url}
                 alt=""
                 width={100}
                 height={100}
               />
-              <p className="line-clamp-1">{playlist.name}</p>
+              <p className="line-clamp-1">{playlist?.name}</p>
               <span className="pl-2">
-                {activePlaylist == playlist.id && isPlaying ? (
+                {activePlaylist == playlist?.id && isPlaying ? (
                   <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
                 ) : (
                   ' '

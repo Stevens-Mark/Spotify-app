@@ -42,12 +42,12 @@ const TopSongCard = ({ song }) => {
    * @param {event object} event NO IN USE CURRENTLY
    */
   const handlePlayPause = (event) => {
-    setCurrentItemId(song.id);
+    setCurrentItemId(song?.id);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
-        (currentItemId === song.id && data.body?.is_playing) ||
-        (currentAlbumId === song.album.id &&
-          currentTrackId === song.id &&
+        (currentItemId === song?.id && data.body?.is_playing) ||
+        (currentAlbumId === song?.album.id &&
+          currentTrackId === song?.id &&
           isPlaying)
       ) {
         spotifyApi
@@ -59,14 +59,14 @@ const TopSongCard = ({ song }) => {
       } else {
         spotifyApi
           .play({
-            uris: [`spotify:track:${song.id}`],
+            uris: [`spotify:track:${song?.id}`],
           })
           .then(() => {
             console.log('Playback Success');
             setPlayerInfoType('track');
             setIsPlaying(true);
-            setCurrentTrackId(song.id); // will trigger playerInfo to update
-            setCurrentAlbumId(song.album.id);
+            setCurrentTrackId(song?.id); // will trigger playerInfo to update
+            setCurrentAlbumId(song?.album?.id);
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));
@@ -78,14 +78,14 @@ const TopSongCard = ({ song }) => {
 
   useEffect(() => {
     const newActiveSongStatus =
-      (song.id === currentItemId && isPlaying) ||
-      (currentAlbumId === song.album.id &&
-        currentTrackId === song.id &&
+      (song?.id === currentItemId && isPlaying) ||
+      (currentAlbumId === song?.album.id &&
+        currentTrackId === song?.id &&
         isPlaying);
     setActiveSongStatus(newActiveSongStatus);
   }, [
-    song.id,
-    song.album.id,
+    song?.id,
+    song?.album?.id,
     currentItemId,
     isPlaying,
     currentAlbumId,
@@ -104,7 +104,7 @@ const TopSongCard = ({ song }) => {
       <div className="flex relative">
         <Image
           className="h-10 w-10 mr-2 rounded-sm"
-          src={song.album?.images?.[0]?.url || noImage}
+          src={song?.album?.images?.[0]?.url || noImage}
           alt=""
           width={100}
           height={100}
@@ -135,15 +135,15 @@ const TopSongCard = ({ song }) => {
               activeSongStatus ? 'text-green-500' : 'text-white'
             }`}
           >
-            {song.name}
+            {song?.name}
           </h3>
           <p className="w-36 xxs:w-60 md:w-80 pr-2 truncate">
-            {song.artists[0].name}
+            {song?.artists?.[0].name}
           </p>
         </div>
       </div>
       <span className="self-end xs:self-center">
-        {millisToMinutesAndSeconds(song.duration_ms)}
+        {millisToMinutesAndSeconds(song?.duration_ms)}
       </span>
     </div>
   );

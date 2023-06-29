@@ -17,7 +17,7 @@ const PreviousSearches = () => {
   const [recent, setRecent] = useState('');
 
   useEffect(() => {
-    if (queryResults.albums?.items.length > 0) {
+    if (queryResults.albums?.items?.length > 0) {
       const firstAlbum = queryResults.albums.items[0]; // Get the first album from queryResults
 
       // Retrieve previous searches from local storage
@@ -66,7 +66,7 @@ const PreviousSearches = () => {
 
   return (
     <>
-      {recent.length !== 0 && (
+      {recent?.length !== 0 && (
         <div className="bg-black pb-4">
           <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
             Recent searches
@@ -76,11 +76,11 @@ const PreviousSearches = () => {
             {recent?.slice(0, numOfItems).map((item, i) => (
               <div
                 className="relative rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8"
-                key={`${item.id}-${i}`}
+                key={`${item?.id}-${i}`}
               >
                 <button
                   className="text.white absolute top-1 z-10 right-1"
-                  onClick={(e) => removeFromLocalStorage(e, item.id)}
+                  onClick={(e) => removeFromLocalStorage(e, item?.id)}
                 >
                   <XMarkIcon className="relative z-100 p-[3px] w-7 h-7 rounded-full  bg-gray-800" />
                 </button>

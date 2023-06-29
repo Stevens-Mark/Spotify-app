@@ -96,8 +96,8 @@ const MediaHeading = ({ item, itemTracks }) => {
                   {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
                 </span>
                 <span className="text-sm">
-                  {item?.tracks.items.length}{' '}
-                  {item?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
+                  {item?.tracks?.items?.length}{' '}
+                  {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
                 <span className="text-sm truncate text-pink-swan">
                   {msToTime(totalDuration(item))}
@@ -111,8 +111,8 @@ const MediaHeading = ({ item, itemTracks }) => {
                 <span>{item?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
                 <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
                 <span className="text-sm">
-                  {item?.tracks.items.length}{' '}
-                  {item?.tracks.items.length > 1 ? 'songs' : 'song'},{' '}
+                  {item?.tracks?.items?.length}{' '}
+                  {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
                 <span className="text-sm truncate text-pink-swan">
                   {msToTime(totalAlbumDuration(item))}

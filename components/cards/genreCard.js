@@ -45,7 +45,7 @@ function GenreCard({ item, idx }) {
     <Link
       href=""
       className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
-        bgColors[idx % bgColors.length]
+        bgColors[idx % bgColors?.length]
       }`}
     >
       <h3 className="relative z-10 capitalize px-3 py-4 text-xl md:text-2xl2xl:text-3xl">
@@ -53,7 +53,7 @@ function GenreCard({ item, idx }) {
       </h3>
       <Image
         className="absolute bottom-3 right-0 origin-bottom-left rotate-[30deg] w-3/4 h-3/4"
-        src={item.icons[0].url}
+        src={item?.icons?.[0].url}
         alt=""
         width={100}
         height={100}

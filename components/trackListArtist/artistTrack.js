@@ -88,9 +88,9 @@ function ArtistTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song.id, currentTrackId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying]);
 
   return (
     <div
@@ -132,14 +132,14 @@ function ArtistTrack({ track, order }) {
                 : 'text-white'
             } truncate`}
           >
-            {song.name}
+            {song?.name}
           </h3>
-          <span className="w-40">{song.artists[0].name}</span>
+          <span className="w-40">{song?.artists?.[0].name}</span>
         </div>
       </div>
       <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
         <span className="pl-5">
-          {millisToMinutesAndSeconds(song.duration_ms)}
+          {millisToMinutesAndSeconds(song?.duration_ms)}
         </span>
       </div>
     </div>

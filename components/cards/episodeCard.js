@@ -87,7 +87,7 @@ function EpisodeCard({ track, order, whichList }) {
    */
   const HandleEpisodePlayPause = (event, currentTrackIndex) => {
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && track.id == currentTrackId) {
+      if (data.body?.is_playing && track?.id == currentTrackId) {
         spotifyApi
           .pause()
           .then(() => {
@@ -106,7 +106,7 @@ function EpisodeCard({ track, order, whichList }) {
             console.log('Playback Success');
             setPlayerInfoType('episode');
             setIsPlaying(true);
-            setCurrentTrackId(track.id);
+            setCurrentTrackId(track?.id);
             setCurrentSongIndex(currentTrackIndex);
             setActiveListInUse(
               whichList === 'show' ? showEpisodesList : episodesList
@@ -121,9 +121,9 @@ function EpisodeCard({ track, order, whichList }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = track.id === currentTrackId && isPlaying;
+    const newActiveStatus = track?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [track.id, currentTrackId, isPlaying]);
+  }, [track?.id, currentTrackId, isPlaying]);
 
   const handleClick = (event) => {
     event.preventDefault();
@@ -141,7 +141,7 @@ function EpisodeCard({ track, order, whichList }) {
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
-            src={track.images?.[0]?.url || noImage}
+            src={track?.images?.[0]?.url || noImage}
             alt=""
             width={100}
             height={100}

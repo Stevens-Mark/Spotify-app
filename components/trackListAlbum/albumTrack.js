@@ -51,7 +51,7 @@ function AlbumTrack({ track, order }) {
         currentTrackId !== null &&
         albumTracklist !== null
       ) {
-        const indexPosition = albumTracklist?.tracks?.items.findIndex(
+        const indexPosition = albumTracklist?.tracks?.items?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
@@ -87,9 +87,9 @@ function AlbumTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song.id, currentTrackId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying]);
 
   return (
     <div
@@ -125,13 +125,13 @@ function AlbumTrack({ track, order }) {
                 : 'text-white'
             } truncate`}
           >
-            {song.name}
+            {song?.name}
           </h3>
-          <p className="w-40">{song.artists[0].name}</p>
+          <p className="w-40">{song?.artists?.[0].name}</p>
         </div>
       </div>
       <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
-        <p className="pl-5">{millisToMinutesAndSeconds(song.duration_ms)}</p>
+        <p className="pl-5">{millisToMinutesAndSeconds(song?.duration_ms)}</p>
       </div>
     </div>
   );

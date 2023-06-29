@@ -199,7 +199,7 @@ function Player() {
       (episode) => episode.id === currentTrackId
     );
     const nextEpisodeId =
-      episodeIndex < activeListInUse.length - 1
+      episodeIndex < activeListInUse?.length - 1
         ? activeListInUse[episodeIndex + 1]?.id
         : null;
     return nextEpisodeId || currentTrackId;
