@@ -13,6 +13,8 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { playerInfoTypeState } from '@/atoms/idAtom';
+// import player play/pause function
+import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
@@ -59,37 +61,28 @@ function ArtistTrack({ track, order }) {
   }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
-   * Either play or pause current artist track
-   * @function HandlePlayPause
+   * Either play or pause current track
+   * @function  HandleTrackPlayPauseClick
    * @param {event object} event
    * @param {number} currentTrackIndex (offset) in artist track list
    */
-  const handlePlayPause = (event, currentTrackIndex) => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id == currentTrackId) {
-        spotifyApi
-          .pause()
-          .then(() => {
-            setIsPlaying(false);
-          })
-          .catch((err) => console.error('Pause failed: '));
-      } else {
-        spotifyApi
-          .play({
-            uris: artistTrackUris,
-            offset: { position: currentTrackIndex },
-          })
-          .then(() => {
-            console.log('Playback Success');
-            setPlayerInfoType('track');
-            setIsPlaying(true);
-            setCurrentTrackId(song.id);
-            setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(null); //artist playing so user's playlist null
-          })
-          .catch((err) => console.error('Playback failed: ', err));
-      }
-    });
+  const HandleTrackPlayPauseClick = (event, currentTrackIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const artistOptions = {
+      song,
+      artistTrackUris, // determines it's artist to play in  play/pause function
+      currentTrackIndex,
+      currentTrackId,
+      setIsPlaying,
+      setPlayerInfoType,
+      setCurrentTrackId,
+      setCurrentSongIndex,
+      setActivePlaylist,
+      spotifyApi,
+    };
+    HandleTrackPlayPause(artistOptions);
   };
 
   // used to set play/pause icons
@@ -109,7 +102,7 @@ function ArtistTrack({ track, order }) {
         <button
           className="w-2 md:w-4"
           onClick={(event) => {
-            handlePlayPause(event, order);
+            HandleTrackPlayPauseClick(event, order);
           }}
         >
           {!isShown ? (

@@ -19,6 +19,8 @@ import {
   playlistTrackListState,
   activePlaylistState,
 } from '@/atoms/playListAtom';
+// import player play/pause function
+import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '../graphics/Equaliser';
@@ -74,34 +76,30 @@ function PlaylistTrack({ track, order, whichList }) {
     whichList,
   ]);
 
-  /* either play or pause current track */
-  const handlePlayPause = (event, currentTrackIndex) => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id == currentTrackId) {
-        spotifyApi
-          .pause()
-          .then(() => {
-            setIsPlaying(false);
-          })
-          .catch((err) => console.error('Pause failed: '));
-      } else {
-        const IdToUse = whichList === 'myPlaylist' ? myPlaylistId : playlistId;
-        spotifyApi
-          .play({
-            context_uri: `spotify:playlist:${IdToUse}`,
-            offset: { position: currentTrackIndex },
-          })
-          .then(() => {
-            console.log('Playback Success');
-            setPlayerInfoType('track');
-            setIsPlaying(true);
-            setCurrentTrackId(song.id);
-            setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(IdToUse);
-          })
-          .catch((err) => console.error('Playback failed: ', err));
-      }
-    });
+  /**
+   * Either play or pause current track
+   * @function  HandleTrackPlayPauseClick
+   * @param {event object} event
+   * @param {number} currentTrackIndex (offset) in playlist track list
+   */
+  const HandleTrackPlayPauseClick = (event, currentTrackIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+    const IdToUse = whichList === 'myPlaylist' ? myPlaylistId : playlistId;
+
+    const playlistsOptions = {
+      song,
+      IdToUse,
+      currentTrackIndex,
+      currentTrackId,
+      setIsPlaying,
+      setPlayerInfoType,
+      setCurrentTrackId,
+      setCurrentSongIndex,
+      setActivePlaylist,
+      spotifyApi,
+    };
+    HandleTrackPlayPause(playlistsOptions);
   };
 
   // used to set play/pause icons
@@ -121,7 +119,7 @@ function PlaylistTrack({ track, order, whichList }) {
         <button
           className="w-2 md:w-4"
           onClick={(event) => {
-            handlePlayPause(event, order);
+            HandleTrackPlayPauseClick(event, order);
           }}
         >
           {!isShown ? (

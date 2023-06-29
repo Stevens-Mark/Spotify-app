@@ -12,6 +12,8 @@ import {
 } from '@/atoms/songAtom';
 import { playerInfoTypeState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
+// import player play/pause function
+import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
@@ -58,37 +60,28 @@ function AlbumTrack({ track, order }) {
   }, [albumTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
-   * Either play or pause current album track
-   * @function HandlePlayPause
+   * Either play or pause current track
+   * @function  HandleTrackPlayPauseClick
    * @param {event object} event
    * @param {number} currentTrackIndex (offset) in album track list
    */
-  const handlePlayPause = (event, currentTrackIndex) => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      if (data.body?.is_playing && song.id == currentTrackId) {
-        spotifyApi
-          .pause()
-          .then(() => {
-            setIsPlaying(false);
-          })
-          .catch((err) => console.error('Pause failed: '));
-      } else {
-        spotifyApi
-          .play({
-            context_uri: `spotify:album:${currentAlbumId}`,
-            offset: { position: currentTrackIndex },
-          })
-          .then(() => {
-            console.log('Playback Success');
-            setPlayerInfoType('track');
-            setIsPlaying(true);
-            setCurrentTrackId(song.id);
-            setCurrentSongIndex(currentTrackIndex);
-            setActivePlaylist(null); //album playing so user's playlist null
-          })
-          .catch((err) => console.error('Playback failed: ', err));
-      }
-    });
+  const HandleTrackPlayPauseClick = (event, currentTrackIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const albumOptions = {
+      song,
+      currentAlbumId, // determines it's album to play in play/pause function
+      currentTrackIndex,
+      currentTrackId,
+      setIsPlaying,
+      setPlayerInfoType,
+      setCurrentTrackId,
+      setCurrentSongIndex,
+      setActivePlaylist,
+      spotifyApi,
+    };
+    HandleTrackPlayPause(albumOptions);
   };
 
   // used to set play/pause icons
@@ -108,7 +101,7 @@ function AlbumTrack({ track, order }) {
         <button
           className="w-2 md:w-4"
           onClick={(event) => {
-            handlePlayPause(event, order);
+            HandleTrackPlayPauseClick(event, order);
           }}
         >
           {!isShown ? (
