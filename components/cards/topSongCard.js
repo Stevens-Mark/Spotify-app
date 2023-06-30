@@ -42,7 +42,7 @@ const TopSongCard = ({ song }) => {
    * @param {event object} event NO IN USE CURRENTLY
    */
   const handlePlayPause = (event) => {
-    setCurrentItemId(song?.id);
+    setCurrentItemId(song?.album?.id); // before song?.id
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (
         (currentItemId === song?.id && data.body?.is_playing) ||
