@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 /**
  * infinite scrolling functionality
  * @param {function} fetchMoreData to laod more items on a page
- * @returns 
+ * @returns
  */
 const useInfiniteScroll = (fetchMoreData) => {
   const containerRef = useRef(null);
@@ -13,7 +13,7 @@ const useInfiniteScroll = (fetchMoreData) => {
       const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
       // Check if the user has scrolled to the bottom
-      if (scrollTop + clientHeight >= scrollHeight) {
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
         // Fetch more data
         fetchMoreData();
       }

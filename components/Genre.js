@@ -1,12 +1,15 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import useScrollToTop from '@/hooks/useScrollToTop';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { genreState } from '@/atoms/genreAtom';
 // import component
 import RecentSearches from './Recent';
 import GenreCard from './cards/genreCard';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
  * Renders the list of genres & previous searches (if any).
@@ -15,10 +18,11 @@ import GenreCard from './cards/genreCard';
  */
 function Genre() {
   const spotifyApi = useSpotify();
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const [genres, setGenres] = useRecoilState(genreState);
   const [currentOffset, setCurrentOffset] = useState(0);
-  const [totalGenres, setTotalGenres] = useState(99999);
-  const itemsPerPage = 50;
+  // const [totalGenres, setTotalGenres] = useState(99999);
+  const itemsPerPage = 25;
 
   useEffect(() => {
     if (genres === null) {
@@ -32,7 +36,7 @@ function Genre() {
           })
           .then(
             function (data) {
-              setTotalGenres(data.body.categories.total);
+              // setTotalGenres(data.body.categories.total);
               setGenres(data.body.categories.items);
             },
             function (err) {
@@ -73,9 +77,16 @@ function Genre() {
         }
       );
   };
+  const containerRef = useInfiniteScroll(fetchGenre);
 
   return (
-    <div className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-56">
+    <div
+      className="overflow-y-scroll h-screen text-white scrollbar-hide px-8 pt-2 pb-56"
+      ref={(node) => {
+        containerRef.current = node;
+        scrollableSectionRef.current = node;
+      }}
+    >
       {/* Recent Searches list here */}
       <RecentSearches />
       <section>
@@ -88,7 +99,7 @@ function Genre() {
             <GenreCard key={`${item?.id}-${idx}`} item={item} idx={idx} />
           ))}
         </div>
-        {genres?.length < totalGenres && (
+        {/* {genres?.length < totalGenres && (
           <button
             className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
             onClick={() => {
@@ -96,6 +107,14 @@ function Genre() {
             }}
           >
             <span>Add More</span>
+          </button>
+        )} */}
+        {showButton && (
+          <button
+            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+            onClick={scrollToTop}
+          >
+            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
           </button>
         )}
       </section>
