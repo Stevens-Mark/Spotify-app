@@ -1,5 +1,6 @@
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
@@ -8,7 +9,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import player play/pause function
 import { HandleTrackPlayPause } from '@/lib/playbackUtils';
@@ -26,12 +27,16 @@ function AlbumTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
+  const router = useRouter();
+  const originId = (router?.asPath).split('/').pop();
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const currentAlbumId = useRecoilValue(albumIdState);
   const albumTracklist = useRecoilValue(albumTrackListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -67,14 +72,16 @@ function AlbumTrack({ track, order }) {
     event.stopPropagation();
 
     const albumOptions = {
+      originId,
       song,
       currentAlbumId, // determines it's album to play in play/pause function
+      setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
-      setIsPlaying,
-      setPlayerInfoType,
       setCurrentTrackId,
       setCurrentSongIndex,
+      setPlayerInfoType,
+      setIsPlaying,
       setActivePlaylist,
       spotifyApi,
     };

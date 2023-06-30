@@ -1,5 +1,6 @@
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -7,7 +8,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 import {
   myPlaylistIdState,
   myPlaylistState,
@@ -32,6 +33,9 @@ function PlaylistTrack({ track, order, whichList }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
+  const router = useRouter();
+  const originId = (router?.asPath).split('/').pop();
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const playlistId = useRecoilValue(playlistIdState);
@@ -40,6 +44,7 @@ function PlaylistTrack({ track, order, whichList }) {
   const myPlaylist = useRecoilValue(myPlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
@@ -83,14 +88,16 @@ function PlaylistTrack({ track, order, whichList }) {
     const IdToUse = whichList === 'myPlaylist' ? myPlaylistId : playlistId;
 
     const playlistsOptions = {
+      originId,
       song,
       IdToUse,
+      setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
-      setIsPlaying,
-      setPlayerInfoType,
       setCurrentTrackId,
       setCurrentSongIndex,
+      setPlayerInfoType,
+      setIsPlaying,
       setActivePlaylist,
       spotifyApi,
     };

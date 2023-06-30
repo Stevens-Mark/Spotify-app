@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
@@ -8,8 +9,8 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
 // import player play/pause function
 import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import component
@@ -26,12 +27,17 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
+  const router = useRouter();
+  const originId = (router?.asPath).split('/').pop();
+  console.log('id', originId);
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -67,14 +73,16 @@ function ArtistTrack({ track, order }) {
     event.stopPropagation();
 
     const artistOptions = {
+      originId,
       song,
       artistTrackUris, // determines it's artist to play in  play/pause function
+      setCurrentItemId,
       currentTrackIndex,
-      currentTrackId,
-      setIsPlaying,
-      setPlayerInfoType,
       setCurrentTrackId,
+      currentTrackId,
       setCurrentSongIndex,
+      setPlayerInfoType,
+      setIsPlaying,
       setActivePlaylist,
       spotifyApi,
     };
