@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -43,8 +43,7 @@ function Card({ item }) {
     useRecoilState(triggeredBySongState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const [currentAlbumId, setCurrentAlbumId] =
-    useRecoilState(currentAlbumIdState);
+  const currentAlbumId = useRecoilValue(currentAlbumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -68,8 +67,6 @@ function Card({ item }) {
     event.stopPropagation();
     HandleCardPlayPause(
       item,
-      setCurrentAlbumId,
-      currentAlbumId,
       setCurrentItemId,
       currentItemId,
       setIsPlaying,
@@ -89,7 +86,6 @@ function Card({ item }) {
     const newActiveStatus = currentItemId === item?.id && isPlaying;
     // ||
     // (currentAlbumId === item?.id && isPlaying);
-
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 

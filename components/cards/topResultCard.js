@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -32,18 +32,19 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function TopResultCard({ item }) {
   const spotifyApi = useSpotify();
 
+  console.log('topcard ', item);
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const [triggeredBySong, setTriggeredBySong] =
     useRecoilState(triggeredBySongState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const [currentAlbumId, setCurrentAlbumId] =
-    useRecoilState(currentAlbumIdState);
+  const currentAlbumId = useRecoilValue(currentAlbumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -65,8 +66,6 @@ function TopResultCard({ item }) {
     event.stopPropagation();
     HandleCardPlayPause(
       item,
-      setCurrentAlbumId,
-      currentAlbumId,
       setCurrentItemId,
       currentItemId,
       setIsPlaying,
@@ -83,12 +82,21 @@ function TopResultCard({ item }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = currentItemId === item?.id && isPlaying;
-    //  ||
-    // (currentAlbumId === item?.id && isPlaying);
+    const newActiveStatus =
+      (currentItemId === item?.id && isPlaying) ||
+      // (currentAlbumId === item?.id && isPlaying) ||
+      (currentItemId === item?.album?.id && isPlaying) ||
+      (currentAlbumId === item?.id && currentTrackId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
+  }, [
+    currentAlbumId,
+    currentItemId,
+    currentTrackId,
+    isPlaying,
+    item?.album?.id,
+    item?.id,
+  ]);
 
   return (
     <Link href={linkAddress} className="group">

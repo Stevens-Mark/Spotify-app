@@ -110,7 +110,7 @@ function Sidebar() {
     setSubmitted(false);
     setQuery('');
     setCurrentItemId(null); // reset these 2 states from search page that may have been set previously
-    setCurrentAlbumId(null); // otherwise playpause icon not deactivated for that search
+    setCurrentAlbumId(null); // otherwise playpause icon not deactivated for that search??
     router.push('/');
   };
 
