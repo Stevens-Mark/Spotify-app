@@ -13,3 +13,9 @@ export const playerInfoTypeState = atom({
   key: 'playerInfoTypeState',
   default: null,
 });
+
+// whether currentItemId triggered by a song
+export const triggeredBySongState = atom({
+  key: 'triggeredBySongState',
+  default: false,
+});

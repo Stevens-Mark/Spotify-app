@@ -8,7 +8,11 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
+import {
+  playerInfoTypeState,
+  currentItemIdState,
+  triggeredBySongState,
+} from '@/atoms/idAtom';
 import {
   myPlaylistIdState,
   myPlaylistState,
@@ -44,6 +48,8 @@ function PlaylistTrack({ track, order, whichList }) {
   const myPlaylist = useRecoilValue(myPlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  const [triggeredBySong, setTriggeredBySong] =
+    useRecoilState(triggeredBySongState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
@@ -99,6 +105,8 @@ function PlaylistTrack({ track, order, whichList }) {
       setPlayerInfoType,
       setIsPlaying,
       setActivePlaylist,
+      triggeredBySong,
+      setTriggeredBySong,
       spotifyApi,
     };
     HandleTrackPlayPause(playlistsOptions);

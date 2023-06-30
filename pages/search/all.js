@@ -3,12 +3,16 @@ import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, useRecoilState } from 'recoil';
 import {
   searchResultState,
   queryState,
   topResultState,
 } from '@/atoms/searchAtom';
+import {
+
+  triggeredBySongState,
+} from '@/atoms/idAtom';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -26,6 +30,10 @@ function All() {
   const router = useRouter();
   const numOfItems = useNumOfItems();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+
+  const [triggeredBySong, setTriggeredBySong] =
+  useRecoilState(triggeredBySongState);
+  console.log("triggeredBySong ", triggeredBySong)
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);

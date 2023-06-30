@@ -11,7 +11,11 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';
-import { currentItemIdState, playerInfoTypeState } from '@/atoms/idAtom';
+import {
+  currentItemIdState,
+  playerInfoTypeState,
+  triggeredBySongState,
+} from '@/atoms/idAtom';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
@@ -35,6 +39,8 @@ function Card({ item }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+  const [triggeredBySong, setTriggeredBySong] =
+    useRecoilState(triggeredBySongState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentAlbumId, setCurrentAlbumId] =
@@ -71,6 +77,8 @@ function Card({ item }) {
       setCurrentTrackId,
       setCurrentSongIndex,
       setActivePlaylist,
+      triggeredBySong,
+      setTriggeredBySong,
       spotifyApi
     );
   };
@@ -78,10 +86,9 @@ function Card({ item }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus =
-      (currentItemId === item?.id && isPlaying) 
-      // ||
-      // (currentAlbumId === item?.id && isPlaying);
+    const newActiveStatus = currentItemId === item?.id && isPlaying;
+    // ||
+    // (currentAlbumId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
