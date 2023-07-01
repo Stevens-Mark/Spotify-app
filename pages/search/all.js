@@ -33,7 +33,6 @@ function All() {
 
   const [triggeredBySong, setTriggeredBySong] =
   useRecoilState(triggeredBySongState);
-  console.log("triggeredBySong ", triggeredBySong)
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);

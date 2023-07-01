@@ -19,6 +19,7 @@ import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import SearchNav from '../SearchNav';
 import StatusSpinner from '../graphics/StatusSpinner';
 
+
 /**
  * Renders the search bar (for all search pages: genres, album, playlist, artists, shows & episodes)
  * as part of the nested layout.
@@ -101,7 +102,7 @@ const NestedLayout = ({ children }) => {
       <div className="flex flex-col w-full relative">
         <div className="sticky xs:h-28 h-36">
           <div className="flex items-center">
-            <form className="ml-8 mt-5" onSubmit={handleSubmit}>
+            <form className="ml-28 mt-5" onSubmit={handleSubmit}>
               <label
                 className="relative text-gray-500 hover:text-white"
                 htmlFor="search"

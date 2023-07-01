@@ -8,6 +8,7 @@ import noUserImage from '@/public/images/user_noImage.svg';
 // import component
 import Sidebar from '../Sidebar';
 import Player from '../player/Player';
+import NavigationButtons from '../navButtons';
 
 /**
  * Renders the user picture & sidebar (for all pages) as part of the general layout.
@@ -21,7 +22,8 @@ const Layout = ({ children }) => {
   const router = useRouter();
   const path = router?.asPath; // URL from router.
 
-  const excludedPath = [ // used to trigger the collapsing of the user info top right on mobile screens
+  const excludedPath = [
+    // used to trigger the collapsing of the user info top right on mobile screens
     '/search',
     '/search/all',
     '/search/albums',
@@ -34,7 +36,7 @@ const Layout = ({ children }) => {
   const isExcluded = excludedPath.includes(path);
 
   return (
-    <div className="bg-black  h-screen overflow-hidden">
+    <div className="bg-black h-screen overflow-hidden">
       <aside className="absolute top-5 right-8 z-10">
         <div
           className="flex items-center bg-gray-800 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 sm:pr-2 text-white"
@@ -58,7 +60,10 @@ const Layout = ({ children }) => {
       </aside>
       <main className="flex">
         <Sidebar />
-        {children}
+        <div className='relative w-full'>
+          <NavigationButtons />
+          {children}
+        </div>
       </main>
 
       <footer className="sticky bottom-0 z-20">
