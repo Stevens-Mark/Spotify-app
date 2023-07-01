@@ -57,7 +57,7 @@ const MediaHeading = ({ item, itemTracks }) => {
       }}
     >
       <Image
-        className="h-16 w-16 xs:h-44 xs:w-44 ml-0 xs:ml-7 shadow-image2"
+        className="h-16 w-16 xs:h-44 xs:w-44  shadow-image2"
         src={item?.images?.[0]?.url || noImage}
         alt=""
         width={100}

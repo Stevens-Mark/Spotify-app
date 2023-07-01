@@ -65,7 +65,7 @@ function All() {
 
   return (
     <div
-      className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-56"
       ref={scrollableSectionRef}
     >
       <h1 className="sr-only">All Search Results</h1>

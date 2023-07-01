@@ -22,13 +22,13 @@ function ArtistTracks() {
 
   return (
     <>
-      <h2 className="text-white px-5 pb-6 xs:px-14 text-xl md:text-2xl xl:text-3xl">
+      <span className="text-white px-5 pb-6 xs:px-8 text-xl md:text-2xl xl:text-3xl">
         Popular
-      </h2>
+      </span>
       <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8">
         <TitleAlbumTimeLabel />
       </div>
-      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-12" />
+      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
         {/* artist track list here */}
         {artistTracklist?.tracks?.slice(0, number).map((track, i) => (

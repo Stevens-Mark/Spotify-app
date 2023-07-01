@@ -102,7 +102,7 @@ const NestedLayout = ({ children }) => {
       <div className="flex flex-col w-full relative">
         <div className="sticky xs:h-28 h-36">
           <div className="flex items-center">
-            <form className="ml-28 mt-5" onSubmit={handleSubmit}>
+            <form className="ml-5 xs:ml-28 mt-5" onSubmit={handleSubmit}>
               <label
                 className="relative text-gray-500 hover:text-white"
                 htmlFor="search"

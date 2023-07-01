@@ -30,7 +30,7 @@ const Layout = ({ children }) => {
     '/search/artists',
     '/search/episodes',
     '/search/playlists',
-    '/search/podcasts',
+    '/search/shows',
     '/search/podcastAndEpisodes',
   ];
   const isExcluded = excludedPath.includes(path);
@@ -50,11 +50,11 @@ const Layout = ({ children }) => {
             height={100}
             priority
           />
-          <p className={`${isExcluded ? 'hidden sm:inline' : ''}`}>
+          <p className={`${isExcluded ? 'hidden  isMdLg:inline' : ''}`}>
             {session?.user.name}
           </p>
           <ChevronDownIcon
-            className={`h-5 w-5 ${isExcluded ? 'hidden sm:inline' : ''}`}
+            className={`h-5 w-5 ${isExcluded ? 'hidden  isMdLg:inline' : ''}`}
           />
         </div>
       </aside>

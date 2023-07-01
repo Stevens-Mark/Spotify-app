@@ -19,7 +19,7 @@ function AlbumTracks() {
       <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8">
         <TitleTimeLabel />
       </div>
-      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-12" />
+      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
         {/* album track list here */}
         {albumTracklist?.tracks?.items?.map((track, i) => (

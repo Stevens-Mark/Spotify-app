@@ -17,6 +17,7 @@ import Equaliser from '@/components/graphics/Equaliser';
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {number} currentSongIndex current playing position in the list
  * @param {object} song data
+ * @param {string} addedAt date track added to list (just for playlists)
  * @returns
  */
 function RenderTracks({
@@ -27,6 +28,7 @@ function RenderTracks({
   activeStatus,
   currentSongIndex,
   song,
+  addedAt,
 }) {
   return (
     <div
@@ -80,9 +82,9 @@ function RenderTracks({
           <span className="w-40 hidden mdlg:inline pr-3">
             {song?.album?.name}
           </span>
-          {song?.added_at && (
+          {addedAt && (
             <span className="w-48 hidden mdlg:inline">
-              {getMonthDayYear(song?.added_at)}
+              {getMonthDayYear(addedAt)}
             </span>
           )}
           <span className="pl-5">

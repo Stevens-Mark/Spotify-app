@@ -22,7 +22,7 @@ function MediaResultList(props) {
 
   return (
     <section
-      className="bg-black overflow-y-scroll h-screen scrollbar-hide px-8 pt-2 pb-56"
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-56"
       ref={(node) => {
         containerRef.current = node;
         scrollableSectionRef.current = node;

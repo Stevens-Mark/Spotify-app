@@ -128,6 +128,7 @@ function PlaylistTrack({ track, order, whichList }) {
       activeStatus={activeStatus}
       currentSongIndex={currentSongIndex}
       song={song}
+      addedAt={track?.added_at}
     />
   );
 }
