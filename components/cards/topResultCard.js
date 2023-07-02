@@ -15,7 +15,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';

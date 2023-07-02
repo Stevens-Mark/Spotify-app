@@ -13,7 +13,9 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+  backgroundColorState,
+  randomColorColorState,
+} from '@/atoms/otherAtoms';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import functions
 import { capitalize } from '@/lib/capitalize';
@@ -24,10 +26,15 @@ import {
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/solid';
 
+/**
+ * Renders quick play start button for media (& in sticky Banner)
+ * @funvtion QuickPlayBanner
+ * @param {object} item media information
+ * @param {object} scrollRef ref for container scroll
+ * @returns {JSX}
+ */
 function QuickPlayBanner({ item, scrollRef }) {
   const spotifyApi = useSpotify();
-
-  console.log('item', item);
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -39,6 +46,11 @@ function QuickPlayBanner({ item, scrollRef }) {
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const currentAlbumId = useRecoilValue(currentAlbumIdState);
+
+  // used for quick play banner
+  const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
+  const [backgroundColor, setBackgroundColor] =
+    useRecoilState(backgroundColorState);
   // show track info when play button at top of screen
   const [isTextVisible, setIsTextVisible] = useState(false);
 
@@ -59,6 +71,7 @@ function QuickPlayBanner({ item, scrollRef }) {
       spotifyApi
     );
   };
+
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
@@ -68,10 +81,11 @@ function QuickPlayBanner({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 
+  // used for sticky banner quick play button
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsTextVisible(scrollPosition > 250); // Change 0 to the desired threshold
+      setIsTextVisible(scrollPosition > 250); // Changed to the desired threshold
     };
 
     handleScroll(); // Run initially to set the text visibility
@@ -82,17 +96,28 @@ function QuickPlayBanner({ item, scrollRef }) {
   }, [scrollRef]);
 
   return (
-    <div className={`flex items-center py-4 sticky top-0 w-full bg-black`}>
+    <div
+      className={`flex items-center py-4 sticky top-0 w-full to-black ${
+        backgroundColor !== null ? '' : randomColor
+      }`}
+      style={
+        isTextVisible
+          ? {
+              background: `linear-gradient(to bottom, ${backgroundColor} 85%, #000000)`,
+            }
+          : {}
+      }
+    >
       <button
         className={` ${
           isTextVisible ? 'ml-5 isSm:ml-28' : 'ml-5 isSm:ml-8'
-        } bg-black rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+        } rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
         onClick={(event) => {
           HandleCardPlayPauseClick(event);
         }}
       >
         {activeStatus ? (
-          <PauseCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+          <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
         ) : (
           <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
         )}

@@ -1,4 +1,10 @@
 import React, { useState, useEffect } from 'react';
+// import state management recoil
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import {
+  backgroundColorState,
+  randomColorColorState,
+} from '@/atoms/otherAtoms';
 // import icon/images
 import Image from 'next/image';
 import noImage from '@/public/images/noImageAvailable.svg';
@@ -30,8 +36,9 @@ const colors = [
  * @returns {JSX}
  */
 const MediaHeading = ({ item, itemTracks }) => {
-  const [randomColor, setRandomColor] = useState(null);
-  const [backgroundColor, setBackgroundColor] = useState();
+  const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
+  const [backgroundColor, setBackgroundColor] =
+    useRecoilState(backgroundColorState);
 
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
@@ -45,7 +52,7 @@ const MediaHeading = ({ item, itemTracks }) => {
     } else {
       setBackgroundColor(null);
     }
-  }, [item?.images]);
+  }, [item?.images, setBackgroundColor, setRandomColor]);
 
   return (
     <div

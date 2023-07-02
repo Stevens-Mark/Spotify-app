@@ -10,7 +10,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playerInfoTypeState, currentItemIdState } from '@/atoms/idAtom';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import {
   showEpisodesUrisState,

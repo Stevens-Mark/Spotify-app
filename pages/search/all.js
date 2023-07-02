@@ -9,10 +9,7 @@ import {
   queryState,
   topResultState,
 } from '@/atoms/searchAtom';
-import {
-
-  triggeredBySongState,
-} from '@/atoms/idAtom';
+import { triggeredBySongState } from '@/atoms/otherAtoms';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -32,7 +29,7 @@ function All() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [triggeredBySong, setTriggeredBySong] =
-  useRecoilState(triggeredBySongState);
+    useRecoilState(triggeredBySongState);
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
@@ -183,7 +180,7 @@ function All() {
           </div>
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
             {playlists?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item}  />
+              <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>
         </section>

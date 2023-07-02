@@ -2,11 +2,9 @@ import { atom } from 'recoil';
 
 // track which card has been selected by user: help play/pause icon activation
 export const currentItemIdState = atom({
-  key: 'currentItemIdState', 
+  key: 'currentItemIdState',
   default: null,
 });
-
-
 
 // used to set what type of player info to display
 export const playerInfoTypeState = atom({
@@ -18,4 +16,16 @@ export const playerInfoTypeState = atom({
 export const triggeredBySongState = atom({
   key: 'triggeredBySongState',
   default: false,
+});
+
+
+
+// used for sticky banner background color setting complementary color with image
+export const backgroundColorState = atom({
+  key: 'backgroundColorState',
+  default: null,
+});
+export const randomColorColorState = atom({
+  key: 'randomColorColorState',
+  default: null,
 });

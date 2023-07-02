@@ -10,7 +10,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons

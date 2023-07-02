@@ -15,7 +15,7 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';

@@ -13,7 +13,7 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import icons/images
 import {

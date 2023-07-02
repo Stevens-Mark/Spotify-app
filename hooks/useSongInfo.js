@@ -3,7 +3,7 @@ import useSpotify from './useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { currentTrackIdState } from '@/atoms/songAtom';
-import { playerInfoTypeState } from '@/atoms/idAtom';
+import { playerInfoTypeState } from '@/atoms/otherAtoms';
 
 /**
  * Custom hook to return the current playing track information
@@ -14,7 +14,7 @@ function useSongInfo() {
   const spotifyApi = useSpotify();
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-      // used to determine what type of info to load
+  // used to determine what type of info to load
   const playerInfoType = useRecoilValue(playerInfoTypeState);
   const [songInfo, setSongInfo] = useState(null);
 

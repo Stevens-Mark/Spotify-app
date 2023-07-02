@@ -13,7 +13,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import player play/pause function
 import { HandleTrackPlayPause } from '@/lib/playbackUtils';

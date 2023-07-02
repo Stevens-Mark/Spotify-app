@@ -12,7 +12,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   triggeredBySongState,
-} from '@/atoms/idAtom';
+} from '@/atoms/otherAtoms';
 import {
   myPlaylistIdState,
   myPlaylistState,
