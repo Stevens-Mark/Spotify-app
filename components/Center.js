@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import { colors } from '@/styles/colors';
@@ -9,6 +9,7 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 import MediaHeading from './headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlay from './QuickPlay';
+import QuickPlayBanner from './QuickPlayBanner';
 
 // random color options for top background
 const colors = [
@@ -29,6 +30,7 @@ const colors = [
 function Center() {
   const { data: session } = useSession();
   const spotifyApi = useSpotify();
+  const scrollRef = useRef(null);
   const myPlaylistId = useRecoilValue(myPlaylistIdState);
   const [myPlaylist, setMyPlaylist] = useRecoilState(myPlaylistState);
   const [message, setMessage] = useState(null);
@@ -104,7 +106,10 @@ function Center() {
   }, [spotifyApi, session, myPlaylistId, setMyPlaylist]);
 
   return (
-    <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
+    <div
+      className="flex-grow h-screen overflow-y-scroll scrollbar-hide relative"
+      ref={scrollRef}
+    >
       <p
         style={myAlert ? { display: 'block' } : { display: 'none' }}
         className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-64"
@@ -112,12 +117,13 @@ function Center() {
         {message}
       </p>
       {/* Hero bar with image, playlist title etc */}
-      <MediaHeading item={myPlaylist} />
 
-      <QuickPlay item={myPlaylist} />
+      <MediaHeading item={myPlaylist} />
+      <QuickPlayBanner item={myPlaylist} scrollRef={scrollRef} />
+
+      {/* <QuickPlay item={myPlaylist} /> */}
 
       <section className="pb-20">
-        <h2 className="sr-only">Track List</h2>
         <PlaylistTracks Tracklist={myPlaylist} whichList="myPlaylist" />
       </section>
     </div>
