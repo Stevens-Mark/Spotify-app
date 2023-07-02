@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 import noUserImage from '@/public/images/user_noImage.svg';
 // import component
-import Sidebar from '../Sidebar';
+import Sidebar from '../navigation/Sidebar';
 import Player from '../player/Player';
-import NavigationButtons from '../navButtons';
+import NavigationButtons from '../navigation/navButtons';
 
 /**
  * Renders the user picture & sidebar (for all pages) as part of the general layout.

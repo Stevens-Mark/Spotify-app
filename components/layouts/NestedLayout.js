@@ -16,7 +16,7 @@ import {
 import { getRandomTopResult } from '@/lib/randomTopResult';
 // import icons & components
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
-import SearchNav from '../SearchNav';
+import SearchNav from '../navigation/SearchNav';
 import StatusSpinner from '../graphics/StatusSpinner';
 
 

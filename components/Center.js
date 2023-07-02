@@ -8,6 +8,7 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
 import MediaHeading from './headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
+import QuickPlay from './QuickPlay';
 
 // random color options for top background
 const colors = [
@@ -112,6 +113,8 @@ function Center() {
       </p>
       {/* Hero bar with image, playlist title etc */}
       <MediaHeading item={myPlaylist} />
+
+      <QuickPlay item={myPlaylist} />
 
       <section className="pb-20">
         <h2 className="sr-only">Track List</h2>
