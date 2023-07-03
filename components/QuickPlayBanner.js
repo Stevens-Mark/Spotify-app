@@ -102,8 +102,8 @@ function QuickPlayBanner({ item, scrollRef }) {
   return (
     <div className="sticky top-0">
       <div
-        className={`flex items-center py-4 w-full to-black ${
-          backgroundColor !== null ? '' : randomColor
+        className={`flex items-center py-4 w-full bg-gradient-to-b to-black  ${
+          isTextVisible ? (backgroundColor !== null ? '' : randomColor) : ''
         }`}
         style={
           isTextVisible
