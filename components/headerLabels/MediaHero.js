@@ -56,9 +56,7 @@ const MediaHeading = ({ item, itemTracks }) => {
 
   return (
     <div
-      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-        backgroundColor !== null ? '' : randomColor
-      }`}
+      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8`}
       style={{
         background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
       }}

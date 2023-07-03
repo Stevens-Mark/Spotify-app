@@ -10,6 +10,7 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlayBanner from '@/components/QuickPlayBanner';
 
+
 export async function getServerSideProps(context) {
   const { id } = context.query;
   const session = await getSession(context);
@@ -68,7 +69,7 @@ const PlaylistPage = ({ playlist }) => {
       >
         {/* Hero bar with image, playlist title etc */}
         <MediaHeading item={playlist} />
-        <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
+        <QuickPlayBanner item={playlist} scrollRef={scrollRef}/>
 
         <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
       </div>

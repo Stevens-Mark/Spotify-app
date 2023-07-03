@@ -37,7 +37,7 @@ import TitleAlbumTimeLabel from '@/components/headerLabels/titleAlbumTime';
  * @returns {JSX}
  */
 function QuickPlayBanner({ item, scrollRef }) {
-  console.log('item ', item);
+  console.log("item ", item)
   const spotifyApi = useSpotify();
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
@@ -52,11 +52,10 @@ function QuickPlayBanner({ item, scrollRef }) {
   const currentAlbumId = useRecoilValue(currentAlbumIdState);
 
   // used for quick play banner
-  const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
-  const [backgroundColor, setBackgroundColor] =
-    useRecoilState(backgroundColorState);
-  // show track info when play button at top of screen
-  const [isTextVisible, setIsTextVisible] = useState(false);
+  const randomColor = useRecoilValue(randomColorColorState);
+  const backgroundColor = useRecoilValue(backgroundColorState);
+
+
 
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
@@ -85,11 +84,21 @@ function QuickPlayBanner({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 
+  // show track info when play button at top of screen
+  const [isTextVisible, setIsTextVisible] = useState(false);
+
+  const [isVisible, setIsVisible] = useState(false);
+  const [opacity, setOpacity] = useState(0);
   // used for sticky banner quick play button
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
       setIsTextVisible(scrollPosition > 295); // Changed to the desired threshold
+      setIsVisible(scrollPosition > 25);
+
+      const maxScroll = 185; // Adjust the maximum scroll value as needed
+      const opacityValue = Math.min(scrollPosition / maxScroll, 1);
+      setOpacity(opacityValue);
     };
 
     handleScroll(); // Run initially to set the text visibility
@@ -100,23 +109,16 @@ function QuickPlayBanner({ item, scrollRef }) {
   }, [scrollRef]);
 
   return (
-    <div className="sticky top-0">
+    <>
       <div
-        className={`flex items-center py-4 w-full bg-gradient-to-b to-black  ${
-          isTextVisible ? (backgroundColor !== null ? '' : randomColor) : ''
-        }`}
-        style={
-          isTextVisible
-            ? {
-                background: `linear-gradient(to bottom, ${backgroundColor} 85%, #000000)`,
-              }
-            : {}
-        }
+        className={`absolute top-0 h-20 w-full z-20 transition-opacity duration-500 ease-in-out bg-gradient-to-b to-black  
+           ${
+             backgroundColor !== null ? '' : randomColor
+           } flex items-center py-4`}
+        style={{ opacity }}
       >
         <button
-          className={` ${
-            isTextVisible ? 'ml-5 isSm:ml-28' : 'ml-5 isSm:ml-8'
-          } rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+          className={`ml-5 isSm:ml-28 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
           onClick={(event) => {
             HandleCardPlayPauseClick(event);
           }}
@@ -127,29 +129,47 @@ function QuickPlayBanner({ item, scrollRef }) {
             <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
           )}
         </button>
-        {!isTextVisible && (
-          <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
-        )}
 
-        {isTextVisible && (
-          <span className="text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
-            {capitalize(item?.name)}
+        <span className="text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+          {capitalize(item?.name)}
+        </span>
+      </div>
+
+      <div className="sticky top-0">
+        <div
+          className={`flex items-center py-4 w-full`}
+  
+        >
+          <button
+            className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+            onClick={(event) => {
+              HandleCardPlayPauseClick(event);
+            }}
+          >
+            {activeStatus ? (
+              <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+            ) : (
+              <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+            )}
+          </button>
+          <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
+        </div>
+
+        {item?.type === 'artist' && !isTextVisible && (
+          <span className="text-white px-5 pb-6 xs:px-8 text-xl md:text-2xl xl:text-3xl">
+            Popular
           </span>
         )}
+
+        {/* choose heading depending on media type */}
+        <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
+          {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
+          {item?.type === 'album' && <TitleTimeLabel />}
+          {item?.type === 'artist' && <TitleAlbumTimeLabel />}
+        </div>
+        <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
       </div>
-      {item?.type === 'artist' && !isTextVisible && (
-        <span className="text-white px-5 pb-6 xs:px-8 text-xl md:text-2xl xl:text-3xl">
-          Popular
-        </span>
-      )}
-      {/* choose heading depending on media type */}
-      <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
-        {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
-        {item?.type === 'album' && <TitleTimeLabel />}
-        {item?.type === 'artist' && <TitleAlbumTimeLabel />}
-      </div>
-      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
-    </div>
+    </>
   );
 }
 
