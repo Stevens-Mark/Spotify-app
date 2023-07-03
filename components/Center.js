@@ -8,7 +8,6 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
 import MediaHeading from './headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
-import QuickPlay from './QuickPlay';
 import QuickPlayBanner from './QuickPlayBanner';
 
 // random color options for top background
@@ -117,15 +116,10 @@ function Center() {
         {message}
       </p>
       {/* Hero bar with image, playlist title etc */}
-
       <MediaHeading item={myPlaylist} />
       <QuickPlayBanner item={myPlaylist} scrollRef={scrollRef} />
 
-      {/* <QuickPlay item={myPlaylist} /> */}
-
-      <section className="pb-20">
-        <PlaylistTracks Tracklist={myPlaylist} whichList="myPlaylist" />
-      </section>
+      <PlaylistTracks Tracklist={myPlaylist} whichList="myPlaylist" />
     </div>
   );
 }

@@ -25,15 +25,19 @@ import {
   PauseCircleIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/solid';
+import TitleAlbumDateTimeLabel from '@/components/headerLabels/titleAlbumDateTime';
+import TitleTimeLabel from '@/components/headerLabels/titleTime';
+import TitleAlbumTimeLabel from '@/components/headerLabels/titleAlbumTime';
 
 /**
  * Renders quick play start button for media (& in sticky Banner)
- * @funvtion QuickPlayBanner
+ * @function QuickPlayBanner
  * @param {object} item media information
  * @param {object} scrollRef ref for container scroll
  * @returns {JSX}
  */
 function QuickPlayBanner({ item, scrollRef }) {
+  console.log('item ', item);
   const spotifyApi = useSpotify();
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
@@ -85,7 +89,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsTextVisible(scrollPosition > 250); // Changed to the desired threshold
+      setIsTextVisible(scrollPosition > 295); // Changed to the desired threshold
     };
 
     handleScroll(); // Run initially to set the text visibility
@@ -96,41 +100,55 @@ function QuickPlayBanner({ item, scrollRef }) {
   }, [scrollRef]);
 
   return (
-    <div
-      className={`flex items-center py-4 sticky top-0 w-full to-black ${
-        backgroundColor !== null ? '' : randomColor
-      }`}
-      style={
-        isTextVisible
-          ? {
-              background: `linear-gradient(to bottom, ${backgroundColor} 85%, #000000)`,
-            }
-          : {}
-      }
-    >
-      <button
-        className={` ${
-          isTextVisible ? 'ml-5 isSm:ml-28' : 'ml-5 isSm:ml-8'
-        } rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
-        onClick={(event) => {
-          HandleCardPlayPauseClick(event);
-        }}
+    <div className="sticky top-0">
+      <div
+        className={`flex items-center py-4 w-full to-black ${
+          backgroundColor !== null ? '' : randomColor
+        }`}
+        style={
+          isTextVisible
+            ? {
+                background: `linear-gradient(to bottom, ${backgroundColor} 85%, #000000)`,
+              }
+            : {}
+        }
       >
-        {activeStatus ? (
-          <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-        ) : (
-          <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+        <button
+          className={` ${
+            isTextVisible ? 'ml-5 isSm:ml-28' : 'ml-5 isSm:ml-8'
+          } rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+          onClick={(event) => {
+            HandleCardPlayPauseClick(event);
+          }}
+        >
+          {activeStatus ? (
+            <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+          ) : (
+            <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+          )}
+        </button>
+        {!isTextVisible && (
+          <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
         )}
-      </button>
-      {!isTextVisible && (
-        <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
-      )}
 
-      {isTextVisible && (
-        <span className="text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
-          {capitalize(item?.name)}
+        {isTextVisible && (
+          <span className="text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+            {capitalize(item?.name)}
+          </span>
+        )}
+      </div>
+      {item?.type === 'artist' && !isTextVisible && (
+        <span className="text-white px-5 pb-6 xs:px-8 text-xl md:text-2xl xl:text-3xl">
+          Popular
         </span>
       )}
+      {/* choose heading depending on media type */}
+      <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
+        {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
+        {item?.type === 'album' && <TitleTimeLabel />}
+        {item?.type === 'artist' && <TitleAlbumTimeLabel />}
+      </div>
+      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
     </div>
   );
 }

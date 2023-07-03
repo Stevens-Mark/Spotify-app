@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 // import state management recoil
 import { useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
@@ -8,6 +8,7 @@ import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
+import QuickPlayBanner from '@/components/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -44,6 +45,7 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const AlbumPage = ({ album }) => {
+  const scrollRef = useRef(null);
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setAlbumTracklist = useSetRecoilState(albumTrackListState);
 
@@ -58,14 +60,15 @@ const AlbumPage = ({ album }) => {
         <title>Spotify - Albums</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
-      <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
+      <div
+        className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
+        ref={scrollRef}
+      >
         {/* Hero bar with image, album title & author etc */}
         <MediaHeading item={album} />
+        <QuickPlayBanner item={album} scrollRef={scrollRef} />
 
-        <section className="pb-20">
-          <h2 className="sr-only">Track List</h2>
-          <AlbumTracks />
-        </section>
+        <AlbumTracks />
       </div>
     </>
   );

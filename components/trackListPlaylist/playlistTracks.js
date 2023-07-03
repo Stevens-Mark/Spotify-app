@@ -1,6 +1,5 @@
 import React from 'react';
 // import components
-import TitleAlbumDateTimeLabel from '../headerLabels/titleAlbumDateTime';
 import PlaylistTrack from './playlistTrack';
 
 /**
@@ -12,13 +11,9 @@ import PlaylistTrack from './playlistTrack';
  */
 function PlaylistTracks({ Tracklist, whichList }) {
   return (
-    <>
-      <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8">
-        <TitleAlbumDateTimeLabel />
-      </div>
-      <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
+    <section className="pb-20">
+      <h2 className="sr-only">Track List</h2>
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
-        {/* playlist here */}
         {Tracklist?.tracks?.items?.map((track, i) => (
           <PlaylistTrack
             key={`${track?.track?.id}-${i}`}
@@ -28,7 +23,7 @@ function PlaylistTracks({ Tracklist, whichList }) {
           />
         ))}
       </div>
-    </>
+    </section>
   );
 }
 

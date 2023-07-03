@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 // import state management recoil
 import { useSetRecoilState } from 'recoil';
 import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
@@ -8,6 +8,7 @@ import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import ArtistTracks from '@/components/trackListArtist/artistTracks';
+import QuickPlayBanner from '@/components/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -68,6 +69,7 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ArtistPage = ({ artistInfo, artistTracks }) => {
+  const scrollRef = useRef(null);
   const setArtistTracklist = useSetRecoilState(artistTrackListState);
   const setArtistTrackUris = useSetRecoilState(artistTrackUrisState);
 
@@ -82,14 +84,15 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
         <title>Artists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
-      <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
+      <div
+        className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
+        ref={scrollRef}
+      >
         {/* Hero bar with image, artist title &  etc */}
         <MediaHeading item={artistInfo} itemTracks={artistTracks} />
+        <QuickPlayBanner item={artistInfo} scrollRef={scrollRef} />
 
-        <section className="pb-20">
-          <h2 className="sr-only">Track List</h2>
-          <ArtistTracks />
-        </section>
+        <ArtistTracks />
       </div>
     </>
   );

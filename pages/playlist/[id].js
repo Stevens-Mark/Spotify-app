@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 // import state management recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
@@ -8,6 +8,7 @@ import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
+import QuickPlayBanner from '@/components/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -44,6 +45,7 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const PlaylistPage = ({ playlist }) => {
+  const scrollRef = useRef(null);
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
     playlistTrackListState
@@ -60,15 +62,15 @@ const PlaylistPage = ({ playlist }) => {
         <title>Spotify - Playlists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
-      <div className="flex-grow h-screen overflow-y-scroll scrollbar-hide">
+      <div
+        className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
+        ref={scrollRef}
+      >
         {/* Hero bar with image, playlist title etc */}
         <MediaHeading item={playlist} />
+        <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
 
-        <section className="pb-20">
-          <h2 className="sr-only">Track List</h2>
-
-          <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
-        </section>
+        <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
       </div>
     </>
   );
