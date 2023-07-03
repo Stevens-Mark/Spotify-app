@@ -10,10 +10,10 @@ const TitleAlbumDateTime = () => {
   return (
     <>
       <span className="flex px-5 xs:px-0">
-        <span>#</span>
-        <span className="w-36 lg:w-64 pl-2">Title</span>
+        <span className='pl-0 isSm:pl-5'>#</span>
+        <span className="w-36 lg:w-64 pl-3 isSm:pl-4 mdlg:pl-5">Title</span>
       </span>
-      <span className="flex justify-end mdlg:justify-between ml-auto md:ml-0 pr-5 xs:pr-2">
+      <span className="flex justify-end mdlg:justify-between ml-auto md:ml-0 pr-5">
         <span className="w-40 hidden mdlg:inline pr-1">Album</span>
         <span className="w-48 hidden mdlg:inline pr-1">Date Added</span>
         <span className="flex items-center">

@@ -106,7 +106,7 @@ function Center() {
 
   return (
     <div
-      className="flex-grow h-screen overflow-y-scroll scrollbar-hide relative"
+      className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
       ref={scrollRef}
     >
       <p

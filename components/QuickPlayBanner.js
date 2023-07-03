@@ -37,7 +37,7 @@ import TitleAlbumTimeLabel from '@/components/headerLabels/titleAlbumTime';
  * @returns {JSX}
  */
 function QuickPlayBanner({ item, scrollRef }) {
-  console.log("item ", item)
+  console.log('item ', item);
   const spotifyApi = useSpotify();
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
@@ -50,12 +50,16 @@ function QuickPlayBanner({ item, scrollRef }) {
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const currentAlbumId = useRecoilValue(currentAlbumIdState);
+  // used to set play/pause icons
+  const [activeStatus, setActiveStatus] = useState(false);
+  // show track info when play button at top of screen
+  const [isVisible, setIsVisible] = useState(false);
+  const [isTextVisible, setIsTextVisible] = useState(true);
+  const [opacity, setOpacity] = useState(0);
 
   // used for quick play banner
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
-
-
 
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
@@ -76,26 +80,17 @@ function QuickPlayBanner({ item, scrollRef }) {
   };
 
   // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus = currentItemId === item?.id && isPlaying;
-    // ||
-    // (currentAlbumId === item?.id && isPlaying);
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 
-  // show track info when play button at top of screen
-  const [isTextVisible, setIsTextVisible] = useState(false);
-
-  const [isVisible, setIsVisible] = useState(false);
-  const [opacity, setOpacity] = useState(0);
   // used for sticky banner quick play button
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsTextVisible(scrollPosition > 295); // Changed to the desired threshold
-      setIsVisible(scrollPosition > 25);
-
+      setIsVisible(scrollPosition > 320); // Changed to the desired threshold
+      setIsTextVisible(scrollPosition > 250); // Changed to the desired threshold
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
@@ -111,35 +106,41 @@ function QuickPlayBanner({ item, scrollRef }) {
   return (
     <>
       <div
-        className={`absolute top-0 h-20 w-full z-20 transition-opacity duration-500 ease-in-out bg-gradient-to-b to-black  
+        className={`absolute top-0 h-20 w-full z-20 bg-gradient-to-b to-black  
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}
-        style={{ opacity }}
+        style={{
+          opacity,
+          background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+        }}
       >
-        <button
-          className={`ml-5 isSm:ml-28 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
-          onClick={(event) => {
-            HandleCardPlayPauseClick(event);
-          }}
+        <div
+          className={` ${
+            isVisible ? 'opacity-100' : 'opacity-0'
+          } transition delay-100 duration-300 ease-in-out flex items-center`}
         >
-          {activeStatus ? (
-            <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-          ) : (
-            <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-          )}
-        </button>
+          <button
+            className={`ml-5 isSm:ml-28 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+            onClick={(event) => {
+              HandleCardPlayPauseClick(event);
+            }}
+          >
+            {activeStatus ? (
+              <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+            ) : (
+              <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+            )}
+          </button>
 
-        <span className="text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
-          {capitalize(item?.name)}
-        </span>
+          <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+            {capitalize(item?.name)}
+          </span>
+        </div>
       </div>
 
       <div className="sticky top-0">
-        <div
-          className={`flex items-center py-4 w-full`}
-  
-        >
+        <div className={`flex items-center py-4 w-full bg-black`}>
           <button
             className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
             onClick={(event) => {
@@ -156,7 +157,7 @@ function QuickPlayBanner({ item, scrollRef }) {
         </div>
 
         {item?.type === 'artist' && !isTextVisible && (
-          <span className="text-white px-5 pb-6 xs:px-8 text-xl md:text-2xl xl:text-3xl">
+          <span className="text-white px-5 xs:px-8 text-xl md:text-2xl xl:text-3xl">
             Popular
           </span>
         )}
