@@ -18,6 +18,7 @@ import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import ShowTracks from '@/components/trackListShow/showTracks';
+import QuickPlayBanner from '@/components/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -57,6 +58,7 @@ const ShowPage = ({ showInfo }) => {
   const { data: session } = useSession();
   const router = useRouter();
   const textRef = useRef(null);
+  const scrollRef = useRef(null);
   const { id } = router.query;
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
@@ -168,11 +170,12 @@ const ShowPage = ({ showInfo }) => {
         ref={(node) => {
           containerRef.current = node;
           scrollableSectionRef.current = node;
+          scrollRef.current = node;
         }}
       >
         {/* Hero bar with image, podcast title & author etc */}
         <MediaHeading item={showInfo} />
-
+        <QuickPlayBanner item={showInfo} scrollRef={scrollRef} />
         <section className="pb-24">
           <h2 className="sr-only">Track List</h2>
           <div className="flex  flex-col-reverse xl:flex-row gap-9 py-4 px-5 xs:p-10">

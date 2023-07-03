@@ -62,7 +62,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
-  console.log("color: ",backgroundColor)
+  console.log('color: ', backgroundColor);
 
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
@@ -93,7 +93,7 @@ function QuickPlayBanner({ item, scrollRef }) {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
       setIsVisible(scrollPosition > 320); // Changed to the desired threshold
-      setIsTextVisible(scrollPosition > 250); 
+      setIsTextVisible(scrollPosition > 250);
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
@@ -115,7 +115,9 @@ function QuickPlayBanner({ item, scrollRef }) {
            } flex items-center py-4`}
         style={{
           opacity,
-          background: `linear-gradient(to bottom, ${darkenColor(backgroundColor)} 60%, #000000)`,
+          background: `linear-gradient(to bottom, ${darkenColor(
+            backgroundColor
+          )} 90%, #000000)`,
         }}
       >
         <div
@@ -123,56 +125,65 @@ function QuickPlayBanner({ item, scrollRef }) {
             isVisible ? 'opacity-100' : 'opacity-0'
           } transition delay-100 duration-300 ease-in-out flex items-center`}
         >
-          <button
-            className={`ml-5 isSm:ml-28 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
-            onClick={(event) => {
-              HandleCardPlayPauseClick(event);
-            }}
-          >
-            {activeStatus ? (
-              <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-            ) : (
-              <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-            )}
-          </button>
-
-          <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
-            {capitalize(item?.name)}
-          </span>
+          {item?.type !== 'show' && (
+            <>
+              <button
+                className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+                onClick={(event) => {
+                  HandleCardPlayPauseClick(event);
+                }}
+              >
+                {activeStatus ? (
+                  <PauseCircleIcon className="w-12 h-12" />
+                ) : (
+                  <PlayCircleIcon className="w-12 h-12" />
+                )}
+              </button>
+              <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+                {capitalize(item?.name)}
+              </span>{' '}
+            </>
+          )}
+          {item?.type === 'show' && (
+            <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-36 xs:w-48 mdlg:w-80 xl:w-auto truncate">
+              {capitalize(item?.name)}
+            </span>
+          )}
         </div>
       </div>
+      {item?.type !== 'show' && (
+        <div className="sticky top-0">
+          <div className={`flex items-center py-4 w-full bg-black`}>
+            <button
+              className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+              onClick={(event) => {
+                HandleCardPlayPauseClick(event);
+              }}
+            >
+              {activeStatus ? (
+                <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+              ) : (
+                <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
+              )}
+            </button>
+            <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
+          </div>
 
-      <div className="sticky top-0">
-        <div className={`flex items-center py-4 w-full bg-black`}>
-          <button
-            className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
-            onClick={(event) => {
-              HandleCardPlayPauseClick(event);
-            }}
-          >
-            {activeStatus ? (
-              <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-            ) : (
-              <PlayCircleIcon className="w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />
-            )}
-          </button>
-          <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
+          {item?.type === 'artist' && !isTextVisible && (
+            <span className="text-white px-5 xs:px-8 text-xl md:text-2xl xl:text-3xl">
+              Popular
+            </span>
+          )}
+
+          {/* choose heading depending on media type */}
+          <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
+            {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
+            {item?.type === 'album' && <TitleTimeLabel />}
+            {item?.type === 'artist' && <TitleAlbumTimeLabel />}
+          </div>
+          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
         </div>
-
-        {item?.type === 'artist' && !isTextVisible && (
-          <span className="text-white px-5 xs:px-8 text-xl md:text-2xl xl:text-3xl">
-            Popular
-          </span>
-        )}
-
-        {/* choose heading depending on media type */}
-        <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
-          {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
-          {item?.type === 'album' && <TitleTimeLabel />}
-          {item?.type === 'artist' && <TitleAlbumTimeLabel />}
-        </div>
-        <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
-      </div>
+      )}
     </>
   );
 }
