@@ -19,6 +19,7 @@ import {
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import functions
 import { capitalize } from '@/lib/capitalize';
+import { darkenColor } from '@/lib/darkenColor';
 // import icons/images
 import {
   PlayCircleIcon,
@@ -61,6 +62,8 @@ function QuickPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
+  console.log("color: ",backgroundColor)
+
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -90,7 +93,7 @@ function QuickPlayBanner({ item, scrollRef }) {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
       setIsVisible(scrollPosition > 320); // Changed to the desired threshold
-      setIsTextVisible(scrollPosition > 250); // Changed to the desired threshold
+      setIsTextVisible(scrollPosition > 250); 
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
@@ -112,7 +115,7 @@ function QuickPlayBanner({ item, scrollRef }) {
            } flex items-center py-4`}
         style={{
           opacity,
-          background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
+          background: `linear-gradient(to bottom, ${darkenColor(backgroundColor)} 60%, #000000)`,
         }}
       >
         <div
