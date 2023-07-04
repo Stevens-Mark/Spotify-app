@@ -18,6 +18,11 @@ export const triggeredBySongState = atom({
   default: false,
 });
 
+// 
+export const originIdState = atom({
+  key: 'originIdState',
+  default: null,
+});
 
 
 // used for sticky banner background color setting complementary color with image

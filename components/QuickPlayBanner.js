@@ -15,6 +15,7 @@ import {
   triggeredBySongState,
   backgroundColorState,
   randomColorColorState,
+  originIdState,
 } from '@/atoms/otherAtoms';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import functions
@@ -38,7 +39,6 @@ import TitleAlbumTimeLabel from '@/components/headerLabels/titleAlbumTime';
  * @returns {JSX}
  */
 function QuickPlayBanner({ item, scrollRef }) {
-  console.log('item ', item);
   const spotifyApi = useSpotify();
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
@@ -48,6 +48,8 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const [triggeredBySong, setTriggeredBySong] =
     useRecoilState(triggeredBySongState);
+
+  const originId = useRecoilValue(originIdState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const currentAlbumId = useRecoilValue(currentAlbumIdState);
@@ -62,24 +64,45 @@ function QuickPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
-  console.log('color: ', backgroundColor);
-
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
-    HandleCardPlayPause(
-      item,
-      setCurrentItemId,
-      currentItemId,
-      setIsPlaying,
-      setPlayerInfoType,
-      setCurrentTrackId,
-      setCurrentSongIndex,
-      setActivePlaylist,
-      triggeredBySong,
-      setTriggeredBySong,
-      spotifyApi
-    );
+
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMyCurrentPlaybackState().then((data) => {
+        if (currentItemId === originId && data.body?.is_playing) {
+          spotifyApi
+            .pause()
+            .then(() => {
+              setIsPlaying(false);
+            })
+            .catch((err) => console.error('Pause failed: ', err));
+        } else {
+          if (currentItemId === originId) {
+            spotifyApi
+              .play()
+              .then(() => {
+                setIsPlaying(true);
+              })
+              .catch((err) => console.error('Playback failed: ', err));
+          } else {
+            HandleCardPlayPause(
+              item,
+              setCurrentItemId,
+              currentItemId,
+              setIsPlaying,
+              setPlayerInfoType,
+              setCurrentTrackId,
+              setCurrentSongIndex,
+              setActivePlaylist,
+              triggeredBySong,
+              setTriggeredBySong,
+              spotifyApi
+            );
+          }
+        }
+      });
+    }
   };
 
   // used to set play/pause icons

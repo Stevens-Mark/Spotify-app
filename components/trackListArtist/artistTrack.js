@@ -13,6 +13,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   triggeredBySongState,
+  originIdState,
 } from '@/atoms/otherAtoms';
 import { activePlaylistState } from '@/atoms/playListAtom';
 // import player play/pause function
@@ -32,7 +33,6 @@ function ArtistTrack({ track, order }) {
   const song = track;
 
   const router = useRouter();
-  const originId = (router?.asPath).split('/').pop();
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -42,7 +42,9 @@ function ArtistTrack({ track, order }) {
 
   const [triggeredBySong, setTriggeredBySong] =
     useRecoilState(triggeredBySongState);
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const [originId, setOriginId] = useRecoilState(originIdState);
+
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -51,6 +53,10 @@ function ArtistTrack({ track, order }) {
   );
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
+
+  useEffect(() => {
+    setOriginId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
     setTimeout(() => {
