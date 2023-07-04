@@ -70,22 +70,25 @@ function QuickPlayBanner({ item, scrollRef }) {
 
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getMyCurrentPlaybackState().then((data) => {
+        // if track playing originates from the current page then pause
         if (currentItemId === originId && data.body?.is_playing) {
           spotifyApi
             .pause()
             .then(() => {
               setIsPlaying(false);
             })
-            .catch((err) => console.error('Pause failed: ', err));
+            .catch((err) => console.error('Pause failed: '));
         } else {
+          // or if paused, restart track (that originates from the current page)
           if (currentItemId === originId) {
             spotifyApi
               .play()
               .then(() => {
                 setIsPlaying(true);
               })
-              .catch((err) => console.error('Playback failed: ', err));
+              .catch((err) => console.error('Playback failed: '));
           } else {
+            // otherwise no track played from the curent page yet, so start with first track
             HandleCardPlayPause(
               item,
               setCurrentItemId,
@@ -107,9 +110,11 @@ function QuickPlayBanner({ item, scrollRef }) {
 
   // used to set play/pause icons
   useEffect(() => {
-    const newActiveStatus = currentItemId === item?.id && isPlaying;
+    const newActiveStatus =
+      (currentItemId === item?.id && isPlaying) ||
+      (currentItemId === originId && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
+  }, [currentAlbumId, currentItemId, isPlaying, item?.id, originId]);
 
   // used for sticky banner quick play button
   useEffect(() => {

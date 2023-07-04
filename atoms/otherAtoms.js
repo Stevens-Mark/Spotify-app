@@ -6,6 +6,12 @@ export const currentItemIdState = atom({
   default: null,
 });
 
+// track which album,artist or playlist a song came from: help play/pause control for quickplayer
+export const originIdState = atom({
+  key: 'originIdState',
+  default: null,
+});
+
 // used to set what type of player info to display
 export const playerInfoTypeState = atom({
   key: 'playerInfoTypeState',
@@ -17,13 +23,6 @@ export const triggeredBySongState = atom({
   key: 'triggeredBySongState',
   default: false,
 });
-
-// 
-export const originIdState = atom({
-  key: 'originIdState',
-  default: null,
-});
-
 
 // used for sticky banner background color setting complementary color with image
 export const backgroundColorState = atom({

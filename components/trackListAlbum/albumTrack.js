@@ -42,7 +42,7 @@ function AlbumTrack({ track, order }) {
 
   const [triggeredBySong, setTriggeredBySong] =
     useRecoilState(triggeredBySongState);
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
 
   const [currentTrackId, setCurrentTrackId] =
@@ -105,7 +105,7 @@ function AlbumTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && isPlaying 
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [song?.id, currentTrackId, originId, isPlaying]);
 

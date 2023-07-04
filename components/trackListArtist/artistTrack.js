@@ -42,7 +42,7 @@ function ArtistTrack({ track, order }) {
 
   const [triggeredBySong, setTriggeredBySong] =
     useRecoilState(triggeredBySongState);
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const  setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
 
   const [currentTrackId, setCurrentTrackId] =
