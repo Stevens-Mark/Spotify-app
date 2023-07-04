@@ -96,6 +96,13 @@ const MediaHeading = ({ item, itemTracks }) => {
               </span>
             )}
 
+            {/*episode*/}
+            {item?.type === 'episode' && (
+              <span className="text-sm mt-5 mb-2 line-clamp-2">
+                {capitalize(item?.show?.name)}
+              </span>
+            )}
+
             {/*playlist*/}
             {item?.type === 'playlist' && (
               <>

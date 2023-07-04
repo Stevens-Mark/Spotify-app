@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -37,7 +38,7 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
  */
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
-
+  const { data: session } = useSession();
   const router = useRouter();
   // const id = (router?.asPath).split('/').pop();
 
@@ -131,8 +132,25 @@ function EpisodeCard({ track, order, whichList }) {
     setActiveStatus(newActiveStatus);
   }, [track?.id, currentTrackId, isPlaying]);
 
+  const fetchData = async (episodeId) => {
+    try {
+      const res = await fetch(`https://api.spotify.com/v1/episodes/${episodeId}`, {
+        headers: {
+          Authorization: `Bearer ${session.user.accessToken}`,
+        },
+      });
+      const data = await res.json();
+      console.log("episode date", data)
+      return data;
+    } catch (err) {
+      console.error('Error retrieving Album tracks:', err);
+      return null;
+    }
+  };
+
   const handleClick = (event) => {
     event.preventDefault();
+    fetchData(track?.id)
     // temperary to block action
     // Handle the click event logic here,
     // use the router to navigate to a different page, for example

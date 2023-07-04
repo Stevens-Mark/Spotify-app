@@ -54,6 +54,8 @@ function Card({ item }) {
       ? `/artist/${item?.id}`
       : item?.type === 'show'
       ? `/show/${item?.id}`
+      : item?.type === 'episode'
+      ? `/episode/${item?.id}`
       : '';
 
   /**
