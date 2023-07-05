@@ -152,9 +152,7 @@ function QuickPlayBanner({ item, scrollRef }) {
             isVisible ? 'opacity-100' : 'opacity-0'
           } transition delay-100 duration-300 ease-in-out flex items-center`}
         >
-          {(item?.type === 'playlist' ||
-            item?.type === 'album' ||
-            item?.type === 'artist') && (
+          {(item?.type !== 'show') && (
             <>
               <button
                 className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
@@ -173,14 +171,14 @@ function QuickPlayBanner({ item, scrollRef }) {
               </span>{' '}
             </>
           )}
-          {(item?.type === 'show' || item?.type === 'episode') && (
+          {(item?.type === 'show') && (
             <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-36 xs:w-48 mdlg:w-80 xl:w-auto truncate">
               {capitalize(item?.name)}
             </span>
           )}
         </div>
       </div>
-      {(item?.type === 'show' || item?.type === 'episode') && (
+      {(item?.type !== 'show') && (
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button
