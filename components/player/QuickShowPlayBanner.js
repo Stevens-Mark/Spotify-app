@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -8,7 +9,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState } from '@/atoms/albumAtom';
+import { searchResultState } from '@/atoms/searchAtom';
 import {
   showEpisodesUrisState,
   showEpisodesListState,
@@ -32,38 +33,33 @@ import {
   PauseCircleIcon,
   EllipsisHorizontalIcon,
 } from '@heroicons/react/24/solid';
-import { HandleEpisodePlayPause } from '@/lib/playbackUtils';
 
 /**
- * Renders quick play start button for show/episode
+ * Renders quick play start button for epsiode
  * @function QuickShowPlayBanner
- * @param {object} item show/episode information
+ * @param {object} item epsiode information
  * @param {object} scrollRef ref for container scroll
  * @returns {JSX}
  */
 function QuickShowPlayBanner({ item, scrollRef }) {
   const spotifyApi = useSpotify();
+  const router = useRouter();
 
+  const [originId, setOriginId] = useRecoilState(originIdState);
+  console.log("origin ", originId);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
-  const showEpisodesList = useRecoilValue(showEpisodesListState);
-  const showEpisodesUris = useRecoilValue(showEpisodesUrisState);
-  const episodesList = useRecoilValue(episodesListState);
-  const episodesUris = useRecoilValue(episodesUrisState);
+  const queryResults = useRecoilValue(searchResultState);
+  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState); // episodes uris (from search)
+  const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
-
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
-  // to identify the track position for the green highlight of the active track
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
-
-  const originId = useRecoilValue(originIdState);
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const currentAlbumId = useRecoilValue(currentAlbumIdState);
+  const [currentTrackId, setCurrentTrackId] =
+    useRecoilState(currentTrackIdState);
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   // show track info when play button at top of screen
@@ -75,7 +71,21 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
-  const HandleEpisodePlayPauseClick = (event, currentTrackIndex) => {
+  useEffect(() => {
+    const episodes = queryResults?.episodes?.items;
+    setEpisodesList(episodes);
+    if (queryResults?.episodes?.items) {
+      const uris = queryResults?.episodes?.items.map((item) => item.uri);
+      setEpisodesUris(uris);
+     
+    }
+  }, [episodesUris, queryResults?.episodes?.items, setEpisodesList, setEpisodesUris]);
+  console.log("uros" ,episodesUris)
+  useEffect(() => {
+    setOriginId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setOriginId]);
+
+  const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
 
@@ -100,25 +110,33 @@ function QuickShowPlayBanner({ item, scrollRef }) {
               .catch((err) => console.error('Playback failed: '));
           } else {
             // otherwise no track played from the curent page yet, so start with first track
-            const episodeOptions = {
-              spotifyApi,
-              item,
-              currentTrackId,
-              currentTrackIndex,
-              setCurrentTrackId,
-              setCurrentSongIndex,
-              setPlayerInfoType,
-              setIsPlaying,
-              setCurrentItemId,
-              setActiveListInUse,
-              episodesList,
-              showEpisodesList,
-              episodesUris,
-              showEpisodesUris,
-              whichList,
-              setActivePlaylist,
-            };
-            HandleEpisodePlayPause(episodeOptions);
+            spotifyApi.getMyCurrentPlaybackState().then((data) => {
+              if (data.body?.is_playing && item?.id == currentTrackId) {
+                spotifyApi
+                  .pause()
+                  .then(() => {
+                    setIsPlaying(false);
+                  })
+                  .catch((err) => console.error('Pause failed: '));
+              } else {
+                spotifyApi
+                  .play({
+                    uris: episodesUris,
+                    offset: { position: 0 },
+                  })
+                  .then(() => {
+                    console.log('Playback Success');
+                    setPlayerInfoType('episode');
+                    setIsPlaying(true);
+                    setCurrentItemId(item?.id);
+                    setCurrentTrackId(item?.id);
+                    // setCurrentSongIndex(currentTrackIndex);
+                    setActiveListInUse(episodesList); // set list to reference for player
+                    setActivePlaylist(null); //episode playing so user's playlist null
+                  })
+                  .catch((err) => console.error('Playback failed: ', err));
+              }
+            });
           }
         }
       });
@@ -131,7 +149,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
       (currentItemId === item?.id && isPlaying) ||
       (currentItemId === originId && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item?.id, originId]);
+  }, [currentItemId, isPlaying, item?.id, originId]);
 
   // used for sticky banner quick play button
   useEffect(() => {
@@ -170,9 +188,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
             isVisible ? 'opacity-100' : 'opacity-0'
           } transition delay-100 duration-300 ease-in-out flex items-center`}
         >
-          {(item?.type === 'playlist' ||
-            item?.type === 'album' ||
-            item?.type === 'artist') && (
+          {item?.type === 'episode' && (
             <>
               <button
                 className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
@@ -191,14 +207,14 @@ function QuickShowPlayBanner({ item, scrollRef }) {
               </span>{' '}
             </>
           )}
-          {(item?.type === 'show' || item?.type === 'episode') && (
+          {item?.type === 'show' && (
             <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-36 xs:w-48 mdlg:w-80 xl:w-auto truncate">
               {capitalize(item?.name)}
             </span>
           )}
         </div>
       </div>
-      {(item?.type === 'show' || item?.type === 'episode') && (
+      {item?.type === 'episode' && (
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button

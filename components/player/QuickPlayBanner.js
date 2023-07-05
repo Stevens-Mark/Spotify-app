@@ -8,7 +8,6 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState } from '@/atoms/albumAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
@@ -52,7 +51,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const originId = useRecoilValue(originIdState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const currentAlbumId = useRecoilValue(currentAlbumIdState);
+
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   // show track info when play button at top of screen
@@ -114,7 +113,7 @@ function QuickPlayBanner({ item, scrollRef }) {
       (currentItemId === item?.id && isPlaying) ||
       (currentItemId === originId && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item?.id, originId]);
+  }, [currentItemId, isPlaying, item?.id, originId]);
 
   // used for sticky banner quick play button
   useEffect(() => {

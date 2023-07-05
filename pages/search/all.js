@@ -3,7 +3,8 @@ import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
-import { useRecoilValue, useRecoilState } from 'recoil';
+import { useRecoilValue, useRecoilState, useSetRecoilState } from 'recoil';
+import { episodesListState, episodesUrisState } from '@/atoms/showAtom';
 import {
   searchResultState,
   queryState,
@@ -34,6 +35,8 @@ function All() {
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
   const topResults = useRecoilValue(topResultState);
+  const setEpisodesUris = useSetRecoilState(episodesUrisState); // episodes uris (from search)
+  const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
 
   const topResult =
     topResults?.tracks?.items ||
@@ -52,6 +55,14 @@ function All() {
   const totalShows = queryResults?.shows?.total;
   const episodes = queryResults?.episodes?.items;
   const totalEpisodes = queryResults?.episodes?.total;
+
+  useEffect(() => {
+    setEpisodesList(episodes);
+    if (queryResults?.episodes?.items) {
+      const uris = queryResults?.episodes?.items.map((item) => item.uri);
+      setEpisodesUris(uris);
+    }
+  }, [episodes, queryResults, setEpisodesList, setEpisodesUris]);
 
   // if no query go back to main search page
   useEffect(() => {

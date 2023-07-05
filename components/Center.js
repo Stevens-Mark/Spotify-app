@@ -8,7 +8,7 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 // import component
 import MediaHeading from './headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
-import QuickPlayBanner from './QuickPlayBanner';
+import QuickPlayBanner from './player/QuickPlayBanner';
 
 // random color options for top background
 const colors = [

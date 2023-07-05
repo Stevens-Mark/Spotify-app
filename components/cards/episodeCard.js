@@ -92,6 +92,8 @@ function EpisodeCard({ track, order, whichList }) {
    * @param {number} currentTrackIndex (offset) in  episode list
    */
   const HandleEpisodePlayPause = (event, currentTrackIndex) => {
+    event.preventDefault();
+    event.stopPropagation();
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track?.id == currentTrackId) {
         spotifyApi
@@ -131,33 +133,6 @@ function EpisodeCard({ track, order, whichList }) {
     const newActiveStatus = track?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [track?.id, currentTrackId, isPlaying]);
-
-  const fetchData = async (episodeId) => {
-    try {
-      const res = await fetch(`https://api.spotify.com/v1/episodes/${episodeId}`, {
-        headers: {
-          Authorization: `Bearer ${session.user.accessToken}`,
-        },
-      });
-      const data = await res.json();
-      console.log("episode date", data)
-      return data;
-    } catch (err) {
-      console.error('Error retrieving Album tracks:', err);
-      return null;
-    }
-  };
-
-  const handleClick = (event) => {
-    event.preventDefault();
-    // fetchData(track?.id)
-    // temperary to block action
-    // Handle the click event logic here,
-    // use the router to navigate to a different page, for example
-    // import { useRouter } from 'next/router';
-    // const router = useRouter();
-    // router.push('/some-page');
-  };
 
   return (
     <Link href={`/episode/${track?.id}`}>

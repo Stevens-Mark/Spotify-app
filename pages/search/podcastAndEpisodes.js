@@ -3,9 +3,8 @@ import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { searchResultState, queryState } from '@/atoms/searchAtom';
-import { episodesListState, episodesUrisState } from '@/atoms/showAtom';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -25,21 +24,11 @@ function PodcastAndEpisodes() {
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
-  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState); // episodes uris (from search)
-  const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
 
   const shows = queryResults?.shows?.items;
   const totalShows = queryResults?.shows?.total;
   const episodes = queryResults?.episodes?.items;
   const totalEpisodes = queryResults?.episodes?.total;
-
-  useEffect(() => {
-    setEpisodesList(episodes);
-    if (queryResults?.episodes?.items) {
-      const uris = queryResults?.episodes?.items.map((item) => item.uri);
-      setEpisodesUris(uris);
-    }
-  }, [episodes, queryResults, setEpisodesList, setEpisodesUris]);
 
   useEffect(() => {
     if (!query) {
