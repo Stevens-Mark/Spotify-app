@@ -55,6 +55,7 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
+  console.log(showInfo);
   const { data: session } = useSession();
   const router = useRouter();
   const textRef = useRef(null);
@@ -186,14 +187,31 @@ const ShowPage = ({ showInfo }) => {
               <h2 className="text-white text-xl md:text-2xl xl:text-3xl mb-5">
                 About
               </h2>
-              <p
-                ref={textRef}
-                className={`text-pink-swan  ${
-                  !expandABoutText ? 'line-clamp-4' : ''
-                }`}
-              >
-                {showInfo?.description}
-              </p>
+              {/* if there is a html description use it: links open in seperate page to avoid hydration issues */}
+              {showInfo?.html_description ? (
+                <p
+                  ref={textRef}
+                  className={`text-pink-swan  ${
+                    !expandABoutText ? 'line-clamp-4' : ''
+                  }`}
+                  dangerouslySetInnerHTML={{
+                    __html: showInfo?.html_description.replace(
+                      /<a(.*?)>/gi,
+                      '<a$1 target="_blank" rel="noopener noreferrer">'
+                    ),
+                  }}
+                />
+              ) : (
+                <p
+                  ref={textRef}
+                  className={`text-pink-swan links ${
+                    !expandABoutText ? 'line-clamp-4' : ''
+                  }`}
+                >
+                  {showInfo?.description}
+                </p>
+              )}
+
               {expandABoutButton && (
                 <button
                   className="mt-3 text-sm md:text-lg text-white hover:text-green-500"

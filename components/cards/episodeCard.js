@@ -150,7 +150,7 @@ function EpisodeCard({ track, order, whichList }) {
 
   const handleClick = (event) => {
     event.preventDefault();
-    fetchData(track?.id)
+    // fetchData(track?.id)
     // temperary to block action
     // Handle the click event logic here,
     // use the router to navigate to a different page, for example
@@ -160,7 +160,7 @@ function EpisodeCard({ track, order, whichList }) {
   };
 
   return (
-    <Link href="#" onClick={handleClick}>
+    <Link href={`/episode/${track?.id}`}>
       <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image

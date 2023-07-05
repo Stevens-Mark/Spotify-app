@@ -111,6 +111,7 @@ const TopSongCard = ({ song }) => {
           alt=""
           width={100}
           height={100}
+          style={{ objectFit: 'cover' }}
         />
         <span
           className={`absolute inset-0 w-10 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${

@@ -48,6 +48,7 @@ const Layout = ({ children }) => {
             alt=""
             width={100}
             height={100}
+            style={{ objectFit: 'cover' }}
             priority
           />
           <p className={`${isExcluded ? 'hidden  isMdLg:inline' : ''}`}>

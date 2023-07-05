@@ -62,6 +62,7 @@ function RenderTracks({
             alt=""
             width={100}
             height={100}
+            style={{ objectFit: 'cover' }}
           />
         )}
         <div>

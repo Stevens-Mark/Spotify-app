@@ -16,6 +16,7 @@ function Error() {
         alt=""
         width={52}
         height={52}
+        style={{ objectFit: 'cover' }}
         priority
       />
       <h1 className="text-7xl">404</h1>

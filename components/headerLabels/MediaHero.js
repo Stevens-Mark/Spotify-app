@@ -64,11 +64,12 @@ const MediaHeading = ({ item, itemTracks }) => {
       }}
     >
       <Image
-        className="h-16 w-16 xs:h-44 xs:w-44  shadow-image2"
+        className="h-16 w-16 xs:h-44 xs:w-44  shadow-image2 aspect-square"
         src={item?.images?.[0]?.url || noImage}
         alt=""
         width={100}
         height={100}
+        style={{ objectFit: 'cover' }}
         priority
       />
       <div>

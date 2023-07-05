@@ -49,6 +49,7 @@ function PlayingInfo() {
         alt=""
         width={100}
         height={100}
+        style={{ objectFit: 'cover' }}
       />
       <div>
         <h3 className="line-clamp-1">{songInfo?.name}</h3>

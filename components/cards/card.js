@@ -105,6 +105,7 @@ function Card({ item }) {
           alt=""
           width={100}
           height={100}
+          style={{ objectFit: 'cover' }}
         />
         {item?.type !== 'show' && item?.type !== 'episode' && (
           <button

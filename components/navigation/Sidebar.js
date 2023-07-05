@@ -216,6 +216,7 @@ function Sidebar() {
                 alt=""
                 width={100}
                 height={100}
+                style={{ objectFit: 'cover' }}
               />
               <p className="line-clamp-1">{playlist?.name}</p>
               <span className="pl-2">
