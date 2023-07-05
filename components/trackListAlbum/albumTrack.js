@@ -107,7 +107,7 @@ function AlbumTrack({ track, order }) {
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, originId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying]);
 
   return (
     <RenderTracks
