@@ -46,12 +46,11 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const router = useRouter();
 
   const [originId, setOriginId] = useRecoilState(originIdState);
-  console.log("origin ", originId);
+  console.log('origin ', originId);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
-  const queryResults = useRecoilValue(searchResultState);
-  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState); // episodes uris (from search)
-  const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
 
+  const episodesUris = useRecoilValue(episodesUrisState); // episodes uris (from search)
+  const episodesList = useRecoilValue(episodesListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
@@ -71,19 +70,17 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
-  useEffect(() => {
-    const episodes = queryResults?.episodes?.items;
-    setEpisodesList(episodes);
-    if (queryResults?.episodes?.items) {
-      const uris = queryResults?.episodes?.items.map((item) => item.uri);
-      setEpisodesUris(uris);
-     
-    }
-  }, [episodesUris, queryResults?.episodes?.items, setEpisodesList, setEpisodesUris]);
-  console.log("uros" ,episodesUris)
+  console.log('uros', episodesUris);
+
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
+  const index = episodesUris?.findIndex((element) =>
+  element.includes(originId)
+);
+const currentTrackIndex = index < 0 || index === null ? 0 : index;
+
+console.log("index, currentTrackIndex", index, currentTrackIndex)
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
@@ -119,10 +116,14 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                   })
                   .catch((err) => console.error('Pause failed: '));
               } else {
+                // const index = episodesUris?.findIndex((element) =>
+                //   element.includes(originId)
+                // );
+                // const currentTrackIndex = index < 0 || index === null ? 0 : index;
                 spotifyApi
                   .play({
                     uris: episodesUris,
-                    offset: { position: 0 },
+                    offset: { position: currentTrackIndex },
                   })
                   .then(() => {
                     console.log('Playback Success');
@@ -130,7 +131,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     setIsPlaying(true);
                     setCurrentItemId(item?.id);
                     setCurrentTrackId(item?.id);
-                    // setCurrentSongIndex(currentTrackIndex);
+                    setCurrentSongIndex(currentTrackIndex);
                     setActiveListInUse(episodesList); // set list to reference for player
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
@@ -206,11 +207,6 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                 {capitalize(item?.name)}
               </span>{' '}
             </>
-          )}
-          {item?.type === 'show' && (
-            <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-36 xs:w-48 mdlg:w-80 xl:w-auto truncate">
-              {capitalize(item?.name)}
-            </span>
           )}
         </div>
       </div>
