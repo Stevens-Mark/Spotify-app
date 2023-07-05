@@ -8,7 +8,7 @@ import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
-import QuickPlayBanner from '@/components/QuickPlayBanner';
+import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;

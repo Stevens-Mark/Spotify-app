@@ -8,7 +8,7 @@ import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import ArtistTracks from '@/components/trackListArtist/artistTracks';
-import QuickPlayBanner from '@/components/QuickPlayBanner';
+import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
