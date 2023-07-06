@@ -48,8 +48,8 @@ function PlaylistTrack({ track, order, whichList }) {
   const myPlaylist = useRecoilValue(myPlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
-  const [triggeredBySong, setTriggeredBySong] =
-    useRecoilState(triggeredBySongState);
+  // const [triggeredBySong, setTriggeredBySong] =
+  //   useRecoilState(triggeredBySongState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
 
@@ -111,8 +111,8 @@ function PlaylistTrack({ track, order, whichList }) {
       setPlayerInfoType,
       setIsPlaying,
       setActivePlaylist,
-      triggeredBySong,
-      setTriggeredBySong,
+      // triggeredBySong,
+      // setTriggeredBySong,
       spotifyApi,
     };
     HandleTrackPlayPause(playlistsOptions);

@@ -78,7 +78,7 @@ const MediaHeading = ({ item, itemTracks }) => {
             <span className="pt-2">
               {capitalize(item?.type || item?.album_type)}
             </span>
-            <h1 className="text-2xl md:text-3xl xl:text-5xl font-bold pt-1 pb-[7px] line-clamp-1">
+            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold pt-1 pb-[7px] line-clamp-2 whitespace-wrap">
               {item?.name}
             </h1>
 

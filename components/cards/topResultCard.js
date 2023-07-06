@@ -14,7 +14,7 @@ import { currentAlbumIdState } from '@/atoms/albumAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
-  triggeredBySongState,
+  // triggeredBySongState,
 } from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
@@ -39,8 +39,8 @@ function TopResultCard({ item }) {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-  const [triggeredBySong, setTriggeredBySong] =
-    useRecoilState(triggeredBySongState);
+  // const [triggeredBySong, setTriggeredBySong] =
+  //   useRecoilState(triggeredBySongState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const currentAlbumId = useRecoilValue(currentAlbumIdState);
@@ -73,7 +73,7 @@ function TopResultCard({ item }) {
       setCurrentSongIndex,
       setActivePlaylist,
       triggeredBySong,
-      setTriggeredBySong,
+      // setTriggeredBySong,
       spotifyApi
     );
   };

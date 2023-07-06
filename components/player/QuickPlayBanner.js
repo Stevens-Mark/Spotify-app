@@ -11,7 +11,7 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
-  triggeredBySongState,
+  // triggeredBySongState,
   backgroundColorState,
   randomColorColorState,
   originIdState,
@@ -45,8 +45,8 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-  const [triggeredBySong, setTriggeredBySong] =
-    useRecoilState(triggeredBySongState);
+  // const [triggeredBySong, setTriggeredBySong] =
+  //   useRecoilState(triggeredBySongState);
 
   const originId = useRecoilValue(originIdState);
   // used to set play/pause icons
@@ -97,8 +97,8 @@ function QuickPlayBanner({ item, scrollRef }) {
               setCurrentTrackId,
               setCurrentSongIndex,
               setActivePlaylist,
-              triggeredBySong,
-              setTriggeredBySong,
+              // triggeredBySong,
+              // setTriggeredBySong,
               spotifyApi
             );
           }
@@ -119,7 +119,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsVisible(scrollPosition > 320); // Changed to the desired threshold
+      setIsVisible(scrollPosition > 250); // Changed to the desired threshold
       setIsTextVisible(scrollPosition > 250);
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
@@ -135,50 +135,53 @@ function QuickPlayBanner({ item, scrollRef }) {
 
   return (
     <>
-      <div
-        className={`absolute top-0 h-20 w-full z-20 bg-gradient-to-b to-black  
+      <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
+        <div
+          className={`bg-gradient-to-b to-black  
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}
-        style={{
-          opacity,
-          background: `linear-gradient(to bottom, ${darkenColor(
-            backgroundColor
-          )} 90%, #000000)`,
-        }}
-      >
-        <div
-          className={` ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          } transition delay-100 duration-300 ease-in-out flex items-center`}
+          style={{
+            opacity,
+            background: `linear-gradient(to bottom, ${darkenColor(
+              backgroundColor
+            )} 90%, #000000)`,
+          }}
         >
-          {(item?.type !== 'show') && (
-            <>
-              <button
-                className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
-                onClick={(event) => {
-                  HandleCardPlayPauseClick(event);
-                }}
-              >
-                {activeStatus ? (
-                  <PauseCircleIcon className="w-12 h-12" />
-                ) : (
-                  <PlayCircleIcon className="w-12 h-12" />
-                )}
-              </button>
-              <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+          <div
+            className={` ${
+              isVisible ? 'opacity-100' : 'opacity-0'
+            } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden`}
+          >
+            {item?.type !== 'show' && (
+              <>
+                <button
+                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+                  onClick={(event) => {
+                    HandleCardPlayPauseClick(event);
+                  }}
+                >
+                  {activeStatus ? (
+                    <PauseCircleIcon className="w-12 h-12" />
+                  ) : (
+                    <PlayCircleIcon className="w-12 h-12" />
+                  )}
+                </button>
+                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
+                  {capitalize(item?.name)}
+                </span>{' '}
+              </>
+            )}
+            {item?.type === 'show' && (
+              <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
                 {capitalize(item?.name)}
-              </span>{' '}
-            </>
-          )}
-          {(item?.type === 'show') && (
-            <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-36 xs:w-48 mdlg:w-80 xl:w-auto truncate">
-              {capitalize(item?.name)}
-            </span>
-          )}
+              </span>
+            )}
+          </div>
         </div>
       </div>
-      {(item?.type !== 'show') && (
+
+      {item?.type !== 'show' && (
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button

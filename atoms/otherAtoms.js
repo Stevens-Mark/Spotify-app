@@ -19,10 +19,10 @@ export const playerInfoTypeState = atom({
 });
 
 // whether currentItemId triggered by a song
-export const triggeredBySongState = atom({
-  key: 'triggeredBySongState',
-  default: false,
-});
+// export const triggeredBySongState = atom({
+//   key: 'triggeredBySongState',
+//   default: false,
+// });
 
 // used for sticky banner background color setting complementary color with image
 export const backgroundColorState = atom({

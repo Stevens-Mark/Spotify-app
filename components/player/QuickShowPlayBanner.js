@@ -50,9 +50,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
 
   const showEpisodesUris = useRecoilValue(showEpisodesUrisState); // episodes uris from a SHOW
-  const showEpisodesList = useRecoilValue(showEpisodesListState); // episodes list from a SHOW
-  const episodesUris = useRecoilValue(episodesUrisState); // episodes uris (from search)
-  const episodesList = useRecoilValue(episodesListState);
+  // const showEpisodesList = useRecoilValue(showEpisodesListState); // episodes list from a SHOW
+  // const episodesUris = useRecoilValue(episodesUrisState); // episodes uris (from search)
+  // const episodesList = useRecoilValue(episodesListState);
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   // used to set play/pause icons
@@ -65,7 +65,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   );
 
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  const setActiveListInUse = useSetRecoilState(activeListInUseState);
+  // const setActiveListInUse = useSetRecoilState(activeListInUseState);
 
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
@@ -74,13 +74,10 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isTextVisible, setIsTextVisible] = useState(true);
   const [opacity, setOpacity] = useState(0);
+
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
-
-  useEffect(() => {
-    const which = (router?.asPath).includes('show');
-  }, [episodesList, router?.asPath, showEpisodesList]);
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
@@ -151,8 +148,8 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsVisible(scrollPosition > 320); // Changed to the desired threshold
-      setIsTextVisible(scrollPosition > 250);
+      setIsVisible(scrollPosition > 250); // Changed to the desired threshold
+      // setIsTextVisible(scrollPosition > 250);
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
@@ -176,8 +173,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
 
   return (
     <>
+        <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
       <div
-        className={`absolute top-0 h-20 w-full z-20 bg-gradient-to-b to-black  
+        className={` bg-gradient-to-b to-black  
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}
@@ -191,7 +189,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
         <div
           className={` ${
             isVisible ? 'opacity-100' : 'opacity-0'
-          } transition delay-100 duration-300 ease-in-out flex items-center`}
+          } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden`}
         >
           {item?.type === 'episode' && (
             <>
@@ -207,13 +205,16 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                   <PlayCircleIcon className="w-12 h-12" />
                 )}
               </button>
-              <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline w-24 xs:w-36 mdlg:w-64 xl:w-auto truncate">
+              <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
                 {capitalize(item?.name)}
               </span>{' '}
             </>
           )}
         </div>
       </div>
+
+      </div>
+
       {item?.type === 'episode' && (
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>

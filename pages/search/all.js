@@ -10,7 +10,7 @@ import {
   queryState,
   topResultState,
 } from '@/atoms/searchAtom';
-import { triggeredBySongState } from '@/atoms/otherAtoms';
+// import { triggeredBySongState } from '@/atoms/otherAtoms';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -29,8 +29,8 @@ function All() {
   const numOfItems = useNumOfItems();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
-  const [triggeredBySong, setTriggeredBySong] =
-    useRecoilState(triggeredBySongState);
+  // const [triggeredBySong, setTriggeredBySong] =
+  //   useRecoilState(triggeredBySongState);
 
   const queryResults = useRecoilValue(searchResultState);
   const query = useRecoilValue(queryState);
