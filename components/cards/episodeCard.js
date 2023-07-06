@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
@@ -38,8 +37,8 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
  */
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
-  const { data: session } = useSession();
-  const router = useRouter();
+
+  // const router = useRouter();
   // const id = (router?.asPath).split('/').pop();
 
   // used to determine what type of info to load/display in plyer window
@@ -49,9 +48,10 @@ function EpisodeCard({ track, order, whichList }) {
   const showEpisodesUris = useRecoilValue(showEpisodesUrisState);
   const episodesList = useRecoilValue(episodesListState);
   const episodesUris = useRecoilValue(episodesUrisState);
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -61,6 +61,8 @@ function EpisodeCard({ track, order, whichList }) {
 
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
+  // used to set play/pause icons
+  const [activeStatus, setActiveStatus] = useState(false);
 
   useEffect(() => {
     const listToUse = whichList === 'show' ? showEpisodesList : episodesList;
@@ -128,11 +130,12 @@ function EpisodeCard({ track, order, whichList }) {
   };
 
   // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = track?.id === currentTrackId && isPlaying;
+    const newActiveStatus =
+      (track?.id === currentTrackId && isPlaying) ||
+      (currentItemId === track?.id && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [track?.id, currentTrackId, isPlaying]);
+  }, [track?.id, currentTrackId, isPlaying, currentItemId]);
 
   return (
     <Link href={`/episode/${track?.id}`}>

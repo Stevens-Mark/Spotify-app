@@ -9,7 +9,6 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { searchResultState } from '@/atoms/searchAtom';
 import {
   showEpisodesUrisState,
   showEpisodesListState,
@@ -44,43 +43,44 @@ import {
 function QuickShowPlayBanner({ item, scrollRef }) {
   const spotifyApi = useSpotify();
   const router = useRouter();
-
   const [originId, setOriginId] = useRecoilState(originIdState);
-  console.log('origin ', originId);
+  // used for quick play banner coloring
+  const randomColor = useRecoilValue(randomColorColorState);
+  const backgroundColor = useRecoilValue(backgroundColorState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
 
+  const showEpisodesUris = useRecoilValue(showEpisodesUrisState); // episodes uris from a SHOW
+  const showEpisodesList = useRecoilValue(showEpisodesListState); // episodes list from a SHOW
   const episodesUris = useRecoilValue(episodesUrisState); // episodes uris (from search)
   const episodesList = useRecoilValue(episodesListState);
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  const setActiveListInUse = useSetRecoilState(activeListInUseState);
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
+
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
+
+  const setActivePlaylist = useSetRecoilState(activePlaylistState);
+  const setActiveListInUse = useSetRecoilState(activeListInUseState);
+
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
+
   // show track info when play button at top of screen
   const [isVisible, setIsVisible] = useState(false);
   const [isTextVisible, setIsTextVisible] = useState(true);
   const [opacity, setOpacity] = useState(0);
-
-  // used for quick play banner
-  const randomColor = useRecoilValue(randomColorColorState);
-  const backgroundColor = useRecoilValue(backgroundColorState);
-
-  console.log('uros', episodesUris);
-
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
-  const index = episodesUris?.findIndex((element) =>
-  element.includes(originId)
-);
-const currentTrackIndex = index < 0 || index === null ? 0 : index;
 
-console.log("index, currentTrackIndex", index, currentTrackIndex)
+  useEffect(() => {
+    const which = (router?.asPath).includes('show');
+  }, [episodesList, router?.asPath, showEpisodesList]);
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
@@ -104,11 +104,11 @@ console.log("index, currentTrackIndex", index, currentTrackIndex)
               .then(() => {
                 setIsPlaying(true);
               })
-              .catch((err) => console.error('Playback failed: '));
+              .catch((err) => console.error('Playback failed 1st: '));
           } else {
             // otherwise no track played from the curent page yet, so start with first track
             spotifyApi.getMyCurrentPlaybackState().then((data) => {
-              if (data.body?.is_playing && item?.id == currentTrackId) {
+              if (data.body?.is_playing && originId === currentTrackId) {
                 spotifyApi
                   .pause()
                   .then(() => {
@@ -116,26 +116,29 @@ console.log("index, currentTrackIndex", index, currentTrackIndex)
                   })
                   .catch((err) => console.error('Pause failed: '));
               } else {
-                // const index = episodesUris?.findIndex((element) =>
-                //   element.includes(originId)
-                // );
-                // const currentTrackIndex = index < 0 || index === null ? 0 : index;
+                const index = showEpisodesUris.findIndex((element) =>
+                  element.includes(item?.id)
+                );
+                const currentTrackIndex =
+                  index < 0 || index === null ? 0 : index;
+
                 spotifyApi
                   .play({
-                    uris: episodesUris,
-                    offset: { position: currentTrackIndex },
+                    uris: [item?.uri],
                   })
                   .then(() => {
                     console.log('Playback Success');
                     setPlayerInfoType('episode');
                     setIsPlaying(true);
-                    setCurrentItemId(item?.id);
-                    setCurrentTrackId(item?.id);
+                    setCurrentItemId(originId);
+                    setCurrentTrackId(originId);
+
                     setCurrentSongIndex(currentTrackIndex);
-                    setActiveListInUse(episodesList); // set list to reference for player
+                    // setActiveListInUse(showEpisodesUris); // set list to reference for player
+
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
-                  .catch((err) => console.error('Playback failed: ', err));
+                  .catch((err) => console.error('Playback failed 2nd: ', err));
               }
             });
           }
@@ -143,14 +146,6 @@ console.log("index, currentTrackIndex", index, currentTrackIndex)
       });
     }
   };
-
-  // used to set play/pause icons
-  useEffect(() => {
-    const newActiveStatus =
-      (currentItemId === item?.id && isPlaying) ||
-      (currentItemId === originId && isPlaying);
-    setActiveStatus(newActiveStatus);
-  }, [currentItemId, isPlaying, item?.id, originId]);
 
   // used for sticky banner quick play button
   useEffect(() => {
@@ -169,6 +164,15 @@ console.log("index, currentTrackIndex", index, currentTrackIndex)
     scrollContainer.addEventListener('scroll', handleScroll);
     return () => scrollContainer.removeEventListener('scroll', handleScroll);
   }, [scrollRef]);
+
+  // used to set play/pause icons
+  useEffect(() => {
+    const newActiveStatus =
+      (currentTrackId === item?.id && isPlaying) ||
+      (currentItemId === item?.id && isPlaying) ||
+      (currentItemId === originId && isPlaying);
+    setActiveStatus(newActiveStatus);
+  }, [currentItemId, currentTrackId, isPlaying, item?.id, originId]);
 
   return (
     <>

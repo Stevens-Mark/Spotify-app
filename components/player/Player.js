@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useRouter } from 'next/router';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
@@ -9,7 +10,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { activePlaylistState } from '@/atoms/playListAtom';
+// import { activePlaylistState } from '@/atoms/playListAtom';
 import { activeListInUseState } from '@/atoms/showAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
@@ -31,21 +32,31 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
  */
 function Player() {
   const spotifyApi = useSpotify();
+  const router = useRouter();
 
-  const [shuffleState, setShuffletState] = useState(false);
-  const [repeatState, setRepeatState] = useState(0);
-  const [volume, setVolume] = useState(50);
+  const [shuffleState, setShuffletState] = useState(false); // shuffle functionality
+  const [repeatState, setRepeatState] = useState(0); // repaet functionality
+  const [volume, setVolume] = useState(50); // volume functionality
+
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-  // list to reference when finding episode ID
+  // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
 
-  const [activePlaylist, setActivePlaylist] =
-    useRecoilState(activePlaylistState);
+  // const [activePlaylist, setActivePlaylist] =
+  //   useRecoilState(activePlaylistState);
+
+  // check whether on a sinle episode page (to dissable skip forward/previous controls)
+  const [isEpisode, setIsEpisode] = useState(false);
+
+  useEffect(() => {
+    const isEpisode = (router?.asPath).includes('episode');
+    setIsEpisode(isEpisode);
+  }, [router?.asPath]);
 
   const debounceAdjustVolume = useMemo(
     () =>
@@ -57,7 +68,11 @@ function Player() {
               const activeDevice = data.body.devices.find(
                 (device) => device.is_active
               );
-              console.log(activeDevice ? 'Device Found' : 'NO Device Found - Connect to Spotify');
+              console.log(
+                activeDevice
+                  ? 'Device Found'
+                  : 'NO Device Found - Connect to Spotify'
+              );
               if (activeDevice) {
                 spotifyApi.setVolume(volume).catch((err) => {
                   console.error(err);
@@ -112,12 +127,12 @@ function Player() {
     return previousEpisodeId || currentTrackId;
   };
 
-  /* go back a track if playing */
+  /* go back a track if playing : disable if on a single episode page */
   const skipToPrevious = () => {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        if (data.body?.is_playing) {
+        if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToPrevious()
             .then(() => {
@@ -161,32 +176,34 @@ function Player() {
 
   /* either play or pause a track */
   const handlePlayPause = () => {
-    spotifyApi.getMyCurrentPlaybackState().then((data) => {
-      const dataType = data.body?.currently_playing_type;
-      if (data.body?.is_playing) {
-        spotifyApi
-          .pause()
-          .then(() => {
-            setIsPlaying(false);
-          })
-          .catch((err) => console.error('Pause failed: ', err));
-      } else {
-        spotifyApi
-          .play()
-          .then(() => {
-            if (dataType === 'episode') {
-              setCurrentTrackId(findEpisodeId);
-            } else {
-              setCurrentTrackId(data.body?.item?.id);
-            }
-            setIsPlaying(true);
-            // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
-            //   setActivePlaylist(playlistId);
-            // }
-          })
-          .catch((err) => console.error('Playback failed: ', err));
-      }
-    });
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMyCurrentPlaybackState().then((data) => {
+        const dataType = data.body?.currently_playing_type;
+        if (data.body?.is_playing) {
+          spotifyApi
+            .pause()
+            .then(() => {
+              setIsPlaying(false);
+            })
+            .catch((err) => console.error('Pause failed: ', err));
+        } else {
+          spotifyApi
+            .play()
+            .then(() => {
+              if (dataType === 'episode') {
+                setCurrentTrackId(findEpisodeId);
+              } else {
+                setCurrentTrackId(data.body?.item?.id);
+              }
+              setIsPlaying(true);
+              // if (data.body?.context !== null) {   // set ID if current track is part of a playlist
+              //   setActivePlaylist(playlistId);
+              // }
+            })
+            .catch((err) => console.error('Playback failed: ', err));
+        }
+      });
+    }
   };
 
   /**
@@ -205,12 +222,12 @@ function Player() {
     return nextEpisodeId || currentTrackId;
   };
 
-  /* go forward a track if playing */
+  /* go forward a track if playing : disable if on a single episode page */
   const skipToNext = () => {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        if (data.body?.is_playing) {
+        if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToNext()
             .then(() => {
