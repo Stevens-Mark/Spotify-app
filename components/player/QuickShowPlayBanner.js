@@ -129,7 +129,6 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     setIsPlaying(true);
                     setCurrentItemId(originId);
                     setCurrentTrackId(originId);
-
                     setCurrentSongIndex(currentTrackIndex);
                     // setActiveListInUse(showEpisodesUris); // set list to reference for player
 
@@ -194,7 +193,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
           {item?.type === 'episode' && (
             <>
               <button
-                className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+                className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
                 onClick={(event) => {
                   HandleEpisodePlayPauseClick(event);
                 }}
@@ -219,7 +218,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button
-              className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+              className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
               onClick={(event) => {
                 HandleEpisodePlayPauseClick(event);
               }}

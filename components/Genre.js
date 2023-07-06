@@ -21,7 +21,6 @@ function Genre() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const [genres, setGenres] = useRecoilState(genreState);
   const [currentOffset, setCurrentOffset] = useState(0);
-  // const [totalGenres, setTotalGenres] = useState(99999);
   const itemsPerPage = 25;
 
   useEffect(() => {
@@ -36,7 +35,6 @@ function Genre() {
           })
           .then(
             function (data) {
-              // setTotalGenres(data.body.categories.total);
               setGenres(data.body.categories.items);
             },
             function (err) {
@@ -99,16 +97,7 @@ function Genre() {
             <GenreCard key={`${item?.id}-${idx}`} item={item} idx={idx} />
           ))}
         </div>
-        {/* {genres?.length < totalGenres && (
-          <button
-            className="flex justify-end w-full mt-5 space-x-2 text-xl md:text-2xl2xl:text-3xl text-white  hover:text-green-500"
-            onClick={() => {
-              fetchGenre();
-            }}
-          >
-            <span>Add More</span>
-          </button>
-        )} */}
+
         {showButton && (
           <button
             className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"

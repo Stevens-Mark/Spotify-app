@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
-import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -37,9 +36,6 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
  */
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
-
-  // const router = useRouter();
-  // const id = (router?.asPath).split('/').pop();
 
   // used to determine what type of info to load/display in plyer window
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);

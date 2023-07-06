@@ -12,7 +12,6 @@ import {
 import {
   playerInfoTypeState,
   currentItemIdState,
-  // triggeredBySongState,
   originIdState,
 } from '@/atoms/otherAtoms';
 import { activePlaylistState } from '@/atoms/playListAtom';
@@ -40,8 +39,6 @@ function AlbumTrack({ track, order }) {
   const albumTracklist = useRecoilValue(albumTrackListState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
-  // const [triggeredBySong, setTriggeredBySong] =
-  //   useRecoilState(triggeredBySongState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
 
@@ -95,8 +92,6 @@ function AlbumTrack({ track, order }) {
       setPlayerInfoType,
       setIsPlaying,
       setActivePlaylist,
-      // triggeredBySong,
-      // setTriggeredBySong,
       spotifyApi,
     };
     HandleTrackPlayPause(albumOptions);

@@ -9,7 +9,6 @@ import { currentAlbumIdState } from '@/atoms/albumAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
-  // triggeredBySongState,
 } from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
@@ -30,7 +29,6 @@ const TopSongCard = ({ song }) => {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  // const setTriggeredBySong = useSetRecoilState(triggeredBySongState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
   // used to set play/pause icons
@@ -69,7 +67,6 @@ const TopSongCard = ({ song }) => {
             setIsPlaying(true);
             setCurrentTrackId(song?.id); // will trigger playerInfo to update
             setCurrentAlbumId(song?.album?.id);
-            // setTriggeredBySong(true);
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));

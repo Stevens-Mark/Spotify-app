@@ -11,7 +11,6 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
-  // triggeredBySongState,
   backgroundColorState,
   randomColorColorState,
   originIdState,
@@ -45,8 +44,6 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-  // const [triggeredBySong, setTriggeredBySong] =
-  //   useRecoilState(triggeredBySongState);
 
   const originId = useRecoilValue(originIdState);
   // used to set play/pause icons
@@ -97,8 +94,6 @@ function QuickPlayBanner({ item, scrollRef }) {
               setCurrentTrackId,
               setCurrentSongIndex,
               setActivePlaylist,
-              // triggeredBySong,
-              // setTriggeredBySong,
               spotifyApi
             );
           }
@@ -151,12 +146,12 @@ function QuickPlayBanner({ item, scrollRef }) {
           <div
             className={` ${
               isVisible ? 'opacity-100' : 'opacity-0'
-            } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden`}
+            } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden `}
           >
             {item?.type !== 'show' && (
               <>
                 <button
-                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
                   onClick={(event) => {
                     HandleCardPlayPauseClick(event);
                   }}
@@ -185,7 +180,7 @@ function QuickPlayBanner({ item, scrollRef }) {
         <div className="sticky top-0">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button
-              className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110`}
+              className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
               onClick={(event) => {
                 HandleCardPlayPauseClick(event);
               }}

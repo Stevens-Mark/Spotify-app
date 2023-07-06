@@ -12,8 +12,7 @@ import { playerInfoTypeState } from '@/atoms/otherAtoms';
  */
 function useSongInfo() {
   const spotifyApi = useSpotify();
-  const [currentTrackId, setCurrentTrackId] =
-    useRecoilState(currentTrackIdState);
+  const currentTrackId = useRecoilValue(currentTrackIdState);
   // used to determine what type of info to load
   const playerInfoType = useRecoilValue(playerInfoTypeState);
   const [songInfo, setSongInfo] = useState(null);
