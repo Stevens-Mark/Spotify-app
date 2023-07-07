@@ -3,13 +3,15 @@ import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import {
+  currentTrackIdState,
+  isPlayState,
+  currentSongIndexState,
+  currentTrackNumberState,
+} from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';
-import {
-  playerInfoTypeState,
-  currentItemIdState,
-} from '@/atoms/otherAtoms';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -25,6 +27,8 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
 
+  console.log('song ', song);
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -32,6 +36,14 @@ const TopSongCard = ({ song }) => {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
   // used to set play/pause icons
+
+  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(
+  //   currentTrackNumberState
+  // );
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
+
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
@@ -67,6 +79,10 @@ const TopSongCard = ({ song }) => {
             setIsPlaying(true);
             setCurrentTrackId(song?.id); // will trigger playerInfo to update
             setCurrentAlbumId(song?.album?.id);
+
+            setCurrentSongIndex(song?.track_number);
+            // setCurrentTrackNumber(song?.track_number);
+
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
           .catch((err) => console.error('Playback failed: ', err));
