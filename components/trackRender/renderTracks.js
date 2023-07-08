@@ -50,9 +50,9 @@ function RenderTracks({
               order + 1
             )
           ) : activeStatus && order == currentSongIndex ? (
-            <PauseIcon className="h-4" />
+            <PauseIcon className="h-3.5" />
           ) : (
-            <PlayIcon className="h-4" />
+            <PlayIcon className="h-3.5" />
           )}
         </button>
         {song?.album?.images?.[0].url && (
