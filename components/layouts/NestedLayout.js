@@ -125,6 +125,7 @@ const NestedLayout = ({ children }) => {
         </div>
 
         {children}
+       
       </div>
     </>
   );

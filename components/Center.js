@@ -9,6 +9,7 @@ import { myPlaylistIdState, myPlaylistState } from '@/atoms/playListAtom';
 import MediaHeading from './headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlayBanner from './player/QuickPlayBanner';
+import Footer from './Footer';
 
 // random color options for top background
 const colors = [
@@ -120,6 +121,7 @@ function Center() {
       <QuickPlayBanner item={myPlaylist} scrollRef={scrollRef} />
 
       <PlaylistTracks Tracklist={myPlaylist} whichList="myPlaylist" />
+      <Footer />
     </div>
   );
 }

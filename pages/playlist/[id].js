@@ -9,6 +9,7 @@ import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
+import Footer from '@/components/Footer';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -71,6 +72,7 @@ const PlaylistPage = ({ playlist }) => {
         <QuickPlayBanner item={playlist} scrollRef={scrollRef}/>
 
         <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
+        <Footer />
       </div>
     </>
   );

@@ -7,7 +7,7 @@ import {
   currentTrackIdState,
   isPlayState,
   currentSongIndexState,
-  currentTrackNumberState,
+  // currentTrackNumberState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';

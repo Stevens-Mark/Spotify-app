@@ -61,15 +61,15 @@ const Layout = ({ children }) => {
       </aside>
       <main className="flex">
         <Sidebar />
-        <div className='relative w-full'>
+        <div className="relative w-full">
           <NavigationButtons />
           {children}
         </div>
       </main>
 
-      <footer className="sticky bottom-0 z-20">
+      <div className="sticky bottom-0 z-20">
         <Player />
-      </footer>
+      </div>
     </div>
   );
 };
