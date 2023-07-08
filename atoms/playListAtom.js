@@ -25,7 +25,7 @@ export const myPlaylistIdState = atom({
   default: null,
 });
 
-// wether a track playing or not
+// whether a track playing or not
 export const activePlaylistState = atom({
   key: 'activePlaylistState',
   default: null,

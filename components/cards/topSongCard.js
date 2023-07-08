@@ -7,7 +7,6 @@ import {
   currentTrackIdState,
   isPlayState,
   currentSongIndexState,
-  // currentTrackNumberState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { currentAlbumIdState } from '@/atoms/albumAtom';
@@ -27,8 +26,6 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 const TopSongCard = ({ song }) => {
   const spotifyApi = useSpotify();
 
-  console.log('song ', song);
-
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -36,14 +33,7 @@ const TopSongCard = ({ song }) => {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState); // to control player information window
   // used to set play/pause icons
-
-  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(
-  //   currentTrackNumberState
-  // );
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
-
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const [currentAlbumId, setCurrentAlbumId] =
     useRecoilState(currentAlbumIdState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);

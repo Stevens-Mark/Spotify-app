@@ -23,11 +23,3 @@ export const currentTrackIdState = atom({
   default: null,
 });
 
-
-
-
-// // the track number the song is in the album
-// export const currentTrackNumberState = atom({
-//   key: 'currentTrackNumberState',
-//   default: null,
-// });

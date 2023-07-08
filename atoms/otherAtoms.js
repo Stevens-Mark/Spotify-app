@@ -23,6 +23,7 @@ export const backgroundColorState = atom({
   key: 'backgroundColorState',
   default: null,
 });
+
 export const randomColorColorState = atom({
   key: 'randomColorColorState',
   default: null,
