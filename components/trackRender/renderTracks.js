@@ -65,9 +65,9 @@ function RenderTracks({
             style={{ objectFit: 'cover' }}
           />
         )}
-        <div>
+        <div className="w-full">
           <h3
-            className={`w-36 sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 pr-2 ${
+            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-full pr-2 ${
               activeStatus && order == currentSongIndex
                 ? 'text-green-500'
                 : 'text-white'
@@ -80,7 +80,7 @@ function RenderTracks({
       </div>
       {song?.album?.name ? (
         <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-          <span className="w-40 hidden mdlg:inline pr-3">
+          <span className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal">
             {song?.album?.name}
           </span>
           {addedAt && (

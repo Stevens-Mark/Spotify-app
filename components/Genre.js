@@ -9,6 +9,8 @@ import { genreState } from '@/atoms/genreAtom';
 // import component
 import RecentSearches from './Recent';
 import GenreCard from './cards/genreCard';
+import Footer from '@/components/Footer';
+
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
@@ -87,7 +89,7 @@ function Genre() {
     >
       {/* Recent Searches list here */}
       <RecentSearches />
-      <section>
+      <section className="pb-20">
         <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
           Browse all Genres
         </h2>
@@ -107,6 +109,7 @@ function Genre() {
           </button>
         )}
       </section>
+      <Footer />
     </div>
   );
 }

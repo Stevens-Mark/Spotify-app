@@ -20,7 +20,7 @@ function ArtistTracks() {
   };
 
   return (
-    <section className="pb-20">
+    <section>
       <h2 className="sr-only">Track List</h2>
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
         {artistTracklist?.tracks?.slice(0, number).map((track, i) => (

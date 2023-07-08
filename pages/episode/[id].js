@@ -9,6 +9,7 @@ import { getMonthYear, msToTime } from '@/lib/time';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import QuickShowPlayBanner from '@/components/player/QuickShowPlayBanner';
+import Footer from '@/components/Footer';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -145,6 +146,7 @@ const EpisodePage = ({ episode }) => {
         >
           see all episodes
         </Link>
+        <Footer />
       </div>
     </>
   );
