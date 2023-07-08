@@ -186,7 +186,7 @@ function Footer() {
       </div>
       <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mb-8" />
       {/* Final dummy links */}
-      <div className="px-8 mb-24 flex justify-between flex-col md:flex-row">
+      <div className="px-8 flex justify-between flex-col md:flex-row">
         <span className="flex flex-wrap flex-col isMdLg:flex-row">
           <p className="pr-8 text-pink-swan">Legal</p>
           <p className="pr-8 text-pink-swan">Privacy Policy</p>

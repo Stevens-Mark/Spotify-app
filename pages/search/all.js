@@ -16,6 +16,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import TopResult from '../../components/topResult';
 import Card from '@/components/cards/card';
 import TopSongs from '@/components/topSongs';
+import Footer from '@/components/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
@@ -248,6 +249,7 @@ function All() {
           <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
         </button>
       )}
+      <Footer />
     </div>
   );
 }
