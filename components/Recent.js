@@ -82,7 +82,7 @@ const PreviousSearches = () => {
                   className="text.white absolute top-1 z-10 right-1"
                   onClick={(e) => removeFromLocalStorage(e, item?.id)}
                 >
-                  <XMarkIcon className="relative z-100 p-[3px] w-7 h-7 rounded-full  bg-gray-800" />
+                  <XMarkIcon className="relative z-100 p-[3px] w-7 h-7 rounded-full  bg-gray-800 hover:scale-125 duration-150 ease-in-out" />
                 </button>
                 <Card item={item} />
               </div>
