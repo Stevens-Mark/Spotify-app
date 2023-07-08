@@ -19,7 +19,7 @@ import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import ShowTracks from '@/components/trackListShow/showTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
-import Footer from '@/components/Footer';
+import Footer from '@/components/navigation/Footer';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;

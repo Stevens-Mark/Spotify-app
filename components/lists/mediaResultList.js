@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
-import Footer from '@/components/Footer';
+import Footer from '@/components/navigation/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
 

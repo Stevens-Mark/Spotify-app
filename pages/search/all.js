@@ -16,7 +16,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import TopResult from '../../components/topResult';
 import Card from '@/components/cards/card';
 import TopSongs from '@/components/topSongs';
-import Footer from '@/components/Footer';
+import Footer from '@/components/navigation/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**

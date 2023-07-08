@@ -9,7 +9,7 @@ import { getMonthYear, msToTime } from '@/lib/time';
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import QuickShowPlayBanner from '@/components/player/QuickShowPlayBanner';
-import Footer from '@/components/Footer';
+import Footer from '@/components/navigation/Footer';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;

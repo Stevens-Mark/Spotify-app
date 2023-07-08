@@ -9,7 +9,7 @@ import { genreState } from '@/atoms/genreAtom';
 // import component
 import RecentSearches from './Recent';
 import GenreCard from './cards/genreCard';
-import Footer from '@/components/Footer';
+import Footer from '@/components/navigation/Footer';
 
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
