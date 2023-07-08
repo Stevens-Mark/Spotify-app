@@ -10,6 +10,8 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
+// import functions
+import { getMonthDayYear } from '@/lib/time';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -50,6 +52,7 @@ const AlbumPage = ({ album }) => {
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setAlbumTracklist = useSetRecoilState(albumTrackListState);
 
+  console.log('album ', album);
   useEffect(() => {
     setCurrentAlbumId(album?.id);
     setAlbumTracklist(album);
@@ -70,6 +73,16 @@ const AlbumPage = ({ album }) => {
         <QuickPlayBanner item={album} scrollRef={scrollRef} />
 
         <AlbumTracks />
+
+        {/* Release date & copyright information */}
+        <aside className="px-8 text-pink-swan">
+          <p>{getMonthDayYear(album?.release_date)}</p>
+          {album?.copyrights.map((item, idx) => (
+            <p key={idx} className="text-[12px]">
+              {item?.text}
+            </p>
+          ))}
+        </aside>
         <Footer />
       </div>
     </>

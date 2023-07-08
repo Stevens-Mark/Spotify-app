@@ -209,7 +209,9 @@ function Footer() {
             © 2023 Mark Stevens
           </p>
         </Link>
+        
       </div>
+      <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mt-8 mb-28" />
     </>
   );
 }
