@@ -19,6 +19,7 @@ import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import ShowTracks from '@/components/trackListShow/showTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
+import Footer from '@/components/Footer';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -55,7 +56,6 @@ export async function getServerSideProps(context) {
  * @returns {JSX}
  */
 const ShowPage = ({ showInfo }) => {
-  console.log(showInfo);
   const { data: session } = useSession();
   const router = useRouter();
   const textRef = useRef(null);
@@ -177,7 +177,7 @@ const ShowPage = ({ showInfo }) => {
         {/* Hero bar with image, podcast title & author etc */}
         <MediaHeading item={showInfo} />
         <QuickPlayBanner item={showInfo} scrollRef={scrollRef} />
-        <section className="pb-24">
+        <section>
           <h2 className="sr-only">Track List</h2>
           <div className="flex  flex-col-reverse xl:flex-row gap-9 py-4 px-5 xs:p-10">
             <div className=" w-[100%] xl:w-[70%]">
@@ -231,6 +231,7 @@ const ShowPage = ({ showInfo }) => {
             </button>
           )}
         </section>
+        <Footer />
       </div>
     </>
   );
