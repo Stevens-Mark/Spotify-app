@@ -1,7 +1,7 @@
 import React from 'react';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
-// import Footer from '../Footer';
+import Footer from '@/components/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
 
@@ -70,9 +70,8 @@ function MediaResultList(props) {
             <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
           </button>
         )}
- 
+        <Footer />
       </div>
-
     </>
   );
 }
