@@ -17,7 +17,7 @@ function Footer() {
   };
 
   return (
-    <>
+    <nav role="navigation" aria-label="Outside Links Menu">
       {/* group one */}
       <div className="pt-20 px-8 flex justify-none md:justify-between flex-wrap flex-col mdlg:flex-row">
         <div className="flex flex-wrap isSm:flex-nowrap">
@@ -209,10 +209,9 @@ function Footer() {
             © 2023 Mark Stevens
           </p>
         </Link>
-        
       </div>
       <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mt-8 mb-28" />
-    </>
+    </nav>
   );
 }
 

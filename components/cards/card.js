@@ -119,9 +119,9 @@ function Card({ item }) {
           </button>
         )}
 
-        <h2 className="text-white capitalize mt-2 truncate">
+        <h3 className="text-white capitalize mt-2 truncate">
           {item?.name.replace('/', ' & ')}
-        </h2>
+        </h3>
 
         <div className="flex flex-wrap text-pink-swan mt-2 h-10">
           {/* album */}

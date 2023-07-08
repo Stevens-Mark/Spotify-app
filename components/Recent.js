@@ -67,7 +67,7 @@ const PreviousSearches = () => {
   return (
     <>
       {recent?.length !== 0 && (
-        <div className="bg-black pb-4">
+        <section className="bg-black pb-4">
           <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
             Recent searches
           </h2>
@@ -88,7 +88,7 @@ const PreviousSearches = () => {
               </div>
             ))}
           </div>
-        </div>
+        </section>
       )}
     </>
   );
