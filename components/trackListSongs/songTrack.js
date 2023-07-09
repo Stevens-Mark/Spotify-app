@@ -67,7 +67,7 @@ function SongTrack({ track, order }) {
         currentTrackId !== null &&
         songsList !== null
       ) {
-        const indexPosition = songsList?.tracks?.findIndex(
+        const indexPosition = songsList?.tracks?.items?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);

@@ -31,6 +31,7 @@ const Layout = ({ children }) => {
     '/search/episodes',
     '/search/playlists',
     '/search/shows',
+    '/search/tracks',
     '/search/podcastAndEpisodes',
   ];
   const isExcluded = excludedPath.includes(path);
