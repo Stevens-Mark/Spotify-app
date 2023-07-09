@@ -10,7 +10,7 @@ import {
   queryState,
   searchingState,
 } from '@/atoms/searchAtom';
-import { songsUrisState } from '@/atoms/songAtom';
+import { songsUrisState, songsListState } from '@/atoms/songAtom';
 import { errorState } from '@/atoms/errorAtom';
 // import functions
 import { mergeObject } from '@/lib/merge';
@@ -31,6 +31,7 @@ function Tracks() {
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [songsUris, setSongsUris] = useRecoilState(songsUrisState); // song uris (from search)
+  const [songsList, setsongsList] = useRecoilState(songsListState); // songs list (from search)
 
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
@@ -41,9 +42,9 @@ function Tracks() {
   const totalNumber = queryResults?.tracks?.total;
 
   useEffect(() => {
-    // setArtistTracklist(artistTracks);
+    setsongsList(tracks);
     setSongsUris(tracks?.map((track) => track.uri)); // set uris to be used in player
-  }, [setSongsUris, tracks]);
+  }, [setSongsUris, setsongsList, tracks]);
 
   console.log("songuris ", songsUris)
 
