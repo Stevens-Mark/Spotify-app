@@ -145,7 +145,7 @@ function EpisodeCard({ track, order, whichList }) {
             height={100}
             style={{ objectFit: 'cover' }}
           />
-          <h2
+          <h3
             className={`col-span-3 row-start-1 capitalize line-clamp-2 self-center
            ${
              activeStatus && order == currentSongIndex
@@ -154,7 +154,7 @@ function EpisodeCard({ track, order, whichList }) {
            }`}
           >
             {track?.name.replace('/', ' & ')}
-          </h2>
+          </h3>
 
           <div className="col-span-4 md:col-span-3 row-start-2 text-pink-swan pt-2 pb-3">
             <span className="mb-2 line-clamp-2">{track?.description}</span>

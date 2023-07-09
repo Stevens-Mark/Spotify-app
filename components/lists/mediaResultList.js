@@ -30,18 +30,22 @@ function MediaResultList(props) {
           scrollableSectionRef.current = node;
         }}
       >
+        <h1 className="sr-only">
+          Search results for{' '}
+          {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
+        </h1>
         {totalNumber === 0 ? (
           <span className="flex items-center h-full justify-center">
-            <h1 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
+            <h2 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
               Sorry no items found
-            </h1>
+            </h2>
           </span>
         ) : (
           <>
             {/* list here */}
-            <h1 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
+            <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
               {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
-            </h1>
+            </h2>
 
             {mediaList?.[0].type === 'episode' ? (
               <div className="flex flex-col">

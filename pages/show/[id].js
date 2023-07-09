@@ -178,7 +178,7 @@ const ShowPage = ({ showInfo }) => {
         <MediaHeading item={showInfo} />
         <QuickPlayBanner item={showInfo} scrollRef={scrollRef} />
         <section>
-          <h2 className="sr-only">Track List</h2>
+          <h2 className="sr-only">Show Episodes List</h2>
           <div className="flex  flex-col-reverse xl:flex-row gap-9 py-4 px-5 xs:p-10">
             <div className=" w-[100%] xl:w-[70%]">
               <ShowTracks />

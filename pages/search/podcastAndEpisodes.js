@@ -50,7 +50,7 @@ function PodcastAndEpisodes() {
       className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-56"
       ref={scrollableSectionRef}
     >
-      <h1 className="sr-only">Podcasts, Shows & Episodes</h1>
+      <h1 className="sr-only">Search Results for Podcasts, Shows & Episodes</h1>
       {totalShows === 0 ? (
         <section>
           <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">

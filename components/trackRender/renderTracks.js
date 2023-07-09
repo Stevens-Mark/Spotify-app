@@ -44,12 +44,14 @@ function RenderTracks({
           }}
         >
           {!isShown ? (
-            activeStatus && order == currentSongIndex ? (
+            (activeStatus && order === currentSongIndex) ||
+            (activeStatus && song?.track_number === currentSongIndex) ? (
               <Equaliser />
             ) : (
               order + 1
             )
-          ) : activeStatus && order == currentSongIndex ? (
+          ) : (activeStatus && order == currentSongIndex) ||
+            (activeStatus && song?.track_number === currentSongIndex) ? (
             <PauseIcon className="h-3.5" />
           ) : (
             <PlayIcon className="h-3.5" />
@@ -68,7 +70,8 @@ function RenderTracks({
         <div className="w-full">
           <h3
             className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-full pr-2 ${
-              activeStatus && order == currentSongIndex
+              (activeStatus && order == currentSongIndex) ||
+              (activeStatus && song?.track_number === currentSongIndex)
                 ? 'text-green-500'
                 : 'text-white'
             } truncate`}

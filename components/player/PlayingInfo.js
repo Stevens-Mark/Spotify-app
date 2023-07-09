@@ -52,7 +52,7 @@ function PlayingInfo() {
         style={{ objectFit: 'cover' }}
       />
       <div>
-        <h3 className="line-clamp-1">{songInfo?.name}</h3>
+        <span className="line-clamp-1">{songInfo?.name}</span>
         {songInfo?.artist && (
           <span className="text-sm line-clamp-1">
             {songInfo?.artists?.[0]?.name}
