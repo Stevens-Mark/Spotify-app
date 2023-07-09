@@ -23,3 +23,15 @@ export const currentTrackIdState = atom({
   default: null,
 });
 
+
+// // list of tracks in artist
+// export const songsTrackListState = atom({
+//   key: 'songsTrackListState',
+//   default: null,
+// });
+
+// list of songs uris for all tracks from the search
+export const songsUrisState = atom({
+  key: 'songsUrisState',
+  default: [],
+});
