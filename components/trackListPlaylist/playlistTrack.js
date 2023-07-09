@@ -39,17 +39,16 @@ function PlaylistTrack({ track, order, whichList }) {
 
   const router = useRouter();
 
-  // used to determine what type of info to load
-  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const playlistId = useRecoilValue(playlistIdState);
   const playlist = useRecoilValue(playlistTrackListState);
-  const myPlaylistId = useRecoilValue(myPlaylistIdState);
+    const myPlaylistId = useRecoilValue(myPlaylistIdState);
   const myPlaylist = useRecoilValue(myPlaylistState);
-  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(

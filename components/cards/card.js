@@ -82,7 +82,7 @@ function Card({ item }) {
   useEffect(() => {
     const newActiveStatus = currentItemId === item?.id && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
+  }, [currentItemId, isPlaying, item?.id]);
 
   return (
     <Link

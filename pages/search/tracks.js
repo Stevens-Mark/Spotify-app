@@ -30,8 +30,8 @@ function Tracks() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
-  const [songsUris, setSongsUris] = useRecoilState(songsUrisState); // song uris (from search)
-  const [songsList, setsongsList] = useRecoilState(songsListState); // songs list (from search)
+  const setSongsUris = useSetRecoilState(songsUrisState); // song uris (from search)
+  const setsongsList = useSetRecoilState(songsListState); // songs list (from search)
 
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
@@ -41,12 +41,7 @@ function Tracks() {
   const tracks = queryResults?.tracks?.items;
   const totalNumber = queryResults?.tracks?.total;
 
-  useEffect(() => {
-    setsongsList(tracks);
-    setSongsUris(tracks?.map((track) => track.uri)); // set uris to be used in player
-  }, [setSongsUris, setsongsList, tracks]);
-
-  console.log("songuris ", songsUris)
+  console.log("track ", tracks)
 
   useEffect(() => {
     if (!query) {
@@ -74,6 +69,11 @@ function Tracks() {
           function (data) {
             const updatedList = mergeObject(data.body, queryResults, 'tracks');
             setQueryResults(updatedList);
+            setsongsList(updatedList);
+            // Merge the new URIs into the existing songsUris state
+            const newUris = data.body?.tracks?.items.map((item) => item.uri);
+
+            setSongsUris((prevUris) => [...prevUris, ...newUris]);
             setIsSearching(false);
           },
           function (err) {

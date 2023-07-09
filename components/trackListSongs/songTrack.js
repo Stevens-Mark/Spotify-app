@@ -3,7 +3,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
+import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -35,19 +35,18 @@ function SongTrack({ track, order }) {
 
   const router = useRouter();
 
+  const songsList = useRecoilValue(songsListState);
+  const songsUris =  useRecoilValue(songsUrisState); // song uris (from search)
+
+  console.log("songslist ", songsList)
+  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+  
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 
-  const songslist = useRecoilValue(songsListState);
-  const songsUris =  useRecoilValue(songsUrisState); // song uris (from search)
-
-
-
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
@@ -66,15 +65,15 @@ function SongTrack({ track, order }) {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        songslist !== null
+        songsList !== null
       ) {
-        const indexPosition = songslist?.tracks?.findIndex(
+        const indexPosition = songsList?.tracks?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '500');
-  }, [currentSongIndex, currentTrackId, setCurrentSongIndex, songslist]);
+  }, [currentSongIndex, currentTrackId, setCurrentSongIndex, songsList]);
 
   /**
    * Either play or pause current track

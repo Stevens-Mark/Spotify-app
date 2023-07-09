@@ -40,7 +40,6 @@ function Episodes() {
   const setIsError = useSetRecoilState(errorState);
 
   const episodes = queryResults?.episodes?.items;
-
   const totalNumber = queryResults?.episodes?.total;
 
   useEffect(() => {
@@ -76,7 +75,7 @@ function Episodes() {
             setQueryResults(updatedList);
             setEpisodesList(updatedList);
             // Merge the new URIs into the existing episodesUris state
-            const newUris = data.body.episodes.items.map((item) => item.uri);
+            const newUris = data.body?.episodes?.items.map((item) => item.uri);
 
             setEpisodesUris((prevUris) => [...prevUris, ...newUris]);
             setIsSearching(false);

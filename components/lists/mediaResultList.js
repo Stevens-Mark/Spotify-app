@@ -1,6 +1,7 @@
 import React from 'react';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
+import SongTrack from '../trackListSongs/songTrack';
 import Footer from '@/components/navigation/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
@@ -47,7 +48,22 @@ function MediaResultList(props) {
               {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
             </h2>
 
-            {mediaList?.[0].type === 'episode' ? (
+            {mediaList?.[0].type === 'track' && (
+              <section>
+                <h2 className="sr-only">Track List</h2>
+                <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
+                  {mediaList?.map((track, i) => (
+                    <SongTrack
+                      key={`${track.id}-${i}`}
+                      track={track}
+                      order={i}
+                    />
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {mediaList?.[0].type === 'episode' && (
               <div className="flex flex-col">
                 {mediaList?.map((track, i) => (
                   <EpisodeCard
@@ -57,13 +73,15 @@ function MediaResultList(props) {
                   />
                 ))}
               </div>
-            ) : (
-              <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-                {mediaList?.map((item, i) => (
-                  <Card key={`${item.id}-${i}`} item={item} />
-                ))}
-              </div>
             )}
+            {mediaList?.[0].type !== 'episode' &&
+              mediaList?.[0].type !== 'track' && (
+                <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+                  {mediaList?.map((item, i) => (
+                    <Card key={`${item.id}-${i}`} item={item} />
+                  ))}
+                </div>
+              )}
           </>
         )}
         {showButton && (

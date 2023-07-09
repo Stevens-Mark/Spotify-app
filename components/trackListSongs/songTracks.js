@@ -3,7 +3,7 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { songsListState } from '@/atoms/songAtom';
 // import component/icons
-import AlbumTrack from './albumTrack';
+import SongTrack from './songTrack';
 
 /**
  * Renders the list of tracks from a search query
@@ -11,14 +11,14 @@ import AlbumTrack from './albumTrack';
  * @returns {JSX}
  */
 function SongTracks() {
-  const songslist = useRecoilValue(songsListState);
-
+  const songsList = useRecoilValue(songsListState);
+  console.log("songslist", songsList)
   return (
     <section>
       <h2 className="sr-only">Track List</h2>
       <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
-        {songslist?.tracks?.items?.map((track, i) => (
-          <AlbumTrack key={`${track.id}-${i}`} track={track} order={i} />
+        {songsList?.tracks?.items?.map((track, i) => (
+          <SongTrack key={`${track.id}-${i}`} track={track} order={i} />
         ))}
       </div>
     </section>

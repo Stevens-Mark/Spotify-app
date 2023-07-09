@@ -10,6 +10,7 @@ import {
   queryState,
   topResultState,
 } from '@/atoms/searchAtom';
+import { songsUrisState, songsListState } from '@/atoms/songAtom';
 // import layouts
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -34,6 +35,8 @@ function All() {
   const topResults = useRecoilValue(topResultState);
   const setEpisodesUris = useSetRecoilState(episodesUrisState); // episodes uris (from search)
   const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
+  const setSongsUris = useSetRecoilState(songsUrisState); // song uris (from search)
+  const setsongsList = useSetRecoilState(songsListState); // songs list (from search)
 
   const topResult =
     topResults?.tracks?.items ||
@@ -52,14 +55,20 @@ function All() {
   const totalShows = queryResults?.shows?.total;
   const episodes = queryResults?.episodes?.items;
   const totalEpisodes = queryResults?.episodes?.total;
+  const tracks = queryResults?.tracks?.items;
 
   useEffect(() => {
     setEpisodesList(episodes);
-    if (queryResults?.episodes?.items) {
-      const uris = queryResults?.episodes?.items.map((item) => item.uri);
+    if (episodes) {
+      const uris = episodes?.map((item) => item.uri);
       setEpisodesUris(uris);
     }
   }, [episodes, queryResults, setEpisodesList, setEpisodesUris]);
+
+  useEffect(() => {
+    setsongsList(tracks);
+    setSongsUris(tracks?.map((track) => track.uri)); // set uris to be used in player
+  }, [setSongsUris, setsongsList, tracks]);
 
   // if no query go back to main search page
   useEffect(() => {

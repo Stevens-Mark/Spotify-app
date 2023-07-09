@@ -33,15 +33,14 @@ function ArtistTrack({ track, order }) {
 
   const router = useRouter();
 
-  // used to determine what type of info to load
-  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
+
+  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-
-  const  setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
