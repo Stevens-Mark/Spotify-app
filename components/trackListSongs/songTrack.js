@@ -38,7 +38,6 @@ function SongTrack({ track, order }) {
   const songsList = useRecoilValue(songsListState);
   const songsUris =  useRecoilValue(songsUrisState); // song uris (from search)
 
-  console.log("songslist ", songsList)
   const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
   
   // used to determine what type of info to load

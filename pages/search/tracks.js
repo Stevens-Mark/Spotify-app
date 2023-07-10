@@ -41,8 +41,6 @@ function Tracks() {
   const tracks = queryResults?.tracks?.items;
   const totalNumber = queryResults?.tracks?.total;
 
-  console.log("track ", tracks)
-
   useEffect(() => {
     if (!query) {
       router.push('/search');
@@ -69,7 +67,7 @@ function Tracks() {
           function (data) {
             const updatedList = mergeObject(data.body, queryResults, 'tracks');
             setQueryResults(updatedList);
-            setsongsList(updatedList);
+            setsongsList(updatedList?.tracks?.items);
             // Merge the new URIs into the existing songsUris state
             const newUris = data.body?.tracks?.items.map((item) => item.uri);
 

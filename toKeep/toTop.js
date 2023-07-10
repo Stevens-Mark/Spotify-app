@@ -44,7 +44,7 @@ const Scroll = ({ children }) => {
   return (
     <span
       ref={scrollableSectionRef}
-      className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-56"
+      className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-24"
     >
       {children}
       {shouldRenderButton && (

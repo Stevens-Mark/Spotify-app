@@ -52,7 +52,6 @@ const AlbumPage = ({ album }) => {
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setAlbumTracklist = useSetRecoilState(albumTrackListState);
 
-  console.log('album ', album);
   useEffect(() => {
     setCurrentAlbumId(album?.id);
     setAlbumTracklist(album);

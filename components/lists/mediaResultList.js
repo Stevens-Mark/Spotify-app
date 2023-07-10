@@ -1,11 +1,10 @@
 import React from 'react';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
-import SongTrack from '../trackListSongs/songTrack';
 import Footer from '@/components/navigation/Footer';
-import TitleAlbumTimeLabel from '@/components/headerLabels/titleAlbumTime';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
+import SongTracks from '../trackListSongs/songTracks';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...
@@ -26,7 +25,9 @@ function MediaResultList(props) {
   return (
     <>
       <div
-        className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-56"
+        className={`bg-black overflow-y-scroll h-screen scrollbar-hide pt-2 pb-24 py-4  ${
+          mediaList?.[0].type === 'track' ? 'px-0' : 'px-5 xs:px-8'
+        }`}
         ref={(node) => {
           containerRef.current = node;
           scrollableSectionRef.current = node;
@@ -44,34 +45,16 @@ function MediaResultList(props) {
           </span>
         ) : (
           <>
-            {/* list here */}
+            {/* visible title if not track list page  */}
             {mediaList?.[0].type !== 'track' && (
               <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
                 {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
               </h2>
             )}
+            {/* track list here */}
+            {mediaList?.[0].type === 'track' && <SongTracks />}
 
-            {mediaList?.[0].type === 'track' && (
-              <section>
-                <h2 className="sr-only">Track List</h2>
-                <div className="sticky -top-2">
-                  <div className="grid grid-cols-2 text-pink-swan bg-black">
-                    <TitleAlbumTimeLabel />
-                  </div>
-                  <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[1rem]" />
-                </div>
-                <div className="flex flex-col space-y-1 bp-28 text-white">
-                  {mediaList?.map((track, i) => (
-                    <SongTrack
-                      key={`${track.id}-${i}`}
-                      track={track}
-                      order={i}
-                    />
-                  ))}
-                </div>
-              </section>
-            )}
-
+            {/* or episode list here */}
             {mediaList?.[0].type === 'episode' && (
               <div className="flex flex-col">
                 {mediaList?.map((track, i) => (
@@ -83,7 +66,7 @@ function MediaResultList(props) {
                 ))}
               </div>
             )}
-
+            {/* otherwise playlist, album or artists list here */}
             {mediaList?.[0].type !== 'episode' &&
               mediaList?.[0].type !== 'track' && (
                 <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">

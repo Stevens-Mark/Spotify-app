@@ -13,7 +13,7 @@ const useInfiniteScroll = (fetchMoreData) => {
       const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
       // Check if the user has scrolled to the bottom
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if (scrollTop + clientHeight >= scrollHeight - 600) {
         // Fetch more data
         fetchMoreData();
       }

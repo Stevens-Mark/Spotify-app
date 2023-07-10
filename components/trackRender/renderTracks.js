@@ -38,7 +38,7 @@ function RenderTracks({
     >
       <div className="flex items-center space-x-4">
         <button
-          className="w-2 md:w-4"
+          className="w-8 flex flex-shrink-0 justify-center"
           onClick={(event) => {
             HandleTrackPlayPauseClick(event, order);
           }}
@@ -87,7 +87,7 @@ function RenderTracks({
             {song?.album?.name}
           </span>
           {addedAt && (
-            <span className="w-48 hidden mdlg:inline">
+            <span className="w-48 hidden mdlg:inline whitespace-nowrap">
               {getMonthDayYear(addedAt)}
             </span>
           )}
