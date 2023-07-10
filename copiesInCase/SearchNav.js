@@ -27,7 +27,7 @@ function SearchNav() {
           aria-label="Search menu"
           className="py-[3px]"
         >
-          <ul className="px-5 xs:px-8 space-x-1 space-y-2 flex flex-wrap justify-center xs:justify-start w-full">
+          <ul className="px-8 space-x-1 space-y-2 flex flex-wrap justify-center xs:justify-start w-full">
             <li className='mt-2'>
               <Link
                 href="/search/all"
