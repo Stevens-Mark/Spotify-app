@@ -1,15 +1,15 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
 
-export async function getServerSideProps() {
-  const providers = await getProviders();
-  return {
-    props: {
-      providers,
-    },
-  };
-}
+// export async function getServerSideProps() {
+//   const providers = await getProviders();
+//   return {
+//     props: {
+//       providers,
+//     },
+//   };
+// }
 
 /**
  * Renders login page
@@ -17,7 +17,17 @@ export async function getServerSideProps() {
  * @param {object} providers spotify provider information.
  * @returns {JSX}
  */
-function Login({ providers }) {
+function Login() {
+  const [providers, setProviders] = useState(null);
+
+  useEffect(() => {
+    (async () => {
+      const res = await getProviders();
+      setProviders(res);
+    })();
+  }, []);
+
+  console.log('providers', providers);
   return (
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center">
       <Image
@@ -29,16 +39,17 @@ function Login({ providers }) {
         priority
       />
 
-      {Object.values(providers).map((provider) => (
-        <div key={provider.name}>
-          <button
-            className="bg-[#18D860] text-white p-5 rounded-full"
-            onClick={() => signIn(provider.id, { callbackUrl: '/' })}
-          >
-            Login with {provider.name}
-          </button>
-        </div>
-      ))}
+      {providers &&
+        Object.values(providers).map((provider) => (
+          <div key={provider.name}>
+            <button
+              className="bg-[#18D860] text-white p-5 rounded-full"
+              onClick={() => signIn(provider.id, { callbackUrl: '/' })}
+            >
+              Login with {provider.name}
+            </button>
+          </div>
+        ))}
     </div>
   );
 }
