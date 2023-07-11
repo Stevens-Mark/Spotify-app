@@ -92,7 +92,7 @@ function TopResultCard({ item }) {
   ]);
 
   return (
-    <Link href={linkAddress} className="group">
+    <Link href={linkAddress} passHref className="group">
       <div className="relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60">
         <Image
           className={`aspect-square shadow-image ${

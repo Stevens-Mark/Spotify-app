@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -57,14 +58,19 @@ const TopSongCard = ({ song }) => {
           .then(() => {
             setIsPlaying(false);
           })
-          .catch((err) => console.error('Pause failed: ', err));
+          .catch((err) => {
+            console.error('Pause failed: ', err);
+            toast.error('Pause failed !', {
+              theme: 'colored',
+            });
+          });
       } else {
         spotifyApi
           .play({
             uris: [`spotify:track:${song?.id}`],
           })
           .then(() => {
-            console.log('Playback Success');
+            // console.log('Playback Success');
             setPlayerInfoType('track');
             setIsPlaying(true);
             setCurrentTrackId(song?.id); // will trigger playerInfo to update
@@ -75,7 +81,12 @@ const TopSongCard = ({ song }) => {
 
             setActivePlaylist(null); // so removes speaker icon from playlist sidebar
           })
-          .catch((err) => console.error('Playback failed: ', err));
+          .catch((err) => {
+            console.error('Playback failed: ', err);
+            toast.error('Playback failed !', {
+              theme: 'colored',
+            });
+          });
       }
     });
   };

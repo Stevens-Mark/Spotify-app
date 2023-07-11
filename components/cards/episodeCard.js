@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
+import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -99,7 +100,12 @@ function EpisodeCard({ track, order, whichList }) {
           .then(() => {
             setIsPlaying(false);
           })
-          .catch((err) => console.error('Pause failed: '));
+          .catch((err) => {
+            console.error('Pause failed: ', err);
+            toast.error('Pause failed !', {
+              theme: 'colored',
+            });
+          });
       } else {
         const urisToUse =
           whichList === 'show' ? showEpisodesUris : episodesUris;
@@ -109,7 +115,7 @@ function EpisodeCard({ track, order, whichList }) {
             offset: { position: currentTrackIndex },
           })
           .then(() => {
-            console.log('Playback Success');
+            // console.log('Playback Success');
             setPlayerInfoType('episode');
             setIsPlaying(true);
             setCurrentItemId(track?.id);
@@ -120,7 +126,12 @@ function EpisodeCard({ track, order, whichList }) {
             ); // set list to reference for player
             setActivePlaylist(null); //episode playing so user's playlist null
           })
-          .catch((err) => console.error('Playback failed: ', err));
+          .catch((err) => {
+            console.error('Playback failed: ', err);
+            toast.error('Playback failed !', {
+              theme: 'colored',
+            });
+          });
       }
     });
   };
@@ -134,7 +145,7 @@ function EpisodeCard({ track, order, whichList }) {
   }, [track?.id, currentTrackId, isPlaying, currentItemId]);
 
   return (
-    <Link href={`/episode/${track?.id}`}>
+    <Link href={`/episode/${track?.id}`} passHref>
       <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
         <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
           <Image

@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -73,7 +74,12 @@ function QuickPlayBanner({ item, scrollRef }) {
             .then(() => {
               setIsPlaying(false);
             })
-            .catch((err) => console.error('Pause failed: '));
+            .catch((err) => {
+              console.error('Pause failed: ', err);
+              toast.error('Pause failed !', {
+                theme: 'colored',
+              });
+            });
         } else {
           // or if paused, restart track (that originates from the current page)
           if (currentItemId === originId) {
@@ -82,7 +88,12 @@ function QuickPlayBanner({ item, scrollRef }) {
               .then(() => {
                 setIsPlaying(true);
               })
-              .catch((err) => console.error('Playback failed: '));
+              .catch((err) => {
+                console.error('Playback failed: ', err);
+                toast.error('Playback failed !', {
+                  theme: 'colored',
+                });
+              });
           } else {
             // otherwise no track played from the curent page yet, so start with first track
             HandleCardPlayPause(

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
+import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
@@ -88,6 +89,9 @@ function Sidebar() {
           setMyPlaylists(userPlaylists.body.items); // load user playlists
         } catch (err) {
           console.error('Failed to get user playlists', err);
+          toast.error('Failed to get user playlists !', {
+            theme: 'colored',
+          });
         }
       }
     };
@@ -153,6 +157,7 @@ function Sidebar() {
         <li>
           <Link
             href="/search"
+            passHref
             className="flex items-center space-x-2 hover:text-white"
           >
             <MagnifyingGlassIcon className="h-5 w-5 ml-3" />

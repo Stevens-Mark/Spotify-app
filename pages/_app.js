@@ -1,5 +1,9 @@
 import { SessionProvider } from 'next-auth/react';
 import { RecoilRoot } from 'recoil';
+import { ToastContainer } from 'react-toastify';
+import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import '@/styles/globals.css';
 
 // export default function App({
@@ -23,7 +27,21 @@ export default function App({
   return (
     <SessionProvider session={session}>
       <RecoilRoot>
-       { getLayout(<Component {...pageProps} />)}
+        <ToastContainer
+          position="bottom-right"
+          transition={Zoom}
+          autoClose={750}
+          hideProgressBar={true}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          // limit={3}
+          style={{ fontSize: '20px', textAlign: 'center' }}
+        />
+        {getLayout(<Component {...pageProps} />)}
       </RecoilRoot>
     </SessionProvider>
   );

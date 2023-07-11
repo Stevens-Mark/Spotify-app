@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -92,7 +93,12 @@ function QuickShowPlayBanner({ item, scrollRef }) {
             .then(() => {
               setIsPlaying(false);
             })
-            .catch((err) => console.error('Pause failed: '));
+            .catch((err) => {
+              console.error('Pause failed: ', err);
+              toast.error('Pause failed !', {
+                theme: 'colored',
+              });
+            });
         } else {
           // or if paused, restart track (that originates from the current page)
           if (currentItemId === originId) {
@@ -101,7 +107,12 @@ function QuickShowPlayBanner({ item, scrollRef }) {
               .then(() => {
                 setIsPlaying(true);
               })
-              .catch((err) => console.error('Playback failed 1st: '));
+              .catch((err) => {
+                console.error('Playback failed: ', err);
+                toast.error('Playback failed !', {
+                  theme: 'colored',
+                });
+              });
           } else {
             // otherwise no track played from the curent page yet, so start with first track
             spotifyApi.getMyCurrentPlaybackState().then((data) => {
@@ -111,7 +122,12 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                   .then(() => {
                     setIsPlaying(false);
                   })
-                  .catch((err) => console.error('Pause failed: '));
+                  .catch((err) => {
+                    console.error('Pause failed: ', err);
+                    toast.error('Pause failed !', {
+                      theme: 'colored',
+                    });
+                  });
               } else {
                 const index = showEpisodesUris.findIndex((element) =>
                   element.includes(item?.id)
@@ -124,7 +140,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     uris: [item?.uri],
                   })
                   .then(() => {
-                    console.log('Playback Success');
+                    // console.log('Playback Success');
                     setPlayerInfoType('episode');
                     setIsPlaying(true);
                     setCurrentItemId(originId);
@@ -134,7 +150,12 @@ function QuickShowPlayBanner({ item, scrollRef }) {
 
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
-                  .catch((err) => console.error('Playback failed 2nd: ', err));
+                  .catch((err) => {
+                    console.error('Playback failed: ', err);
+                    toast.error('Playback failed !', {
+                      theme: 'colored',
+                    });
+                  });
               }
             });
           }
@@ -172,46 +193,45 @@ function QuickShowPlayBanner({ item, scrollRef }) {
 
   return (
     <>
-        <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
-      <div
-        className={` bg-gradient-to-b to-black  
+      <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
+        <div
+          className={` bg-gradient-to-b to-black  
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}
-        style={{
-          opacity,
-          background: `linear-gradient(to bottom, ${darkenColor(
-            backgroundColor
-          )} 90%, #000000)`,
-        }}
-      >
-        <div
-          className={` ${
-            isVisible ? 'opacity-100' : 'opacity-0'
-          } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden`}
+          style={{
+            opacity,
+            background: `linear-gradient(to bottom, ${darkenColor(
+              backgroundColor
+            )} 90%, #000000)`,
+          }}
         >
-          {item?.type === 'episode' && (
-            <>
-              <button
-                className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
-                onClick={(event) => {
-                  HandleEpisodePlayPauseClick(event);
-                }}
-              >
-                {activeStatus ? (
-                  <PauseCircleIcon className="w-12 h-12" />
-                ) : (
-                  <PlayCircleIcon className="w-12 h-12" />
-                )}
-              </button>
-              <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
-                {capitalize(item?.name)}
-              </span>{' '}
-            </>
-          )}
+          <div
+            className={` ${
+              isVisible ? 'opacity-100' : 'opacity-0'
+            } transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden`}
+          >
+            {item?.type === 'episode' && (
+              <>
+                <button
+                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
+                  onClick={(event) => {
+                    HandleEpisodePlayPauseClick(event);
+                  }}
+                >
+                  {activeStatus ? (
+                    <PauseCircleIcon className="w-12 h-12" />
+                  ) : (
+                    <PlayCircleIcon className="w-12 h-12" />
+                  )}
+                </button>
+                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
+                  {capitalize(item?.name)}
+                </span>{' '}
+              </>
+            )}
+          </div>
         </div>
-      </div>
-
       </div>
 
       {item?.type === 'episode' && (

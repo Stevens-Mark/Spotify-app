@@ -2,6 +2,7 @@ import Head from 'next/head';
 import React, { useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { errorState } from '@/atoms/errorAtom';
@@ -18,7 +19,6 @@ import { getRandomTopResult } from '@/lib/randomTopResult';
 import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
 import SearchNav from '../navigation/SearchNav';
 import StatusSpinner from '../graphics/StatusSpinner';
-
 
 /**
  * Renders the search bar (for all search pages: genres, album, playlist, artists, shows & episodes)
@@ -88,6 +88,9 @@ const NestedLayout = ({ children }) => {
         setIsSearching(false);
         setIsError(true);
         console.error('Search failed: ', err);
+        toast.error('Search failed!', {
+          theme: 'colored',
+        });
       }
     }
   };
@@ -125,7 +128,6 @@ const NestedLayout = ({ children }) => {
         </div>
 
         {children}
-       
       </div>
     </>
   );

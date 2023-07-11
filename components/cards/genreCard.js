@@ -44,6 +44,7 @@ function GenreCard({ item, idx }) {
   return (
     <Link
       href=""
+      passHref
       className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
         bgColors[idx % bgColors?.length]
       }`}

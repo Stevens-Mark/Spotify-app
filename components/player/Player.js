@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
+import { toast } from 'react-toastify';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
@@ -47,9 +48,6 @@ function Player() {
   // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
 
-  // const [activePlaylist, setActivePlaylist] =
-  //   useRecoilState(activePlaylistState);
-
   // check whether on a sinle episode page (to dissable skip forward/previous controls)
   const [isEpisode, setIsEpisode] = useState(false);
 
@@ -75,12 +73,18 @@ function Player() {
               );
               if (activeDevice) {
                 spotifyApi.setVolume(volume).catch((err) => {
-                  console.error(err);
+                  console.error('Something went wrong !', err);
+                  toast.error('Something went wrong !', {
+                    theme: 'colored',
+                  });
                 });
               }
             })
             .catch((err) => {
-              console.error('Something went wrong!', err);
+              console.error('Something went wrong !', err);
+              toast.error('Something went wrong !', {
+                theme: 'colored',
+              });
             });
         }
       }, 500),
@@ -108,9 +112,12 @@ function Player() {
   /* set shuffle of tracks on or off */
   const setShuffle = () => {
     setShuffletState((prevState) => !prevState);
-    spotifyApi
-      .setShuffle(!shuffleState)
-      .catch((err) => console.error('Shuffle failed:'));
+    spotifyApi.setShuffle(!shuffleState).catch((err) => {
+      console.error('Shuffle failed: ');
+      toast.error('Shuffle failed !', {
+        theme: 'colored',
+      });
+    });
   };
 
   /**
@@ -151,15 +158,28 @@ function Player() {
                       setCurrentSongIndex(0);
                     }
                   })
-                  .catch((err) =>
-                    console.error('Get Current Track ID failed: ')
-                  );
+                  .catch((err) => {
+                    console.error('Get Current Track ID failed: ');
+                    toast.error('Something went wrong !', {
+                      theme: 'colored',
+                    });
+                  });
               }, 750);
             })
-            .catch((err) => console.error('Skip to Next failed: '));
+            .catch((err) => {
+              console.error('Skip to Previous failed: ');
+              toast.error('Skip to Previous failed !', {
+                theme: 'colored',
+              });
+            });
         }
       })
-      .catch((err) => console.error('Get Current Playing Track failed: '));
+      .catch((err) => {
+        console.error('Get Current Playing Track failed: ');
+        toast.error('Something went wrong !', {
+          theme: 'colored',
+        });
+      });
   };
 
   /**
@@ -185,7 +205,12 @@ function Player() {
             .then(() => {
               setIsPlaying(false);
             })
-            .catch((err) => console.error('Pause failed: ', err));
+            .catch((err) => {
+              console.error('Pause failed: ', err);
+              toast.error('Pause failed !', {
+                theme: 'colored',
+              });
+            });
         } else {
           spotifyApi
             .play()
@@ -200,7 +225,12 @@ function Player() {
               //   setActivePlaylist(playlistId);
               // }
             })
-            .catch((err) => console.error('Playback failed: ', err));
+            .catch((err) => {
+              console.error('Playback failed: ', err);
+              toast.error('Playback failed !', {
+                theme: 'colored',
+              });
+            });
         }
       });
     }
@@ -242,15 +272,28 @@ function Player() {
                     }
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
-                  .catch((err) =>
-                    console.error('Get Current Track ID failed: ')
-                  );
+                  .catch((err) => {
+                    console.error('Get Current Track ID failed: ');
+                    toast.error('Something went wrong !', {
+                      theme: 'colored',
+                    });
+                  });
               }, 750);
             })
-            .catch((err) => console.error('Skip to Next failed: '));
+            .catch((err) => {
+              console.error('Skip to Next failed: ');
+              toast.error('Skip to Next failed !', {
+                theme: 'colored',
+              });
+            });
         }
       })
-      .catch((err) => console.error('Get Current Playing Track failed: '));
+      .catch((err) => {
+        console.error('Get Current Playing Track failed: ');
+        toast.error('Something went wrong !', {
+          theme: 'colored',
+        });
+      });
   };
 
   // handles 3 way toggle, off, repeat, repeat  once
@@ -258,9 +301,12 @@ function Player() {
     let adjusted = repeatState == 0 ? 1 : repeatState == 2 ? 0 : 2;
     let value = adjusted === 0 ? 'off' : adjusted === 1 ? 'context' : 'track';
     setRepeatState((prevState) => (prevState + 1) % 3);
-    spotifyApi
-      .setRepeat(`${value}`, {})
-      .catch((err) => console.error('Repeat failed:'));
+    spotifyApi.setRepeat(`${value}`, {}).catch((err) => {
+      console.error('Repeat failed: ');
+      toast.error('Repeat failed !', {
+        theme: 'colored',
+      });
+    });
   };
 
   return (
