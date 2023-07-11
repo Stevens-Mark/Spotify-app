@@ -57,7 +57,12 @@ function Sidebar() {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
-          if (data.body && data.body.is_playing && data.body.context !== null) {
+          if (
+            data.body &&
+            data.body.is_playing &&
+            data.body.context !== null &&
+            data.body.context.type === 'playlist'
+          ) {
             const currentPlaylistId = data.body?.context?.uri.split(':').pop();
             setPlayerInfoType(data.body?.currently_playing_type);
             setCurrentTrackId(data.body?.item?.id); // set current playing track for player info

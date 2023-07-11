@@ -56,7 +56,7 @@ function Center() {
     // check whether there is an active device connected to spotify account.
     // if not this app will not be fully functional.
     // Inform user to connect to spotify
-    // if (spotifyApi.getAccessToken()) {
+    if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getMyDevices()
         .then((data) => {
@@ -86,7 +86,7 @@ function Center() {
           setMessage('Have you connected to Spotify?');
           handleMyAlert();
         });
-    // }
+    }
   }, [spotifyApi]);
 
   /* fetch playlist which is currently playing */
