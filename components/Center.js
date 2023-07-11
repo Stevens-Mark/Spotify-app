@@ -56,7 +56,7 @@ function Center() {
     // check whether there is an active device connected to spotify account.
     // if not this app will not be fully functional.
     // Inform user to connect to spotify
-    if (spotifyApi.getAccessToken()) {
+    // if (spotifyApi.getAccessToken()) {
       spotifyApi
         .getMyDevices()
         .then((data) => {
@@ -83,10 +83,10 @@ function Center() {
             'Failed to find active devices. Connect to Spotify & reload page.',
             err
           );
-          setMessage('Connect to Spotify & reload page.');
+          setMessage('Have you connected to Spotify?');
           handleMyAlert();
         });
-    }
+    // }
   }, [spotifyApi]);
 
   /* fetch playlist which is currently playing */
@@ -112,7 +112,7 @@ function Center() {
     >
       <p
         style={myAlert ? { display: 'block' } : { display: 'none' }}
-        className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-64"
+        className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-96"
       >
         {message}
       </p>
