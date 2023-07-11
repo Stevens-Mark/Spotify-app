@@ -16,7 +16,15 @@ export async function middleware(req) {
 }
 
 export const config = {
-  matcher: ['/', '/search/:path*', '/album/:path*'],
+  matcher: [
+    '/',
+    '/search/:path*',
+    '/artist/:path*',
+    '/album/:path*',
+    '/playlist/:path*',
+    '/show/:path*',
+    '/episode/:path*',
+  ],
 };
 
 // export async function middleware(req) {

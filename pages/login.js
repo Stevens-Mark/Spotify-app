@@ -2,14 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
 
-// export async function getServerSideProps() {
-//   const providers = await getProviders();
-//   return {
-//     props: {
-//       providers,
-//     },
-//   };
-// }
+export async function getServerSideProps() {
+  const providers = await getProviders();
+  return {
+    props: {
+      providers,
+    },
+  };
+}
 
 /**
  * Renders login page
@@ -17,17 +17,17 @@ import Image from 'next/image';
  * @param {object} providers spotify provider information.
  * @returns {JSX}
  */
-function Login() {
-  const [providers, setProviders] = useState(null);
+function Login({ providers }) {
+  // if getServerSideProps does not work then use below instead
+  // const [providers, setProviders] = useState(null);
 
-  useEffect(() => {
-    (async () => {
-      const res = await getProviders();
-      setProviders(res);
-    })();
-  }, []);
+  // useEffect(() => {
+  //   (async () => {
+  //     const res = await getProviders();
+  //     setProviders(res);
+  //   })();
+  // }, []);
 
-  console.log('providers', providers);
   return (
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center">
       <Image
