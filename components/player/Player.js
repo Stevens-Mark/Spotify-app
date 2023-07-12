@@ -12,7 +12,6 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-// import { activePlaylistState } from '@/atoms/playListAtom';
 import { activeListInUseState } from '@/atoms/showAtom';
 // import component
 import PlayingInfo from './PlayingInfo';

@@ -38,8 +38,7 @@ function SongTrack({ track, order }) {
 
   const songsList = useRecoilValue(songsListState);
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
-
-  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+  const  setCurrentAlbumId = useSetRecoilState(albumIdState);
 
   // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(currentTrackNumberState);
 

@@ -1,17 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
-import { toast } from 'react-toastify';
-// import state management recoil
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import {
-  currentTrackIdState,
-  isPlayState,
-  currentSongIndexState,
-} from '@/atoms/songAtom';
-import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState, albumIdState } from '@/atoms/albumAtom';
-import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
@@ -25,14 +13,11 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
  * @returns {JSX}
  */
 const TopSongCard = ({
-  // isShown,
-  // setIsShown,
   HandleTrackPlayPauseClick,
   order,
   activeStatus,
-  // currentSongIndex,
   song,
-  // addedAt,
+
 }) => {
   return (
     <div

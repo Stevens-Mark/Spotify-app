@@ -8,24 +8,7 @@ function NavigationButtons() {
   const [canGoBack, setCanGoBack] = useState(true);
   const [canGoForward, setCanGoForward] = useState(true);
 
-  // useEffect(() => {
-  //   const handleRouteChange = () => {
-  //     updateNavigationState();
-  //   };
-
-  //   const updateNavigationState = () => {
-  //     const history = router.isReady ? router.asPath.split('/') : [];
-  //     setCanGoBack(window.history.length > 1);
-
-  //     setCanGoForward(router.pathname !== window.location.pathname);
-  //   };
-
-  //   router.events.on('routeChangeComplete', handleRouteChange);
-
-  //   return () => {
-  //     router.events.off('routeChangeComplete', handleRouteChange);
-  //   };
-  // }, [router.asPath, router.events, router.isReady, router.pathname]);
+  // needs improving to mimic brower navigatyion controls
 
   const handleGoBack = () => {
     router.back();

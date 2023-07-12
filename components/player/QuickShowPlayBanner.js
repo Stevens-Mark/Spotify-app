@@ -12,10 +12,6 @@ import {
 import { activePlaylistState } from '@/atoms/playListAtom';
 import {
   showEpisodesUrisState,
-  showEpisodesListState,
-  episodesListState,
-  episodesUrisState,
-  activeListInUseState,
 } from '@/atoms/showAtom';
 import {
   currentItemIdState,
@@ -49,31 +45,21 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
-
   const showEpisodesUris = useRecoilValue(showEpisodesUrisState); // episodes uris from a SHOW
-  // const showEpisodesList = useRecoilValue(showEpisodesListState); // episodes list from a SHOW
-  // const episodesUris = useRecoilValue(episodesUrisState); // episodes uris (from search)
-  // const episodesList = useRecoilValue(episodesListState);
-
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+  const  setCurrentSongIndex = useSetRecoilState(
     currentSongIndexState
   );
-
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  // const setActiveListInUse = useSetRecoilState(activeListInUseState);
-
-  // used to set play/pause icons
+   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
 
   // show track info when play button at top of screen
   const [isVisible, setIsVisible] = useState(false);
-  const [isTextVisible, setIsTextVisible] = useState(true);
   const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
@@ -140,14 +126,11 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     uris: [item?.uri],
                   })
                   .then(() => {
-                    // console.log('Playback Success');
-                    setPlayerInfoType('episode');
+                     setPlayerInfoType('episode');
                     setIsPlaying(true);
                     setCurrentItemId(originId);
                     setCurrentTrackId(originId);
                     setCurrentSongIndex(currentTrackIndex);
-                    // setActiveListInUse(showEpisodesUris); // set list to reference for player
-
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
                   .catch((err) => {
@@ -169,7 +152,6 @@ function QuickShowPlayBanner({ item, scrollRef }) {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
       setIsVisible(scrollPosition > 250); // Changed to the desired threshold
-      // setIsTextVisible(scrollPosition > 250);
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);

@@ -10,7 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState, albumIdState } from '@/atoms/albumAtom';
+import {  albumIdState } from '@/atoms/albumAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
@@ -37,9 +37,6 @@ function Card({ item }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-
-  // original beofre below
-  // const currentAlbumId = useRecoilValue(currentAlbumIdState);
   const currentAlbumId = useRecoilValue(albumIdState);
 
   const linkAddress =
@@ -57,7 +54,7 @@ function Card({ item }) {
 
   /**
    * Either play or pause current track
-   * in Card.js or topResultCard.js component
+   * in Card.js or topResultCard.js & quickplaybanner component
    * @function HandleCardPlayPauseClick
    * @param {event object} event
    */

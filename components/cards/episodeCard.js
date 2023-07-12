@@ -115,7 +115,6 @@ function EpisodeCard({ track, order, whichList }) {
             offset: { position: currentTrackIndex },
           })
           .then(() => {
-            // console.log('Playback Success');
             setPlayerInfoType('episode');
             setIsPlaying(true);
             setCurrentItemId(track?.id);

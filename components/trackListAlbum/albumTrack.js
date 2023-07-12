@@ -34,9 +34,7 @@ function AlbumTrack({ track, order }) {
   const router = useRouter();
 
   const currentAlbumId = useRecoilValue(albumIdState);
-  // const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
   const albumTracklist = useRecoilValue(albumTrackListState);
-
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -94,7 +92,6 @@ function AlbumTrack({ track, order }) {
       setIsPlaying,
       setActivePlaylist,
       spotifyApi,
-      // setCurrentAlbumId
     };
     HandleTrackPlayPause(albumOptions);
   };

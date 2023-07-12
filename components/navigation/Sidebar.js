@@ -10,7 +10,7 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import { currentAlbumIdState } from '@/atoms/albumAtom';
+// import { currentAlbumIdState } from '@/atoms/albumAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
@@ -40,8 +40,8 @@ function Sidebar() {
     useRecoilState(activePlaylistState);
   const isPlaying = useRecoilValue(isPlayState);
 
-  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  // const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
+  // const setCurrentItemId = useSetRecoilState(albumIdState);
+  // const setCurrentAlbumId = useSetRecoilState(albumIdState);
   
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);

@@ -32,6 +32,8 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
+  console.log("track.artist", track)
+
   const router = useRouter();
 
   const artistTracklist = useRecoilValue(artistTrackListState);
