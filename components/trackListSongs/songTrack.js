@@ -55,9 +55,9 @@ function SongTrack({ track, order }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
 
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
+  useEffect(() => {
+    setOriginId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
     setTimeout(() => {
@@ -87,7 +87,7 @@ function SongTrack({ track, order }) {
     const artistTrackUris = songsUris; //tempp for testing purposes
 
     const artistOptions = {
-      // originId,
+      originId,
       song,
       artistTrackUris, // determines it's artist to play in  play/pause function
       setCurrentItemId,
