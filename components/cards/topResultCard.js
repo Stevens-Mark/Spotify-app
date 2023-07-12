@@ -10,7 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState } from '@/atoms/albumAtom';
+import { currentAlbumIdState, albumIdState } from '@/atoms/albumAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
@@ -40,7 +40,10 @@ function TopResultCard({ item }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const currentAlbumId = useRecoilValue(currentAlbumIdState);
+
+  // original beofre below
+  // const currentAlbumId = useRecoilValue(currentAlbumIdState);
+  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -69,7 +72,8 @@ function TopResultCard({ item }) {
       setCurrentTrackId,
       setCurrentSongIndex,
       setActivePlaylist,
-      spotifyApi
+      spotifyApi,
+      currentTrackId
     );
   };
 
@@ -79,7 +83,7 @@ function TopResultCard({ item }) {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
       (currentItemId === item?.album?.id && isPlaying) ||
-      (currentAlbumId === item?.id && currentTrackId === item?.id && isPlaying);
+      (currentAlbumId === item?.album?.id && currentTrackId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
   }, [

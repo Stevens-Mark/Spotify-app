@@ -10,11 +10,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { currentAlbumIdState } from '@/atoms/albumAtom';
-import {
-  currentItemIdState,
-  playerInfoTypeState,
-} from '@/atoms/otherAtoms';
+import { currentAlbumIdState, albumIdState } from '@/atoms/albumAtom';
+import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
 import { capitalize } from '@/lib/capitalize';
@@ -32,6 +29,8 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function Card({ item }) {
   const spotifyApi = useSpotify();
 
+  console.log("item ", item)
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -40,7 +39,10 @@ function Card({ item }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const currentAlbumId = useRecoilValue(currentAlbumIdState);
+
+  // original beofre below
+  // const currentAlbumId = useRecoilValue(currentAlbumIdState);
+  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -80,13 +82,16 @@ function Card({ item }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = currentItemId === item?.id && isPlaying;
+    const newActiveStatus =
+      (currentItemId === item?.id && isPlaying) ||
+      (currentAlbumId === item?.id && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [currentItemId, isPlaying, item?.id]);
+  }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 
   return (
     <Link
-      href={linkAddress} passHref
+      href={linkAddress}
+      passHref
       className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
     >
       <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">

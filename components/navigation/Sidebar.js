@@ -39,8 +39,10 @@ function Sidebar() {
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const isPlaying = useRecoilValue(isPlayState);
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
+
+  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  // const setCurrentAlbumId = useSetRecoilState(currentAlbumIdState);
+  
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   // needed to reset search when user changes to their saved playlists

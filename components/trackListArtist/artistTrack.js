@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
+import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -35,6 +36,8 @@ function ArtistTrack({ track, order }) {
 
   const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
+
+  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -92,6 +95,7 @@ function ArtistTrack({ track, order }) {
       setIsPlaying,
       setActivePlaylist,
       spotifyApi,
+      setCurrentAlbumId,
     };
     HandleTrackPlayPause(artistOptions);
   };
