@@ -5,7 +5,8 @@ import { toast } from 'react-toastify';
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
 // import state management recoil
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { currentItemIdState } from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -45,6 +46,7 @@ function Player() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
 
@@ -139,6 +141,7 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
+        console.log('data ', data);
         if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToPrevious()
@@ -152,6 +155,12 @@ function Player() {
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
+                    // if (
+                    //   data.body.context === null &&
+                    //   data.body?.item.album.type === 'album'
+                    // ) {
+                    //   setCurrentItemId(data.body?.item?.album?.id);
+                    // }
                     if (currentSongIndex > 0) {
                       setCurrentSongIndex(currentSongIndex - 1);
                     } else {
@@ -257,6 +266,7 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
+        console.log('data ', data);
         if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToNext()
@@ -270,6 +280,12 @@ function Player() {
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
+                    // if (
+                    //   data.body.context === null &&
+                    //   data.body?.item.album.type === 'album'
+                    // ) {
+                    //   setCurrentItemId(data.body?.item?.album?.id);
+                    // }
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
                   .catch((err) => {

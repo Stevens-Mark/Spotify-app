@@ -29,8 +29,6 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function Card({ item }) {
   const spotifyApi = useSpotify();
 
-  console.log("item ", item)
-
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -42,7 +40,7 @@ function Card({ item }) {
 
   // original beofre below
   // const currentAlbumId = useRecoilValue(currentAlbumIdState);
-  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+  const currentAlbumId = useRecoilValue(albumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -82,10 +80,7 @@ function Card({ item }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus =
-      (currentItemId === item?.id && isPlaying) 
-      // ||
-      // (currentAlbumId === item?.id && isPlaying);
+    const newActiveStatus = currentItemId === item?.id && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, currentItemId, isPlaying, item?.id]);
 

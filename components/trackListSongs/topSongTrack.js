@@ -10,7 +10,7 @@ import {
   isPlayState,
   songsUrisState,
   songsListState,
-  currentTrackNumberState
+  currentTrackNumberState,
 } from '@/atoms/songAtom';
 import {
   playerInfoTypeState,
@@ -21,7 +21,6 @@ import { activePlaylistState } from '@/atoms/playListAtom';
 // import player play/pause function
 import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import component
-import RenderTracks from '../trackRender/renderTracks';
 import TopSongCard from '../cards/topSongCard';
 
 /**
@@ -40,9 +39,11 @@ function TopSongTrack({ track, order }) {
   const songsList = useRecoilValue(songsListState);
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
 
-  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
 
-  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(currentTrackNumberState);
+  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(
+  //   currentTrackNumberState
+  // );
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -104,7 +105,8 @@ function TopSongTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
-      // setCurrentTrackNumber
+      // setCurrentTrackNumber,
+      // currentTrackNumber,
     };
     HandleTrackPlayPause(songsOptions);
   };
@@ -118,12 +120,9 @@ function TopSongTrack({ track, order }) {
 
   return (
     <TopSongCard
-      // isShown={isShown}
-      // setIsShown={setIsShown}
       HandleTrackPlayPauseClick={HandleTrackPlayPauseClick}
       order={order}
       activeStatus={activeStatus}
-      // currentSongIndex={currentSongIndex}
       song={song}
     />
   );
