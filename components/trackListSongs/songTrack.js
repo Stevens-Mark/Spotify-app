@@ -10,6 +10,7 @@ import {
   isPlayState,
   songsUrisState,
   songsListState,
+  currentTrackNumberState
 } from '@/atoms/songAtom';
 import {
   playerInfoTypeState,
@@ -39,6 +40,8 @@ function SongTrack({ track, order }) {
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
 
   const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
+
+  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(currentTrackNumberState);
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -84,12 +87,12 @@ function SongTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
-    const artistTrackUris = songsUris; //tempp for testing purposes
+    const artistTrackUris = songsUris; //set variable to songsUris (for HandleTrackPlayPause logic)
 
-    const artistOptions = {
+    const songsOptions = {
       originId,
       song,
-      artistTrackUris, // determines it's artist to play in  play/pause function
+      artistTrackUris, // determines it's artist/songs to play in  play/pause function
       setCurrentItemId,
       currentTrackIndex,
       setCurrentTrackId,
@@ -100,8 +103,9 @@ function SongTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
+      // setCurrentTrackNumber
     };
-    HandleTrackPlayPause(artistOptions);
+    HandleTrackPlayPause(songsOptions);
   };
 
   // used to set play/pause icons
