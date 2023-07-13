@@ -1,5 +1,11 @@
 import { atom } from 'recoil';
 
+// keep track on naviagtion position for nav buttons
+export const navIndexState = atom({
+  key: 'navIndexState',
+  default: 1,
+});
+
 // track which card has been selected by user: help play/pause icon activation
 export const currentItemIdState = atom({
   key: 'currentItemIdState',
