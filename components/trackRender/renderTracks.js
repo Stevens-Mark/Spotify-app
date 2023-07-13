@@ -68,7 +68,7 @@ function RenderTracks({
         )}
         <div className="w-full">
           <h3
-            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-full pr-2 ${
+            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 ${
               (activeStatus)
                 ? 'text-green-500'
                 : 'text-white'
