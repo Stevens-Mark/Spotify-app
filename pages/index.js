@@ -4,6 +4,7 @@ import { getSession } from 'next-auth/react';
 import Layout from '@/components/layouts/Layout';
 import Center from '@/components/Center';
 
+import Welcome from '@/components/Welcome';
 // export async function getServerSideProps(context) {
 //   const session = await getSession(context);
 //   return {
@@ -26,7 +27,8 @@ export default function Home() {
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 
-      <Center />
+      <Welcome />
+      {/* <Center /> */}
     </>
   );
 }

@@ -10,8 +10,8 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-// import { currentAlbumIdState } from '@/atoms/albumAtom';
-import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
+import {  albumIdState, } from '@/atoms/albumAtom';
+import {  currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -40,7 +40,7 @@ function Sidebar() {
     useRecoilState(activePlaylistState);
   const isPlaying = useRecoilValue(isPlayState);
 
-  // const setCurrentItemId = useSetRecoilState(albumIdState);
+  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
   // const setCurrentAlbumId = useSetRecoilState(albumIdState);
   
   // used to determine what type of info to load
@@ -59,25 +59,29 @@ function Sidebar() {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
+          console.log("data ", data)
           if (
             data.body &&
-            data.body.is_playing &&
+            data.body.is_playing 
+            &&
             data.body.context !== null &&
             data.body.context.type === 'playlist'
           ) {
             const currentPlaylistId = data.body?.context?.uri.split(':').pop();
+            console.log("currentPlaylistId ", currentPlaylistId)
             setPlayerInfoType(data.body?.currently_playing_type);
             setCurrentTrackId(data.body?.item?.id); // set current playing track for player info
-            setMyPlaylistId(currentPlaylistId); // set current playlist in use
+            // setMyPlaylistId(currentPlaylistId); // set current playlist in use
             setActivePlaylist(currentPlaylistId);
           } else {
-            const userPlaylists = await spotifyApi.getUserPlaylists();
-            setMyPlaylists(userPlaylists.body.items);
-            setMyPlaylistId(userPlaylists.body.items[0].id); // set a default playlist to show as no currently playing
+            // const userPlaylists = await spotifyApi.getUserPlaylists();
+            // setMyPlaylists(userPlaylists.body.items);
+            // setMyPlaylistId(userPlaylists.body.items[0].id); // set a default playlist to show as no currently playing
             const recentlyPlayed = await spotifyApi.getMyRecentlyPlayedTracks({
               limit: 6, // this recently played data can be saved to an atom & used later on another page in the future
             });
-            setCurrentTrackId(recentlyPlayed.body?.items?.[0].track.id); // set recent track for player info (as no current playing track)
+            setCurrentTrackId(data.body?.item?.id); // set recent track for player info (as no current playing track)
+            setActivePlaylist(data.body?.context?.uri.split(':').pop())
           }
         }
       } catch (err) {
@@ -130,7 +134,7 @@ function Sidebar() {
    * @function handleHome
    */
   const handleHome = () => {
-    setMyPlaylistId(null);
+    // setMyPlaylistId(null);
     resetValues();
   };
 
@@ -140,8 +144,10 @@ function Sidebar() {
    * @param {string} id of playlist
    */
   const handleClick = (id) => {
-    setMyPlaylistId(id);
-    resetValues();
+    router.push(`/playlist/${id}`);
+
+    // setMyPlaylistId(id);
+    // resetValues();
   };
 
   return (
