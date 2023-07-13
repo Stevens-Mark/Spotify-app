@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
@@ -76,6 +77,11 @@ function Shows() {
   const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
+    <>
+    <Head>
+      <title>Spotify - Results for Shows</title>
+      <link rel="icon" href="/spotify.ico"></link>
+    </Head>
     <MediaResultList
       mediaList={shows}
       totalNumber={totalNumber}
@@ -84,6 +90,7 @@ function Shows() {
       scrollableSectionRef={scrollableSectionRef}
       containerRef={containerRef}
     />
+    </>
   );
 }
 

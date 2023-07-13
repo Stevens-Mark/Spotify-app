@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
@@ -46,85 +47,93 @@ function PodcastAndEpisodes() {
   };
 
   return (
-    <div
-      className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-24"
-      ref={scrollableSectionRef}
-    >
-      <h1 className="sr-only">Search Results for Podcasts, Shows & Episodes</h1>
-      {totalShows === 0 ? (
-        <section>
-          <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
-            No Podcasts & Shows
-          </h2>
-          <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
-            <h3 className="text-white">Sorry no Shows/Podcasts</h3>
-          </div>
-        </section>
-      ) : (
-        <section>
-          {/* first seven shows/postcasts list */}
-          <div className="flex items-center justify-between">
+    <>
+      <Head>
+        <title>Spotify - Results for Podcasts/Shows & Episodes</title>
+        <link rel="icon" href="/spotify.ico"></link>
+      </Head>
+      <div
+        className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2 pb-24"
+        ref={scrollableSectionRef}
+      >
+        <h1 className="sr-only">
+          Search Results for Podcasts, Shows & Episodes
+        </h1>
+        {totalShows === 0 ? (
+          <section>
             <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
-              Podcasts & Shows
+              No Podcasts & Shows
             </h2>
-            <button
-              className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
-              onClick={() => {
-                handlePodcasts();
-              }}
-            >
-              <span>show all</span>
-            </button>
-          </div>
-          <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-            {shows?.slice(0, numOfItems).map((item, i) => (
-              <Card key={`${item.id}-${i}`} item={item} />
-            ))}
-          </div>
-        </section>
-      )}
-      {totalEpisodes === 0 ? (
-        <section>
-          <h2 className="text-white mt-4 mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
-            Episodes
-          </h2>
-          <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
-            <h3 className="text-white">Sorry no Episodes</h3>
-          </div>
-        </section>
-      ) : (
-        <section>
-          {/* first twenty-five esisodes list */}
-          <div className="flex items-center justify-between mt-4">
-            <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
+            <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
+              <h3 className="text-white">Sorry no Shows/Podcasts</h3>
+            </div>
+          </section>
+        ) : (
+          <section>
+            {/* first seven shows/postcasts list */}
+            <div className="flex items-center justify-between">
+              <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
+                Podcasts & Shows
+              </h2>
+              <button
+                className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
+                onClick={() => {
+                  handlePodcasts();
+                }}
+              >
+                <span>show all</span>
+              </button>
+            </div>
+            <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+              {shows?.slice(0, numOfItems).map((item, i) => (
+                <Card key={`${item.id}-${i}`} item={item} />
+              ))}
+            </div>
+          </section>
+        )}
+        {totalEpisodes === 0 ? (
+          <section>
+            <h2 className="text-white mt-4 mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
               Episodes
             </h2>
-            <button
-              className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
-              onClick={() => {
-                handleEpisodes();
-              }}
-            >
-              <span>show all</span>
-            </button>
-          </div>
-          <div className="flex flex-col">
-            {episodes?.slice(0, 30).map((track, i) => (
-              <EpisodeCard key={`${track.id}-${i}`} track={track} order={i} />
-            ))}
-          </div>
-        </section>
-      )}
-      {showButton && (
-        <button
-          className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
-          onClick={scrollToTop}
-        >
-          <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
-        </button>
-      )}
-      <Footer />
-    </div>
+            <div className="p-4 rounded-lg bg-gray-900 h-60 flex justify-center items-center">
+              <h3 className="text-white">Sorry no Episodes</h3>
+            </div>
+          </section>
+        ) : (
+          <section>
+            {/* first twenty-five esisodes list */}
+            <div className="flex items-center justify-between mt-4">
+              <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
+                Episodes
+              </h2>
+              <button
+                className="mb-5 text-sm md:text-xl text-white hover:text-green-500"
+                onClick={() => {
+                  handleEpisodes();
+                }}
+              >
+                <span>show all</span>
+              </button>
+            </div>
+            <div className="flex flex-col">
+              {episodes?.slice(0, 30).map((track, i) => (
+                <EpisodeCard key={`${track.id}-${i}`} track={track} order={i} />
+              ))}
+            </div>
+          </section>
+        )}
+        {showButton && (
+          <button
+            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+            onClick={scrollToTop}
+          >
+            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+          </button>
+        )}
+        <Footer />
+      </div>
+    </>
   );
 }
 

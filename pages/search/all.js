@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
@@ -78,6 +79,11 @@ function All() {
   }, [query, router]);
 
   return (
+    <>
+    <Head>
+      <title>Spotify - All Search Results</title>
+      <link rel="icon" href="/spotify.ico"></link>
+    </Head>
     <div
       className="bg-black overflow-y-scroll h-screen scrollbar-hide py-4 px-5 xs:px-8 pt-2  pb-24"
       ref={scrollableSectionRef}
@@ -260,6 +266,7 @@ function All() {
       )}
       <Footer />
     </div>
+    </>
   );
 }
 

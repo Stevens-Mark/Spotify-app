@@ -98,7 +98,7 @@ const NestedLayout = ({ children }) => {
   return (
     <>
       <Head>
-        <title>Spotify - Search</title>
+        <title>Spotify - Enter a search phrase</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 
