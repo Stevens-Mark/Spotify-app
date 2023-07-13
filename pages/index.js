@@ -1,8 +1,7 @@
 import Head from 'next/head';
-import { getSession } from 'next-auth/react';
+// import { getSession } from 'next-auth/react';
 // import components
 import Layout from '@/components/layouts/Layout';
-import Center from '@/components/Center';
 
 import Welcome from '@/components/Welcome';
 // export async function getServerSideProps(context) {
@@ -26,9 +25,7 @@ export default function Home() {
         <title>Spotify - Web Player</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
-
       <Welcome />
-      {/* <Center /> */}
     </>
   );
 }

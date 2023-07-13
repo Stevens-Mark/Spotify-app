@@ -10,8 +10,8 @@ import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import {  albumIdState, } from '@/atoms/albumAtom';
-import {  currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
+import { albumIdState } from '@/atoms/albumAtom';
+import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // please vist https://heroicons.com/ for icon details
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 import {
@@ -42,47 +42,27 @@ function Sidebar() {
 
   // const setCurrentItemId = useSetRecoilState(currentItemIdState);
   // const setCurrentAlbumId = useSetRecoilState(albumIdState);
-  
+
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-  // needed to reset search when user changes to their saved playlists
+  // needed to reset search when user changes pages
   const setSubmitted = useSetRecoilState(querySubmittedState);
   const setQuery = useSetRecoilState(queryState);
 
   useEffect(() => {
     /**
-     * set player info to the currently playing track or recently played track as default on page load
-     * & loads the currently playing playlist or default playlist to the page
+     * set player info & active palylist (if applicable)
      * @function fetchCurrentTrack
      */
     const fetchCurrentTrack = async () => {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
-          console.log("data ", data)
-          if (
-            data.body &&
-            data.body.is_playing 
-            &&
-            data.body.context !== null &&
-            data.body.context.type === 'playlist'
-          ) {
-            const currentPlaylistId = data.body?.context?.uri.split(':').pop();
-            console.log("currentPlaylistId ", currentPlaylistId)
-            setPlayerInfoType(data.body?.currently_playing_type);
-            setCurrentTrackId(data.body?.item?.id); // set current playing track for player info
-            // setMyPlaylistId(currentPlaylistId); // set current playlist in use
-            setActivePlaylist(currentPlaylistId);
-          } else {
-            // const userPlaylists = await spotifyApi.getUserPlaylists();
-            // setMyPlaylists(userPlaylists.body.items);
-            // setMyPlaylistId(userPlaylists.body.items[0].id); // set a default playlist to show as no currently playing
-            const recentlyPlayed = await spotifyApi.getMyRecentlyPlayedTracks({
-              limit: 6, // this recently played data can be saved to an atom & used later on another page in the future
-            });
-            setCurrentTrackId(data.body?.item?.id); // set recent track for player info (as no current playing track)
-            setActivePlaylist(data.body?.context?.uri.split(':').pop())
-          }
+          const currentPlaylistId = data.body?.context?.uri.split(':').pop(); // get playlist id (if applicable)
+          setPlayerInfoType(data.body?.currently_playing_type);
+          setCurrentTrackId(data.body?.item?.id); // set track for player info
+          // setMyPlaylistId(currentPlaylistId); // set current playlist in use
+          setActivePlaylist(currentPlaylistId);
         }
       } catch (err) {
         console.error('Failed to get current playing track / playlist ID', err);
@@ -117,11 +97,12 @@ function Sidebar() {
     setPlayerInfoType,
   ]);
 
+
   /**
-   * clear search (if any) & redirect to homepage
-   * @function resetValues
+   * navigates back to homepage & reset
+   * @function handleHome
    */
-  const resetValues = () => {
+  const handleHome = () => {
     setSubmitted(false);
     setQuery('');
     // setCurrentItemId(null); // reset these 2 states from search page that may have been set previously ???
@@ -130,24 +111,12 @@ function Sidebar() {
   };
 
   /**
-   * navigates back to homepage & reset
-   * @function handleHome
-   */
-  const handleHome = () => {
-    // setMyPlaylistId(null);
-    resetValues();
-  };
-
-  /**
-   * navigates to chosen playlist & reset
+   * navigates to chosen playlist
    * @function handleClick
    * @param {string} id of playlist
    */
   const handleClick = (id) => {
     router.push(`/playlist/${id}`);
-
-    // setMyPlaylistId(id);
-    // resetValues();
   };
 
   return (
