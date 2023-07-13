@@ -61,6 +61,45 @@ function QuickPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
+  // Function to save currentItem in localStorage
+  const saveState = (key, state) => {
+    try {
+      const currentItemState = JSON.stringify(state);
+      localStorage.setItem(key, currentItemState);
+    } catch {
+      console.error(`Error adding from localStorage`);
+    }
+  };
+
+  // Function to load currentItem from localStorage
+  const loadState = (key) => {
+    try {
+      const currentItemState = localStorage.getItem(key);
+      return currentItemState !== null ? JSON.parse(currentItemState) : null;
+    } catch {
+      console.error(`Error loading ${key} from localStorage`);
+      return null;
+    }
+  };
+  // Load the currentItemId from localStorage on component mount
+  useEffect(() => {
+    const storedCurrentItemId = loadState('currentItemId');
+    if (storedCurrentItemId) {
+      setCurrentItemId(storedCurrentItemId);
+    }
+  }, [setCurrentItemId]);
+
+  // Save the currentItemId to localStorage whenever it changes
+  useEffect(() => {
+    saveState('currentItemId', currentItemId);
+  }, [currentItemId]);
+
+  console.log('currentItemId ', currentItemId)
+  /**
+   * Either play or pause current track
+   * @function HandleCardPlayPauseClick
+   * @param {event object} event
+   */
   const HandleCardPlayPauseClick = (event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -113,14 +152,6 @@ function QuickPlayBanner({ item, scrollRef }) {
     }
   };
 
-  // used to set play/pause icons
-  useEffect(() => {
-    const newActiveStatus =
-      (currentItemId === item?.id && isPlaying) ||
-      (currentItemId === originId && isPlaying);
-    setActiveStatus(newActiveStatus);
-  }, [currentItemId, isPlaying, item?.id, originId]);
-
   // used for sticky banner quick play button
   useEffect(() => {
     const handleScroll = () => {
@@ -138,6 +169,14 @@ function QuickPlayBanner({ item, scrollRef }) {
     scrollContainer.addEventListener('scroll', handleScroll);
     return () => scrollContainer.removeEventListener('scroll', handleScroll);
   }, [scrollRef]);
+
+  // used to set play/pause icons
+  useEffect(() => {
+    const newActiveStatus =
+      (currentItemId === item?.id && isPlaying) ||
+      (currentItemId === originId && isPlaying);
+    setActiveStatus(newActiveStatus);
+  }, [currentItemId, isPlaying, item?.id, originId]);
 
   return (
     <>
