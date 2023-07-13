@@ -108,7 +108,7 @@ const EpisodePage = ({ episode }) => {
 
           {/* if there is a html description use it: links open in seperate page to avoid hydration issues */}
           {episode?.html_description ? (
-            <p
+            <div
               ref={textRef}
               className={`text-pink-swan links ${
                 !expandABoutText ? 'line-clamp-4' : ''

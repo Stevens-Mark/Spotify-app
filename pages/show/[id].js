@@ -189,7 +189,7 @@ const ShowPage = ({ showInfo }) => {
               </h2>
               {/* if there is a html description use it: links open in seperate page to avoid hydration issues */}
               {showInfo?.html_description ? (
-                <p
+                <div
                   ref={textRef}
                   className={`text-pink-swan  ${
                     !expandABoutText ? 'line-clamp-4' : ''
