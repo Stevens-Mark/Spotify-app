@@ -33,3 +33,8 @@
   text-decoration: underline;
 }
 
+/* Toast Notification style overide */
+.Toastify__toast {
+  border-radius: 12px 3px 12px 3px !important;
+  min-height: 50px !important;
+} 

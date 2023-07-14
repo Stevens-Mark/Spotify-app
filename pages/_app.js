@@ -3,7 +3,6 @@ import { RecoilRoot } from 'recoil';
 import { ToastContainer } from 'react-toastify';
 import { Slide, Zoom, Flip, Bounce } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
 import '@/styles/globals.css';
 
 // export default function App({
@@ -29,8 +28,8 @@ export default function App({
       <RecoilRoot>
         <ToastContainer
           position="bottom-right"
-          transition={Zoom}
-          autoClose={750}
+          transition={Bounce}
+          autoClose={2000}
           hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
@@ -39,7 +38,7 @@ export default function App({
           draggable
           pauseOnHover
           // limit={3}
-          style={{ fontSize: '20px', textAlign: 'center' }}
+          style={{ fontSize: '18px', textAlign: 'center', bottom: '5rem' }}
         />
         {getLayout(<Component {...pageProps} />)}
       </RecoilRoot>

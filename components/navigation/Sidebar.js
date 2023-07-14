@@ -81,7 +81,7 @@ function Sidebar() {
           setMyPlaylists(userPlaylists.body.items); // load user playlists
         } catch (err) {
           console.error('Failed to get user playlists', err);
-          toast.error('Failed to get user playlists !', {
+          toast.error('Playlists Retrieval failed !', {
             theme: 'colored',
           });
         }
