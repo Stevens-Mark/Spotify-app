@@ -1,8 +1,97 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
 
-First, run the development server:
+<p align="center">
+  <img src="/public/spotifyScreenshot.png" />
+</p>
+
+# PROJECT PERSONAL *(English)*
+
+
+
+# SPOTIFY - A Spotify Clone
+
+This app acts as a playback "controller" using the Spotify Web API that enables the application to interact with Spotify's streaming service,(retrieving search content metadata & controlling playback).
+
+## Objective
+What started off as a simple project to learn the basics of Next.js, Tailwind and Recoil (all that I had never used) from a simple tutorial online, turned into a more robust project. Each time I solved one problem, another arrived & I just kept adding more & more pages/compononts. The logic to make all the different components work together in relation to when to start/pause a track (thus showing the correct icon) I found slightly complicated to say the least. I think I improved some features though. For example with my app, on the shows page, you can use the player controls to navigate between the different episodes, but on spotify using the player controls navigates away from show episodes & plays a track from elsewhere that I think makes no sense. The same problem occurs with the songs page and the "songs window" on the all search results page. Again, if you select a track & then try to navigate using the player controls (like you can on a playlist, album or artist page) spotify plays a totally different track from elsewhere. From a user point of view there's no continuity. My app does not have these issues, but it's far from perfect. Spotify is an amazing site, which is so feature rich. Far more than you  realise until you try to clone it. If you want a challenge of logic  (to keep you awake at night) I strongly advice trying to replicate the site (well at least a aprt of it).
+...
+
+## Features
+- [x] Interact with Spotify's streaming service
+- [x] Secure Login using Next/auth
+- [x] Welcome page
+- [x] Sidebar containing all the users playlists
+- [x] Search option returns results for albums, artists, playlists, podcasts/shows & episodes
+- [x] Media player controls
+- [x] Quick play start/pause control banner on page scroll
+- [x] Equaliser graphic animation when track playing
+- [x] Infinite scrolling of media data
+- [x] Use of hooks and custom hooks
+- [x] Rccent search list currently persisted in local storage for ease of demo
+- [x] Responsive layout
+- [x] State Management with [Recoil](https://recoiljs.org/)
+- [x] Adaptive banner colour background based on image colors
+- [x] Web Api courtesy of [Spotify for developer](https://developer.spotify.com/) Spotify Web API Node
+- [x] Spotify Web API Node courtesy of [Michael Thelin](https://github.com/thelinmichael/spotify-web-api-node)
+
+## Limitations / Areas for improvement
+- [x] The spotify site is huge with (deceptively) a lot of functionality & features. I have not attempted to replicate the whole site.
+- [x] I have not added the functionality for the genres on the search page.
+- [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
+- [x] There are a presently a few known issues with my implementation, listed below:
+
+# Known issues
+- [x] Implmentation of the forward & backward navigation buttons not perfect.
+- [x] On the All search results page: if an artist has been selected & is playing, the "pause icon" disappears when the user presses forward or backwards on the player controls (not so obvious).
+- [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops so this is not a feature implemented by Spotify anyway.
+- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, an artist or a playlist that does not belong to the user).
+- [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/
+- [x] There are probably some other issues (similar to this) that I haven't spotted as yet.
+
+# Installation *(English)*
+
+- You will need an account with  [Spotify](https://open.spotify.com/) 
+- PLEASE NOTE: YOU WILL NEED A PREMIUM ACCOUNT TO ACCESS ALL THE FEATURES
+## Prerequisites
+- [NodeJS](https://nodejs.org/en/)  Version 16.13.0 
+- [NPM](https://www.npmjs.com/package/npm) Version 7.6.0
+- [Visual Studio Code](https://code.visualstudio.com/) or another IDE of your choice
+
+## Dependencies
+- [Heroicons](https://heroicons.com/) Version 2.0.17
+- [GetPixels](https://www.npmjs.com/package/get-pixels) Version 3.3.3
+- [Lodash](https://lodash.com/) Version 4.17.21
+- [Toastify](https://www.npmjs.com/package/react-toastify) Version 9.1.3
+- [Recoil](https://recoiljs.org/) Version 0.7.7
+- [Rgbaster](https://www.npmjs.com/package/rgbaster) Version 2.1.1
+- [Spotify-web-api-node](https://github.com/thelinmichael/spotify-web-api-node) Version 5.0.2
+- [Tailwind](https://tailwindcss.com/) Version 3.3.1
+- [Tailwind-scrollbar-hide](https://www.npmjs.com/package/tailwind-scrollbar-hide) Version 1.1.7
+
+
+## Installing and running the project
+- Clone the repository onto your computer :
+  `https://github.com/Stevens-Mark/Spotify-app.git`
+
+- Inside this repository, install the packages/dependencies :
+ `npm install`
+
+- Create an account with [Spotify-for-developers](https://developer.spotify.com/) 
+- Create an app (what you call it & the description is up to you)
+
+<p align="center">
+  <img src="/public/spotifyForDevelopers.png" />
+</p>
+
+- Create a `.env.local` and add the information below (with your details)
+
+-NEXTAUTH_URL=http://localhost:3000
+-NEXT_PUBLIC_CLIENT_SECRET=your-client-secret
+-NEXT_PUBLIC_CLIENT_ID=your-client-id
+-JWT_SECRET=your-own-made-up-jwt-secret-word-for-the-encryption
+
+
+- Run the development server:
 
 ```bash
 npm run dev
@@ -12,27 +101,10 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+- Make sure you have connected to your Spotify account & at least started the player once. This makes sure that the application is connected properly, in order for the app to control the streaming service.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+## Notes
+- This is a project that I would like to come back to in the future in order to add yet more features ( I think one could do this project forever)...
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

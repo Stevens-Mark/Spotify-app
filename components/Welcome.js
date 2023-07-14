@@ -108,6 +108,7 @@ function Welcome() {
       />
       <h2 className="text-2xl isSm:text-3xl mt-6">For Your Listening Pleasure ...</h2>
       <h2 className="text-lg isSm:text-2xl mt-6">Why not listen to your playlists or search for something new...</h2>
+      <p className="text-sm mt-6">( Make sure to connect to your Spotify account & have a PREMIUM ACCOUNT to access all features )</p>
       </div>
          <Footer />
     </div>
