@@ -10,7 +10,6 @@ import {
   isPlayState,
   songsUrisState,
   songsListState,
-  currentTrackNumberState,
 } from '@/atoms/songAtom';
 import {
   playerInfoTypeState,
@@ -41,10 +40,6 @@ function TopSongTrack({ track, order }) {
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
 
-  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(
-  //   currentTrackNumberState
-  // );
-
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 
@@ -58,7 +53,6 @@ function TopSongTrack({ track, order }) {
     currentSongIndexState
   );
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  const [isShown, setIsShown] = useState(false);
 
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
@@ -105,8 +99,6 @@ function TopSongTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
-      // setCurrentTrackNumber,
-      // currentTrackNumber,
     };
     HandleTrackPlayPause(songsOptions);
   };

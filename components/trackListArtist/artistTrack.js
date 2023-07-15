@@ -32,15 +32,12 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  console.log('track.artist', track);
-
   const router = useRouter();
 
   const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
 
-  const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
-
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -90,8 +87,8 @@ function ArtistTrack({ track, order }) {
       artistTrackUris, // determines it's artist to play in  play/pause function
       setCurrentItemId,
       currentTrackIndex,
-      setCurrentTrackId,
       currentTrackId,
+      setCurrentTrackId,
       setCurrentSongIndex,
       setPlayerInfoType,
       setIsPlaying,

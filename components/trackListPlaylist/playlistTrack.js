@@ -73,11 +73,6 @@ function PlaylistTrack({ track, order }) {
     }, '500');
   }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
 
-
-  // console.log('currentSongIndex ', currentSongIndex)
-  // console.log('currentTrackId', currentTrackId)
-  // console.log('playlist ', playlist)
-
   /**
    * Either play or pause current track
    * @function  HandleTrackPlayPauseClick
@@ -108,7 +103,8 @@ function PlaylistTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && order === currentSongIndex && isPlaying;
+    const newActiveStatus =
+      song?.id === currentTrackId && order === currentSongIndex && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
 

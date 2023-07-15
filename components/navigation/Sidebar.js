@@ -61,7 +61,7 @@ function Sidebar() {
           const currentPlaylistId = data.body?.context?.uri.split(':').pop(); // get playlist id (if applicable)
           setPlayerInfoType(data.body?.currently_playing_type);
           setCurrentTrackId(data.body?.item?.id); // set track for player info
-          // setMyPlaylistId(currentPlaylistId); // set current playlist in use
+          setMyPlaylistId(currentPlaylistId); // set current playlist in use
           setActivePlaylist(currentPlaylistId);
           setCurrentItemId(currentPlaylistId);
         }

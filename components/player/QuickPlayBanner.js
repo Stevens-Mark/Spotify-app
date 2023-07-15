@@ -94,7 +94,6 @@ function QuickPlayBanner({ item, scrollRef }) {
     saveState('currentItemId', currentItemId);
   }, [currentItemId]);
 
-  console.log('currentItemId ', currentItemId)
   /**
    * Either play or pause current track
    * @function HandleCardPlayPauseClick

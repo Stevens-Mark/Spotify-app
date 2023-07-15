@@ -101,11 +101,13 @@ function Player() {
   useEffect(() => {
     setTimeout(() => {
       if (spotifyApi.getAccessToken()) {
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          if (data.body?.is_playing) {
-            setIsPlaying(true);
-          }
-        });
+        spotifyApi
+          .getMyCurrentPlayingTrack()
+          .then((data) => {
+            if (data.body?.is_playing) {
+              setIsPlaying(true);
+            }
+          });
       }
     }, '500');
   }, [setIsPlaying, spotifyApi]);
@@ -140,7 +142,6 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        console.log('data ', data);
         if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToPrevious()
@@ -265,7 +266,6 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        console.log('data ', data);
         if (data.body?.is_playing && !isEpisode) {
           spotifyApi
             .skipToNext()
