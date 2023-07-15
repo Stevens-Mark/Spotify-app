@@ -40,12 +40,12 @@ What started off as a simple project to learn the basics of Next.js, Tailwind an
 - [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
 - [x] There are a presently a few known issues with my implementation, listed below:
 
-# Known issues
+## Known issues
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] On the All search results page: if an artist has been selected & is playing, the "pause icon" disappears when the user presses forward or backwards on the player controls (not so obvious).
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops so this is not a feature implemented by Spotify anyway.
 - [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, an artist or a playlist that does not belong to the user).
-- [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/
+- [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/reloads the page.
 - [x] There are probably some other issues (similar to this) that I haven't spotted as yet.
 
 # Installation *(English)*

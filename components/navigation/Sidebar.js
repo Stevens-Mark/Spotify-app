@@ -51,7 +51,7 @@ function Sidebar() {
 
   useEffect(() => {
     /**
-     * set player info & active palylist (if applicable)
+     * set player info & active playlist (if applicable)
      * @function fetchCurrentTrack
      */
     const fetchCurrentTrack = async () => {

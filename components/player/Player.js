@@ -101,13 +101,11 @@ function Player() {
   useEffect(() => {
     setTimeout(() => {
       if (spotifyApi.getAccessToken()) {
-        spotifyApi
-          .getMyCurrentPlayingTrack()
-          .then((data) => {
-            if (data.body?.is_playing) {
-              setIsPlaying(true);
-            }
-          });
+        spotifyApi.getMyCurrentPlayingTrack().then((data) => {
+          if (data.body?.is_playing) {
+            setIsPlaying(true);
+          }
+        });
       }
     }, '500');
   }, [setIsPlaying, spotifyApi]);
@@ -155,12 +153,13 @@ function Player() {
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
-                    // if (
-                    //   data.body.context === null &&
-                    //   data.body?.item.album.type === 'album'
-                    // ) {
-                    //   setCurrentItemId(data.body?.item?.album?.id);
-                    // }
+                    // when navigating songs set album id on skip (currently doesn't work correctly for artists)
+                    if (
+                      data.body.context === null &&
+                      data.body?.item.album.type === 'album'
+                    ) {
+                      setCurrentItemId(data.body?.item?.album?.id);
+                    }
                     if (currentSongIndex > 0) {
                       setCurrentSongIndex(currentSongIndex - 1);
                     } else {
@@ -279,12 +278,13 @@ function Player() {
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
-                    // if (
-                    //   data.body.context === null &&
-                    //   data.body?.item.album.type === 'album'
-                    // ) {
-                    //   setCurrentItemId(data.body?.item?.album?.id);
-                    // }
+                    // when navigating songs set album id on skip (currently doesn't work correctly for artists)
+                    if (
+                      data.body.context === null &&
+                      data.body?.item.album.type === 'album'
+                    ) {
+                      setCurrentItemId(data.body?.item?.album?.id);
+                    }
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
                   .catch((err) => {
