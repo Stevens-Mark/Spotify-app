@@ -32,7 +32,7 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  console.log("track.artist", track)
+  console.log('track.artist', track);
 
   const router = useRouter();
 
@@ -105,9 +105,10 @@ function ArtistTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && isPlaying;
+    const newActiveStatus =
+      song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
 
   return (
     <RenderTracks
@@ -116,7 +117,6 @@ function ArtistTrack({ track, order }) {
       HandleTrackPlayPauseClick={HandleTrackPlayPauseClick}
       order={order}
       activeStatus={activeStatus}
-      currentSongIndex={currentSongIndex}
       song={song}
     />
   );

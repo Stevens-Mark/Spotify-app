@@ -13,9 +13,8 @@ import Equaliser from '@/components/graphics/Equaliser';
  * @param {boolean} isShown whether to show of not (see below)
  * @param {function} setIsShown set state for mouve rollover
  * @param {function} HandleTrackPlayPauseClick handle play/pause
- * @param {number} order index/posiotn in list
+ * @param {number} order index/position in list
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
- * @param {number} currentSongIndex current playing position in the list
  * @param {object} song data
  * @param {string} addedAt date track added to list (just for playlists)
  * @returns
@@ -26,10 +25,8 @@ function RenderTracks({
   HandleTrackPlayPauseClick,
   order,
   activeStatus,
-  currentSongIndex,
   song,
   addedAt,
-  // currentTrackNumber,
 }) {
   return (
     <div
@@ -69,7 +66,7 @@ function RenderTracks({
         <div className="w-full">
           <h3
             className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 ${
-              (activeStatus)
+              (activeStatus) 
                 ? 'text-green-500'
                 : 'text-white'
             } truncate`}

@@ -10,7 +10,6 @@ import {
   isPlayState,
   songsUrisState,
   songsListState,
-  currentTrackNumberState
 } from '@/atoms/songAtom';
 import {
   playerInfoTypeState,
@@ -39,8 +38,6 @@ function SongTrack({ track, order }) {
   const songsList = useRecoilValue(songsListState);
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
   const  setCurrentAlbumId = useSetRecoilState(albumIdState);
-
-  // const [currentTrackNumber, setCurrentTrackNumber] = useRecoilState(currentTrackNumberState);
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -102,7 +99,6 @@ function SongTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
-      // setCurrentTrackNumber
     };
     HandleTrackPlayPause(songsOptions);
   };
@@ -121,7 +117,6 @@ function SongTrack({ track, order }) {
       HandleTrackPlayPauseClick={HandleTrackPlayPauseClick}
       order={order}
       activeStatus={activeStatus}
-      currentSongIndex={currentSongIndex}
       song={song}
     />
   );

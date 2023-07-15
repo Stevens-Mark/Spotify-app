@@ -101,7 +101,7 @@ function AlbumTrack({ track, order }) {
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
 
   return (
     <RenderTracks
@@ -110,7 +110,6 @@ function AlbumTrack({ track, order }) {
       HandleTrackPlayPauseClick={HandleTrackPlayPauseClick}
       order={order}
       activeStatus={activeStatus}
-      currentSongIndex={currentSongIndex}
       song={song}
     />
   );
