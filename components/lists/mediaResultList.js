@@ -14,6 +14,8 @@ import SongTracks from '../trackListSongs/songTracks';
  */
 function MediaResultList(props) {
   const {
+    genreCategory,
+    error,
     mediaList,
     totalNumber,
     showButton,
@@ -26,18 +28,30 @@ function MediaResultList(props) {
     <>
       <div
         className={`bg-black overflow-y-scroll h-screen scrollbar-hide pt-2 pb-24 py-4  ${
-          mediaList?.[0].type === 'track' ? 'px-0' : 'px-5 xs:px-8'
+          mediaList?.[0]?.type === 'track' ? 'px-0' : 'px-5 xs:px-8'
         }`}
         ref={(node) => {
           containerRef.current = node;
           scrollableSectionRef.current = node;
         }}
       >
-        <h1 className="sr-only">
-          Search results for{' '}
-          {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
-        </h1>
-        {totalNumber === 0 ? (
+        {!error && (
+          <>
+            {genreCategory ? (
+              <h1 className="text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
+                {genreCategory}
+              </h1>
+            ) : (
+              <h1 className="sr-only">
+                Search results for{' '}
+                {mediaList?.[0]?.type && (
+                  <>{capitalize(mediaList?.[0].type)}s</>
+                )}
+              </h1>
+            )}
+          </>
+        )}
+        {totalNumber === 0 || error ? (
           <span className="flex items-center h-full justify-center">
             <h2 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
               Sorry no items found
@@ -45,21 +59,23 @@ function MediaResultList(props) {
           </span>
         ) : (
           <>
-            {/* visible title if not track list page  */}
-            {mediaList?.[0].type !== 'track' && (
+            {/* visible title if not track list page & not genre page */}
+            {!genreCategory && mediaList?.[0]?.type !== 'track' && (
               <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
-                {mediaList?.[0].type && <>{capitalize(mediaList?.[0].type)}s</>}
+                {mediaList?.[0]?.type && (
+                  <>{capitalize(mediaList?.[0]?.type)}s</>
+                )}
               </h2>
             )}
             {/* track list here */}
-            {mediaList?.[0].type === 'track' && <SongTracks />}
+            {mediaList?.[0]?.type === 'track' && <SongTracks />}
 
             {/* or episode list here */}
-            {mediaList?.[0].type === 'episode' && (
+            {mediaList?.[0]?.type === 'episode' && (
               <div className="flex flex-col">
                 {mediaList?.map((track, i) => (
                   <EpisodeCard
-                    key={`${track.id}-${i}`}
+                    key={`${track?.id}-${i}`}
                     track={track}
                     order={i}
                   />
@@ -67,11 +83,11 @@ function MediaResultList(props) {
               </div>
             )}
             {/* otherwise playlist, album or artists list here */}
-            {mediaList?.[0].type !== 'episode' &&
-              mediaList?.[0].type !== 'track' && (
+            {mediaList?.[0]?.type !== 'episode' &&
+              mediaList?.[0]?.type !== 'track' && (
                 <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
                   {mediaList?.map((item, i) => (
-                    <Card key={`${item.id}-${i}`} item={item} />
+                    <Card key={`${item?.id}-${i}`} item={item} />
                   ))}
                 </div>
               )}

@@ -24,6 +24,7 @@ export const config = {
     '/playlist/:path*',
     '/show/:path*',
     '/episode/:path*',
+    '/genre/:path*',
   ],
 };
 

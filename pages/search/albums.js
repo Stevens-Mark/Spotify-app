@@ -52,7 +52,7 @@ function Albums() {
   const fetchMoreData = () => {
     const itemsPerPage = 30;
     const nextOffset = currentOffset + itemsPerPage;
-    setCurrentOffset(nextOffset);
+    
     setIsSearching(true);
     if (spotifyApi.getAccessToken()) {
       spotifyApi
@@ -65,6 +65,7 @@ function Albums() {
             const updatedList = mergeObject(data.body, queryResults, 'albums');
             setQueryResults(updatedList);
             setIsSearching(false);
+            setCurrentOffset(nextOffset);
           },
           function (err) {
             setIsSearching(false);

@@ -43,7 +43,7 @@ const bgColors = [
 function GenreCard({ item, idx }) {
   return (
     <Link
-      href=""
+      href={`/genre/${item?.id}`}
       passHref
       className={`relative overflow-hidden rounded-lg  aspect-square cursor-pointer ${
         bgColors[idx % bgColors?.length]

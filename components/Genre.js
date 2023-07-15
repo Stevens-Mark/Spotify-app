@@ -95,7 +95,7 @@ function Genre() {
         </h2>
         <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
           {/* genres list here */}
-          {genres?.map((item, idx) => (
+          {genres?.slice(1).map((item, idx) => (
             <GenreCard key={`${item?.id}-${idx}`} item={item} idx={idx} />
           ))}
         </div>
