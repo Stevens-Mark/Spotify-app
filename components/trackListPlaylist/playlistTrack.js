@@ -30,10 +30,9 @@ import RenderTracks from '../trackRender/renderTracks';
  * @function PlaylistTrack
  * @param {object} track information
  * @param {number} order track index in the playlist list
- * @param {string} whichList (optional) either user playlist or defaults to other person's playlist
  * @returns {JSX}
  */
-function PlaylistTrack({ track, order, whichList }) {
+function PlaylistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
 
@@ -41,8 +40,6 @@ function PlaylistTrack({ track, order, whichList }) {
 
   const playlistId = useRecoilValue(playlistIdState);
   const playlist = useRecoilValue(playlistTrackListState);
-    const myPlaylistId = useRecoilValue(myPlaylistIdState);
-  const myPlaylist = useRecoilValue(myPlaylistState);
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -62,27 +59,24 @@ function PlaylistTrack({ track, order, whichList }) {
   }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
-    const listToUse = whichList === 'myPlaylist' ? myPlaylist : playlist;
     setTimeout(() => {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        listToUse !== null
+        playlist !== null
       ) {
-        const indexPosition = listToUse?.tracks.items.findIndex(
+        const indexPosition = playlist?.tracks.items.findIndex(
           (x) => x.track.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '500');
-  }, [
-    currentSongIndex,
-    currentTrackId,
-    myPlaylist,
-    playlist,
-    setCurrentSongIndex,
-    whichList,
-  ]);
+  }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
+
+
+  // console.log('currentSongIndex ', currentSongIndex)
+  // console.log('currentTrackId', currentTrackId)
+  // console.log('playlist ', playlist)
 
   /**
    * Either play or pause current track
@@ -93,12 +87,11 @@ function PlaylistTrack({ track, order, whichList }) {
   const HandleTrackPlayPauseClick = (event, currentTrackIndex) => {
     event.preventDefault();
     event.stopPropagation();
-    const IdToUse = whichList === 'myPlaylist' ? myPlaylistId : playlistId;
 
     const playlistsOptions = {
       originId,
       song,
-      IdToUse,
+      playlistId,
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
@@ -114,6 +107,7 @@ function PlaylistTrack({ track, order, whichList }) {
 
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
+  // console.log('active ', activeStatus);
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);

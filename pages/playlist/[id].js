@@ -52,6 +52,7 @@ const PlaylistPage = ({ playlist }) => {
     playlistTrackListState
   );
 
+ 
   useEffect(() => {
     setCurrentPlaylistId(playlist?.id);
     setPlaylistTracklist(playlist);
@@ -71,7 +72,7 @@ const PlaylistPage = ({ playlist }) => {
         <MediaHeading item={playlist} />
         <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
 
-        <PlaylistTracks Tracklist={playlistTracklist} whichList={null} />
+        <PlaylistTracks Tracklist={playlistTracklist} />
         <Footer />
       </div>
     </>

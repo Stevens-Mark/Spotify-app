@@ -6,10 +6,9 @@ import PlaylistTrack from './playlistTrack';
  * Renders the list of tracks of a playlist (user or other persons)
  * @function PlaylistTracks
  * @param {object} Tracklist from user or other person
- * @param {string} whichList either user playlist or null (so other person's playlist used)
  * @returns {JSX}
  */
-function PlaylistTracks({ Tracklist, whichList }) {
+function PlaylistTracks({ Tracklist }) {
   return (
     <section>
       <h2 className="sr-only">Track List</h2>
@@ -19,7 +18,6 @@ function PlaylistTracks({ Tracklist, whichList }) {
             key={`${track?.track?.id}-${i}`}
             track={track}
             order={i}
-            whichList={whichList}
           />
         ))}
       </div>
