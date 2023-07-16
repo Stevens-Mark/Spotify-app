@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
     '/search/tracks',
     '/search/podcastAndEpisodes',
   ];
-  const isExcluded = excludedPath.includes(path);
+  const isExcluded = excludedPath.includes(path) || path.startsWith('/genre/');
 
   return (
     <div className="bg-black h-screen overflow-hidden">

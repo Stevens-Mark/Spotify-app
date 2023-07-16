@@ -179,9 +179,9 @@ function QuickPlayBanner({ item, scrollRef }) {
 
   return (
     <>
-      <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
+      <div className="absolute top-0 w-full z-20 flex flex-col">
         <div
-          className={`bg-gradient-to-b to-black  
+          className={`bg-gradient-to-b to-black h-20
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}

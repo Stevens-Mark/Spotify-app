@@ -145,6 +145,7 @@ function Genres({ genreData }) {
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 
+
       <MediaResultList
         heading={genreCategory}
         error={error}

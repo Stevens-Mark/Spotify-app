@@ -5,6 +5,7 @@ import Footer from '@/components/navigation/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
 import SongTracks from '../trackListSongs/songTracks';
+import GenreHeading from '../headerLabels/GenreHeading';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...
@@ -38,9 +39,12 @@ function MediaResultList(props) {
         {!error && (
           <>
             {heading ? (
+              <>
               <h1 className="text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
                 {heading}
               </h1>
+              <GenreHeading heading={heading} scrollRef={scrollableSectionRef}/>
+              </>
             ) : (
               <h1 className="sr-only">
                 Search results for{' '}
