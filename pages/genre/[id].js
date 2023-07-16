@@ -1,8 +1,10 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
+// custom hooks
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
@@ -80,17 +82,27 @@ function Genres({ genreData }) {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
 
-  useEffect(() => {
-    setId((router?.asPath).split('/').pop());
-  }, [router?.asPath, setId]);
+  const totalNumber = genreData?.playlists?.total;
+  const genreCategory = genreData?.categoryName;
+  const error = genreData?.error || null;
 
   useEffect(() => {
     setGenreList(genreData?.playlists?.items);
   }, [genreData?.playlists?.items, setGenreList]);
 
-  const totalNumber = genreData?.playlists?.total;
-  const genreCategory = genreData?.categoryName;
-  const error = genreData?.error || null;
+  
+  useEffect(() => {
+    setId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setId]);
+
+  // show message when all data loaded/end of infinite scrolling
+  useEffect(() => {
+    if (stopFetch) {
+      toast.info("That's everything !", {
+        theme: 'colored',
+      });
+    }
+  }, [stopFetch]);
 
   /**
    * Fetches more genre playlists & update the current list
@@ -116,7 +128,10 @@ function Genres({ genreData }) {
         setGenreList([...genreList, ...data.playlists.items]);
         setCurrentOffset(nextOffset);
       } catch (err) {
-        console.error('Retrieving more items failed: ...', err);
+        console.error('Retrieving more items failed ...');
+        toast.error('Retrieving more items failed !', {
+          theme: 'colored',
+        });
         return null;
       }
     }
@@ -131,7 +146,7 @@ function Genres({ genreData }) {
       </Head>
 
       <MediaResultList
-        genreCategory={genreCategory}
+        heading={genreCategory}
         error={error}
         mediaList={genreList}
         totalNumber={totalNumber}

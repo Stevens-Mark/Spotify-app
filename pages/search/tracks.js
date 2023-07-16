@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+// custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
@@ -38,6 +40,7 @@ function Tracks() {
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
   const setIsError = useSetRecoilState(errorState);
+  const [stopFetch, setStopFetch] = useState(false);
 
   const tracks = queryResults?.tracks?.items;
   const totalNumber = queryResults?.tracks?.total;
@@ -48,39 +51,59 @@ function Tracks() {
     }
   }, [query, router]);
 
+  // show message when all data loaded/end of infinite scrolling
+  useEffect(() => {
+    if (stopFetch) {
+      toast.info("That's everything !", {
+        theme: 'colored',
+      });
+    }
+  }, [stopFetch]);
+
   /**
    * Fetches more tracks & updates the list of tracks
    * @function fetchMoreData
    * @returns {object} updated list of tracks in queryResults
    */
   const fetchMoreData = () => {
-    const itemsPerPage = 30;
-    const nextOffset = currentOffset + itemsPerPage;
-    setCurrentOffset(nextOffset);
-    setIsSearching(true);
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .searchTracks(query, {
-          offset: nextOffset,
-          limit: itemsPerPage,
-        })
-        .then(
-          function (data) {
-            const updatedList = mergeObject(data.body, queryResults, 'tracks');
-            setQueryResults(updatedList);
-            setsongsList(updatedList?.tracks?.items);
-            // Merge the new URIs into the existing songsUris state
-            const newUris = data.body?.tracks?.items.map((item) => item.uri);
+    if (!stopFetch) {
+      const itemsPerPage = 30;
+      const nextOffset = currentOffset + itemsPerPage;
+      setIsSearching(true);
 
-            setSongsUris((prevUris) => [...prevUris, ...newUris]);
-            setIsSearching(false);
-          },
-          function (err) {
-            setIsSearching(false);
-            setIsError(true);
-            console.log('Retrieving more items failed:', err);
-          }
-        );
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .searchTracks(query, {
+            offset: nextOffset,
+            limit: itemsPerPage,
+          })
+          .then(
+            function (data) {
+              const updatedList = mergeObject(
+                data.body,
+                queryResults,
+                'tracks'
+              );
+              setStopFetch(data?.body?.tracks?.next === null);
+              setQueryResults(updatedList);
+              setsongsList(updatedList?.tracks?.items);
+              // Merge the new URIs into the existing songsUris state
+              const newUris = data.body?.tracks?.items.map((item) => item.uri);
+
+              setSongsUris((prevUris) => [...prevUris, ...newUris]);
+              setIsSearching(false);
+              setCurrentOffset(nextOffset);
+            },
+            function (err) {
+              setIsSearching(false);
+              setIsError(true);
+              console.log('Retrieving more items failed ...');
+              toast.error('Retrieving more items failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
     }
   };
   const containerRef = useInfiniteScroll(fetchMoreData);

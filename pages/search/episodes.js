@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+// custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
@@ -39,6 +41,7 @@ function Episodes() {
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
   const setIsError = useSetRecoilState(errorState);
+  const [stopFetch, setStopFetch] = useState(false);
 
   const episodes = queryResults?.episodes?.items;
   const totalNumber = queryResults?.episodes?.total;
@@ -49,6 +52,15 @@ function Episodes() {
     }
   }, [query, router]);
 
+  // show message when all data loaded/end of infinite scrolling
+  useEffect(() => {
+    if (stopFetch) {
+      toast.info("That's everything !", {
+        theme: 'colored',
+      });
+    }
+  }, [stopFetch]);
+
   /**
    * Fetches more episodes & updates the list of episodes
    * @function fetchMoreData
@@ -56,37 +68,46 @@ function Episodes() {
    */
 
   const fetchMoreData = () => {
-    const itemsPerPage = 30;
-    const nextOffset = currentOffset + itemsPerPage;
-    setCurrentOffset(nextOffset);
-    setIsSearching(true);
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .searchEpisodes(query, {
-          offset: nextOffset,
-          limit: itemsPerPage,
-        })
-        .then(
-          function (data) {
-            const updatedList = mergeObject(
-              data.body,
-              queryResults,
-              'episodes'
-            );
-            setQueryResults(updatedList);
-            setEpisodesList(updatedList);
-            // Merge the new URIs into the existing episodesUris state
-            const newUris = data.body?.episodes?.items.map((item) => item.uri);
+    if (!stopFetch) {
+      const itemsPerPage = 30;
+      const nextOffset = currentOffset + itemsPerPage;
+      setIsSearching(true);
 
-            setEpisodesUris((prevUris) => [...prevUris, ...newUris]);
-            setIsSearching(false);
-          },
-          function (err) {
-            setIsSearching(false);
-            setIsError(true);
-            console.log('Retrieving more items failed:', err);
-          }
-        );
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .searchEpisodes(query, {
+            offset: nextOffset,
+            limit: itemsPerPage,
+          })
+          .then(
+            function (data) {
+              const updatedList = mergeObject(
+                data.body,
+                queryResults,
+                'episodes'
+              );
+              setStopFetch(data?.body?.episodes?.next === null);
+              setQueryResults(updatedList);
+              setEpisodesList(updatedList);
+              // Merge the new URIs into the existing episodesUris state
+              const newUris = data.body?.episodes?.items.map(
+                (item) => item.uri
+              );
+
+              setEpisodesUris((prevUris) => [...prevUris, ...newUris]);
+              setIsSearching(false);
+              setCurrentOffset(nextOffset);
+            },
+            function (err) {
+              setIsSearching(false);
+              setIsError(true);
+              console.log('Retrieving more items failed ...');
+              toast.error('Retrieving more items failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
     }
   };
   const containerRef = useInfiniteScroll(fetchMoreData);

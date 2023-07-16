@@ -52,8 +52,7 @@ const PlaylistPage = ({ playlist }) => {
     playlistTrackListState
   );
 
- 
-  useEffect(() => {
+   useEffect(() => {
     setCurrentPlaylistId(playlist?.id);
     setPlaylistTracklist(playlist);
   }, [playlist, setCurrentPlaylistId, setPlaylistTracklist]);

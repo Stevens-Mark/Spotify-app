@@ -14,7 +14,7 @@ import SongTracks from '../trackListSongs/songTracks';
  */
 function MediaResultList(props) {
   const {
-    genreCategory,
+    heading,
     error,
     mediaList,
     totalNumber,
@@ -37,9 +37,9 @@ function MediaResultList(props) {
       >
         {!error && (
           <>
-            {genreCategory ? (
+            {heading ? (
               <h1 className="text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
-                {genreCategory}
+                {heading}
               </h1>
             ) : (
               <h1 className="sr-only">
@@ -54,13 +54,13 @@ function MediaResultList(props) {
         {totalNumber === 0 || error ? (
           <span className="flex items-center h-full justify-center">
             <h2 className="text-white text-2xl md:text-3xl 2xl:text-4xl">
-              Sorry no items found
+              Sorry no items available
             </h2>
           </span>
         ) : (
           <>
-            {/* visible title if not track list page & not genre page */}
-            {!genreCategory && mediaList?.[0]?.type !== 'track' && (
+            {/* visible title if not track list page & no specific heading */}
+            {!heading && mediaList?.[0]?.type !== 'track' && (
               <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl">
                 {mediaList?.[0]?.type && (
                   <>{capitalize(mediaList?.[0]?.type)}s</>

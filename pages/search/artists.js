@@ -1,6 +1,8 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
+import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
+// custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
@@ -34,6 +36,7 @@ function Artists() {
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
   const setIsError = useSetRecoilState(errorState);
+  const [stopFetch, setStopFetch] = useState(false);
 
   const artists = queryResults?.artists?.items;
   const totalNumber = queryResults?.artists?.total;
@@ -44,34 +47,54 @@ function Artists() {
     }
   }, [query, router]);
 
+  // show message when all data loaded/end of infinite scrolling
+  useEffect(() => {
+    if (stopFetch) {
+      toast.info("That's everything !", {
+        theme: 'colored',
+      });
+    }
+  }, [stopFetch]);
+
   /**
    * Fetches more Artists & updates the list of Artists
    * @function fetchMoreData
    * @returns {object} updated list of artists in queryResults
    */
   const fetchMoreData = () => {
-    const itemsPerPage = 30;
-    const nextOffset = currentOffset + itemsPerPage;
-    setCurrentOffset(nextOffset);
-    setIsSearching(true);
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .searchArtists(query, {
-          offset: nextOffset,
-          limit: itemsPerPage,
-        })
-        .then(
-          function (data) {
-            const updatedList = mergeObject(data.body, queryResults, 'artists');
-            setQueryResults(updatedList);
-            setIsSearching(false);
-          },
-          function (err) {
-            setIsSearching(false);
-            setIsError(true);
-            console.log('Retrieving more items failed:', err);
-          }
-        );
+    if (!stopFetch) {
+      const itemsPerPage = 30;
+      const nextOffset = currentOffset + itemsPerPage;
+      setIsSearching(true);
+
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .searchArtists(query, {
+            offset: nextOffset,
+            limit: itemsPerPage,
+          })
+          .then(
+            function (data) {
+              const updatedList = mergeObject(
+                data.body,
+                queryResults,
+                'artists'
+              );
+              setStopFetch(data?.body?.artists?.next === null);
+              setQueryResults(updatedList);
+              setIsSearching(false);
+              setCurrentOffset(nextOffset);
+            },
+            function (err) {
+              setIsSearching(false);
+              setIsError(true);
+              console.log('Retrieving more items failed ...');
+              toast.error('Retrieving more items failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
     }
   };
   const containerRef = useInfiniteScroll(fetchMoreData);
