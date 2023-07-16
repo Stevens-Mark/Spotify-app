@@ -148,13 +148,16 @@ function Player() {
                 spotifyApi
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
+                    console.log("in previous ", data.body)
                     if (data.body?.currently_playing_type === 'episode') {
+               
                       setCurrentTrackId(findPreviousEpisodeId);
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
                     // when navigating songs set album id on skip (currently doesn't work correctly for artists)
                     if (
+                      data.body?.currently_playing_type !== 'episode' &&
                       data.body.context === null &&
                       data.body?.item.album.type === 'album'
                     ) {
@@ -273,13 +276,16 @@ function Player() {
                 spotifyApi
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
+                    console.log("in skip ", data.body)
                     if (data.body?.currently_playing_type === 'episode') {
+             
                       setCurrentTrackId(findNextEpisodeId);
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
                     // when navigating songs set album id on skip (currently doesn't work correctly for artists)
                     if (
+                      data.body?.currently_playing_type !== 'episode' &&
                       data.body.context === null &&
                       data.body?.item.album.type === 'album'
                     ) {
