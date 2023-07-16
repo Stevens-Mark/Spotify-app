@@ -14,8 +14,6 @@ import {
   originIdState,
 } from '@/atoms/otherAtoms';
 import {
-  myPlaylistIdState,
-  myPlaylistState,
   playlistIdState,
   playlistTrackListState,
   activePlaylistState,

@@ -40,6 +40,8 @@ const MediaHeading = ({ item, itemTracks }) => {
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
 
+  console.log('item ', item);
+
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
     setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
@@ -56,7 +58,7 @@ const MediaHeading = ({ item, itemTracks }) => {
 
   return (
     <div
-      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
+      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 lg:h-96 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
         backgroundColor !== null ? '' : randomColor
       }`}
       style={{
@@ -64,7 +66,7 @@ const MediaHeading = ({ item, itemTracks }) => {
       }}
     >
       <Image
-        className="h-16 w-16 xs:h-44 xs:w-44  shadow-image2 aspect-square"
+        className="h-16 w-16 xs:h-44 xs:w-44 lg:h-[14.5rem] lg:w-[14.5rem] shadow-image2 aspect-square"
         src={item?.images?.[0]?.url || noImage}
         alt=""
         width={100}
@@ -75,31 +77,38 @@ const MediaHeading = ({ item, itemTracks }) => {
       <div>
         {item && (
           <div className="drop-shadow-text">
-            <span className="pt-2">
-              {capitalize(item?.type || item?.album_type)}
+            <span className="pt-2 text-base sm:text-xl">
+              {capitalize(
+                item?.album_type
+                  ? item?.album_type
+                  : item?.type === 'show'
+                  ? 'Podcast'
+                  : item?.type === 'episode'
+                  ? 'Podcast Episode'
+                  : item?.type
+              )}
             </span>
-            <h1 className="text-2xl sm:text-3xl lg:text-5xl font-bold pt-1 pb-[7px] line-clamp-2 whitespace-wrap">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pt-1 pb-[7px] mb-4 line-clamp-2 whitespace-wrap">
               {item?.name}
             </h1>
 
-            {/*not for artist & show information*/}
-            {item?.type !== 'artist' ||
-              (item?.type !== 'show' && (
-                <p className="text-sm mt-5 mb-2 line-clamp-2 text-pink-swan">
-                  {item?.description}
-                </p>
-              ))}
+            {/*playlist description*/}
+            {item?.type === 'playlist' && (
+              <p className="text-base md:text-lg lg:text-xl xl:text-2xl mb-2 line-clamp-2 text-pink-swan">
+                {item?.description}
+              </p>
+            )}
 
             {/*show*/}
             {item?.type === 'show' && (
-              <span className="text-sm mt-5 mb-2 line-clamp-2">
+              <span className="text-base md:text-2xl lg:text-3xl line-clamp-2">
                 {capitalize(item?.publisher)}
               </span>
             )}
 
             {/*episode*/}
             {item?.type === 'episode' && (
-              <span className="text-sm mt-5 mb-2 line-clamp-2">
+              <span className="text-base sm:text-xl mt-3 mb-2 line-clamp-2">
                 {capitalize(item?.show?.name)}
               </span>
             )}
@@ -110,11 +119,11 @@ const MediaHeading = ({ item, itemTracks }) => {
                 <span>
                   {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
                 </span>
-                <span className="text-sm">
+                <span>
                   {item?.tracks?.items?.length}{' '}
                   {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
-                <span className="text-sm truncate text-pink-swan">
+                <span className="truncate text-pink-swan">
                   {msToTime(totalDuration(item))}
                 </span>
               </>
@@ -125,11 +134,11 @@ const MediaHeading = ({ item, itemTracks }) => {
               <>
                 <span>{item?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
                 <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
-                <span className="text-sm">
+                <span className="text-base">
                   {item?.tracks?.items?.length}{' '}
                   {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
-                <span className="text-sm truncate text-pink-swan">
+                <span className="text-base truncate text-pink-swan">
                   {msToTime(totalAlbumDuration(item))}
                 </span>
               </>
@@ -142,11 +151,11 @@ const MediaHeading = ({ item, itemTracks }) => {
                   {(item?.followers?.total).toLocaleString()}{' '}
                   followers&nbsp;•&nbsp;
                 </span>
-                <span className="text-sm">
+                <span className="text-base">
                   {itemTracks?.tracks?.length}{' '}
                   {itemTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
-                <span className="text-sm truncate text-pink-swan">
+                <span className="text-base truncate text-pink-swan">
                   {msToTime(totalArtistTrackDuration(itemTracks))}
                 </span>
               </>
