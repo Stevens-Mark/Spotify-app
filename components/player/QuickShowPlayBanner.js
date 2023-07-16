@@ -80,7 +80,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
               setIsPlaying(false);
             })
             .catch((err) => {
-              console.error('Pause failed: ', err);
+              console.error('Pause failed: ');
               toast.error('Pause failed !', {
                 theme: 'colored',
               });
@@ -94,7 +94,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                 setIsPlaying(true);
               })
               .catch((err) => {
-                console.error('Playback failed: ', err);
+                console.error('Playback failed: ');
                 toast.error('Playback failed !', {
                   theme: 'colored',
                 });
@@ -109,7 +109,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     setIsPlaying(false);
                   })
                   .catch((err) => {
-                    console.error('Pause failed: ', err);
+                    console.error('Pause failed: ');
                     toast.error('Pause failed !', {
                       theme: 'colored',
                     });
@@ -134,7 +134,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
                   .catch((err) => {
-                    console.error('Playback failed: ', err);
+                    console.error('Playback failed: ');
                     toast.error('Playback failed !', {
                       theme: 'colored',
                     });

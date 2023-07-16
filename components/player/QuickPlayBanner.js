@@ -61,6 +61,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
+  //**** BELOW USING LOCAL STORAGE TO PERSIST CURRENTITEM FOR PLAY:PAUSE STATUS ****/
   // Function to save currentItem in localStorage
   const saveState = (key, state) => {
     try {
@@ -93,6 +94,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   useEffect(() => {
     saveState('currentItemId', currentItemId);
   }, [currentItemId]);
+ //**** ABOVE USING LOCAL STORAGE TO PERSIST CURRENTITEM FOR PLAY:PAUSE STATUS ****/
 
   /**
    * Either play or pause current track
@@ -113,7 +115,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               setIsPlaying(false);
             })
             .catch((err) => {
-              console.error('Pause failed: ', err);
+              console.error('Pause failed: ');
               toast.error('Pause failed !', {
                 theme: 'colored',
               });
@@ -127,7 +129,7 @@ function QuickPlayBanner({ item, scrollRef }) {
                 setIsPlaying(true);
               })
               .catch((err) => {
-                console.error('Playback failed: ', err);
+                console.error('Playback failed: ');
                 toast.error('Playback failed !', {
                   theme: 'colored',
                 });

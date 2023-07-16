@@ -23,7 +23,7 @@ import noImage from '@/public/images/noImageAvailable.svg';
 /**
  * Render a card for either album, playlist, show, artist, or recent search
  * @function Card
- * @param {object} item (album, playlist, show, artist, or recentsearch info)
+ * @param {object} item (album, playlist, show, artist, or recent search info)
  * @returns {JSX}
  */
 function Card({ item }) {

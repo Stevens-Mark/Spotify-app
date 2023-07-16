@@ -6,6 +6,7 @@ export const genreState = atom({
   default: null,
 });
 
+// holds the list of playlists for a choosen genre
 export const genreListState = atom({
   key: 'genreListState',
   default: [],

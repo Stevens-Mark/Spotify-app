@@ -26,7 +26,7 @@ import RenderTracks from '../trackRender/renderTracks';
  * Renders each track from the song list
  * @function SongTrack
  * @param {object} track information
- * @param {number} order track index in the artist list
+ * @param {number} order track index in the song list
  * @returns {JSX}
  */
 function SongTrack({ track, order }) {

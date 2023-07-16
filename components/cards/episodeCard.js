@@ -101,7 +101,7 @@ function EpisodeCard({ track, order, whichList }) {
             setIsPlaying(false);
           })
           .catch((err) => {
-            console.error('Pause failed: ', err);
+            console.error('Pause failed: ');
             toast.error('Pause failed !', {
               theme: 'colored',
             });
@@ -126,7 +126,7 @@ function EpisodeCard({ track, order, whichList }) {
             setActivePlaylist(null); //episode playing so user's playlist null
           })
           .catch((err) => {
-            console.error('Playback failed: ', err);
+            console.error('Playback failed: ');
             toast.error('Playback failed !', {
               theme: 'colored',
             });

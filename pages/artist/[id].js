@@ -76,7 +76,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
 
   useEffect(() => {
     setArtistTracklist(artistTracks);
-    setArtistTrackUris(artistTracks?.tracks.map((track) => track.uri)); // set uris to be used in player
+    setArtistTrackUris(artistTracks?.tracks?.map((track) => track.uri)); // set uris to be used in player
   }, [artistTracks, setArtistTrackUris, setArtistTracklist]);
 
   return (

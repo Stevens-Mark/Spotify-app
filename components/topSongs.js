@@ -3,8 +3,8 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { searchResultState } from '@/atoms/searchAtom';
 // import component/icons
-import TopSongCard from './cards/topSongCard';
 import TopSongTrack from './trackListSongs/topSongTrack';
+
 /**
  * Renders first 4 songs from search query next to top results
  * @function TopSongs

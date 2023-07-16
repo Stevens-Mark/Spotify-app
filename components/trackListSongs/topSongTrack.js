@@ -26,7 +26,7 @@ import TopSongCard from '../cards/topSongCard';
  * Renders each track from the song list
  * @function TopSongTrack
  * @param {object} track information
- * @param {number} order track index in the artist list
+ * @param {number} order track index 
  * @returns {JSX}
  */
 function TopSongTrack({ track, order }) {

@@ -66,7 +66,7 @@ function Sidebar() {
           setCurrentItemId(currentPlaylistId);
         }
       } catch (err) {
-        console.error('Failed to get current playing track / playlist ID', err);
+        console.error('Failed to get current playing track / playlist ID');
       }
     };
 
@@ -80,7 +80,7 @@ function Sidebar() {
           const userPlaylists = await spotifyApi.getUserPlaylists();
           setMyPlaylists(userPlaylists.body.items); // load user playlists
         } catch (err) {
-          console.error('Failed to get user playlists', err);
+          console.error('Failed to get user playlists');
           toast.error('Playlists Retrieval failed !', {
             theme: 'colored',
           });

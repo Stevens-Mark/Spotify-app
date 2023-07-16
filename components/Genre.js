@@ -40,7 +40,7 @@ function Genre() {
               setGenres(data.body.categories.items);
             },
             function (err) {
-              console.log('Failed to get genres!', err);
+              console.log('Failed to get genres!');
             }
           );
       }
@@ -73,7 +73,7 @@ function Genre() {
           setGenres(genreList);
         },
         function (err) {
-          console.log('Failed to get genres!', err);
+          console.log('Failed to get genres!');
         }
       );
   };

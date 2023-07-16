@@ -23,14 +23,6 @@ export const currentTrackIdState = atom({
   default: null,
 });
 
-
-// export const currentTrackNumberState = atom({
-//   key: 'currentTrackNumberState',
-//   default: null,
-// });
-
-
-
 // // list of tracks from a query (not really needed as we could just use queryResults but I think it's clearer like this)
 export const songsListState = atom({
   key: 'songsListState',

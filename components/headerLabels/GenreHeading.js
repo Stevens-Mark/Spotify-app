@@ -1,16 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
-// import state management recoil
-import { useRecoilValue } from 'recoil';
-import {
-  backgroundColorState,
-  randomColorColorState,
-} from '@/atoms/otherAtoms';
+import React, { useEffect, useState } from 'react';
 // import functions
 import { capitalize } from '@/lib/capitalize';
-import { darkenColor } from '@/lib/darkenColor';
 
 /**
- * Renders genre title in sticky Banner)
+ * Renders genre title in sticky Banner
  * @function GenreHeading
  * @param {object} heading genre title
  * @param {object} scrollRef ref for container scroll
@@ -20,11 +13,7 @@ function GenreHeading({ heading, scrollRef }) {
   // show title when  at top of screen
   const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
-  // used for banner color
-  const randomColor = useRecoilValue(randomColorColorState);
-  const backgroundColor = useRecoilValue(backgroundColorState);
 
-  // used for sticky banner
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;

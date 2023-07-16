@@ -76,10 +76,10 @@ const ShowPage = ({ showInfo }) => {
     // avoid epsisode list being reset on page reload
     if (lastShowEpisodeId === id) {
       setShowEpisodesList((prevEpisodesList) => {
-        const mergedList = [...prevEpisodesList, ...showInfo.episodes.items];
+        const mergedList = [...prevEpisodesList, ...showInfo?.episodes?.items];
         // Remove duplicates
         const uniqueList = Array.from(
-          new Set(mergedList.map((item) => item.id))
+          new Set(mergedList.map((item) => item?.id))
         ).map((id) => mergedList.find((item) => item.id === id));
         return uniqueList;
       });
@@ -87,15 +87,15 @@ const ShowPage = ({ showInfo }) => {
       setShowEpisodesUris((prevUris) => {
         const mergedUris = [
           ...prevUris,
-          ...showInfo.episodes.items.map((track) => track.uri),
+          ...showInfo?.episodes?.items?.map((track) => track.uri),
         ];
         // Remove duplicates
         const uniqueUris = Array.from(new Set(mergedUris));
         return uniqueUris;
       });
     } else {
-      setShowEpisodesList(showInfo.episodes.items);
-      setShowEpisodesUris(showInfo.episodes.items.map((track) => track.uri)); // set uris to be used in player
+      setShowEpisodesList(showInfo?.episodes?.items);
+      setShowEpisodesUris(showInfo?.episodes?.items?.map((track) => track.uri)); // set uris to be used in player
     }
     setLastShowEpisodeId(id);
   }, [
@@ -104,7 +104,7 @@ const ShowPage = ({ showInfo }) => {
     setLastShowEpisodeId,
     setShowEpisodesList,
     setShowEpisodesUris,
-    showInfo.episodes.items,
+    showInfo?.episodes?.items,
   ]);
 
   // calculate if About text is more than 4 lines high ?

@@ -76,7 +76,7 @@ const AlbumPage = ({ album }) => {
         {/* Release date & copyright information */}
         <aside className="px-8 text-pink-swan">
           <p>{getMonthDayYear(album?.release_date)}</p>
-          {album?.copyrights.map((item, idx) => (
+          {album?.copyrights?.map((item, idx) => (
             <p key={idx} className="text-[12px]">
               {item?.text}
             </p>

@@ -74,7 +74,7 @@ function Player() {
               );
               if (activeDevice) {
                 spotifyApi.setVolume(volume).catch((err) => {
-                  console.error('Something went wrong !', err);
+                  console.error('Something went wrong !');
                   toast.error('Something went wrong !', {
                     theme: 'colored',
                   });
@@ -82,7 +82,7 @@ function Player() {
               }
             })
             .catch((err) => {
-              console.error('Something went wrong !', err);
+              console.error('Something went wrong !');
               toast.error('Something went wrong !', {
                 theme: 'colored',
               });
@@ -214,7 +214,7 @@ function Player() {
               setIsPlaying(false);
             })
             .catch((err) => {
-              console.error('Pause failed: ', err);
+              console.error('Pause failed: ');
               toast.error('Pause failed !', {
                 theme: 'colored',
               });
@@ -234,7 +234,7 @@ function Player() {
               // }
             })
             .catch((err) => {
-              console.error('Playback failed: ', err);
+              console.error('Playback failed: ');
               toast.error('Playback failed !', {
                 theme: 'colored',
               });
