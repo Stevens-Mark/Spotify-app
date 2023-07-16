@@ -34,13 +34,13 @@ const Layout = ({ children }) => {
     '/search/tracks',
     '/search/podcastAndEpisodes',
   ];
-  const isExcluded = excludedPath.includes(path) || path.startsWith('/genre/');
+  const isExcluded = excludedPath.includes(path) || path.startsWith('/genre/') || path.startsWith('/show/');
 
   return (
     <div className="bg-black h-screen overflow-hidden">
       <aside className="absolute top-5 right-8 z-50">
         <div
-          className="flex items-center bg-gray-800 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 sm:pr-2 text-white"
+          className="flex items-center bg-gray-800 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 text-white"
           onClick={signOut}
         >
           <Image

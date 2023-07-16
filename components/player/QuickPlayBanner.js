@@ -217,7 +217,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               </>
             )}
             {item?.type === 'show' && (
-              <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
+              <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 truncate pr-[100px] md:pr-[250px]">
                 {capitalize(item?.name)}
               </span>
             )}

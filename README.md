@@ -35,14 +35,19 @@ What started off as a simple project to learn the basics of Next.js, Tailwind an
 - [x] Spotify Web API Node courtesy of [Michael Thelin](https://github.com/thelinmichael/spotify-web-api-node)
 
 ## Limitations / Areas for improvement
-- [x] The spotify site is huge with (deceptively) a lot of functionality & features. I have not attempted to replicate the whole site.
-- [x] I have not added the functionality for the genres on the search page.
+- [x] The spotify site is (deceptively) huge, with a lot of functionality & features. I have not attempted to replicate the whole site.
 - [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
+- [x] Episode ("up next") not implemented on show page.
+- [x] The Algorithms used by Spotify to create the various lists are not available, so I cannot create lists like "sugguestions", "jump back in" or "mixes for...." etc
+- [x] Recent searches was created by me & are stored in local storage. I need to implement Spotify's recently played feature instead...
 - [x] There are a presently a few known issues with my implementation, listed below:
 
 ## Known issues
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] On the All search results page: if an artist has been selected & is playing, the "pause icon" disappears when the user presses forward or backwards on the player controls (not so obvious).
+
+- [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should be the case as it's in a different album/playlist).)
+
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops so this is not a feature implemented by Spotify anyway.
 - [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, an artist or a playlist that does not belong to the user).
 - [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/reloads the page.
