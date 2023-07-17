@@ -40,8 +40,6 @@ const MediaHeading = ({ item, itemTracks }) => {
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
 
-  console.log('item ', item);
-
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
     setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)

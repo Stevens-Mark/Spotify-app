@@ -45,13 +45,12 @@ What started off as a simple project to learn the basics of Next.js, Tailwind an
 ## Known issues
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] On the All search results page: if an artist has been selected & is playing, the "pause icon" disappears when the user presses forward or backwards on the player controls (not so obvious).
-
-- [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should be the case as it's in a different album/playlist).)
-
-- [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops so this is not a feature implemented by Spotify anyway.
-- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, an artist or a playlist that does not belong to the user).
+- [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
+- [x] If an episode is curently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
+- [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing so these is not features implemented by Spotify anyway.
+- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode or an artist).
 - [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/reloads the page.
-- [x] There are probably some other issues (similar to this) that I haven't spotted as yet.
+- [x] There are probably some other issues that I haven't spotted as yet.
 
 # Installation *(English)*
 
