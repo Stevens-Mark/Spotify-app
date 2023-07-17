@@ -37,8 +37,9 @@ function Sidebar() {
   const [myPlaylistId, setMyPlaylistId] = useRecoilState(myPlaylistIdState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
-  useRecoilState(activePlaylistState);
-  const isPlaying = useRecoilValue(isPlayState);
+    useRecoilState(activePlaylistState);
+  // const isPlaying = useRecoilValue(isPlayState);
+  const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   // const setCurrentAlbumId = useSetRecoilState(albumIdState);
@@ -60,6 +61,7 @@ function Sidebar() {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
           const currentPlaylistId = data.body?.context?.uri.split(':').pop(); // get playlist id (if applicable)
           setPlayerInfoType(data.body?.currently_playing_type);
+          setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id); // set track for player info
           setMyPlaylistId(currentPlaylistId); // set current playlist in use
           setActivePlaylist(currentPlaylistId);
@@ -97,6 +99,7 @@ function Sidebar() {
     setMyPlaylistId,
     setPlayerInfoType,
     setCurrentItemId,
+    setIsPlaying,
   ]);
 
   /**
