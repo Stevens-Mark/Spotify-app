@@ -38,7 +38,7 @@ function NavigationButtons() {
   };
 
   return (
-    <div className="absolute top-6 left-8 z-30 hidden xs:inline">
+    <div className="absolute top-6 left-20 md:left-8 z-30 hidden md:inline">
       <button
         className={`rounded-full mr-1 bg-gray-900 hover:bg-gray-800 text-pink-swan hover:text-white ${
           !canGoBack && 'cursor-not-allowed'

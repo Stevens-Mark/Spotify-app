@@ -87,12 +87,12 @@ function Welcome() {
   return (
     <>
     <div
-      className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
+      className="flex-grow h-screen overflow-y-scroll scrollbar-hide relative"
       ref={scrollRef}
     >
       <p
         style={myAlert ? { display: 'block' } : { display: 'none' }}
-        className="text-white absolute top-0 left-1/2 transform -translate-x-1/2 w-96"
+        className="text-white absolute text-center w-full"
       >
         {message}
       </p>

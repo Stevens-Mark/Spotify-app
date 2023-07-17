@@ -105,14 +105,14 @@ const NestedLayout = ({ children }) => {
       <div className="flex flex-col w-full relative">
         <div className="sticky h-36 sm:h-28">
           <div className="flex items-center">
-            <form className="ml-5 xs:ml-28 mt-5" onSubmit={handleSubmit}>
+            <form className="ml-16 md:ml-28 mt-5" onSubmit={handleSubmit}>
               <label
                 className="relative text-gray-500 hover:text-white"
                 htmlFor="search"
               >
                 <MagnifyingGlassIcon className="pointer-events-none w-5 h-6 absolute top-1/2 transform -translate-y-1/2 left-3" />
                 <input
-                  className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm xs:w-[15rem] lg:w-[16.5rem] cursor-pointer appearance-none block py-3 px-3 pl-10 placeholder-gray-500 hover:placeholder-white"
+                  className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm w-[11.2rem] xxs:w-[14.8rem] lg:w-[25rem] cursor-pointer appearance-none block py-3 px-3 pl-10 placeholder-gray-500 hover:placeholder-white"
                   type="search"
                   id="search"
                   value={isError ? 'Loading Error !' : query}

@@ -56,7 +56,7 @@ const MediaHeading = ({ item, itemTracks }) => {
 
   return (
     <div
-      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-end space-x-0 xs:space-x-7 h-80 lg:h-96 text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
+      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-center space-x-0 xs:space-x-7 h-[24rem] lg:h-[30rem] text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
         backgroundColor !== null ? '' : randomColor
       }`}
       style={{
@@ -92,7 +92,7 @@ const MediaHeading = ({ item, itemTracks }) => {
 
             {/*playlist description*/}
             {item?.type === 'playlist' && (
-              <p className="text-base md:text-lg lg:text-xl xl:text-2xl mb-2 line-clamp-2 text-pink-swan">
+              <p className="text-base md:text-lg lg:text-xl xl:text-2xl mb-2 line-clamp-2">
                 {item?.description}
               </p>
             )}
@@ -121,7 +121,7 @@ const MediaHeading = ({ item, itemTracks }) => {
                   {item?.tracks?.items?.length}{' '}
                   {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
-                <span className="truncate text-pink-swan">
+                <span className="truncate">
                   {msToTime(totalDuration(item))}
                 </span>
               </>
