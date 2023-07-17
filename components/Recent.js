@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
+import { useSession } from 'next-auth/react';
+import useSpotify from '@/hooks/useSpotify';
 import { searchResultState } from '@/atoms/searchAtom';
 import { useRecoilValue } from 'recoil';
-import useNumOfItems from '@/hooks/useNumberOfItems';  //control number of cards shown depending on screen width 
+import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 import { XMarkIcon } from '@heroicons/react/24/solid';
 import Card from './cards/card';
 
@@ -12,6 +14,8 @@ import Card from './cards/card';
  * @returns {JSX}
  */
 const PreviousSearches = () => {
+  const spotifyApi = useSpotify();
+  const { data: session } = useSession();
   const numOfItems = useNumOfItems();
   const queryResults = useRecoilValue(searchResultState); // Get the queryResults from Recoil
   const [recent, setRecent] = useState('');
@@ -63,6 +67,20 @@ const PreviousSearches = () => {
     // Update the recent state with the updated previous searches
     setRecent(previousSearches);
   };
+
+  useEffect(() => {
+    const fetchRecent = async () => {
+      try {
+        if (spotifyApi.getAccessToken()) {
+          const data = await spotifyApi.getMyRecentlyPlayedTracks();
+          console.log('the data returned ', data?.body?.items);
+        }
+      } catch (err) {
+        console.error('something went wrong', err);
+      }
+    };
+    fetchRecent();
+  }, [spotifyApi]);
 
   return (
     <>

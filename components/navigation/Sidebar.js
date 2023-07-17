@@ -5,27 +5,11 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
-import {
-  useRecoilState,
-  useSetRecoilState,
-  useRecoilValue,
-} from 'recoil';
-import {
-  querySubmittedState,
-  queryState,
-} from '@/atoms/searchAtom';
-import {
-  myPlaylistIdState,
-  activePlaylistState,
-} from '@/atoms/playListAtom';
-import {
-  currentTrackIdState,
-  isPlayState,
-} from '@/atoms/songAtom';
-import {
-  currentItemIdState,
-  playerInfoTypeState,
-} from '@/atoms/otherAtoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import { querySubmittedState, queryState } from '@/atoms/searchAtom';
+import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
+import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 import { SpeakerWaveIcon, Bars3Icon } from '@heroicons/react/24/solid';
 import {
   HomeIcon,
@@ -36,20 +20,16 @@ import {
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 
-
 function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
 
   const [myPlaylists, setMyPlaylists] = useState([]);
-  const [myPlaylistId, setMyPlaylistId] = useRecoilState(
-    myPlaylistIdState
-  );
+  const [myPlaylistId, setMyPlaylistId] = useRecoilState(myPlaylistIdState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
-  const [activePlaylist, setActivePlaylist] = useRecoilState(
-    activePlaylistState
-  );
+  const [activePlaylist, setActivePlaylist] =
+    useRecoilState(activePlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
@@ -64,9 +44,7 @@ function Sidebar() {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
-          const currentPlaylistId = data.body?.context?.uri
-            .split(':')
-            .pop();
+          const currentPlaylistId = data.body?.context?.uri.split(':').pop();
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
@@ -75,9 +53,7 @@ function Sidebar() {
           setCurrentItemId(currentPlaylistId);
         }
       } catch (err) {
-        console.error(
-          'Failed to get current playing track / playlist ID'
-        );
+        console.error('Failed to get current playing track / playlist ID');
       }
     };
 
@@ -135,7 +111,9 @@ function Sidebar() {
         role="navigation"
         aria-label="Playlist menu"
         className={`md:pt-7 pt-20 text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide ${
-          isMenuOpen ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-20' : 'hidden '
+          isMenuOpen
+            ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-20'
+            : 'hidden '
         } md:inline md:relative min-w-[13rem] isMdLg:min-w-[16rem] lg:w-[21%]`}
       >
         <ul className="space-y-4 w-full">
@@ -222,8 +200,8 @@ function Sidebar() {
                   {activePlaylist == playlist?.id && isPlaying ? (
                     <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
                   ) : (
-                      ' '
-                    )}
+                    ' '
+                  )}
                 </span>
               </button>
             </li>
