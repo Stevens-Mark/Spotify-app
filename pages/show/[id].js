@@ -73,25 +73,39 @@ const ShowPage = ({ showInfo }) => {
   const [expandABoutButton, setExpandABoutButton] = useState(false); // show/hide see more/less button
 
   useEffect(() => {
-    // avoid epsisode list being reset on page reload
+    // avoid epsisode list being reset on page reload & if user edit URL with invalid ID
     if (lastShowEpisodeId === id) {
       setShowEpisodesList((prevEpisodesList) => {
-        const mergedList = [...prevEpisodesList, ...showInfo?.episodes?.items];
-        // Remove duplicates
-        const uniqueList = Array.from(
-          new Set(mergedList.map((item) => item?.id))
-        ).map((id) => mergedList.find((item) => item.id === id));
-        return uniqueList;
+        // check it's array before performing any operation (avoid TypeError)
+        if (Array.isArray(prevEpisodesList)) {
+          const mergedList = [
+            ...prevEpisodesList,
+            ...showInfo?.episodes?.items,
+          ];
+          // Remove duplicates
+          const uniqueList = Array.from(
+            new Set(mergedList.map((item) => item?.id))
+          ).map((id) => mergedList.find((item) => item.id === id));
+          return uniqueList;
+        } else {
+          return showInfo?.episodes?.items; // if not array assign value directly
+        }
       });
-      // avoid uris list being reset on page reload
+
+      // avoid uris list being reset on page reload & if user edit URL with invalid ID
       setShowEpisodesUris((prevUris) => {
-        const mergedUris = [
-          ...prevUris,
-          ...showInfo?.episodes?.items?.map((track) => track.uri),
-        ];
-        // Remove duplicates
-        const uniqueUris = Array.from(new Set(mergedUris));
-        return uniqueUris;
+        // check it's array before performing any operation (avoid TypeError)
+        if (Array.isArray(prevUris)) {
+          const mergedUris = [
+            ...prevUris,
+            ...showInfo?.episodes?.items?.map((track) => track.uri),
+          ];
+          // Remove duplicates
+          const uniqueUris = Array.from(new Set(mergedUris));
+          return uniqueUris;
+        } else {
+          return showInfo?.episodes?.items?.map((track) => track.uri); // if not array assign value directly
+        }
       });
     } else {
       setShowEpisodesList(showInfo?.episodes?.items);
