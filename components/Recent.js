@@ -72,7 +72,9 @@ const PreviousSearches = () => {
     const fetchRecent = async () => {
       try {
         if (spotifyApi.getAccessToken()) {
-          const data = await spotifyApi.getMyRecentlyPlayedTracks();
+          const data = await spotifyApi.getMyRecentlyPlayedTracks({
+            limit : 50
+          });
           console.log('the data returned ', data?.body?.items);
         }
       } catch (err) {
