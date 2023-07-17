@@ -121,7 +121,7 @@ const MediaHeading = ({ item, itemTracks }) => {
                   {item?.tracks?.items?.length}{' '}
                   {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
                 </span>
-                <span className="truncate">
+                <span className="text-base truncate text-pink-swan">
                   {msToTime(totalDuration(item))}
                 </span>
               </>
