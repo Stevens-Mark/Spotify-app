@@ -33,16 +33,16 @@ function Tracks() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
-  const setSongsUris = useSetRecoilState(songsUrisState); // song uris (from search)
-  const setsongsList = useSetRecoilState(songsListState); // songs list (from search)
-
+  const [SongsUris, setSongsUris] = useRecoilState(songsUrisState); // song uris (from search)
+  console.log('SongsUris ', SongsUris);
+  const [songsList, setsongsList] = useRecoilState(songsListState); // songs list (from search)
+  console.log('songsList ', songsList);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
   const setIsError = useSetRecoilState(errorState);
   const [stopFetch, setStopFetch] = useState(false);
 
-  const tracks = queryResults?.tracks?.items;
   const totalNumber = queryResults?.tracks?.total;
 
   useEffect(() => {
@@ -87,10 +87,15 @@ function Tracks() {
               setStopFetch(data?.body?.tracks?.next === null);
               setQueryResults(updatedList);
               setsongsList(updatedList?.tracks?.items);
-              // Merge the new URIs into the existing songsUris state
-              const newUris = data.body?.tracks?.items.map((item) => item.uri);
 
-              setSongsUris((prevUris) => [...prevUris, ...newUris]);
+              // Merge the new URIs into the existing songsUris state
+              setSongsUris((prevUris) => {
+                const newUris = data.body?.tracks?.items.map(
+                  (item) => item.uri
+                );
+                return [...prevUris, ...newUris];
+              });
+
               setIsSearching(false);
               setCurrentOffset(nextOffset);
             },
@@ -115,7 +120,7 @@ function Tracks() {
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList
-        mediaList={tracks}
+        mediaList={songsList}
         totalNumber={totalNumber}
         showButton={showButton}
         scrollToTop={scrollToTop}

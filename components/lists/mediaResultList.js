@@ -5,6 +5,7 @@ import Footer from '@/components/navigation/Footer';
 import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
 import SongTracks from '../trackListSongs/songTracks';
+import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
 
 /**
@@ -40,10 +41,14 @@ function MediaResultList(props) {
           <>
             {heading ? (
               <>
-              <h1 className="text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
-                {heading}
-              </h1>
-              <GenreHeading heading={heading} scrollRef={scrollableSectionRef}/>
+                <h1 className="px-5 text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
+                  {heading}
+                </h1>
+
+                <GenreHeading
+                  heading={heading}
+                  scrollRef={scrollableSectionRef}
+                />
               </>
             ) : (
               <h1 className="sr-only">
@@ -71,8 +76,6 @@ function MediaResultList(props) {
                 )}
               </h2>
             )}
-            {/* track list here */}
-            {mediaList?.[0]?.type === 'track' && <SongTracks />}
 
             {/* or episode list here */}
             {mediaList?.[0]?.type === 'episode' && (
@@ -86,9 +89,17 @@ function MediaResultList(props) {
                 ))}
               </div>
             )}
+
+            {/* song track list here */}
+            {mediaList?.[0]?.type === 'track' && <SongTracks />}
+            <div className='-mx-5'>
+              {/* recently played list here */}
+              {mediaList?.[0]?.track?.type === 'track' && <RecentPlayedSongs />}
+            </div>
             {/* otherwise playlist, album or artists list here */}
             {mediaList?.[0]?.type !== 'episode' &&
-              mediaList?.[0]?.type !== 'track' && (
+              mediaList?.[0]?.type !== 'track' &&
+              mediaList?.[0]?.track?.type !== 'track' && (
                 <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
                   {mediaList?.map((item, i) => (
                     <Card key={`${item?.id}-${i}`} item={item} />

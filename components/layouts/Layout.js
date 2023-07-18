@@ -33,6 +33,7 @@ const Layout = ({ children }) => {
     '/search/shows',
     '/search/tracks',
     '/search/podcastAndEpisodes',
+    '/recently',
   ];
   const isExcluded = excludedPath.includes(path) || path.startsWith('/genre/') || path.startsWith('/show/');
 

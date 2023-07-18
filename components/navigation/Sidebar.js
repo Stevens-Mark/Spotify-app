@@ -89,10 +89,6 @@ function Sidebar() {
     router.push('/');
   };
 
-  const handleRecent = () => {
-    router.push('/recent/');
-  };
-
   const handleClick = (id) => {
     router.push(`/playlist/${id}`);
   };
@@ -143,13 +139,14 @@ function Sidebar() {
           </li>
 
           <li>
-            <button
+          <Link
+              href="/recently"
+              passHref
               className="flex items-center space-x-2 hover:text-white"
-              onClick={handleRecent}
             >
               <BuildingLibraryIcon className="h-5 w-5 ml-3" />
-              <p>Your Library</p>
-            </button>
+              <p>Recently Played</p>
+              </Link>
           </li>
           <hr className="border-t-[0.1px] border-gray-900" />
 

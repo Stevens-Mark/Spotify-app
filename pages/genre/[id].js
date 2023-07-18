@@ -125,7 +125,7 @@ function Genres({ genreData }) {
         const data = await res.json();
         setStopFetch(data?.playlists?.next === null);
         // Update genreList state
-        setGenreList([...genreList, ...data.playlists.items]);
+        setGenreList([...genreList, ...data?.playlists?.items]);
         setCurrentOffset(nextOffset);
       } catch (err) {
         console.error('Retrieving more items failed ...');

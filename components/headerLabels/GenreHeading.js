@@ -40,7 +40,7 @@ function GenreHeading({ heading, scrollRef }) {
               isVisible ? 'opacity-100' : 'opacity-0'
             } py-4 transition delay-100 duration-300 ease-in-out flex items-center overflow-hidden  `}
           >
-            <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-3xl font-bold p-2 truncate pr-[100px] md:pr-[250px]">
+            <span className="ml-10 md:ml-24 drop-shadow-text text-white text-3xl font-bold p-2 truncate pr-[100px] md:pr-[250px]">
               {capitalize(heading)}
             </span>
           </div>
