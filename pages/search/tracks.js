@@ -34,9 +34,7 @@ function Tracks() {
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [SongsUris, setSongsUris] = useRecoilState(songsUrisState); // song uris (from search)
-  console.log('SongsUris ', SongsUris);
-  const [songsList, setsongsList] = useRecoilState(songsListState); // songs list (from search)
-  console.log('songsList ', songsList);
+  const [songsList, setSongsList] = useRecoilState(songsListState); // songs list (from search)
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
@@ -70,7 +68,7 @@ function Tracks() {
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;
       setIsSearching(true);
-
+  
       if (spotifyApi.getAccessToken()) {
         spotifyApi
           .searchTracks(query, {
@@ -79,23 +77,19 @@ function Tracks() {
           })
           .then(
             function (data) {
-              const updatedList = mergeObject(
-                data.body,
-                queryResults,
-                'tracks'
-              );
+              const updatedList = mergeObject(data.body, queryResults, 'tracks');
               setStopFetch(data?.body?.tracks?.next === null);
               setQueryResults(updatedList);
-              setsongsList(updatedList?.tracks?.items);
-
-              // Merge the new URIs into the existing songsUris state
+  
+              // Update songList state with the new items
+              setSongsList((prevList) => [...prevList, ...updatedList?.tracks?.items]);
+  
+              // Update songUris state with the new URIs
               setSongsUris((prevUris) => {
-                const newUris = data.body?.tracks?.items.map(
-                  (item) => item.uri
-                );
+                const newUris = updatedList?.tracks?.items.map((item) => item.uri);
                 return [...prevUris, ...newUris];
               });
-
+  
               setIsSearching(false);
               setCurrentOffset(nextOffset);
             },
@@ -103,14 +97,13 @@ function Tracks() {
               setIsSearching(false);
               setIsError(true);
               console.log('Retrieving more items failed ...');
-              toast.error('Retrieving more items failed !', {
-                theme: 'colored',
-              });
+              toast.error('Retrieving more items failed!', { theme: 'colored' });
             }
           );
       }
     }
   };
+  
   const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
