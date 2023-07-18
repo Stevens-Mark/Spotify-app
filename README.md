@@ -58,7 +58,6 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
 - [x] Episode ("up next") not implemented on show page.
 - [x] The Algorithms used by Spotify to create the various lists are not available, so I cannot create lists like "sugguestions", "jump back in" or "mixes for...." etc
-- [x] Recent searches was created by me & are stored in local storage. I need to implement Spotify's recently played feature instead...
 - [x] There are a presently a few known issues with my implementation, listed below:
 
 ## Known issues
@@ -188,7 +187,6 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
 - [x] Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas disponibles, donc je ne peux pas créer des listes comme "suggestions", "jump back in" ou "mixes for...." etc.
-- [x] Les recherches récentes ont été créées par moi et sont stockées en local. Il faut que j'implémente la fonction "récemment écouté" de Spotify à la place...
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :
 
 ## Problèmes connus
