@@ -33,8 +33,9 @@ function Tracks() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
-  const [SongsUris, setSongsUris] = useRecoilState(songsUrisState); // song uris (from search)
+  const setSongsUris = useSetRecoilState(songsUrisState); // song uris (from search)
   const [songsList, setSongsList] = useRecoilState(songsListState); // songs list (from search)
+
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
   const setIsSearching = useSetRecoilState(searchingState);
@@ -61,14 +62,14 @@ function Tracks() {
   /**
    * Fetches more tracks & updates the list of tracks
    * @function fetchMoreData
-   * @returns {object} updated list of tracks in queryResults
+   * @returns {object} updated list of tracks & uris
    */
   const fetchMoreData = () => {
     if (!stopFetch) {
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;
       setIsSearching(true);
-  
+
       if (spotifyApi.getAccessToken()) {
         spotifyApi
           .searchTracks(query, {
@@ -77,19 +78,33 @@ function Tracks() {
           })
           .then(
             function (data) {
-              const updatedList = mergeObject(data.body, queryResults, 'tracks');
+              const updatedList = mergeObject(
+                data.body,
+                queryResults,
+                'tracks'
+              );
               setStopFetch(data?.body?.tracks?.next === null);
               setQueryResults(updatedList);
-  
+
               // Update songList state with the new items
-              setSongsList((prevList) => [...prevList, ...updatedList?.tracks?.items]);
-  
+              // a "set" is used to remove duplicates based on the URI property
+              setSongsList((prevList) => {
+                const newList = [...prevList, ...updatedList?.tracks?.items];
+                // the set is converted back to an array using "Array.from", and the original order of the items
+                // is restored by using map to find the corresponding item in the original list.
+                return Array.from(new Set(newList.map((item) => item.uri))).map(
+                  (uri) => newList.find((item) => item.uri === uri)
+                );
+              });
+
               // Update songUris state with the new URIs
               setSongsUris((prevUris) => {
-                const newUris = updatedList?.tracks?.items.map((item) => item.uri);
-                return [...prevUris, ...newUris];
+                const newUris = updatedList?.tracks?.items.map(
+                  (item) => item.uri
+                );
+                return Array.from(new Set([...prevUris, ...newUris]));
               });
-  
+
               setIsSearching(false);
               setCurrentOffset(nextOffset);
             },
@@ -97,13 +112,15 @@ function Tracks() {
               setIsSearching(false);
               setIsError(true);
               console.log('Retrieving more items failed ...');
-              toast.error('Retrieving more items failed!', { theme: 'colored' });
+              toast.error('Retrieving more items failed!', {
+                theme: 'colored',
+              });
             }
           );
       }
     }
   };
-  
+
   const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
