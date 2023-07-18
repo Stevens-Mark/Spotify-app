@@ -57,6 +57,7 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] The spotify site is (deceptively) huge, with a lot of functionality & features. I have not attempted to replicate the whole site.
 - [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
 - [x] Episode ("up next") not implemented on show page.
+- [x] When a track has finished playing the green highlighting does not move along. This app "controls" the streaming service so does not receive real-time updates/feedback to update the states obviously
 - [x] The Algorithms used by Spotify to create the various lists are not available, so I cannot create lists like "sugguestions", "jump back in" or "mixes for...." etc
 - [x] There are a presently a few known issues with my implementation, listed below:
 
@@ -186,6 +187,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Le site spotify est (faussement) énorme, avec beaucoup de fonctionnalités et de caractéristiques. Je n'ai pas essayé de reproduire l'ensemble du site.
 - [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
+- [x] Lorsqu'une piste a fini d'être jouée, le surlignage vert ne se déplace pas. Cette application "contrôle" le service de diffusion en continu et ne reçoit donc pas de mises à jour ou de retours en temps réel pour actualiser les états. 
 - [x] Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas disponibles, donc je ne peux pas créer des listes comme "suggestions", "jump back in" ou "mixes for...." etc.
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :
 
