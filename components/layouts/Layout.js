@@ -1,6 +1,5 @@
 import React from 'react';
 import { useSession, signOut } from 'next-auth/react';
-import { useRouter } from 'next/router';
 import Image from 'next/image';
 // import icon/images
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
@@ -19,23 +18,6 @@ import NavigationButtons from '../navigation/navButtons';
  */
 const Layout = ({ children }) => {
   const { data: session } = useSession();
-  const router = useRouter();
-  const path = router?.asPath; // URL from router.
-
-  const excludedPath = [
-    // used to trigger the collapsing of the user info top right on mobile screens
-    '/search',
-    '/search/all',
-    '/search/albums',
-    '/search/artists',
-    '/search/episodes',
-    '/search/playlists',
-    '/search/shows',
-    '/search/tracks',
-    '/search/podcastAndEpisodes',
-    '/recently',
-  ];
-  const isExcluded = excludedPath.includes(path) || path.startsWith('/genre/') || path.startsWith('/show/');
 
   return (
     <div className="bg-black h-screen overflow-hidden">
@@ -53,11 +35,11 @@ const Layout = ({ children }) => {
             style={{ objectFit: 'cover' }}
             priority
           />
-          <p className={`${isExcluded ? 'hidden  isMdLg:inline' : ''}`}>
+          <p className={`hidden  isMdLg:inline`}>
             {session?.user.name}
           </p>
           <ChevronDownIcon
-            className={`h-5 w-5 ${isExcluded ? 'hidden  isMdLg:inline' : ''}`}
+            className={`h-5 w-5 hidden  isMdLg:inline`}
           />
         </div>
       </aside>

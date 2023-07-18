@@ -177,7 +177,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
     <>
       <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
         <div
-          className={` bg-gradient-to-b to-black  
+          className={`bg-gradient-to-b to-black  
            ${
              backgroundColor !== null ? '' : randomColor
            } flex items-center py-4`}
@@ -196,7 +196,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
             {item?.type === 'episode' && (
               <>
                 <button
-                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
+                  className={`ml-20 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
                   onClick={(event) => {
                     HandleEpisodePlayPauseClick(event);
                   }}
@@ -207,7 +207,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     <PlayCircleIcon className="w-12 h-12" />
                   )}
                 </button>
-                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
+                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[100px] isMdLg:pr-[250px]">
                   {capitalize(item?.name)}
                 </span>{' '}
               </>
@@ -234,7 +234,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
             <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
           </div>
 
-          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
+          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
         </div>
       )}
     </>

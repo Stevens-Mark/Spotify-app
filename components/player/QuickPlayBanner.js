@@ -202,7 +202,7 @@ function QuickPlayBanner({ item, scrollRef }) {
             {item?.type !== 'show' && (
               <>
                 <button
-                  className={`ml-5 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
+                  className={`ml-20 isSm:ml-28 bg-gray-900 border-2 border-green-500 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
                   onClick={(event) => {
                     HandleCardPlayPauseClick(event);
                   }}
@@ -213,7 +213,7 @@ function QuickPlayBanner({ item, scrollRef }) {
                     <PlayCircleIcon className="w-12 h-12" />
                   )}
                 </button>
-                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[250px]">
+                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[100px] isMdLg:pr-[250px]">
                   {capitalize(item?.name)}
                 </span>{' '}
               </>
@@ -246,18 +246,18 @@ function QuickPlayBanner({ item, scrollRef }) {
           </div>
 
           {item?.type === 'artist' && !isTextVisible && (
-            <span className="text-white px-5 xs:px-8 text-xl md:text-2xl xl:text-3xl">
+            <span className="text-white px-5 xs:px-12 text-xl md:text-2xl xl:text-3xl">
               Popular
             </span>
           )}
 
           {/* choose heading depending on media type */}
-          <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black">
+          <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black items-center">
             {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
             {item?.type === 'album' && <TitleTimeLabel />}
             {item?.type === 'artist' && <TitleAlbumTimeLabel />}
           </div>
-          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[2.1rem]" />
+          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
         </div>
       )}
     </>

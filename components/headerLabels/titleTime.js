@@ -9,9 +9,9 @@ import { ClockIcon } from '@heroicons/react/24/outline';
 const TitleTime = () => {
   return (
     <>
-      <span className="flex px-5 xs:px-0">
-        <span className="w-8 flex flex-shrink-0 justify-center">#</span>
-        <span className="w-36 lg:w-64 pl-3 mdlg:pl-5">Title</span>
+      <span className="flex items-center px-3 isSm:px-2 lg:px-4">
+        <span className="w-14 lg:w-12 flex flex-shrink-0 justify-center">#</span>
+        <span className="w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2">Title</span>
       </span>
       <span className="flex justify-end ml-auto md:ml-0 pr-5">
         <span className="flex items-center">
