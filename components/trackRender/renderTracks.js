@@ -10,9 +10,9 @@ import Equaliser from '@/components/graphics/Equaliser';
 /**
  * Handles the actual rendering of each track.
  * @function RenderTracks
- * @param {boolean} isShown whether to show of not (see below)
- * @param {function} setIsShown set state for mouve rollover
- * @param {function} HandleTrackPlayPauseClick handle play/pause
+ * @param {boolean} isShown whether to show/hide play/pause/equaliser on move rollover (see below)
+ * @param {function} setIsShown set state for mouse rollover
+ * @param {function} HandleTrackPlayPauseClick handle play/pause functionality
  * @param {number} order index/position in list
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {object} song data

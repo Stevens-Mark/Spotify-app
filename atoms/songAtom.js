@@ -41,10 +41,20 @@ export const recentlyListState = atom({
   default: null,
 });
 
-// list of recently played songs uris for all recently played tracks according to Spotify
+// list of recently played track uris for all recently played tracks according to Spotify
 export const recentlyUrisState = atom({
   key: 'recentlyUrisState',
   default: [],
 });
 
-// ****LET SEE IF BOVE NEED LATER
+// list of the users liked tracks according to Spotify
+export const likedListState = atom({
+  key: 'likedListState',
+  default: null,
+});
+
+// list of user liked track uris for all recently played tracks according to Spotify
+export const likedUrisState = atom({
+  key: 'likedUrisState',
+  default: [],
+});

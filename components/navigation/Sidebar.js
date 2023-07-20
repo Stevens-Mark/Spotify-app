@@ -139,14 +139,14 @@ function Sidebar() {
           </li>
 
           <li>
-          <Link
+            <Link
               href="/recently"
               passHref
               className="flex items-center space-x-2 hover:text-white"
             >
               <BuildingLibraryIcon className="h-5 w-5 ml-3" />
               <p>Recently Played</p>
-              </Link>
+            </Link>
           </li>
           <hr className="border-t-[0.1px] border-gray-900" />
 
@@ -158,10 +158,14 @@ function Sidebar() {
           </li>
           <li>
             {' '}
-            <button className="flex items-center space-x-2 hover:text-white">
+            <Link
+              href="/liked"
+              passHref
+              className="flex items-center space-x-2 hover:text-white"
+            >
               <HeartIcon className="h-5 w-5 ml-3" />
               <p>Liked Songs</p>
-            </button>
+            </Link>
           </li>
           <li>
             <button

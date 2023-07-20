@@ -78,13 +78,14 @@ function Genres({ genreData }) {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
   const [genreList, setGenreList] = useRecoilState(genreListState);
-  const [id, setId] = useState(null);
+  const [categoryId, setCategoryId] = useState(null);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
 
   const totalNumber = genreData?.playlists?.total;
   const genreCategory = genreData?.categoryName;
-  const error = genreData?.error || null;
+// Spotify returns a list of genres (see genre.js)
+  const error = genreData?.error || null; 
 
   useEffect(() => {
     setGenreList(genreData?.playlists?.items);
@@ -92,8 +93,8 @@ function Genres({ genreData }) {
 
   
   useEffect(() => {
-    setId((router?.asPath).split('/').pop());
-  }, [router?.asPath, setId]);
+    setCategoryId((router?.asPath).split('/').pop());
+  }, [router?.asPath]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -110,12 +111,13 @@ function Genres({ genreData }) {
    * @returns {object} updated genre playlist
    */
   const fetchMoreData = async () => {
+    console.log("called genre");
     if (genreList && !stopFetch) {
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;
       try {
         const res = await fetch(
-          `https://api.spotify.com/v1/browse/categories/${id}/playlists?offset=${nextOffset}&limit=${itemsPerPage}`,
+          `https://api.spotify.com/v1/browse/categories/${categoryId}/playlists?offset=${nextOffset}&limit=${itemsPerPage}`,
           {
             headers: {
               Authorization: `Bearer ${session.user.accessToken}`,

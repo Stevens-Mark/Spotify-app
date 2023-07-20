@@ -66,7 +66,7 @@ export async function getServerSideProps(context) {
  * Renders Artist page with tracks
  * @function ArtistPage
  * @param {object} artistInfo information about the artist
- *  * @param {object} artistTracks top 10 tracks
+ * @param {object} artistTracks top 10 tracks
  * @returns {JSX}
  */
 const ArtistPage = ({ artistInfo, artistTracks }) => {

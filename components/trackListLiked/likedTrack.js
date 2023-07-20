@@ -3,7 +3,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
+import { likedListState, likedUrisState } from '@/atoms/songAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
@@ -22,20 +22,20 @@ import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 import RenderTracks from '../trackRender/renderTracks';
 
 /**
- * Renders each track in the artist
- * @function ArtistTrack
+ * Renders each track in the liked song list
+ * @function LikedTrack
  * @param {object} track information
- * @param {number} order track index in the artist list
+ * @param {number} order track index in the liked song list
  * @returns {JSX}
  */
-function ArtistTrack({ track, order }) {
+function LikedTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
   const router = useRouter();
 
-  const artistTracklist = useRecoilValue(artistTrackListState);
-  const artistTrackUris = useRecoilValue(artistTrackUrisState);
+  const [likedTracklist, setLikedTracklist] = useRecoilState(likedListState);
+  const [likedTrackUris, setLikedTrackUris] = useRecoilState(likedUrisState);
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
@@ -61,15 +61,15 @@ function ArtistTrack({ track, order }) {
       if (
         currentSongIndex == null &&
         currentTrackId !== null &&
-        artistTracklist !== null
+        likedTracklist !== null
       ) {
-        const indexPosition = artistTracklist?.tracks?.findIndex(
+        const indexPosition = likedTracklist?.tracks?.findIndex(
           (x) => x.id == currentTrackId
         );
         setCurrentSongIndex(indexPosition);
       }
     }, '500');
-  }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
+  }, [currentSongIndex, currentTrackId, likedTracklist, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track
@@ -81,10 +81,11 @@ function ArtistTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
-    const artistOptions = {
+    const artistTrackUris = likedTrackUris;
+    const likedOptions = {
       originId,
       song,
-      artistTrackUris, // determines it's artist to play in play/pause function
+      artistTrackUris, // determines it's likedsongs to play in  play/pause function
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
@@ -96,14 +97,13 @@ function ArtistTrack({ track, order }) {
       spotifyApi,
       setCurrentAlbumId,
     };
-    HandleTrackPlayPause(artistOptions);
+    HandleTrackPlayPause(likedOptions);
   };
 
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus =
-      song?.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
 
@@ -119,4 +119,4 @@ function ArtistTrack({ track, order }) {
   );
 }
 
-export default ArtistTrack;
+export default LikedTrack;

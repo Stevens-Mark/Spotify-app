@@ -8,6 +8,7 @@ import {
 // import icon/images
 import Image from 'next/image';
 import noImage from '@/public/images/noImageAvailable.svg';
+import likedSongs from '@/public/images/LikedSongs.png';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -65,7 +66,7 @@ const MediaHeading = ({ item, itemTracks }) => {
     >
       <Image
         className="h-16 w-16 xs:h-44 xs:w-44 lg:h-[14.5rem] lg:w-[14.5rem] shadow-image2 aspect-square"
-        src={item?.images?.[0]?.url || noImage}
+        src={item?.images?.[0]?.url || likedSongs || noImage}
         alt=""
         width={100}
         height={100}
@@ -84,10 +85,12 @@ const MediaHeading = ({ item, itemTracks }) => {
                   : item?.type === 'episode'
                   ? 'Podcast Episode'
                   : item?.type
+                  ? item?.type
+                  : 'Liked Songs Playlist'
               )}
             </span>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pt-1 pb-[7px] mb-4 line-clamp-2 whitespace-wrap">
-              {item?.name}
+              {item?.name ? item.name : "Liked Songs"}
             </h1>
 
             {/*playlist description*/}

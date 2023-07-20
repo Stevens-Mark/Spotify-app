@@ -1,12 +1,14 @@
 import React from 'react';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
+import { capitalize } from '@/lib/capitalize';
+// import components
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 import Footer from '@/components/navigation/Footer';
-import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
-import { capitalize } from '@/lib/capitalize';
 import SongTracks from '../trackListSongs/songTracks';
 import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
+import LikedTracks from '../trackListLiked/likedTracks';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...
@@ -24,6 +26,7 @@ function MediaResultList(props) {
     scrollToTop,
     containerRef,
     scrollableSectionRef,
+    liked,
   } = props;
 
   return (
@@ -92,14 +95,18 @@ function MediaResultList(props) {
 
             {/* song track list here */}
             {mediaList?.[0]?.type === 'track' && <SongTracks />}
-            <div className='-mx-5'>
+            <div className="-mx-5">
               {/* recently played list here */}
               {mediaList?.[0]?.track?.type === 'track' && <RecentPlayedSongs />}
             </div>
+
+            {liked && <LikedTracks />}
+
             {/* otherwise playlist, album or artists list here */}
             {mediaList?.[0]?.type !== 'episode' &&
               mediaList?.[0]?.type !== 'track' &&
-              mediaList?.[0]?.track?.type !== 'track' && (
+              mediaList?.[0]?.track?.type !== 'track' &&
+              !liked && (
                 <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
                   {mediaList?.map((item, i) => (
                     <Card key={`${item?.id}-${i}`} item={item} />

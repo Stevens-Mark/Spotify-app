@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 import useSpotify from '@/hooks/useSpotify';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useScrollToTop from '@/hooks/useScrollToTop';
@@ -23,6 +24,7 @@ function Genre() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const [genres, setGenres] = useRecoilState(genreState);
   const [currentOffset, setCurrentOffset] = useState(0);
+  const [stopFetch, setStopFetch] = useState(false);
   const itemsPerPage = 25;
 
   useEffect(() => {
@@ -37,7 +39,7 @@ function Genre() {
           })
           .then(
             function (data) {
-              setGenres(data.body.categories.items);
+              setGenres(data?.body?.categories?.items);
             },
             function (err) {
               console.log('Failed to get genres!');
@@ -47,35 +49,53 @@ function Genre() {
     }
   });
 
+  // show message when all data loaded/end of infinite scrolling
+  useEffect(() => {
+    if (stopFetch) {
+      toast.info(`That's all genres !`, {
+        theme: 'colored',
+      });
+    }
+  }, [genres?.length, stopFetch]);
+
   /**
    * Fetches more genres & updates the list of genres
    * @function fetchGenre
    * @returns {object} updated list of genres
    */
   const fetchGenre = () => {
-    const nextOffset = currentOffset + itemsPerPage;
-    setCurrentOffset(nextOffset);
-    spotifyApi
-      .getCategories({
-        limit: itemsPerPage,
-        offset: nextOffset,
-        country: 'US', // FR, US, GB
-        locale: 'en_US', // fr_FR, en_US, en_GB
-      })
-      .then(
-        function (data) {
-          const updatedList = [...genres, ...data.body.categories.items];
-          // Always ensure there are no dublicate objects in the list of categories
-          const genreList = updatedList.filter(
-            (genre, index) =>
-              index === updatedList.findIndex((other) => genre.id === other.id)
-          );
-          setGenres(genreList);
-        },
-        function (err) {
-          console.log('Failed to get genres!');
-        }
-      );
+    if (!stopFetch) {
+      console.log('called genre');
+      const nextOffset = currentOffset + itemsPerPage;
+      setCurrentOffset(nextOffset);
+      spotifyApi
+        .getCategories({
+          limit: itemsPerPage,
+          offset: nextOffset,
+          country: 'US', // FR, US, GB
+          locale: 'en_US', // fr_FR, en_US, en_GB
+        })
+        .then(
+          function (data) {
+            // Check if there's no more data to fetch
+            if (data?.body?.categories?.items?.length === 0) {
+              setStopFetch(true);
+              return; // Exit the function early if there are no more items
+            }
+            const updatedList = [...genres, ...data?.body?.categories?.items];
+            // Always ensure there are no dublicate objects in the list of categories
+            const genreList = updatedList.filter(
+              (genre, index) =>
+                index ===
+                updatedList.findIndex((other) => genre.id === other.id)
+            );
+            setGenres(genreList);
+          },
+          function (err) {
+            console.log('Failed to get genres!');
+          }
+        );
+    }
   };
   const containerRef = useInfiniteScroll(fetchGenre);
 
