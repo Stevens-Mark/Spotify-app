@@ -220,7 +220,11 @@ function QuickPlayBanner({ item, scrollRef }) {
           <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black items-center">
             {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
             {item?.type === 'album' && <TitleTimeLabel />}
-            {item?.type === 'artist' && <TitleAlbumTimeLabel />}
+
+
+            {/* ****MAYBE TEMPORARY LIED TYPE ***** */}
+
+            {item?.type === 'artist' || item?.type === 'liked' && <TitleAlbumTimeLabel />}  
           </div>
           <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
         </div>

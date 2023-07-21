@@ -53,8 +53,21 @@ export async function getServerSideProps(context) {
  * @param {object}  likedTracks information about user's liked tracks
  * @returns {JSX}
  */
-const ArtistPage = ({ likedTracks }) => {
+const LikedPage = ({ likedTracks }) => {
   const { data: session } = useSession();
+
+  likedTracks.id = 'liked';
+  likedTracks.type = 'liked';
+  likedTracks.name = 'Liked Songs';
+  likedTracks.publisher= session?.user.name;
+  likedTracks.images = [
+    {
+      height: 640,
+      url: '/images/LikedSongs.png',
+      width: 640,
+    },
+  ];
+  
   // const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
@@ -77,13 +90,14 @@ const ArtistPage = ({ likedTracks }) => {
     }
   }, [stopFetch]);
 
+  console.log('likedtracks', likedTracks);
   /**
    * Fetches more liked songs & updates the list of liked songs
    * @function fetchMoreData
    * @returns {object} updated list of liked songs
   //  */
   const fetchMoreData = async () => {
-     if (!stopFetch) {
+    if (!stopFetch) {
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;
       console.log('next offset', nextOffset);
@@ -97,8 +111,8 @@ const ArtistPage = ({ likedTracks }) => {
           }
         );
         const data = await res.json();
-          // Check if there's no more data to fetch
-        if (data?.items.length === 0) {
+        // Check if there's no more data to fetch
+        if (data?.items?.length === 0) {
           setStopFetch(true);
           return; // Exit the function early if there are no more items
         }
@@ -170,8 +184,8 @@ const ArtistPage = ({ likedTracks }) => {
   );
 };
 
-export default ArtistPage;
+export default LikedPage;
 
-ArtistPage.getLayout = function getLayout(page) {
+LikedPage.getLayout = function getLayout(page) {
   return <Layout>{page}</Layout>;
 };

@@ -45,7 +45,10 @@ function Player() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
+
+  
   // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
 
@@ -148,21 +151,21 @@ function Player() {
                 spotifyApi
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
-                    console.log("in previous ", data.body)
+                    console.log('in previous ', data.body);
                     if (data.body?.currently_playing_type === 'episode') {
-               
                       setCurrentTrackId(findPreviousEpisodeId);
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
                     // when navigating songs set album id on skip (currently doesn't work correctly for artists)
-                    if (
-                      data.body?.currently_playing_type !== 'episode' &&
-                      data.body.context === null &&
-                      data.body?.item.album.type === 'album'
-                    ) {
-                      setCurrentItemId(data.body?.item?.album?.id);
-                    }
+                    // if (
+                    //   data.body?.currently_playing_type !== 'episode' &&
+                    //   data.body.context === null &&
+                    //   data.body?.item.album.type === 'album'
+                    // ) {
+
+                    //   setCurrentItemId(data.body?.item?.album?.id);
+                    // }
                     if (currentSongIndex > 0) {
                       setCurrentSongIndex(currentSongIndex - 1);
                     } else {
@@ -276,21 +279,20 @@ function Player() {
                 spotifyApi
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
-                    console.log("in skip ", data.body)
+                    console.log('in skip ', data.body);
                     if (data.body?.currently_playing_type === 'episode') {
-             
-                      setCurrentTrackId(findNextEpisodeId);
+                     setCurrentTrackId(findNextEpisodeId);
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
                     // when navigating songs set album id on skip (currently doesn't work correctly for artists)
-                    if (
-                      data.body?.currently_playing_type !== 'episode' &&
-                      data.body.context === null &&
-                      data.body?.item.album.type === 'album'
-                    ) {
-                      setCurrentItemId(data.body?.item?.album?.id);
-                    }
+                    // if (
+                    //   data.body?.currently_playing_type !== 'episode' &&
+                    //   data.body.context === null &&
+                    //   data.body?.item.album.type === 'album'
+                    // ) {
+                    //   setCurrentItemId(data.body?.item?.album?.id);
+                    // }
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
                   .catch((err) => {

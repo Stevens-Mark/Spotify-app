@@ -80,7 +80,7 @@ function Welcome() {
           );
           setMessage('Have you connected to Spotify?');
           handleMyAlert();
-        });
+        });     
     }
   }, [spotifyApi]);
 

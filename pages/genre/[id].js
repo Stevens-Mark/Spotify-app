@@ -18,7 +18,7 @@ export async function getServerSideProps(context) {
   const { id } = context.query;
   const session = await getSession(context);
 
-  const fetchGenrelist = async (id) => {
+  const fetchGenrePlaylist = async (id) => {
     try {
       const res = await fetch(
         `https://api.spotify.com/v1/browse/categories/${id}/playlists`,
@@ -36,7 +36,7 @@ export async function getServerSideProps(context) {
     }
   };
 
-  const genreData = await fetchGenrelist(id);
+  const genreData = await fetchGenrePlaylist(id);
 
   const fetchCategory = async () => {
     try {
