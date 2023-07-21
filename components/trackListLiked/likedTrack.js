@@ -3,7 +3,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { likedListState, likedUrisState } from '@/atoms/songAtom';
+import { likedUrisState } from '@/atoms/songAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
@@ -30,12 +30,10 @@ import RenderTracks from '../trackRender/renderTracks';
  */
 function LikedTrack({ track, order }) {
   const spotifyApi = useSpotify();
-  const song = track;
-
+  const song = track.track;
   const router = useRouter();
 
-  const [likedTracklist, setLikedTracklist] = useRecoilState(likedListState);
-  const [likedTrackUris, setLikedTrackUris] = useRecoilState(likedUrisState);
+  const likedTrackUris = useRecoilValue(likedUrisState);
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
@@ -115,6 +113,7 @@ function LikedTrack({ track, order }) {
       order={order}
       activeStatus={activeStatus}
       song={song}
+      addedAt={track?.added_at}
     />
   );
 }

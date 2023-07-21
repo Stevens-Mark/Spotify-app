@@ -31,6 +31,18 @@ export async function getServerSideProps(context) {
         }
       );
       const data = await res.json();
+      data.id = 'liked';
+      data.type = 'liked';
+      data.name = 'Liked Songs';
+      data.publisher = session?.user.name;
+      data.images = [
+        {
+          height: 640,
+          url: '/images/LikedSongs.png',
+          width: 640,
+        },
+      ];
+
       return data;
     } catch (err) {
       console.error('Error retrieving liked tracks:', err);
@@ -47,6 +59,21 @@ export async function getServerSideProps(context) {
   };
 }
 
+// Helper function to merge and remove duplicates from the new data
+const mergeAndRemoveDuplicates = (existingData, newData) => {
+  const mergedData = [...existingData];
+  const addedTrackUris = new Set(existingData.map((item) => item.track.uri));
+
+  for (const newItem of newData) {
+    const newItemUri = newItem.track.uri;
+    if (!addedTrackUris.has(newItemUri)) {
+      mergedData.push(newItem);
+      addedTrackUris.add(newItemUri);
+    }
+  }
+  return mergedData;
+};
+
 /**
  * Renders Users Liked Songs
  * @function LikedPage
@@ -56,30 +83,16 @@ export async function getServerSideProps(context) {
 const LikedPage = ({ likedTracks }) => {
   const { data: session } = useSession();
 
-  likedTracks.id = 'liked';
-  likedTracks.type = 'liked';
-  likedTracks.name = 'Liked Songs';
-  likedTracks.publisher= session?.user.name;
-  likedTracks.images = [
-    {
-      height: 640,
-      url: '/images/LikedSongs.png',
-      width: 640,
-    },
-  ];
-  
-  // const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
-
   const [likedTracklist, setLikedTracklist] = useRecoilState(likedListState);
-  const [likedTrackUris, setLikedTrackUris] = useRecoilState(likedUrisState);
+  const setLikedTrackUris = useSetRecoilState(likedUrisState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
 
   useEffect(() => {
-    setLikedTracklist(likedTracks?.items?.map((item) => item.track));
+    setLikedTracklist(likedTracks);
     setLikedTrackUris(likedTracks?.items?.map((item) => item.track.uri)); // set uris to be used in player
-  }, [likedTracks?.items, setLikedTrackUris, setLikedTracklist]);
+  }, [likedTracks, setLikedTrackUris, setLikedTracklist]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -90,17 +103,13 @@ const LikedPage = ({ likedTracks }) => {
     }
   }, [stopFetch]);
 
-  console.log('likedtracks', likedTracks);
-  /**
-   * Fetches more liked songs & updates the list of liked songs
-   * @function fetchMoreData
-   * @returns {object} updated list of liked songs
-  //  */
+  // Function to fetch more data when the user scrolls down
   const fetchMoreData = async () => {
     if (!stopFetch) {
+      // If we reached the end, don't fetch more
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;
-      console.log('next offset', nextOffset);
+
       try {
         const res = await fetch(
           `https://api.spotify.com/v1/me/tracks?offset=${nextOffset}&limit=${itemsPerPage}`,
@@ -110,40 +119,44 @@ const LikedPage = ({ likedTracks }) => {
             },
           }
         );
-        const data = await res.json();
-        // Check if there's no more data to fetch
-        if (data?.items?.length === 0) {
-          setStopFetch(true);
-          return; // Exit the function early if there are no more items
+
+        if (res.ok) {
+          const data = await res.json();
+          if (data.items.length === 0) {
+            // If there's no more data, set stopFetch to true
+            setStopFetch(true);
+          } else {
+            // Merge the new data with the existing data and remove duplicates
+            setLikedTracklist((prev) => ({
+              ...prev,
+              items: mergeAndRemoveDuplicates(prev.items, data.items),
+            }));
+
+            // Update the likedTrackUris with the new URIs
+            setLikedTrackUris((prev) => {
+              // Convert the previous URIs to a Set for faster lookups
+              const existingUris = new Set(prev);
+              // Filter out duplicates from newItems by checking against existingUris
+              const newTrackUris = data.items
+                .filter((item) => !existingUris.has(item.track.uri))
+                .map((item) => item.track.uri);
+              // Combine the existing URIs and the new URIs to form the new uris list
+              return [...prev, ...newTrackUris];
+            });
+          }
+        } else {
+          console.error('Error fetching more liked tracks:');
+          toast.error('Liked Songs retrieval failed !', {
+            theme: 'colored',
+          });
         }
-
-        // Extract the new track objects and URIs from the fetched data
-        const newTracks = data?.items?.map((item) => item.track);
-        const newUris = data?.items?.map((item) => item.track.uri);
-
-        // Merge the new track objects with the existing likedTracklist array after removing duplicates
-        setLikedTracklist((prevLikedTracklist) => {
-          const mergedList = [...prevLikedTracklist, ...newTracks];
-          const uniqueItems = Array.from(
-            new Set(mergedList.map((track) => track.uri))
-          ).map((uri) => mergedList.find((track) => track.uri === uri));
-          return uniqueItems;
-        });
-
-        // Merge the new URIs with the existing likedTrackUris array after removing duplicates
-        setLikedTrackUris((prevLikedTrackUris) => {
-          const mergedUris = [...prevLikedTrackUris, ...newUris];
-          return Array.from(new Set(mergedUris));
-        });
-
-        setCurrentOffset(nextOffset);
       } catch (err) {
-        console.error('Retrieving more items failed ...', err);
-        toast.error('Retrieving more items failed!', {
+        console.error('Error fetching more liked tracks:');
+        toast.error('Liked Songs retrieval failed !', {
           theme: 'colored',
         });
-        return null;
       }
+      setCurrentOffset(nextOffset);
     }
   };
 
@@ -157,9 +170,7 @@ const LikedPage = ({ likedTracks }) => {
       </Head>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
-        // ref={scrollRef}
         ref={(node) => {
-          // containerRef.current = node;
           scrollableSectionRef.current = node;
           scrollRef.current = node;
         }}

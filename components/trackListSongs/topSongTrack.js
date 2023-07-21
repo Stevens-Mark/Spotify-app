@@ -70,7 +70,7 @@ function TopSongTrack({ track, order }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, 500);
   }, [currentSongIndex, currentTrackId, setCurrentSongIndex, songsList]);
 
   /**

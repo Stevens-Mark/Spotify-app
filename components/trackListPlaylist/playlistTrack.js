@@ -33,7 +33,6 @@ import RenderTracks from '../trackRender/renderTracks';
 function PlaylistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
-
   const router = useRouter();
 
   const playlistId = useRecoilValue(playlistIdState);
@@ -68,7 +67,7 @@ function PlaylistTrack({ track, order }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, 500);
   }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
 
   /**

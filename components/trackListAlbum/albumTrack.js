@@ -66,7 +66,7 @@ function AlbumTrack({ track, order }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, 500);
   }, [albumTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**

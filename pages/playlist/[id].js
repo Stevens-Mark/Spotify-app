@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useEffect, useRef } from 'react';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useSetRecoilState } from 'recoil';
 import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
 // import components
 import Layout from '@/components/layouts/Layout';
@@ -48,11 +48,9 @@ export async function getServerSideProps(context) {
 const PlaylistPage = ({ playlist }) => {
   const scrollRef = useRef(null);
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
-  const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
-    playlistTrackListState
-  );
+  const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
 
-   useEffect(() => {
+  useEffect(() => {
     setCurrentPlaylistId(playlist?.id);
     setPlaylistTracklist(playlist);
   }, [playlist, setCurrentPlaylistId, setPlaylistTracklist]);
@@ -71,7 +69,7 @@ const PlaylistPage = ({ playlist }) => {
         <MediaHeading item={playlist} />
         <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
 
-        <PlaylistTracks Tracklist={playlistTracklist} />
+        <PlaylistTracks />
         <Footer />
       </div>
     </>

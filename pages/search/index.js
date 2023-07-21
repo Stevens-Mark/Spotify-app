@@ -80,7 +80,6 @@ function Search({ genreList }) {
    */
   const fetchGenre = () => {
     if (!stopFetch) {
-      console.log('called genre');
       spotifyApi
         .getCategories({
           limit: itemsPerPage,

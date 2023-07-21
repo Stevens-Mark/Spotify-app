@@ -74,7 +74,7 @@ function EpisodeCard({ track, order, whichList }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, 500);
   }, [
     currentSongIndex,
     currentTrackId,

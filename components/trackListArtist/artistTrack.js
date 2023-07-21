@@ -68,7 +68,7 @@ function ArtistTrack({ track, order }) {
         );
         setCurrentSongIndex(indexPosition);
       }
-    }, '500');
+    }, 500);
   }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**

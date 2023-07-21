@@ -111,7 +111,6 @@ function Genres({ genreData }) {
    * @returns {object} updated genre playlist
    */
   const fetchMoreData = async () => {
-    console.log("called genre");
     if (genreList && !stopFetch) {
       const itemsPerPage = 30;
       const nextOffset = currentOffset + itemsPerPage;

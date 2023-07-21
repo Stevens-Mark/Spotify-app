@@ -110,7 +110,7 @@ function Player() {
           }
         });
       }
-    }, '500');
+    }, 500);
   }, [setIsPlaying, spotifyApi]);
 
   /* set shuffle of tracks on or off */
