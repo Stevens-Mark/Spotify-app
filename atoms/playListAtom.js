@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-// current playlist id
+// current playlist id of playlist that has been selected/opened on playlist page
 export const playlistIdState = atom({
   key: 'playlistIdState',
   default: null,
@@ -12,15 +12,15 @@ export const playlistTrackListState = atom({
   default: null,
 });
 
-// list of (user made) playlists retrieved
-export const myPlaylistState = atom({
-  key: 'myPlaylistState',
-  default: null,
-});
+// // list of (user made) playlists retrieved
+// export const myPlaylistState = atom({
+//   key: 'myPlaylistState',
+//   default: null,
+// });
 
-// current (user made) myplaylist id
-export const myPlaylistIdState = atom({
-  key: 'myPlaylistIdState',
+// current (user made) playlist (from sidebar) showing on the screen
+export const activePlaylistIdState = atom({
+  key: 'activePlaylistIdState',
   // default: "1beJKiTTWHdetZqGFyBeAN",
   default: null,
 });

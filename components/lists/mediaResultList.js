@@ -8,7 +8,6 @@ import Footer from '@/components/navigation/Footer';
 import SongTracks from '../trackListSongs/songTracks';
 import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
-import LikedTracks from '../trackListLiked/likedTracks';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...
@@ -26,7 +25,6 @@ function MediaResultList(props) {
     scrollToTop,
     containerRef,
     scrollableSectionRef,
-    liked,
   } = props;
 
   return (
@@ -99,8 +97,6 @@ function MediaResultList(props) {
               {/* recently played list here */}
               {mediaList?.[0]?.track?.type === 'track' && <RecentPlayedSongs />}
             </div>
-
-            {liked && <LikedTracks />}
 
             {/* otherwise playlist, album or artists list here */}
             {mediaList?.[0]?.type !== 'episode' &&

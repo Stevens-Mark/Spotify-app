@@ -6,22 +6,22 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 /**
  * Render Liked song Button in Navigation sidebar
  * @function LikedButton
- * @param {string} myPlaylistId
+ * @param {string} activePlaylistId
  * @param {string} activePlaylist
  * @param {boolean} isPlaying
- * @param {function} setMyPlaylistId
  * @returns {JSX}
  */
 function LikedSongsButton({
-  myPlaylistId,
-  activePlaylist,
+  activePlaylistId,
+  // activePlaylist,
   isPlaying,
-  setMyPlaylistId,
 }) {
+
+  const activePlaylist = null; // disabled highlight on active functionality as issues
+
   const router = useRouter();
 
-  console.log(typeof isPlaying);
-  const collection = {
+   const collection = {
     id: 'collection',
     type: 'collection',
     name: 'Liked Songs',
@@ -37,7 +37,6 @@ function LikedSongsButton({
 
   const handleCollectionClick = () => {
     router.push(`/collection`);
-    setMyPlaylistId(collection.id);
   };
 
   return (
@@ -51,7 +50,7 @@ function LikedSongsButton({
                   : 'hover:text-white'
               } 
               ${
-                myPlaylistId == collection?.id
+                activePlaylistId == collection?.id
                   ? ` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }

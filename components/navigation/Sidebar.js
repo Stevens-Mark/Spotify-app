@@ -7,7 +7,10 @@ import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
-import { myPlaylistIdState, activePlaylistState } from '@/atoms/playListAtom';
+import {
+  activePlaylistIdState,
+  activePlaylistState,
+} from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 import { SpeakerWaveIcon, Bars3Icon } from '@heroicons/react/24/solid';
@@ -26,7 +29,9 @@ function Sidebar() {
   const { data: session } = useSession();
 
   const [myPlaylists, setMyPlaylists] = useState([]);
-  const [myPlaylistId, setMyPlaylistId] = useRecoilState(myPlaylistIdState);
+  const [activePlaylistId, setActivePlaylistId] = useRecoilState(
+    activePlaylistIdState
+  );
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
@@ -40,15 +45,20 @@ function Sidebar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    setActivePlaylistId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setActivePlaylistId]);
+
+  useEffect(() => {
     const fetchCurrentTrack = async () => {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
+          console.log('currentplaying sidebar ', data?.body);
           const currentPlaylistId = data.body?.context?.uri.split(':').pop();
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
-          setMyPlaylistId(currentPlaylistId);
+          // setActivePlaylistId(currentPlaylistId);
           setActivePlaylist(currentPlaylistId);
           setCurrentItemId(currentPlaylistId);
         }
@@ -77,10 +87,10 @@ function Sidebar() {
     session,
     setCurrentTrackId,
     setActivePlaylist,
-    setMyPlaylistId,
     setPlayerInfoType,
     setCurrentItemId,
     setIsPlaying,
+    setActivePlaylistId,
   ]);
 
   const handleHome = () => {
@@ -91,7 +101,6 @@ function Sidebar() {
 
   const handleClick = (id) => {
     router.push(`/playlist/${id}`);
-    setMyPlaylistId(id);
   };
 
   const handleMenuToggle = () => {
@@ -172,12 +181,12 @@ function Sidebar() {
 
           {/* Menu button - Liked Songs */}
           <LikedButton
-            myPlaylistId={myPlaylistId}
+            activePlaylistId={activePlaylistId}
             activePlaylist={activePlaylist}
             isPlaying={isPlaying}
-            setMyPlaylistId={setMyPlaylistId}
           />
-
+          <hr className="border-t-[0.1px] border-gray-900" />
+          
           {/* Menu buttons - playlists */}
           {myPlaylists?.map((playlist) => (
             <li key={playlist?.id}>
@@ -190,7 +199,7 @@ function Sidebar() {
                   : 'hover:text-white'
               } 
               ${
-                myPlaylistId == playlist?.id
+                activePlaylistId == playlist?.id
                   ? ` bg-gray-900 hover:bg-gray-800`
                   : 'hover:bg-gray-900'
               }
