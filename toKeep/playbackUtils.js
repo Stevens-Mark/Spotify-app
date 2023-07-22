@@ -46,7 +46,7 @@ const GetAlbumTrack = async (spotifyApi, setCurrentTrackId, AlbumId) => {
 
 /**
  * Either play or pause current track
- * (Card.js, topResultCard.js or quickplayerbanner component)
+ * in Card.js or topResultCard.js component
  * @function HandleCardPlayPause
  * @param {object} item the media information
  * @param {function} setCurrentItemId set state for current card chosen
@@ -86,7 +86,7 @@ export const HandleCardPlayPause = (
   };
 
   // check if current playing track matches the one chosen by the user
-  // & is currently playing: if "yes" pause
+  // if "yes" pause if "no" play the new track selected
   spotifyApi.getMyCurrentPlaybackState().then((data) => {
     if (
       (currentItemId === item?.id && data.body?.is_playing) ||
@@ -101,7 +101,6 @@ export const HandleCardPlayPause = (
             theme: 'colored',
           });
         });
-      //  if "no" play the new track selected
     } else if (currentItemId === item?.id) {
       spotifyApi
         .play()
@@ -112,54 +111,62 @@ export const HandleCardPlayPause = (
             theme: 'colored',
           });
         });
-    } else { // OTHERWISE ...
-      // if artist selected get the tracks Uris & play in player (start with 1st)
-      if (item?.type === 'artist') {
-        if (spotifyApi.getAccessToken()) {
-          playPromise = spotifyApi
-            .getArtistTopTracks(item?.id, ['US', 'FR'])
-            .then((data) => {
-              console.log ("artistTopTracks", data)
-              setCurrentTrackId(data.body?.tracks[0]?.id); // will trigger playerInfo to update
-              return data.body.tracks.map((track) => track.uri);
-            })
-            .then((trackUris) => {
-              return spotifyApi.play({ uris: trackUris });
-            })
-            .catch((err) => {
-              console.error('Either Artist retrieval or playback failed:', err);
-              toast.error('Playback failed !', {
-                theme: 'colored',
+    } else {
+      if (item?.type === 'artist' || item?.type === 'track') {
+        // if artist selected get tracks Uris & play in player
+        if (item?.type === 'artist') {
+          if (spotifyApi.getAccessToken()) {
+            playPromise = spotifyApi
+              .getArtistTopTracks(item?.id, ['US', 'FR'])
+              .then((data) => {
+                setCurrentTrackId(data.body?.tracks[0]?.id); // will trigger playerInfo to update
+                return data.body.tracks.map((track) => track.uri);
+              })
+              .then((trackUris) => {
+                return spotifyApi.play({ uris: trackUris });
+              })
+              .catch((err) => {
+                console.error(
+                  'Either Artist retrieval or playback failed:',
+                  err
+                );
+                toast.error('Playback failed !', {
+                  theme: 'colored',
+                });
               });
-            });
-        }
-      }
-      // if track selected (from "songs" in search results for example) get track Uri & play in player
-      else if (item?.type === 'track') {
-        if (spotifyApi.getAccessToken()) {
-          playPromise = spotifyApi
-            .play({
-              uris: [item.uri],
-            })
-            .then(() => {
-              setCurrentTrackId(item.id); // will trigger playerInfo to update
-              setPlayerInfoType('track');
-            })
-            .catch((err) => {
-              console.error('Track playback failed:', err);
-              toast.error('Playback failed !', {
-                theme: 'colored',
+          }
+          // if track selected get track Uri & play in player
+        } else if (item?.type === 'track') {
+          console.log('uri', item.uri);
+          if (spotifyApi.getAccessToken()) {
+            playPromise = spotifyApi
+              .play({
+                uris: [item.uri],
+              })
+              .then(() => {
+                setCurrentTrackId(item.id); // will trigger playerInfo to update
+                setPlayerInfoType('track');
+              })
+              .catch((err) => {
+                console.error('Track playback failed:', err);
+                toast.error('Playback failed !', {
+                  theme: 'colored',
+                });
               });
-            });
+          }
         }
-      }
-      // if track selected (from liked songs) get track Uris & play (start with 1st)
-      // unfortunately limited to a max of 50 per download each time by Spotify so if left playing
-      // the player will stop!! LIMIATION OF USING THE QUICKSTART PLAY BUTTON HERE
-      else if (item?.type === 'liked') {
+        // else get corresponding context_uri depending on if album or playlist
+      } else if (item?.type === 'playlist') {
+        address = `spotify:playlist:${item.id}`;
+        GetPlaylistTrack(spotifyApi, setCurrentTrackId, item.id);
+      } else if (item?.type === 'album') {
+        address = `spotify:album:${item.id}`;
+        GetAlbumTrack(spotifyApi, setCurrentTrackId, item.id);
+      } else if (item?.type === 'liked') {
+        console.log('uri', item.uri);
         if (spotifyApi.getAccessToken()) {
           playPromise = spotifyApi
-            .getMySavedTracks({ limit: 50 }) 
+            .getMySavedTracks({ limit: 50 })
             .then((data) => {
               setCurrentTrackId(data.body?.items[0].track.id); // will trigger playerInfo to update
               return data.body.items.map((item) => item.track.uri);
@@ -178,20 +185,11 @@ export const HandleCardPlayPause = (
             });
         }
       }
-      // else get corresponding context_uri depending on if album or playlist
-      else if (item?.type === 'playlist') {
-        address = `spotify:playlist:${item.id}`;
-        GetPlaylistTrack(spotifyApi, setCurrentTrackId, item.id);
-      } else if (item?.type === 'album') {
-        address = `spotify:album:${item.id}`;
-        GetAlbumTrack(spotifyApi, setCurrentTrackId, item.id);
-      }
-      // THEN context_uri exists then play it
+      // context_uri exists then play it
       if (address && spotifyApi.getAccessToken()) {
         playPromise = spotifyApi.play({ context_uri: address });
       }
-
-      // if possible to play a track (one of the above conditions met) then call function to set states otherwise fail
+      // if possible to play a track then call function to set states otherwise fail
       if (playPromise) {
         playPromise.then(handlePlaybackSuccess).catch((err) => {
           console.error('Either album or Playlist Playback failed:', err);

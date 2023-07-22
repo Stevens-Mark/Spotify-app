@@ -19,6 +19,7 @@ import {
   PlusCircleIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
+import LikedButton from './likedButton';
 
 function Sidebar() {
   const router = useRouter();
@@ -99,7 +100,7 @@ function Sidebar() {
 
   return (
     <>
-      {/* Menu button */}
+      {/* Menu buttons - General */}
       <button
         className="fixed top-5 left-5 z-[51] bg-gray-900 p-2 rounded-md text-white md:hidden"
         onClick={handleMenuToggle}
@@ -178,6 +179,14 @@ function Sidebar() {
           </li>
           <hr className="border-t-[0.1px] border-gray-900" />
 
+          {/* Menu button - Liked Songs */}
+          <LikedButton
+            myPlaylistId={myPlaylistId}
+            activePlaylist={activePlaylist}
+            isPlaying={isPlaying}
+          />
+
+          {/* Menu buttons - playlists */}
           {myPlaylists?.map((playlist) => (
             <li key={playlist?.id}>
               <button
