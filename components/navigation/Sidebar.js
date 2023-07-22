@@ -15,11 +15,10 @@ import {
   HomeIcon,
   BuildingLibraryIcon,
   MagnifyingGlassIcon,
-  HeartIcon,
   PlusCircleIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
-import LikedButton from './likedButton';
+import LikedButton from './likedSongsButton';
 
 function Sidebar() {
   const router = useRouter();
@@ -92,6 +91,7 @@ function Sidebar() {
 
   const handleClick = (id) => {
     router.push(`/playlist/${id}`);
+    setMyPlaylistId(id);
   };
 
   const handleMenuToggle = () => {
@@ -149,7 +149,6 @@ function Sidebar() {
               <p>Recently Played</p>
             </Link>
           </li>
-          <hr className="border-t-[0.1px] border-gray-900" />
 
           <li>
             <button className="flex items-center space-x-2 hover:text-white">
@@ -157,17 +156,9 @@ function Sidebar() {
               <p>Create Playlist</p>
             </button>
           </li>
-          <li>
-            {' '}
-            <Link
-              href="/liked"
-              passHref
-              className="flex items-center space-x-2 hover:text-white"
-            >
-              <HeartIcon className="h-5 w-5 ml-3" />
-              <p>Liked Songs</p>
-            </Link>
-          </li>
+
+          <hr className="border-t-[0.1px] border-gray-900" />
+
           <li>
             <button
               className="flex items-center space-x-2 hover:text-white"
@@ -184,6 +175,7 @@ function Sidebar() {
             myPlaylistId={myPlaylistId}
             activePlaylist={activePlaylist}
             isPlaying={isPlaying}
+            setMyPlaylistId={setMyPlaylistId}
           />
 
           {/* Menu buttons - playlists */}

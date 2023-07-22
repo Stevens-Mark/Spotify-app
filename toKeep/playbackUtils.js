@@ -162,7 +162,7 @@ export const HandleCardPlayPause = (
       } else if (item?.type === 'album') {
         address = `spotify:album:${item.id}`;
         GetAlbumTrack(spotifyApi, setCurrentTrackId, item.id);
-      } else if (item?.type === 'liked') {
+      } else if (item?.type === 'collection') {
         console.log('uri', item.uri);
         if (spotifyApi.getAccessToken()) {
           playPromise = spotifyApi

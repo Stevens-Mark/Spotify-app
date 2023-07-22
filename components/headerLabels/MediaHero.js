@@ -84,13 +84,13 @@ const MediaHeading = ({ item, itemTracks }) => {
                   ? 'Podcast'
                   : item?.type === 'episode'
                   ? 'Podcast Episode'
-                  : item?.type === 'liked'
+                  : item?.type === 'collection'
                   ? 'Playlist'
                   : item?.type
               )}
             </span>
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold pt-1 pb-[7px] mb-4 line-clamp-2 whitespace-wrap">
-              {item?.name ? item.name : 'Liked Songs'}
+              {item?.name}
             </h1>
 
             {/*playlist description*/}

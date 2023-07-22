@@ -3,12 +3,27 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
-function LikedButton({ myPlaylistId, activePlaylist, isPlaying }) {
+/**
+ * Render Liked song Button in Navigation sidebar
+ * @function LikedButton
+ * @param {string} myPlaylistId
+ * @param {string} activePlaylist
+ * @param {boolean} isPlaying
+ * @param {function} setMyPlaylistId
+ * @returns {JSX}
+ */
+function LikedSongsButton({
+  myPlaylistId,
+  activePlaylist,
+  isPlaying,
+  setMyPlaylistId,
+}) {
   const router = useRouter();
 
+  console.log(typeof isPlaying);
   const collection = {
-    id: 'liked',
-    type: 'liked',
+    id: 'collection',
+    type: 'collection',
     name: 'Liked Songs',
 
     images: [
@@ -20,14 +35,15 @@ function LikedButton({ myPlaylistId, activePlaylist, isPlaying }) {
     ],
   };
 
-  const handleClick = () => {
-    router.push(`liked`);
+  const handleCollectionClick = () => {
+    router.push(`/collection`);
+    setMyPlaylistId(collection.id);
   };
 
   return (
     <li>
       <button
-        onClick={() => handleClick(collection?.id)}
+        onClick={() => handleCollectionClick(collection?.id)}
         className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
               ${
                 activePlaylist == collection?.id && isPlaying
@@ -62,4 +78,4 @@ function LikedButton({ myPlaylistId, activePlaylist, isPlaying }) {
   );
 }
 
-export default LikedButton;
+export default LikedSongsButton;

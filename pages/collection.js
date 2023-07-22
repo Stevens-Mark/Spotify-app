@@ -31,7 +31,7 @@ export async function getServerSideProps(context) {
         }
       );
       const data = await res.json();
-      data.id = 'liked';
+      data.id = 'collection';
       data.type = 'collection';
       data.name = 'Liked Songs';
       data.publisher = session?.user.name;
