@@ -81,10 +81,13 @@ function ArtistTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
+    
+    const mediaTrackUris = artistTrackUris; //set variable to artistTrackUris (for HandleTrackPlayPause logic)
+
     const artistOptions = {
       originId,
       song,
-      artistTrackUris, // determines it's artist to play in play/pause function
+      mediaTrackUris, // determines it's artist to play in play/pause function
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,

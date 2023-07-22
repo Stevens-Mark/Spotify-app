@@ -79,11 +79,13 @@ function LikedTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
-    const artistTrackUris = likedTrackUris;
+    const mediaTrackUris = likedTrackUris; //set variable to likedTrackUris (for HandleTrackPlayPause logic)
+
+
     const likedOptions = {
       originId,
       song,
-      artistTrackUris, // determines it's likedsongs to play in  play/pause function
+      mediaTrackUris, // determines it's likedsongs to play in  play/pause function
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
@@ -114,6 +116,7 @@ function LikedTrack({ track, order }) {
       activeStatus={activeStatus}
       song={song}
       addedAt={track?.added_at}
+      collection={true}
     />
   );
 }

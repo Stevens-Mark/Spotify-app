@@ -83,12 +83,12 @@ function RecentPlayedTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
-    const artistTrackUris = recentlyUris; //set variable to recentlyUris (for HandleTrackPlayPause logic)
+    const mediaTrackUris = recentlyUris; //set variable to recentlyUris (for HandleTrackPlayPause logic)
 
     const songsOptions = {
       originId,
       song,
-      artistTrackUris, // determines it's artist/songs to play in  play/pause function
+      mediaTrackUris, // determines it's recently played to play in play/pause function
       setCurrentItemId,
       currentTrackIndex,
       setCurrentTrackId,

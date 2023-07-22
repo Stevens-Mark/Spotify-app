@@ -16,7 +16,7 @@ function RecentSongTracks() {
   return (
     <section>
       <h2 className="sr-only">Track List</h2>
-      <div className="sticky top-[4.5rem]">
+      <div className="sticky top-[4.5rem] z-20">
         <div className="grid grid-cols-2 text-pink-swan bg-black px-0 isSm:px-8">
           <TitleAlbumTimeLabel />
         </div>

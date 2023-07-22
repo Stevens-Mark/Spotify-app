@@ -30,7 +30,7 @@ function MediaResultList(props) {
   return (
     <>
       <div
-        className={`bg-black overflow-y-scroll h-screen scrollbar-hide pt-2 pb-24 py-4  ${
+        className={`bg-black overflow-y-scroll h-screen scrollbar-hide pt-2 pb-24 py-4 ${
           mediaList?.[0]?.type === 'track' ? 'px-0' : 'px-5 xs:px-8'
         }`}
         ref={(node) => {
@@ -101,9 +101,7 @@ function MediaResultList(props) {
             {/* otherwise playlist, album or artists list here */}
             {mediaList?.[0]?.type !== 'episode' &&
               mediaList?.[0]?.type !== 'track' &&
-              mediaList?.[0]?.track?.type !== 'track' &&
-              !liked && 
-              (
+              mediaList?.[0]?.track?.type !== 'track' && (
                 <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
                   {mediaList?.map((item, i) => (
                     <Card key={`${item?.id}-${i}`} item={item} />

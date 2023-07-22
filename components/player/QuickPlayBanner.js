@@ -193,7 +193,7 @@ function QuickPlayBanner({ item, scrollRef }) {
       </div>
 
       {item?.type !== 'show' && (
-        <div className="sticky top-0">
+        <div className="sticky -top-2 z-10">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button
               className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
@@ -218,8 +218,9 @@ function QuickPlayBanner({ item, scrollRef }) {
 
           {/* choose heading depending on media type */}
           <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black items-center">
-            {item?.type === 'playlist' ||
-              (item?.type === 'collection' && <TitleAlbumDateTimeLabel />)}
+            {(item?.type === 'playlist' || item?.type === 'collection') && (
+              <TitleAlbumDateTimeLabel />
+            )}
             {item?.type === 'album' && <TitleTimeLabel />}
             {item?.type === 'artist' && <TitleAlbumTimeLabel />}
           </div>

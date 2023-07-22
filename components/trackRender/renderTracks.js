@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { millisToMinutesAndSeconds } from '@/lib/time';
 import { getMonthDayYear } from '@/lib/time';
 // import icon
-import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
+import { PlayIcon, PauseIcon, HeartIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
 
 /**
@@ -17,7 +17,8 @@ import Equaliser from '@/components/graphics/Equaliser';
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {object} song data
  * @param {string} addedAt date track added to list (just for playlists)
- * @returns
+ * @param {string} collection sets a heart next to track in likesong list (currently just for show - DUMMY)
+ * @returns {JSX}
  */
 function RenderTracks({
   isShown,
@@ -27,6 +28,7 @@ function RenderTracks({
   activeStatus,
   song,
   addedAt,
+  collection,
 }) {
   return (
     <div
@@ -42,12 +44,12 @@ function RenderTracks({
           }}
         >
           {!isShown ? (
-            (activeStatus)  ? (
+            activeStatus ? (
               <Equaliser />
             ) : (
               order + 1
             )
-          ) : (activeStatus)  ? (
+          ) : activeStatus ? (
             <PauseIcon className="h-3.5" />
           ) : (
             <PlayIcon className="h-3.5" />
@@ -66,14 +68,14 @@ function RenderTracks({
         <div className="w-full">
           <h3
             className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 ${
-              (activeStatus) 
-                ? 'text-green-500'
-                : 'text-white'
+              activeStatus ? 'text-green-500' : 'text-white'
             } truncate`}
           >
             {song?.name}
           </h3>
-          <span className="w-40">{song?.artists?.[0].name}</span>
+          <h4 className="w-24 xxs:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 truncate">
+            {song?.artists?.[0].name}
+          </h4>
         </div>
       </div>
       {song?.album?.name ? (
@@ -86,9 +88,15 @@ function RenderTracks({
               {getMonthDayYear(addedAt)}
             </span>
           )}
-          <span className="pl-5">
-            {millisToMinutesAndSeconds(song?.duration_ms)}
-          </span>
+          <div className="flex items-center">
+
+            {/**** DUMMY "like" heart to indicate part of likesongs list - currently NON FUNCTIONAL****/}
+            {collection && <HeartIcon className="text-green-500 h-5 w-5" />}
+
+            <span className="pl-5">
+              {millisToMinutesAndSeconds(song?.duration_ms)}
+            </span>
+          </div>
         </div>
       ) : (
         <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
