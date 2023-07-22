@@ -82,7 +82,7 @@ const mergeAndRemoveDuplicates = (existingData, newData) => {
  */
 const LikedPage = ({ likedTracks }) => {
   const { data: session } = useSession();
-
+  const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const [likedTracklist, setLikedTracklist] = useRecoilState(likedListState);
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
@@ -160,7 +160,7 @@ const LikedPage = ({ likedTracks }) => {
     }
   };
 
-  const scrollRef = useInfiniteScroll(fetchMoreData);
+  const containerRef = useInfiniteScroll(fetchMoreData);
 
   return (
     <>
@@ -171,6 +171,7 @@ const LikedPage = ({ likedTracks }) => {
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
         ref={(node) => {
+          containerRef.current = node;
           scrollableSectionRef.current = node;
           scrollRef.current = node;
         }}

@@ -20,7 +20,7 @@ const useInfiniteScroll = (fetchMoreData) => {
   };
 
   // Use lodash throttle to throttle the handleScroll function
-  const throttledHandleScroll = throttle(handleScroll, 1000); // Adjust the throttle time as needed (e.g., 1000ms)
+  const throttledHandleScroll = throttle(handleScroll, 2000); // Adjust the throttle time as needed (e.g., XXXXms)
 
   useEffect(() => {
     // Add event listener for scrolling

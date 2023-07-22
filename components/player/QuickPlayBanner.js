@@ -218,11 +218,12 @@ function QuickPlayBanner({ item, scrollRef }) {
 
           {/* choose heading depending on media type */}
           <div className="grid grid-cols-2 text-pink-swan px-0 xs:px-8 bg-black items-center">
-            {(item?.type === 'playlist' || item?.type === 'collection') && (
-              <TitleAlbumDateTimeLabel />
-            )}
+            {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
             {item?.type === 'album' && <TitleTimeLabel />}
             {item?.type === 'artist' && <TitleAlbumTimeLabel />}
+            {item?.type === 'collection' && (
+              <TitleAlbumDateTimeLabel collection={true} />
+            )}
           </div>
           <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
         </div>

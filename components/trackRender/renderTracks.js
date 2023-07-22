@@ -17,7 +17,7 @@ import Equaliser from '@/components/graphics/Equaliser';
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {object} song data
  * @param {string} addedAt date track added to list (just for playlists)
- * @param {string} collection sets a heart next to track in likesong list (currently just for show - DUMMY)
+ * @param {boolean} collection sets a heart next to track in likesong list (currently just for show - DUMMY)
  * @returns {JSX}
  */
 function RenderTracks({

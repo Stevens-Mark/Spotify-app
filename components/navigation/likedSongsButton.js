@@ -16,12 +16,11 @@ function LikedSongsButton({
   // activePlaylist,
   isPlaying,
 }) {
-
   const activePlaylist = null; // disabled highlight on active functionality as issues
 
   const router = useRouter();
 
-   const collection = {
+  const collection = {
     id: 'collection',
     type: 'collection',
     name: 'Liked Songs',
@@ -36,7 +35,9 @@ function LikedSongsButton({
   };
 
   const handleCollectionClick = () => {
-    router.push(`/collection`);
+    if (activePlaylistId !== collection?.id) { // if on likesongs page this check stops the page being reloaded & loosing previously loaded song data
+      router.push(`/collection`);
+    }
   };
 
   return (
