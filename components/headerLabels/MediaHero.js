@@ -8,13 +8,15 @@ import {
 // import icon/images
 import Image from 'next/image';
 import noImage from '@/public/images/noImageAvailable.svg';
-import likedSongs from '@/public/images/LikedSongs.png';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
-import { totalDuration } from '@/lib/totalTrackDuration';
-import { totalAlbumDuration } from '@/lib/totalTrackDuration';
-import { totalArtistTrackDuration } from '@/lib/totalTrackDuration';
+import {
+  totalDuration,
+  totalAlbumDuration,
+  totalArtistTrackDuration,
+  totalCollectionTrackDuration,
+} from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
 import { analyseImageColor } from '@/lib/analyseImageColor.js';
 
@@ -41,6 +43,8 @@ const MediaHeading = ({ item, itemTracks }) => {
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
 
+  console.log('media banner ', item);
+
   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
     setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
@@ -54,6 +58,8 @@ const MediaHeading = ({ item, itemTracks }) => {
       setBackgroundColor(null);
     }
   }, [item?.images, setBackgroundColor, setRandomColor]);
+
+
 
   return (
     <div
@@ -93,13 +99,6 @@ const MediaHeading = ({ item, itemTracks }) => {
               {item?.name}
             </h1>
 
-            {/*playlist description*/}
-            {item?.type === 'playlist' && (
-              <p className="text-base md:text-lg lg:text-xl xl:text-2xl mb-2 line-clamp-2">
-                {item?.description}
-              </p>
-            )}
-
             {/*show*/}
             {item?.type === 'show' && (
               <span className="text-base md:text-2xl lg:text-3xl line-clamp-2">
@@ -114,12 +113,25 @@ const MediaHeading = ({ item, itemTracks }) => {
               </span>
             )}
 
+            {/*playlist description*/}
+            {item?.type === 'playlist' && (
+              <p className="text-base md:text-lg lg:text-xl xl:text-2xl mb-2 line-clamp-2">
+                {item?.description}
+              </p>
+            )}
+
             {/*playlist*/}
             {item?.type === 'playlist' && (
               <>
                 <span>
                   {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
                 </span>
+                {item?.followers?.total !== 0 && (
+                  <span>
+                    {(item?.followers?.total).toLocaleString()}{' '}
+                    followers&nbsp;•&nbsp;
+                  </span>
+                )}
                 <span>
                   {item?.tracks?.items?.length}{' '}
                   {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
@@ -158,6 +170,19 @@ const MediaHeading = ({ item, itemTracks }) => {
                 </span>
                 <span className="text-base truncate text-pink-swan">
                   {msToTime(totalArtistTrackDuration(itemTracks))}
+                </span>
+              </>
+            )}
+
+            {/*collection -liked songs*/}
+            {item?.type === 'collection' && (
+              <>
+                <span>{capitalize(item?.publisher)}&nbsp;•&nbsp;</span>
+                <span>
+                  {item?.total} {item?.total > 1 ? 'songs' : 'song'},{' '}
+                </span>
+                <span className="text-base truncate text-pink-swan">
+                  {msToTime(totalCollectionTrackDuration(item))}
                 </span>
               </>
             )}

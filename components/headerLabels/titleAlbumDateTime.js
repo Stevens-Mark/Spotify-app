@@ -1,5 +1,5 @@
 import React from 'react';
-import { ClockIcon, HeartIcon } from '@heroicons/react/24/outline';
+import { ClockIcon } from '@heroicons/react/24/outline';
 
 /**
  * Renders the relevant Headings

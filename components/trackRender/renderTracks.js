@@ -1,8 +1,8 @@
 import React from 'react';
 import Image from 'next/image';
 // import functions
-import { millisToMinutesAndSeconds } from '@/lib/time';
-import { getMonthDayYear } from '@/lib/time';
+import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
+// import { getMonthDayYear } from '@/lib/time';
 // import icon
 import { PlayIcon, PauseIcon, HeartIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
@@ -84,8 +84,8 @@ function RenderTracks({
             {song?.album?.name}
           </span>
           {addedAt && (
-            <span className="w-48 hidden mdlg:inline whitespace-nowrap">
-              {getMonthDayYear(addedAt)}
+            <span className="w-48 hidden mdlg:inline whitespace-nowrap pr-2">
+              {formatDateToTimeElapsed(addedAt)}
             </span>
           )}
           <div className="flex items-center">
