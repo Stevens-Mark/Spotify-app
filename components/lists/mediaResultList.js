@@ -1,5 +1,4 @@
 import React from 'react';
-import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 import { capitalize } from '@/lib/capitalize';
 // import components
 import Card from '@/components/cards/card';
@@ -8,6 +7,7 @@ import Footer from '@/components/navigation/Footer';
 import SongTracks from '../trackListSongs/songTracks';
 import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...

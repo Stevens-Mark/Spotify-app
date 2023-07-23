@@ -47,7 +47,7 @@ const MediaHeading = ({ item, itemTracks }) => {
     useRecoilState(backgroundColorState);
   const [userImage, setUserImage] = useState(null);
 
-   // analyse image colors for custom background & set default random background color (in case)
+  // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
     setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
     const imageUrl = item?.images?.[0]?.url;
@@ -144,19 +144,21 @@ const MediaHeading = ({ item, itemTracks }) => {
               </p>
             )}
 
-            <div className='flex items-center'>
+            <div className="flex items-center flex-wrap">
               {/* Add owner or artist image if not show or episode  */}
-              {item?.type !== 'show' && item?.type !== 'episode' && (
-                <Image
-                  className="h-6 w-6 rounded-full shadow-image2 aspect-square mr-1"
-                  src={userImage || noImage}
-                  alt=""
-                  width={100}
-                  height={100}
-                  style={{ objectFit: 'cover' }}
-                  priority
-                />
-              )}
+              {item?.type !== 'show' &&
+                item?.type !== 'episode' &&
+                item?.type !== 'artist' && (
+                  <Image
+                    className="h-6 w-6 rounded-full shadow-image2 aspect-square mr-1"
+                    src={userImage || noImage}
+                    alt=""
+                    width={100}
+                    height={100}
+                    style={{ objectFit: 'cover' }}
+                    priority
+                  />
+                )}
 
               {/*playlist*/}
               {item?.type === 'playlist' && (
@@ -172,9 +174,9 @@ const MediaHeading = ({ item, itemTracks }) => {
                   )}
                   <span>
                     {item?.tracks?.items?.length}{' '}
-                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
+                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'}, &nbsp;
                   </span>
-                  <span className="text-base truncate text-pink-swan">&nbsp;
+                  <span className="text-base truncate text-pink-swan">
                     {msToTime(totalDuration(item))}
                   </span>
                 </>
@@ -204,9 +206,9 @@ const MediaHeading = ({ item, itemTracks }) => {
                   </span>
                   <span className="text-base">
                     {itemTracks?.tracks?.length}{' '}
-                    {itemTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
+                    {itemTracks?.tracks?.length > 1 ? 'songs' : 'song'}, &nbsp;
                   </span>
-                  <span className="text-base truncate text-pink-swan">&nbsp;
+                  <span className="text-base truncate text-pink-swan">
                     {msToTime(totalArtistTrackDuration(itemTracks))}
                   </span>
                 </>
@@ -219,9 +221,9 @@ const MediaHeading = ({ item, itemTracks }) => {
                     {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
                   </span>
                   <span>
-                    {item?.total} {item?.total > 1 ? 'songs' : 'song'},{' '}
+                    {item?.total} {item?.total > 1 ? 'songs' : 'song'}, &nbsp;
                   </span>
-                  <span className="text-base truncate text-pink-swan">&nbsp;
+                  <span className="text-base truncate text-pink-swan">
                     {msToTime(totalCollectionTrackDuration(item))}
                   </span>
                 </>

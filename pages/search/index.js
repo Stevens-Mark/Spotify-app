@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { getSession } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
+// custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useScrollToTop from '@/hooks/useScrollToTop';

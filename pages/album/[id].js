@@ -1,6 +1,10 @@
 import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useEffect, useRef } from 'react';
+// import functions
+import { getMonthDayYear } from '@/lib/time';
+// custom hooks
+import useScrollToTop from '@/hooks/useScrollToTop';
 // import state management recoil
 import { useSetRecoilState } from 'recoil';
 import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
@@ -10,8 +14,8 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
-// import functions
-import { getMonthDayYear } from '@/lib/time';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
+
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -49,6 +53,7 @@ export async function getServerSideProps(context) {
  */
 const AlbumPage = ({ album }) => {
   const scrollRef = useRef(null);
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setAlbumTracklist = useSetRecoilState(albumTrackListState);
 
@@ -65,7 +70,10 @@ const AlbumPage = ({ album }) => {
       </Head>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
-        ref={scrollRef}
+        ref={(node) => {
+          scrollRef.current = node;
+          scrollableSectionRef.current = node;
+        }}
       >
         {/* Hero bar with image, album title & author etc */}
         <MediaHeading item={album} />
@@ -82,6 +90,14 @@ const AlbumPage = ({ album }) => {
             </p>
           ))}
         </aside>
+        {showButton && (
+          <button
+            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+            onClick={scrollToTop}
+          >
+            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+          </button>
+        )}
         <Footer />
       </div>
     </>

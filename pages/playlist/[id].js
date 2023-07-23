@@ -4,12 +4,15 @@ import React, { useEffect, useRef } from 'react';
 // import state management recoil
 import { useSetRecoilState } from 'recoil';
 import { playlistIdState, playlistTrackListState } from '@/atoms/playListAtom';
+// custom hooks
+import useScrollToTop from '@/hooks/useScrollToTop';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
+import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -47,6 +50,7 @@ export async function getServerSideProps(context) {
  */
 const PlaylistPage = ({ playlist }) => {
   const scrollRef = useRef(null);
+  const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const setPlaylistTracklist = useSetRecoilState(playlistTrackListState);
 
@@ -63,13 +67,25 @@ const PlaylistPage = ({ playlist }) => {
       </Head>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
-        ref={scrollRef}
+        // ref={scrollRef}
+        ref={(node) => {
+          scrollRef.current = node;
+          scrollableSectionRef.current = node;
+        }}
       >
         {/* Hero bar with image, playlist title etc */}
         <MediaHeading item={playlist} />
         <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
 
         <PlaylistTracks />
+        {showButton && (
+          <button
+            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
+            onClick={scrollToTop}
+          >
+            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
+          </button>
+        )}
         <Footer />
       </div>
     </>
