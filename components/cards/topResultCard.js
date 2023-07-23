@@ -79,7 +79,7 @@ function TopResultCard({ item }) {
   useEffect(() => {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
-      (currentItemId === item?.album?.id && isPlaying) ||
+      // (currentItemId === item?.album?.id && isPlaying) ||
       (currentAlbumId === item?.album?.id && currentTrackId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
