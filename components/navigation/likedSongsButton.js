@@ -24,7 +24,6 @@ function LikedSongsButton({
     id: 'collection',
     type: 'collection',
     name: 'Liked Songs',
-
     images: [
       {
         height: 640,

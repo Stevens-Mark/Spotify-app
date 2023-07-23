@@ -31,10 +31,14 @@ export async function getServerSideProps(context) {
         }
       );
       const data = await res.json();
+      // add this information to allow us to create the media banner for liked songs
       data.id = 'collection';
       data.type = 'collection';
       data.name = 'Liked Songs';
-      data.publisher = session?.user.name;
+      data.owner = {
+        display_name: session?.user.name,
+        id: session?.user?.username,
+      };
       data.images = [
         {
           height: 640,
@@ -84,7 +88,7 @@ const LikedPage = ({ likedTracks }) => {
   const { data: session } = useSession();
   const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
-  const [likedTracklist, setLikedTracklist] = useRecoilState(likedListState);
+  const setLikedTracklist = useSetRecoilState(likedListState);
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);

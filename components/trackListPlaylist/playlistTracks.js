@@ -12,7 +12,6 @@ import PlaylistTrack from './playlistTrack';
  */
 function PlaylistTracks() {
   const playlistTracklist = useRecoilValue(playlistTrackListState);
-  console.log('Playlisttracks ', playlistTracklist);
   return (
     <section>
       <h2 className="sr-only">Track List</h2>

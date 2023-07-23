@@ -25,7 +25,6 @@ const colors = [
  * @returns {JSX}
  */
 function Welcome() {
-  const { data: session } = useSession();
   const spotifyApi = useSpotify();
   const scrollRef = useRef(null);
   const [message, setMessage] = useState(null);

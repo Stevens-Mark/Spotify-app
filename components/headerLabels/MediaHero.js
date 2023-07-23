@@ -1,4 +1,5 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import {
@@ -39,13 +40,14 @@ const colors = [
  * @returns {JSX}
  */
 const MediaHeading = ({ item, itemTracks }) => {
+  const spotifyApi = useSpotify();
+
   const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
+  const [userImage, setUserImage] = useState(null);
 
-  console.log('media banner ', item);
-
-  // analyse image colors for custom background & set default random background color (in case)
+   // analyse image colors for custom background & set default random background color (in case)
   useEffect(() => {
     setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
     const imageUrl = item?.images?.[0]?.url;
@@ -59,7 +61,29 @@ const MediaHeading = ({ item, itemTracks }) => {
     }
   }, [item?.images, setBackgroundColor, setRandomColor]);
 
+  useEffect(() => {
+    if (spotifyApi.getAccessToken()) {
+      // if liked songs or playlist - Get owner's image
+      if (item?.owner?.id) {
+        spotifyApi
+          .getUser(item?.owner?.id)
+          .then((data) => {
+            setUserImage(data?.body?.images?.[0]?.url);
+          })
+          .catch((err) => console.error('Owner image retrieval failed:'));
+      }
 
+      // otherwise if an Album - Get artist's image
+      if (item?.artists?.[0]?.id) {
+        spotifyApi
+          .getArtist(item.artists[0].id)
+          .then((data) => {
+            setUserImage(data?.body?.images?.[0]?.url);
+          })
+          .catch((err) => console.error('Artist image retrieval failed:'));
+      }
+    }
+  }, [item?.artists, item?.owner?.id, spotifyApi]);
 
   return (
     <div
@@ -120,72 +144,89 @@ const MediaHeading = ({ item, itemTracks }) => {
               </p>
             )}
 
-            {/*playlist*/}
-            {item?.type === 'playlist' && (
-              <>
-                <span>
-                  {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
-                </span>
-                {item?.followers?.total !== 0 && (
+            <div className='flex items-center'>
+              {/* Add owner or artist image if not show or episode  */}
+              {item?.type !== 'show' && item?.type !== 'episode' && (
+                <Image
+                  className="h-6 w-6 rounded-full shadow-image2 aspect-square mr-1"
+                  src={userImage || noImage}
+                  alt=""
+                  width={100}
+                  height={100}
+                  style={{ objectFit: 'cover' }}
+                  priority
+                />
+              )}
+
+              {/*playlist*/}
+              {item?.type === 'playlist' && (
+                <>
+                  <span>
+                    {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
+                  </span>
+                  {item?.followers?.total !== 0 && (
+                    <span>
+                      {(item?.followers?.total).toLocaleString()}{' '}
+                      followers&nbsp;•&nbsp;
+                    </span>
+                  )}
+                  <span>
+                    {item?.tracks?.items?.length}{' '}
+                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
+                  </span>
+                  <span className="text-base truncate text-pink-swan">&nbsp;
+                    {msToTime(totalDuration(item))}
+                  </span>
+                </>
+              )}
+
+              {/*album*/}
+              {item?.type === 'album' && (
+                <>
+                  <span>{item?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
+                  <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
+                  <span className="text-base">
+                    {item?.tracks?.items?.length}{' '}
+                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
+                  </span>
+                  <span className="text-base truncate text-pink-swan">
+                    {msToTime(totalAlbumDuration(item))}
+                  </span>
+                </>
+              )}
+
+              {/*artist*/}
+              {item?.type === 'artist' && (
+                <>
                   <span>
                     {(item?.followers?.total).toLocaleString()}{' '}
                     followers&nbsp;•&nbsp;
                   </span>
-                )}
-                <span>
-                  {item?.tracks?.items?.length}{' '}
-                  {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
-                </span>
-                <span className="text-base truncate text-pink-swan">
-                  {msToTime(totalDuration(item))}
-                </span>
-              </>
-            )}
+                  <span className="text-base">
+                    {itemTracks?.tracks?.length}{' '}
+                    {itemTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
+                  </span>
+                  <span className="text-base truncate text-pink-swan">&nbsp;
+                    {msToTime(totalArtistTrackDuration(itemTracks))}
+                  </span>
+                </>
+              )}
 
-            {/*album*/}
-            {item?.type === 'album' && (
-              <>
-                <span>{item?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
-                <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
-                <span className="text-base">
-                  {item?.tracks?.items?.length}{' '}
-                  {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
-                </span>
-                <span className="text-base truncate text-pink-swan">
-                  {msToTime(totalAlbumDuration(item))}
-                </span>
-              </>
-            )}
-
-            {/*artist*/}
-            {item?.type === 'artist' && (
-              <>
-                <span>
-                  {(item?.followers?.total).toLocaleString()}{' '}
-                  followers&nbsp;•&nbsp;
-                </span>
-                <span className="text-base">
-                  {itemTracks?.tracks?.length}{' '}
-                  {itemTracks?.tracks?.length > 1 ? 'songs' : 'song'},{' '}
-                </span>
-                <span className="text-base truncate text-pink-swan">
-                  {msToTime(totalArtistTrackDuration(itemTracks))}
-                </span>
-              </>
-            )}
-
-            {/*collection -liked songs*/}
-            {item?.type === 'collection' && (
-              <>
-                <span>{capitalize(item?.publisher)}&nbsp;•&nbsp;</span>
-                <span>
-                  {item?.total} {item?.total > 1 ? 'songs' : 'song'},{' '}
-                </span>
-                <span className="text-base truncate text-pink-swan">
-                  {msToTime(totalCollectionTrackDuration(item))}
-                </span>
-              </>
-            )}
+              {/*collection - liked songs*/}
+              {item?.type === 'collection' && (
+                <>
+                  <span>
+                    {capitalize(item?.owner?.display_name)}&nbsp;•&nbsp;
+                  </span>
+                  <span>
+                    {item?.total} {item?.total > 1 ? 'songs' : 'song'},{' '}
+                  </span>
+                  <span className="text-base truncate text-pink-swan">&nbsp;
+                    {msToTime(totalCollectionTrackDuration(item))}
+                  </span>
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>
