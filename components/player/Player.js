@@ -333,7 +333,7 @@ function Player() {
   };
 
   return (
-    <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3">
+    <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
       <PlayingInfo /> {/* left hand side - album photo/info */}
       {/* player controls */}
       <div className="flex items-center justify-evenly">
