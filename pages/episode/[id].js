@@ -8,7 +8,7 @@ import { getMonthYear, msToTime } from '@/lib/time';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
-import QuickShowPlayBanner from '@/components/player/QuickShowPlayBanner';
+import QuickEpisodePlayBanner from '@/components/player/QuickShowPlayBanner';
 import Footer from '@/components/navigation/Footer';
 
 export async function getServerSideProps(context) {
@@ -99,7 +99,7 @@ const EpisodePage = ({ episode }) => {
           />
         </aside>
 
-        <QuickShowPlayBanner item={episode} scrollRef={scrollRef} />
+        <QuickEpisodePlayBanner item={episode} scrollRef={scrollRef} />
 
         <section className="p-5 xs:px-8 max-w-4xl mb-14">
           <h2 className="text-white text-xl md:text-2xl xl:text-3xl mb-5">

@@ -33,7 +33,7 @@ function GenreHeading({ heading, scrollRef }) {
 
   return (
     <>
-      <div className="absolute top-0 w-full z-20">
+      <div className="absolute top-0 w-full z-[25]">
         <div className=" h-20 bg-black" style={{ opacity }}>
           <div
             className={` ${

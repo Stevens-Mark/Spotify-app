@@ -11,6 +11,12 @@ const useInfiniteScroll = (fetchMoreData) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const handleScroll = () => {
+
+    // const containerNode = containerRef.current;
+
+    // if (!containerNode) return; // Check if containerNode is null before proceeding:
+    // won't throw an error even if the ref is not yet set or has been unset when the component unmounts
+
     const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
     // Check if the user has scrolled to the bottom and is not currently fetching data

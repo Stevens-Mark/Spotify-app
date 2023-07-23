@@ -42,7 +42,7 @@ function MediaResultList(props) {
           <>
             {heading ? (
               <>
-                <h1 className="px-5 text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
+                <h1 className=" text-white text-3xl xs:text-4xl sm:text-5xl 2xl:text-8xl mt-28 mb-16">
                   {heading}
                 </h1>
 

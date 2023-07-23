@@ -8,7 +8,7 @@ import {
 } from '@/atoms/otherAtoms';
 // import icon/images
 import Image from 'next/image';
-import noImage from '@/public/images/noImageAvailable.svg';
+import noImage from '@/public/images/user_noImage.svg';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';

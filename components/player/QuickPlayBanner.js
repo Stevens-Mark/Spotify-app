@@ -184,7 +184,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               </>
             )}
             {item?.type === 'show' && (
-              <span className="ml-5 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 truncate pr-[100px] md:pr-[250px]">
+              <span className="ml-20 isSm:ml-28 drop-shadow-text text-white text-xl font-bold p-2 truncate pr-[100px] md:pr-[250px]">
                 {capitalize(item?.name)}
               </span>
             )}
@@ -193,7 +193,7 @@ function QuickPlayBanner({ item, scrollRef }) {
       </div>
 
       {item?.type !== 'show' && (
-        <div className="sticky -top-2 z-10">
+        <div className="sticky -top-1 z-10">
           <div className={`flex items-center py-4 w-full bg-black`}>
             <button
               className={`ml-5 isSm:ml-8 rounded-full text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-95`}
@@ -225,7 +225,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               <TitleAlbumDateTimeLabel collection={true} />
             )}
           </div>
-          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
+          <hr className="border-t-1 text-gray-400 mx-5 xs:mx-[3rem]" />
         </div>
       )}
     </>

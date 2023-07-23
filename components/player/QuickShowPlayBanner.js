@@ -234,7 +234,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
             <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
           </div>
 
-          <hr className="border-t-1 text-gray-400 mx-4 xs:mx-[3rem]" />
+          <hr className="border-t-1 text-gray-400 mx-5 xs:mx-[3rem]" />
         </div>
       )}
     </>

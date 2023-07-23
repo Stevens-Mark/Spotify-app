@@ -122,7 +122,7 @@ function Sidebar() {
         aria-label="Playlist menu"
         className={`md:pt-7 pt-20 text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide ${
           isMenuOpen
-            ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-20'
+            ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-50'
             : 'hidden '
         } md:inline md:relative min-w-[13rem] isMdLg:min-w-[16rem] lg:w-[21%]`}
       >
