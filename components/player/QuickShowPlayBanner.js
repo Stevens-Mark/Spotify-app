@@ -62,9 +62,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
 
-  useEffect(() => {
-    setOriginId((router?.asPath).split('/').pop());
-  }, [router?.asPath, setOriginId]);
+  // useEffect(() => {
+  //   setOriginId((router?.asPath).split('/').pop());
+  // }, [router?.asPath, setOriginId]);
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();

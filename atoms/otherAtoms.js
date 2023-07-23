@@ -12,7 +12,7 @@ export const currentItemIdState = atom({
   default: null,
 });
 
-// track which album,artist or playlist a song came from: help play/pause control for quickplayer
+// helps track which album,artist or playlist a song came from: help play/pause control for quickplayer
 export const originIdState = atom({
   key: 'originIdState',
   default: null,

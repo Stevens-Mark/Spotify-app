@@ -50,19 +50,19 @@ function Player() {
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-
-  // check whether on a single episode page (to disable skip forward/previous controls)
   const [isEpisode, setIsEpisode] = useState(false);
-  // check whether on a single artist page (to disable setting CurrentItemId to album.id in skip forward/previous controls)
   const [isArtist, setIsArtist] = useState(false);
 
   useEffect(() => {
+    // take ID from url each time page changed
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
+    // check whether on a single episode page (to disable skip forward/previous controls)
     const isEpisode = (router?.asPath).includes('episode');
     setIsEpisode(isEpisode);
+    // check whether on a single artist page (to disable setting CurrentItemId to album.id in skip forward/previous controls)
     const isArtist = (router?.asPath).includes('artist');
     setIsArtist(isArtist);
   }, [router?.asPath]);

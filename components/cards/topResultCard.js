@@ -80,7 +80,9 @@ function TopResultCard({ item }) {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
       // (currentItemId === item?.album?.id && isPlaying) ||
-      (currentAlbumId === item?.album?.id && currentTrackId === item?.id && isPlaying);
+       currentTrackId === item?.id && isPlaying 
+      //  ||
+      // (currentAlbumId === item?.album?.id && currentTrackId === item?.id && isPlaying);
 
     setActiveStatus(newActiveStatus);
   }, [
