@@ -6,7 +6,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentItemIdState } from '@/atoms/otherAtoms';
+import { currentItemIdState, originIdState } from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -36,7 +36,7 @@ function Player() {
   const router = useRouter();
 
   const [shuffleState, setShuffletState] = useState(false); // shuffle functionality
-  const [repeatState, setRepeatState] = useState(0); // repaet functionality
+  const [repeatState, setRepeatState] = useState(0); // repeat functionality
   const [volume, setVolume] = useState(50); // volume functionality
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -45,19 +45,26 @@ function Player() {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
-
-  
   // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
 
-  // check whether on a sinle episode page (to dissable skip forward/previous controls)
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const [originId, setOriginId] = useRecoilState(originIdState);
+
+  // check whether on a single episode page (to disable skip forward/previous controls)
   const [isEpisode, setIsEpisode] = useState(false);
+  // check whether on a single artist page (to disable setting CurrentItemId to album.id in skip forward/previous controls)
+  const [isArtist, setIsArtist] = useState(false);
+
+  useEffect(() => {
+    setOriginId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
     const isEpisode = (router?.asPath).includes('episode');
     setIsEpisode(isEpisode);
+    const isArtist = (router?.asPath).includes('artist');
+    setIsArtist(isArtist);
   }, [router?.asPath]);
 
   const debounceAdjustVolume = useMemo(
@@ -158,14 +165,14 @@ function Player() {
                       setCurrentTrackId(data.body?.item?.id);
                     }
                     // when navigating songs set album id on skip (currently doesn't work correctly for artists)
-                    // if (
-                    //   data.body?.currently_playing_type !== 'episode' &&
-                    //   data.body.context === null &&
-                    //   data.body?.item.album.type === 'album'
-                    // ) {
-
-                    //   setCurrentItemId(data.body?.item?.album?.id);
-                    // }
+                    if (
+                      data.body?.currently_playing_type !== 'episode' &&
+                      data.body.context === null &&
+                      data.body?.item.album.type === 'album' &&
+                      (originId !== 'collection' || !isArtist)
+                    ) {
+                      setCurrentItemId(data.body?.item?.album?.id);
+                    }
                     if (currentSongIndex > 0) {
                       setCurrentSongIndex(currentSongIndex - 1);
                     } else {
@@ -281,18 +288,19 @@ function Player() {
                   .then((data) => {
                     console.log('in skip ', data.body);
                     if (data.body?.currently_playing_type === 'episode') {
-                     setCurrentTrackId(findNextEpisodeId);
+                      setCurrentTrackId(findNextEpisodeId);
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
-                    // when navigating songs set album id on skip (currently doesn't work correctly for artists)
-                    // if (
-                    //   data.body?.currently_playing_type !== 'episode' &&
-                    //   data.body.context === null &&
-                    //   data.body?.item.album.type === 'album'
-                    // ) {
-                    //   setCurrentItemId(data.body?.item?.album?.id);
-                    // }
+                    // when navigating "songs" set album id on skip (currently doesn't work correctly for artists)
+                    if (
+                      data.body?.currently_playing_type !== 'episode' &&
+                      data.body.context === null &&
+                      data.body?.item.album.type === 'album' &&
+                      (originId !== 'collection' || !isArtist)
+                    ) {
+                      setCurrentItemId(data.body?.item?.album?.id);
+                    }
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
                   .catch((err) => {
