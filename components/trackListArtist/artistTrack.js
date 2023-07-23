@@ -56,20 +56,20 @@ function ArtistTrack({ track, order }) {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        currentSongIndex == null &&
-        currentTrackId !== null &&
-        artistTracklist !== null
-      ) {
-        const indexPosition = artistTracklist?.tracks?.findIndex(
-          (x) => x.id == currentTrackId
-        );
-        setCurrentSongIndex(indexPosition);
-      }
-    }, 500);
-  }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (
+  //       currentSongIndex == null &&
+  //       currentTrackId !== null &&
+  //       artistTracklist !== null
+  //     ) {
+  //       const indexPosition = artistTracklist?.tracks?.findIndex(
+  //         (x) => x.id == currentTrackId
+  //       );
+  //       setCurrentSongIndex(indexPosition);
+  //     }
+  //   }, 500);
+  // }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track

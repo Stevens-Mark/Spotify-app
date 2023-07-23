@@ -58,20 +58,20 @@ function RecentPlayedTrack({ track, order }) {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      if (
-        currentSongIndex == null &&
-        currentTrackId !== null &&
-        recentlyList !== null
-      ) {
-        const indexPosition = recentlyList?.tracks?.items?.findIndex(
-          (x) => x.id == currentTrackId
-        );
-        setCurrentSongIndex(indexPosition);
-      }
-    }, 500);
-  }, [currentSongIndex, currentTrackId, setCurrentSongIndex, recentlyList]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (
+  //       currentSongIndex == null &&
+  //       currentTrackId !== null &&
+  //       recentlyList !== null
+  //     ) {
+  //       const indexPosition = recentlyList?.tracks?.items?.findIndex(
+  //         (x) => x.id == currentTrackId
+  //       );
+  //       setCurrentSongIndex(indexPosition);
+  //     }
+  //   }, 500);
+  // }, [currentSongIndex, currentTrackId, setCurrentSongIndex, recentlyList]);
 
   /**
    * Either play or pause current track
