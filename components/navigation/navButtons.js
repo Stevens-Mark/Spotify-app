@@ -19,7 +19,13 @@ function NavigationButtons() {
   const [navIndex, setNnavIndex] = useRecoilState(navIndexState);
 
   useEffect(() => {
-    setCanGoBack(router.asPath !== '/');
+    // Check if the current URL is '/' (when local server) or contains the "code" query parameter (when deployed)
+    const isRootPath = router.asPath === '/';
+    const hasCodeQueryParam = router.asPath.includes('?code=');
+
+    // If the current URL is '/' or contains the "code" query parameter, the user cannot go back
+    setCanGoBack(!(isRootPath || hasCodeQueryParam));
+
     setCanGoForward(navIndex < window.history.length - 1);
   }, [navIndex, router.asPath]);
 
