@@ -40,6 +40,7 @@ function Albums() {
 
   const albums = queryResults?.albums?.items;
   const totalNumber = queryResults?.albums?.total;
+  console.log( "query " , queryResults)
 
   useEffect(() => {
     if (!query) {
@@ -63,7 +64,7 @@ function Albums() {
    */
   const fetchMoreData = () => {
     if (!stopFetch) {
-      const itemsPerPage = 30;
+      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
       setIsSearching(true);
 

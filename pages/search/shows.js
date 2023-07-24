@@ -63,7 +63,7 @@ function Shows() {
    */
   const fetchMoreData = () => {
     if (!stopFetch) {
-      const itemsPerPage = 30;
+      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
       setIsSearching(true);
 

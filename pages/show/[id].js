@@ -144,7 +144,7 @@ const ShowPage = ({ showInfo }) => {
    * @returns {object} updated list in showEpisodesUris/showEpisodesList
    */
   const fetchMoreData = () => {
-    const itemsPerPage = 30;
+    const itemsPerPage = 25;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
     fetch(

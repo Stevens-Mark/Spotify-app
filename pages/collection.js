@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
   const fetchLiked = async () => {
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/me/tracks?limit=${30}`,
+        `https://api.spotify.com/v1/me/tracks?limit=${25}`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
@@ -112,7 +112,7 @@ const LikedPage = ({ likedTracks }) => {
   const fetchMoreData = async () => {
     if (!stopFetch) {
       // If we reached the end, don't fetch more
-      const itemsPerPage = 30;
+      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
 
       try {

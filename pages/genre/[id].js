@@ -112,7 +112,7 @@ function Genres({ genreData }) {
    */
   const fetchMoreData = async () => {
     if (genreList && !stopFetch) {
-      const itemsPerPage = 30;
+      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
       try {
         const res = await fetch(
