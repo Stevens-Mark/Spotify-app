@@ -141,7 +141,7 @@ function EpisodeCard({ track, order, whichList }) {
       (track?.id === currentTrackId && isPlaying) ||
       (currentItemId === track?.id && isPlaying);
     setActiveStatus(newActiveStatus);
-  }, [track?.id, currentTrackId, isPlaying, currentItemId]);
+  }, [currentItemId, currentTrackId, isPlaying, track?.id]);
 
   return (
     <Link href={`/episode/${track?.id}`} passHref>

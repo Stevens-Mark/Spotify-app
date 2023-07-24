@@ -29,6 +29,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
@@ -39,6 +40,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
@@ -49,6 +51,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
@@ -67,6 +70,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
@@ -77,6 +81,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="space-x-2 text-pink-swan hover:text-white"
               >
@@ -87,6 +92,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
@@ -96,6 +102,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
@@ -105,6 +112,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
@@ -114,6 +122,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
@@ -132,6 +141,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
@@ -142,6 +152,7 @@ function Footer() {
             <li>
               <Link
                 href="#"
+                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
@@ -154,7 +165,7 @@ function Footer() {
         {/* group four - social media */}
 
         <div className="flex space-x-4 xxs:justify-end mb-10">
-          <Link href="#" onClick={disableLinkClick}>
+          <Link href="#" passHref onClick={disableLinkClick}>
             <Image
               className="h-10 w-10 p-2 bg-gray-800 rounded-full hover:bg-gray-700 min-w-12"
               src={instagramIcon}
@@ -162,7 +173,7 @@ function Footer() {
             />
           </Link>
 
-          <Link href="#" onClick={disableLinkClick}>
+          <Link href="#" passHref onClick={disableLinkClick}>
             <Image
               className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
               src={twitterIcon}
@@ -170,7 +181,7 @@ function Footer() {
             />
           </Link>
 
-          <Link href="#" onClick={disableLinkClick}>
+          <Link href="#" passHref onClick={disableLinkClick}>
             <Image
               className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
               src={facebookIcon}
@@ -204,6 +215,7 @@ function Footer() {
           href="https://stevensmarkportfolio.netlify.app/"
           target="_blank"
           rel="noopener noreferrer"
+          passHref
         >
           <p className="text-white whitespace-nowrap hover:underline">
             © 2023 Mark Stevens

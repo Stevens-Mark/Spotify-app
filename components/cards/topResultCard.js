@@ -82,20 +82,9 @@ function TopResultCard({ item }) {
   useEffect(() => {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
-      // (currentItemId === item?.album?.id && isPlaying) ||
        currentTrackId === item?.id && isPlaying 
-      //  ||
-      // (currentAlbumId === item?.album?.id && currentTrackId === item?.id && isPlaying);
-
     setActiveStatus(newActiveStatus);
-  }, [
-    currentAlbumId,
-    currentItemId,
-    currentTrackId,
-    isPlaying,
-    item?.album?.id,
-    item?.id,
-  ]);
+  }, [currentItemId, currentTrackId, isPlaying, item?.id]);
 
   return (
     <Link href={linkAddress} passHref className="group">
@@ -138,9 +127,9 @@ function TopResultCard({ item }) {
           {item?.type === 'album' && (
             <>
               <span className="truncate">
-                <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
+                <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
 
-                {item?.artists.slice(0, 2).map((item) => (
+                {item?.artists?.slice(0, 2).map((item) => (
                   <span className="trucate mr-5" key={item?.id}>
                     {item?.name}.&nbsp;
                   </span>

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
-import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { likedUrisState } from '@/atoms/songAtom';
@@ -32,7 +31,6 @@ import RenderTracks from '../trackRender/renderTracks';
 function LikedTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
-  const router = useRouter();
 
   const likedTrackUris = useRecoilValue(likedUrisState);
 
@@ -41,35 +39,14 @@ function LikedTrack({ track, order }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  const [originId, setOriginId] = useRecoilState(originIdState);
+  const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
-
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentTrackId !== null &&
-  //       likedTracklist !== null
-  //     ) {
-  //       const indexPosition = likedTracklist?.tracks?.findIndex(
-  //         (x) => x.id == currentTrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, 500);
-  // }, [currentSongIndex, currentTrackId, likedTracklist, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track
@@ -82,7 +59,6 @@ function LikedTrack({ track, order }) {
     event.stopPropagation();
 
     const mediaTrackUris = likedTrackUris; //set variable to likedTrackUris (for HandleTrackPlayPause logic)
-
 
     const likedOptions = {
       originId,

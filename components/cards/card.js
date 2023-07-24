@@ -129,7 +129,7 @@ function Card({ item }) {
           {item?.type === 'album' && (
             <>
               <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
-              {item?.artists.slice(0, 2).map((item) => (
+              {item?.artists?.slice(0, 2).map((item) => (
                 <span className="truncate" key={item?.id}>
                   {item?.name}.&nbsp;
                 </span>
@@ -140,7 +140,7 @@ function Card({ item }) {
           {/* playlist*/}
           {item?.type === 'playlist' && (
             <span className="truncate">
-              By {capitalize(item?.owner.display_name)}
+              By {capitalize(item?.owner?.display_name)}
             </span>
           )}
 

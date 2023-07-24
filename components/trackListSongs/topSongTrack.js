@@ -9,7 +9,6 @@ import {
   currentSongIndexState,
   isPlayState,
   songsUrisState,
-  songsListState,
 } from '@/atoms/songAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
 import {
@@ -27,7 +26,7 @@ import TopSongCard from '../cards/topSongCard';
  * Renders each track from the song list
  * @function TopSongTrack
  * @param {object} track information
- * @param {number} order track index 
+ * @param {number} order track index
  * @returns {JSX}
  */
 function TopSongTrack({ track, order }) {
@@ -36,7 +35,6 @@ function TopSongTrack({ track, order }) {
 
   const router = useRouter();
 
-  const songsList = useRecoilValue(songsListState);
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
@@ -50,30 +48,13 @@ function TopSongTrack({ track, order }) {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveArtist = useSetRecoilState(activeArtistState);
 
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentTrackId !== null &&
-  //       songsList !== null
-  //     ) {
-  //       const indexPosition = songsList?.tracks?.items?.findIndex(
-  //         (x) => x.id == currentTrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, 500);
-  // }, [currentSongIndex, currentTrackId, setCurrentSongIndex, songsList]);
 
   /**
    * Either play or pause current track

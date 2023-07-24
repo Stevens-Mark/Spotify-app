@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
 // import { colors } from '@/styles/colors';

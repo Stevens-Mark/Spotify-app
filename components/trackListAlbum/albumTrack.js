@@ -1,9 +1,8 @@
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { albumIdState, albumTrackListState } from '@/atoms/albumAtom';
+import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -32,44 +31,20 @@ function AlbumTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  const router = useRouter();
-
   const currentAlbumId = useRecoilValue(albumIdState);
-  const albumTracklist = useRecoilValue(albumTrackListState);
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  const [originId, setOriginId] = useRecoilState(originIdState);
+  const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
-
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentTrackId !== null &&
-  //       albumTracklist !== null
-  //     ) {
-  //       const indexPosition = albumTracklist?.tracks?.items?.findIndex(
-  //         (x) => x.id == currentTrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, 500);
-  // }, [albumTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track

@@ -31,7 +31,6 @@ export async function getServerSideProps(context) {
         }
       );
       const data = await res.json();
-      console.log("likes ", data)
       // add this information to allow us to create the media banner for liked songs
       data.id = 'collection';
       data.type = 'collection';

@@ -66,7 +66,7 @@ const TopSongCard = ({
             {song?.name}
           </h3>
           <p className="w-36 xxs:w-60 md:w-80 pr-2 truncate">
-            {song?.artists?.[0].name}
+            {song?.artists?.[0]?.name}
           </p>
         </div>
       </div>

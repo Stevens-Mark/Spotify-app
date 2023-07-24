@@ -10,9 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import {
-  showEpisodesUrisState,
-} from '@/atoms/showAtom';
+import { showEpisodesUrisState } from '@/atoms/showAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
@@ -51,11 +49,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  const  setCurrentSongIndex = useSetRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-   // used to set play/pause icons
+  // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
 
   // show track info when play button at top of screen

@@ -28,7 +28,7 @@ const Layout = ({ children }) => {
         >
           <Image
             className="rounded-full w-9 h-9"
-            src={session?.user.image || noUserImage}
+            src={session?.user?.image || noUserImage}
             alt=""
             width={100}
             height={100}
@@ -36,7 +36,7 @@ const Layout = ({ children }) => {
             priority
           />
           <p className={`hidden  isMdLg:inline`}>
-            {session?.user.name}
+            {session?.user?.name}
           </p>
           <ChevronDownIcon
             className={`h-5 w-5 hidden  isMdLg:inline`}

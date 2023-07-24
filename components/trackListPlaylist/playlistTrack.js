@@ -1,6 +1,5 @@
 import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -34,7 +33,6 @@ import RenderTracks from '../trackRender/renderTracks';
 function PlaylistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track.track;
-  const router = useRouter();
 
   const playlistId = useRecoilValue(playlistIdState);
   const playlist = useRecoilValue(playlistTrackListState);
@@ -43,7 +41,7 @@ function PlaylistTrack({ track, order }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  const [originId, setOriginId] = useRecoilState(originIdState);
+  const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
@@ -52,10 +50,6 @@ function PlaylistTrack({ track, order }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
-
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
     setTimeout(() => {

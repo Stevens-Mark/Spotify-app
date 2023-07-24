@@ -40,8 +40,7 @@ function Albums() {
 
   const albums = queryResults?.albums?.items;
   const totalNumber = queryResults?.albums?.total;
-  console.log( "query " , queryResults)
-
+ 
   useEffect(() => {
     if (!query) {
       router.push('/search');

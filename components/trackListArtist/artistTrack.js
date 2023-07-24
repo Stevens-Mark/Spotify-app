@@ -1,13 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
-import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import {
-  artistTrackListState,
-  artistTrackUrisState,
-  activeArtistState,
-} from '@/atoms/artistAtom';
+import { artistTrackUrisState, activeArtistState } from '@/atoms/artistAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
@@ -36,9 +31,6 @@ function ArtistTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  const router = useRouter();
-
-  const artistTracklist = useRecoilValue(artistTrackListState);
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
@@ -46,35 +38,14 @@ function ArtistTrack({ track, order }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
-  const [originId, setOriginId] = useRecoilState(originIdState);
+  const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
-
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
-
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentTrackId !== null &&
-  //       artistTracklist !== null
-  //     ) {
-  //       const indexPosition = artistTracklist?.tracks?.findIndex(
-  //         (x) => x.id == currentTrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, 500);
-  // }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track
@@ -87,7 +58,6 @@ function ArtistTrack({ track, order }) {
     event.stopPropagation();
 
     const mediaTrackUris = artistTrackUris; //set variable to artistTrackUris (for HandleTrackPlayPause logic)
-    // const fromArtist = true;
 
     const artistOptions = {
       originId,

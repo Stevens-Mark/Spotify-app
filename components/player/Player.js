@@ -76,7 +76,7 @@ function Player() {
           spotifyApi
             .getMyDevices()
             .then((data) => {
-              const activeDevice = data.body.devices.find(
+              const activeDevice = data.body?.devices.find(
                 (device) => device.is_active
               );
               console.log(

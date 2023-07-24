@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
 import { getSession } from 'next-auth/react';
-import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 // custom hooks
 import useScrollToTop from '@/hooks/useScrollToTop';

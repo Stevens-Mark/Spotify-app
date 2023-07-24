@@ -41,7 +41,6 @@ const colors = [
  * @returns {JSX}
  */
 const MediaHeading = ({ item, itemTracks }) => {
-  console.log('item ', item);
   const spotifyApi = useSpotify();
 
   const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
@@ -78,13 +77,13 @@ const MediaHeading = ({ item, itemTracks }) => {
     // otherwise if an Album - Get artist's image
     if (item?.artists?.[0]?.id) {
       spotifyApi
-        .getArtist(item.artists[0].id)
+        .getArtist(item?.artists?.[0]?.id)
         .then((data) => {
           setUserImage(data?.body?.images?.[0]?.url);
         })
         .catch((err) => console.error('Artist image retrieval failed:'));
     }
-  }, [item.artists, item?.owner?.id, spotifyApi]);
+  }, [item?.artists, item?.owner?.id, spotifyApi]);
 
   return (
     <div
@@ -187,7 +186,7 @@ const MediaHeading = ({ item, itemTracks }) => {
               {item?.type === 'album' && (
                 <>
                   <span>{item?.artists?.[0]?.name}&nbsp;•&nbsp;</span>
-                  <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
+                  <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
                   <span className="text-base">
                     {item?.tracks?.items?.length}{' '}
                     {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}

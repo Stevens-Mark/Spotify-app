@@ -1,7 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-// import { bgColors } from '@/styles/colors';
 
 // color options for genre card backgrounds: total: 26
 const bgColors = [
