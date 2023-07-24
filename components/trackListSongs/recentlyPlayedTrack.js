@@ -11,6 +11,7 @@ import {
   recentlyUrisState,
   recentlyListState,
 } from '@/atoms/songAtom';
+import { activeArtistState } from '@/atoms/artistAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
@@ -53,6 +54,7 @@ function RecentPlayedTrack({ track, order }) {
   );
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
 
   // useEffect(() => {
   //   setOriginId((router?.asPath).split('/').pop());
@@ -88,7 +90,7 @@ function RecentPlayedTrack({ track, order }) {
     const songsOptions = {
       originId,
       song,
-      mediaTrackUris, // determines it's recently played to play in play/pause function
+      mediaTrackUris, //send array of uris to play in play/pause function
       setCurrentItemId,
       currentTrackIndex,
       setCurrentTrackId,
@@ -99,6 +101,8 @@ function RecentPlayedTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
+      fromArtist: false,
+      setActiveArtist,
     };
     HandleTrackPlayPause(songsOptions);
   };

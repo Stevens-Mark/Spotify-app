@@ -9,5 +9,5 @@ export const albumIdState = atom({
 // list of tracks in album
 export const albumTrackListState = atom({
   key: 'albumTrackListState',
-  default: null,
+  default: [],
 });

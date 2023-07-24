@@ -9,6 +9,7 @@ import {
 // import icon/images
 import Image from 'next/image';
 import noImage from '@/public/images/user_noImage.svg';
+import noCoverImage from '@/public/images/noImageAvailable.svg';
 // import functions
 import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
@@ -40,6 +41,7 @@ const colors = [
  * @returns {JSX}
  */
 const MediaHeading = ({ item, itemTracks }) => {
+  console.log('item ', item);
   const spotifyApi = useSpotify();
 
   const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
@@ -62,28 +64,27 @@ const MediaHeading = ({ item, itemTracks }) => {
   }, [item?.images, setBackgroundColor, setRandomColor]);
 
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      // if liked songs or playlist - Get owner's image
-      if (item?.owner?.id) {
-        spotifyApi
-          .getUser(item?.owner?.id)
-          .then((data) => {
-            setUserImage(data?.body?.images?.[0]?.url);
-          })
-          .catch((err) => console.error('Owner image retrieval failed:'));
-      }
+    // if liked songs or playlist - Get owner's image
+    if (item?.owner?.id) {
+      spotifyApi
+        .getUser(item?.owner?.id)
 
-      // otherwise if an Album - Get artist's image
-      if (item?.artists?.[0]?.id) {
-        spotifyApi
-          .getArtist(item.artists[0].id)
-          .then((data) => {
-            setUserImage(data?.body?.images?.[0]?.url);
-          })
-          .catch((err) => console.error('Artist image retrieval failed:'));
-      }
+        .then((data) => {
+          setUserImage(data?.body?.images?.[0]?.url);
+        })
+        .catch((err) => console.error('Owner image retrieval failed:'));
     }
-  }, [item?.artists, item?.owner?.id, spotifyApi]);
+
+    // otherwise if an Album - Get artist's image
+    if (item?.artists?.[0]?.id) {
+      spotifyApi
+        .getArtist(item.artists[0].id)
+        .then((data) => {
+          setUserImage(data?.body?.images?.[0]?.url);
+        })
+        .catch((err) => console.error('Artist image retrieval failed:'));
+    }
+  }, [item.artists, item?.owner?.id, spotifyApi]);
 
   return (
     <div
@@ -96,7 +97,7 @@ const MediaHeading = ({ item, itemTracks }) => {
     >
       <Image
         className="h-16 w-16 xs:h-44 xs:w-44 lg:h-[14.5rem] lg:w-[14.5rem] shadow-image2 aspect-square"
-        src={item?.images?.[0]?.url || noImage}
+        src={item?.images?.[0]?.url || noCoverImage}
         alt=""
         width={100}
         height={100}

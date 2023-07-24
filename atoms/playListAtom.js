@@ -9,14 +9,8 @@ export const playlistIdState = atom({
 // list of tracks in playlist
 export const playlistTrackListState = atom({
   key: 'playlistTrackListState',
-  default: null,
+  default: [],
 });
-
-// // list of (user made) playlists retrieved
-// export const myPlaylistState = atom({
-//   key: 'myPlaylistState',
-//   default: null,
-// });
 
 // current (user made) playlist (from sidebar) showing on the screen
 export const activePlaylistIdState = atom({
@@ -25,7 +19,7 @@ export const activePlaylistIdState = atom({
   default: null,
 });
 
-// whether a track playing or not in quickplayerbanners
+// whether a track playing or not from user playlist (used for setting speaker in sidebar)
 export const activePlaylistState = atom({
   key: 'activePlaylistState',
   default: null,

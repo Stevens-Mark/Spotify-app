@@ -8,6 +8,7 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
+import { activeArtistState } from '@/atoms/artistAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
@@ -50,6 +51,7 @@ function PlaylistTrack({ track, order }) {
   );
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
 
   // useEffect(() => {
   //   setOriginId((router?.asPath).split('/').pop());
@@ -93,6 +95,8 @@ function PlaylistTrack({ track, order }) {
       setIsPlaying,
       setActivePlaylist,
       spotifyApi,
+      fromArtist: false,
+      setActiveArtist,
     };
     HandleTrackPlayPause(playlistsOptions);
   };
@@ -103,7 +107,7 @@ function PlaylistTrack({ track, order }) {
     const newActiveStatus =
       song?.id === currentTrackId && order === currentSongIndex && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
+  }, [currentSongIndex, currentTrackId, isPlaying, order, song?.id]);
 
   return (
     <RenderTracks

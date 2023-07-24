@@ -3,7 +3,11 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { artistTrackListState, artistTrackUrisState } from '@/atoms/artistAtom';
+import {
+  artistTrackListState,
+  artistTrackUrisState,
+  activeArtistState,
+} from '@/atoms/artistAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
@@ -51,6 +55,7 @@ function ArtistTrack({ track, order }) {
   );
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
 
   // useEffect(() => {
   //   setOriginId((router?.asPath).split('/').pop());
@@ -81,13 +86,13 @@ function ArtistTrack({ track, order }) {
     event.preventDefault();
     event.stopPropagation();
 
-    
     const mediaTrackUris = artistTrackUris; //set variable to artistTrackUris (for HandleTrackPlayPause logic)
+    // const fromArtist = true;
 
     const artistOptions = {
       originId,
       song,
-      mediaTrackUris, // determines it's artist to play in play/pause function
+      mediaTrackUris, //send array of uris to play in play/pause function
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
@@ -98,6 +103,8 @@ function ArtistTrack({ track, order }) {
       setActivePlaylist,
       spotifyApi,
       setCurrentAlbumId,
+      fromArtist: true,
+      setActiveArtist,
     };
     HandleTrackPlayPause(artistOptions);
   };
@@ -105,10 +112,9 @@ function ArtistTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus =
-      song?.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, isPlaying, order, currentSongIndex]);
+  }, [currentTrackId, isPlaying, song?.id]);
 
   return (
     <RenderTracks

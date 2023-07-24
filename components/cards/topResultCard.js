@@ -11,6 +11,7 @@ import {
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { albumIdState } from '@/atoms/albumAtom';
+import { activeArtistState } from '@/atoms/artistAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
@@ -35,6 +36,7 @@ function TopResultCard({ item }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
@@ -69,6 +71,7 @@ function TopResultCard({ item }) {
       setCurrentTrackId,
       setCurrentSongIndex,
       setActivePlaylist,
+      setActiveArtist,
       spotifyApi,
       currentTrackId
     );

@@ -1,6 +1,6 @@
 import { atom } from 'recoil';
 
-// used o set whether to show an error message in the serach field when there error fetching search results
+// used to set whether to show an error message in the serach field when there error fetching search results
 export const errorState = atom({
   key: 'errorState',
   default: false,

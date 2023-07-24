@@ -126,7 +126,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     uris: [item?.uri],
                   })
                   .then(() => {
-                     setPlayerInfoType('episode');
+                    setPlayerInfoType('episode');
                     setIsPlaying(true);
                     setCurrentItemId(originId);
                     setCurrentTrackId(originId);

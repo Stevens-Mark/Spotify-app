@@ -10,7 +10,8 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import {  albumIdState } from '@/atoms/albumAtom';
+import { albumIdState } from '@/atoms/albumAtom';
+import { activeArtistState } from '@/atoms/artistAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // import functions
 import { millisecondsToMinutes, getMonthYear } from '@/lib/time';
@@ -33,6 +34,7 @@ function Card({ item }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
@@ -70,6 +72,7 @@ function Card({ item }) {
       setCurrentTrackId,
       setCurrentSongIndex,
       setActivePlaylist,
+      setActiveArtist,
       spotifyApi
     );
   };

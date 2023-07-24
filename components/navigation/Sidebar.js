@@ -22,6 +22,7 @@ import {
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 import LikedButton from './likedSongsButton';
+import noCoverImage from '@/public/images/noImageAvailable.svg';
 
 function Sidebar() {
   const router = useRouter();
@@ -207,7 +208,7 @@ function Sidebar() {
               >
                 <Image
                   className="h-8 w-8 mr-1 rounded-sm"
-                  src={playlist?.images?.[0].url}
+                  src={playlist?.images?.[0]?.url || noCoverImage}
                   alt=""
                   width={100}
                   height={100}

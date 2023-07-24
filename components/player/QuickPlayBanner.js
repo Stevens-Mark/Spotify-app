@@ -9,6 +9,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
+import { activeArtistState } from '@/atoms/artistAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
@@ -43,6 +44,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
+  const setActiveArtist = useSetRecoilState(activeArtistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
@@ -110,6 +112,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               setCurrentTrackId,
               setCurrentSongIndex,
               setActivePlaylist,
+              setActiveArtist,
               spotifyApi
             );
           }
