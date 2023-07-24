@@ -110,7 +110,7 @@ const NestedLayout = ({ children }) => {
                 className="relative text-gray-500 hover:text-white"
                 htmlFor="search"
               >
-                <MagnifyingGlassIcon className="pointer-events-none w-5 h-6 absolute top-1/2 transform -translate-y-1/2 left-3" />
+                <MagnifyingGlassIcon className="magnifying-glass-icon pointer-events-none w-5 h-6 absolute  transform -translate-y-1/2 left-3" />
                 <input
                   className="rounded-full bg-gray-900 hover:bg-gray-800 text-white text-sm w-[11.2rem] xxs:w-[14.8rem] lg:w-[25rem] cursor-pointer appearance-none block py-3 px-3 pl-10 placeholder-gray-500 hover:placeholder-white"
                   type="search"
