@@ -6,7 +6,11 @@
 
 # PROJECT PERSONAL *(English)*
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/59f221d2-28a3-4917-97bc-aa0e42de666f/deploy-status)](https://app.netlify.com/sites/spotifyclone2023/deploys)
 
+You can see the website at [Spotify-clone](https://spotifyclone2023.netlify.app/)
+
+NOTE: It runs better on chrome than firefox I think, but for some reason Chrome keeps blocking the site as dangerous. I  have asked them to review it as it's not a danger, but at time of wrting I am still waiting for a reply!!
 
 # SPOTIFY - A Spotify Clone
 
@@ -137,7 +141,11 @@ yarn dev
 
 # PROJET PERSONNEL *(français)*
 
+[![Netlify Status](https://api.netlify.com/api/v1/badges/59f221d2-28a3-4917-97bc-aa0e42de666f/deploy-status)](https://app.netlify.com/sites/spotifyclone2023/deploys)
 
+Vous pouvez voir le site web à l'adresse suivante : [Spotify-clone](https://spotifyclone2023.netlify.app/)
+
+NOTE : Il fonctionne mieux sur chrome que sur firefox je pense, mais pour une raison quelconque Chrome continue de bloquer le site comme étant dangereux. Je leur ai demandé de le revoir car il n'est pas dangereux, mais à l'heure où j'écris ces lignes, j'attends toujours une réponse !
 
 # SPOTIFY - Un clone de Spotify
 
