@@ -55,19 +55,18 @@ And finally, I used Tailwind for the first time & I loved it!!!
 
 ## Limitations / Areas for improvement
 - [x] The spotify site is (deceptively) huge, with a lot of functionality & features. I have not attempted to replicate the whole site.
-- [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
+- [x] You cannot add/delete/modify your playlists/liked songs from this app (maybe in the future).
 - [x] Episode ("up next") not implemented on show page.
-- [x] When a track has finished playing the green highlighting does not move along. This app "controls" the streaming service so does not receive real-time updates/feedback to update the states obviously
-- [x] The Algorithms used by Spotify to create the various lists are not available, so I cannot create lists like "sugguestions", "jump back in" or "mixes for...." etc
+- [x] When a track has finished playing the green highlighting does not move along. This app "controls" the streaming service so does not receive real-time updates/feedback to update the states.
+- [x] The Algorithms used by Spotify to create the various lists are not all available, so I cannot create lists like "jump back in" or "mixes for...." etc
 - [x] There are a presently a few known issues with my implementation, listed below:
 
 ## Known issues
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
-- [x] On the All search results page: if an artist has been selected & is playing, the "pause icon" disappears when the user presses forward or backwards on the player controls (not so obvious).
 - [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
-- [x] If an episode is curently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
+- [x] If an episode is currently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing so these is not features implemented by Spotify anyway.
-- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode or an artist).
+- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, likedsongs or an artist). This is because "getMyCurrentPlayingTrack" does not return the required info to set the trackid. It's to do with the way Spotify allows us to access/retrieve the likedsongs, episodes & top 10 artists tracks lists (which I have then put into an array of uris in order to be able to play them). Thus they are handled differently to album/playlists which return a "context".
 - [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/reloads the page.
 - [x] There are probably some other issues that I haven't spotted as yet.
 
@@ -185,21 +184,22 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 
 ## Limites / Domaines d'amélioration
 - [x] Le site spotify est (faussement) énorme, avec beaucoup de fonctionnalités et de caractéristiques. Je n'ai pas essayé de reproduire l'ensemble du site.
-- [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture à partir de cette application (peut-être à l'avenir).
+- [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture/chansons préférées à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
-- [x] Lorsqu'une piste a fini d'être jouée, le surlignage vert ne se déplace pas. Cette application "contrôle" le service de diffusion en continu et ne reçoit donc pas de mises à jour ou de retours en temps réel pour actualiser les états. 
-- [x] Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas disponibles, donc je ne peux pas créer des listes comme "suggestions", "jump back in" ou "mixes for...." etc.
+- Lorsqu'un morceau a fini d'être joué, le surlignage vert ne se déplace pas. Cette application "contrôle" le service de streaming et ne reçoit donc pas d'informations en temps réel pour mettre à jour les états.
+- Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas tous disponibles, donc je ne peux pas créer des listes comme "jump back in" ou "mixes for...." etc.
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :
+
 
 ## Problèmes connus
 - [x] L'implémentation des boutons de navigation avant et arrière n'est pas parfaite.
-- [x] Sur la page Tous les résultats de recherche : si un artiste a été sélectionné et est en cours de lecture, l'icône de pause disparaît lorsque l'utilisateur appuie en avant ou en arrière sur les commandes du lecteur (ce qui n'est pas très évident).
 - [x] Si la piste sélectionnée apparaît à la même position (index dans la liste des pistes) dans un autre album/liste de lecture, elle est également surlignée en vert (ce qui ne devrait pas être le cas puisqu'elle se trouve dans un autre album/liste de lecture).
-- [x] Si un épisode est en cours de lecture, "getMyCurrentPlayingTrack" ne renvoie aucune information sur la piste (seulement qu'un épisode est en cours de lecture), donc lors du rechargement de la page, aucune information sur la piste n'est affichée dans le coin inférieur gauche. Pour une piste "normale", cela fonctionne. Problème de réponse de Spotify ?
+- [x] Si un épisode est en cours de lecture, "getMyCurrentPlayingTrack" ne renvoie aucune information sur la piste (seulement qu'un épisode est en cours de lecture), donc lors du rechargement de la page, aucune information sur la piste n'est affichée dans le coin inférieur gauche. Pour une piste "normale", cela fonctionne. Problème de réponse de Spotify ??
 - [x] Aucun des problèmes ci-dessous n'est rédhibitoire car il est peu probable que l'utilisateur rafraîchisse la page soudainement. Dans Spotify, si vous rafraîchissez la page, tout s'arrête, donc ce ne sont pas des fonctionnalités implémentées par Spotify de toute façon.
-- [x] La bannière Quickplay perd l'état "icône de pause" (bien qu'un titre soit en cours de lecture) lorsque l'utilisateur rafraîchit/recharge la page (cela se produit pour un épisode ou un artiste).
-- [x] Sur la page d'un spectacle : Si un épisode a été sélectionné et est en cours de lecture, la surbrillance verte, qui indique la piste en cours de lecture, disparaît si l'utilisateur actualise/recharge la page.
+- [x] La bannière Quickplay perd l'état "icône de pause" (bien qu'un titre soit en cours de lecture) lorsque l'utilisateur rafraîchit/recharge la page (cela se produit pour un épisode, les likedsongs ou un artiste). Ceci est dû au fait que "getMyCurrentPlayingTrack" ne renvoie pas les informations nécessaires pour définir l'identifiant de la piste. C'est lié à la façon dont Spotify nous permet d'accéder/récupérer les listes de chansons likedsongs, d'épisodes et de titres du top 10 des artistes (que j'ai ensuite mis dans un tableau d'uris pour pouvoir les jouer). Elles sont donc gérées différemment des listes d'albums et de lecture qui renvoient un "contexte".
+- [x] Sur la page d'une émission : Si un épisode a été sélectionné et est en cours de lecture, la surbrillance verte, qui indique la piste en cours de lecture, disparaît si l'utilisateur rafraîchit/recharge la page.
 - [x] Il y a probablement d'autres problèmes que je n'ai pas encore détectés.
+
 
 # Installation *(français)*
 
