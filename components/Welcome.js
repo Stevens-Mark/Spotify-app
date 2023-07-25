@@ -105,11 +105,16 @@ function Welcome() {
             Why not listen to your playlists or search for something new...
           </h2>
           <p className="text-sm mt-6">
-            ( To use this app you need to have Spotify running in the back ground. If you don&apos;t have an account, please follow one of the links in the right hand bottom corner )
+            ( To use this app you need to have Spotify running in the back
+            ground. If you don&apos;t have an account, please follow one of the
+            links in the right hand bottom corner )
           </p>
           <p className="text-sm mt-6">
             ( Make sure to connect to your Spotify account & have a PREMIUM
             ACCOUNT to access all features )
+          </p>
+          <p className="text-m mt-6">
+            ( NOTE: ALL content is being supplied and made available by Spotify )
           </p>
         </div>
         <Footer />
