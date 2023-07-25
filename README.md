@@ -139,6 +139,7 @@ yarn dev
   <img src="/public/spotifyScreenshot.png" />
 </p>
 
+
 # PROJET PERSONNEL *(français)*
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/59f221d2-28a3-4917-97bc-aa0e42de666f/deploy-status)](https://app.netlify.com/sites/spotifyclone2023/deploys)
