@@ -111,6 +111,7 @@ function Card({ item }) {
             onClick={(event) => {
               HandleCardPlayPauseClick(event);
             }}
+            aria-label="Play or Pause track"
           >
             {activeStatus ? (
               <PauseCircleIcon className="w-12 h-12 -m-2" />

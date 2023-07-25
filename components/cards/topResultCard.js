@@ -12,10 +12,7 @@ import {
 import { activePlaylistState } from '@/atoms/playListAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
-import {
-  playerInfoTypeState,
-  currentItemIdState,
-} from '@/atoms/otherAtoms';
+import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
@@ -82,7 +79,7 @@ function TopResultCard({ item }) {
   useEffect(() => {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
-       currentTrackId === item?.id && isPlaying 
+      (currentTrackId === item?.id && isPlaying);
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, item?.id]);
 
@@ -110,6 +107,7 @@ function TopResultCard({ item }) {
           onClick={(event) => {
             HandleCardPlayPauseClick(event);
           }}
+          aria-label="Play or Pause"
         >
           {activeStatus ? (
             <PauseCircleIcon className="w-12 h-12 -m-2" />

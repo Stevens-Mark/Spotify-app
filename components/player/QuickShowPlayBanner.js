@@ -192,7 +192,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                   onClick={(event) => {
                     HandleEpisodePlayPauseClick(event);
                   }}
-                  aria-label="Play or Pause"
+                  aria-label="Play or Pause show/episode"
                 >
                   {activeStatus ? (
                     <PauseCircleIcon className="w-12 h-12" />

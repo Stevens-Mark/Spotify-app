@@ -174,6 +174,7 @@ function EpisodeCard({ track, order, whichList }) {
             onClick={(event) => {
               HandleEpisodePlayPause(event, order);
             }}
+            aria-label="Play or Pause episode"
           >
             {activeStatus && order == currentSongIndex ? (
               <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />

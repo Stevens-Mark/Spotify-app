@@ -17,7 +17,6 @@ const TopSongCard = ({
   order,
   activeStatus,
   song,
-
 }) => {
   return (
     <div
@@ -27,6 +26,7 @@ const TopSongCard = ({
       onClick={(event) => {
         HandleTrackPlayPauseClick(event, order);
       }}
+      aria-label="Play or Pause track"
     >
       <div className="flex relative">
         <Image
@@ -60,7 +60,7 @@ const TopSongCard = ({
         <div>
           <h3
             className={`w-36 xxs:w-60 md:w-80 pr-2 truncate ${
-              activeStatus? 'text-green-500' : 'text-white'
+              activeStatus ? 'text-green-500' : 'text-white'
             }`}
           >
             {song?.name}
