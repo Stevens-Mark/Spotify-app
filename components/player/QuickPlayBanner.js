@@ -174,6 +174,7 @@ function QuickPlayBanner({ item, scrollRef }) {
                   onClick={(event) => {
                     HandleCardPlayPauseClick(event);
                   }}
+                  aria-label="Play or Pause"
                 >
                   {activeStatus ? (
                     <PauseCircleIcon className="w-12 h-12" />
@@ -203,6 +204,7 @@ function QuickPlayBanner({ item, scrollRef }) {
               onClick={(event) => {
                 HandleCardPlayPauseClick(event);
               }}
+              aria-label="Play or Pause"
             >
               {activeStatus ? (
                 <PauseCircleIcon className=" w-12 h-12 isSm:w-[3.5rem] isSm:h-[3.5rem]" />

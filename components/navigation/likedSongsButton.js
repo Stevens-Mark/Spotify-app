@@ -40,10 +40,11 @@ function LikedSongsButton({
   };
 
   return (
-    <li>
+
       <button
         onClick={() => handleCollectionClick(collection?.id)}
-        className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
+        aria-label="Go to Liked Songs"
+        className={`flex items-center p-3  rounded-lg min-w-full cursor-pointer
               ${
                 activePlaylist == collection?.id && isPlaying
                   ? 'text-green-500'
@@ -73,7 +74,7 @@ function LikedSongsButton({
           )}
         </span>
       </button>
-    </li>
+   
   );
 }
 

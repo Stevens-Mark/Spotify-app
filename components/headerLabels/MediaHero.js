@@ -64,24 +64,26 @@ const MediaHeading = ({ item, itemTracks }) => {
 
   useEffect(() => {
     // if liked songs or playlist - Get owner's image
-    if (item?.owner?.id) {
-      spotifyApi
-        .getUser(item?.owner?.id)
+    if (spotifyApi.getAccessToken()) {
+      if (item?.owner?.id) {
+        spotifyApi
+          .getUser(item?.owner?.id)
 
-        .then((data) => {
-          setUserImage(data?.body?.images?.[0]?.url);
-        })
-        .catch((err) => console.error('Owner image retrieval failed:'));
-    }
+          .then((data) => {
+            setUserImage(data?.body?.images?.[0]?.url);
+          })
+          .catch((err) => console.error('Owner image retrieval failed:'));
+      }
 
-    // otherwise if an Album - Get artist's image
-    if (item?.artists?.[0]?.id) {
-      spotifyApi
-        .getArtist(item?.artists?.[0]?.id)
-        .then((data) => {
-          setUserImage(data?.body?.images?.[0]?.url);
-        })
-        .catch((err) => console.error('Artist image retrieval failed:'));
+      // otherwise if an Album - Get artist's image
+      if (item?.artists?.[0]?.id) {
+        spotifyApi
+          .getArtist(item?.artists?.[0]?.id)
+          .then((data) => {
+            setUserImage(data?.body?.images?.[0]?.url);
+          })
+          .catch((err) => console.error('Artist image retrieval failed:'));
+      }
     }
   }, [item?.artists, item?.owner?.id, spotifyApi]);
 

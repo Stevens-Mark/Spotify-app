@@ -50,6 +50,7 @@ function NavigationButtons() {
           !canGoBack && 'cursor-not-allowed'
         }`}
         onClick={handleGoBack}
+        aria-label="Go back a page"
       >
         <ChevronLeftIcon className="p-1 w-8 h-8 pl-[1px]" />
       </button>
@@ -59,6 +60,7 @@ function NavigationButtons() {
           !canGoForward && 'cursor-not-allowed'
         }`}
         onClick={handleGoForward}
+        aria-label="Go forward a page"
       >
         <ChevronRightIcon className="p-1 w-8 h-8 pr-[1px]" />
       </button>

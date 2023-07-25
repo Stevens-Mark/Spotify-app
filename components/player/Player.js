@@ -348,6 +348,7 @@ function Player() {
         <button
           className="hidden sm:inline relative"
           onClick={() => setShuffle()}
+          aria-label="shuffle songs on/off"
         >
           <ArrowsRightLeftIcon
             className={`button ${
@@ -359,27 +360,29 @@ function Player() {
           )}
         </button>
 
-        <button onClick={() => skipToPrevious()}>
+        <button
+          onClick={() => skipToPrevious()}
+          aria-label="skip To Previous Track"
+        >
           <BackwardIcon className="button" />
         </button>
 
-        {isPlaying ? (
-          <button onClick={handlePlayPause}>
+        <button onClick={handlePlayPause} aria-label="Play/Pause a track">
+          {isPlaying ? (
             <PauseCircleIcon className="button w-10 h-10" />
-          </button>
-        ) : (
-          <button onClick={handlePlayPause}>
+          ) : (
             <PlayCircleIcon className="button w-10 h-10" />
-          </button>
-        )}
+          )}
+        </button>
 
-        <button onClick={() => skipToNext()}>
+        <button onClick={() => skipToNext()} aria-label="skip To Next Track">
           <ForwardIcon className="button" />
         </button>
 
         <button
           className="hidden sm:inline relative"
           onClick={() => handleRepeatToggle()}
+          aria-label="repeat track toggle"
         >
           <ArrowPathRoundedSquareIcon
             className={`button w-6 h-6 ${
@@ -407,7 +410,12 @@ function Player() {
           className="button"
           onClick={() => volume > 0 && setVolume(volume - 10)}
         />
+        {/* Hidden Label for Volume Control */}
+        <label htmlFor="volume-control" className="sr-only">
+          Volume Control
+        </label>
         <input
+          id="volume-control"
           className="w-14 md:w-28"
           type="range"
           value={volume}
