@@ -15,7 +15,6 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   backgroundColorState,
-  randomColorColorState,
   originIdState,
 } from '@/atoms/otherAtoms';
 // import functions
@@ -40,7 +39,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const router = useRouter();
   const [originId, setOriginId] = useRecoilState(originIdState);
   // used for quick play banner coloring
-  const randomColor = useRecoilValue(randomColorColorState);
+
   const backgroundColor = useRecoilValue(backgroundColorState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const showEpisodesUris = useRecoilValue(showEpisodesUrisState); // episodes uris from a SHOW
@@ -173,10 +172,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
     <>
       <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
         <div
-          className={`bg-gradient-to-b to-black  
-           ${
-             backgroundColor !== null ? '' : randomColor
-           } flex items-center py-4`}
+          className={`flex items-center py-4`}
           style={{
             opacity,
             background: `linear-gradient(to bottom, ${darkenColor(

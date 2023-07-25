@@ -12,7 +12,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 import Footer from '@/components/navigation/Footer';
-import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
+import BackToTopButton from '@/components/backToTopButton';
 
 /**
  * Renders the list of Shows/Podcasts & Episodes from search.
@@ -49,7 +49,9 @@ function PodcastAndEpisodes() {
   return (
     <>
       <Head>
-        <title>Provided by Spotify - Results for Podcasts/Shows & Episodes</title>
+        <title>
+          Provided by Spotify - Results for Podcasts/Shows & Episodes
+        </title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div
@@ -123,14 +125,9 @@ function PodcastAndEpisodes() {
             </div>
           </section>
         )}
-        {showButton && (
-          <button
-            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
-            onClick={scrollToTop}
-          >
-            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
-          </button>
-        )}
+
+        {/* Scroll to top button */}
+        {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         <Footer />
       </div>
     </>

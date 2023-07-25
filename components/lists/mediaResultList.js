@@ -7,7 +7,7 @@ import Footer from '@/components/navigation/Footer';
 import SongTracks from '../trackListSongs/songTracks';
 import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
-import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
+import BackToTopButton from '@/components/backToTopButton';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...
@@ -110,14 +110,7 @@ function MediaResultList(props) {
               )}
           </>
         )}
-        {showButton && (
-          <button
-            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
-            onClick={scrollToTop}
-          >
-            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
-          </button>
-        )}
+        {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         <Footer />
       </div>
     </>

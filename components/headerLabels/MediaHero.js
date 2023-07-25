@@ -4,7 +4,6 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRecoilState } from 'recoil';
 import {
   backgroundColorState,
-  randomColorColorState,
 } from '@/atoms/otherAtoms';
 // import icon/images
 import Image from 'next/image';
@@ -43,14 +42,12 @@ const colors = [
 const MediaHeading = ({ item, itemTracks }) => {
   const spotifyApi = useSpotify();
 
-  const [randomColor, setRandomColor] = useRecoilState(randomColorColorState);
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
   const [userImage, setUserImage] = useState(null);
 
-  // analyse image colors for custom background & set default random background color (in case)
+  // analyse image colors for custom background
   useEffect(() => {
-    setRandomColor(shuffle(colors).pop()); // default color tailwind (in case)
     const imageUrl = item?.images?.[0]?.url;
     if (imageUrl) {
       // custom background color (css style)
@@ -60,7 +57,7 @@ const MediaHeading = ({ item, itemTracks }) => {
     } else {
       setBackgroundColor(null);
     }
-  }, [item?.images, setBackgroundColor, setRandomColor]);
+  }, [item?.images, setBackgroundColor]);
 
   useEffect(() => {
     // if liked songs or playlist - Get owner's image
@@ -89,9 +86,7 @@ const MediaHeading = ({ item, itemTracks }) => {
 
   return (
     <div
-      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-center space-x-0 xs:space-x-7 h-[24rem] lg:h-[30rem] text-white py-4 px-5 xs:p-8 bg-gradient-to-b to-black ${
-        backgroundColor !== null ? '' : randomColor
-      }`}
+      className={`flex flex-col justify-end xs:flex-row xs:justify-start xs:items-center space-x-0 xs:space-x-7 h-[24rem] lg:h-[30rem] text-white py-4 px-5 xs:p-8`}
       style={{
         background: `linear-gradient(to bottom, ${backgroundColor} 60%, #000000)`,
       }}

@@ -14,7 +14,6 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   backgroundColorState,
-  randomColorColorState,
   originIdState,
 } from '@/atoms/otherAtoms';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
@@ -60,7 +59,6 @@ function QuickPlayBanner({ item, scrollRef }) {
   const [opacity, setOpacity] = useState(0);
 
   // used for quick play banner
-  const randomColor = useRecoilValue(randomColorColorState);
   const backgroundColor = useRecoilValue(backgroundColorState);
 
   /**
@@ -151,10 +149,7 @@ function QuickPlayBanner({ item, scrollRef }) {
     <>
       <div className="absolute top-0 w-full z-20 flex flex-col">
         <div
-          className={`bg-gradient-to-b to-black h-20
-           ${
-             backgroundColor !== null ? '' : randomColor
-           } flex items-center py-4`}
+          className={`h-20 flex items-center py-4`}
           style={{
             opacity,
             background: `linear-gradient(to bottom, ${darkenColor(

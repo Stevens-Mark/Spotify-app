@@ -11,12 +11,13 @@ const useInfiniteScroll = (fetchMoreData) => {
   const [isFetching, setIsFetching] = useState(false);
 
   const handleScroll = () => {
+    if (containerRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
 
-    const { scrollTop, scrollHeight, clientHeight } = containerRef.current;
-
-    // Check if the user has scrolled to the bottom and is not currently fetching data
-    if (scrollTop + clientHeight >= scrollHeight - 600 && !isFetching) {
-      setIsFetching(true);
+      // Check if the user has scrolled to the bottom and is not currently fetching data
+      if (scrollTop + clientHeight >= scrollHeight - 600 && !isFetching) {
+        setIsFetching(true);
+      }
     }
   };
 

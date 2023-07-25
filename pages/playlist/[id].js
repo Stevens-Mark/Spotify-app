@@ -12,7 +12,7 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import PlaylistTracks from '@/components/trackListPlaylist/playlistTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
-import { ArrowUpCircleIcon } from '@heroicons/react/24/solid';
+import BackToTopButton from '@/components/backToTopButton';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -78,14 +78,8 @@ const PlaylistPage = ({ playlist }) => {
         <QuickPlayBanner item={playlist} scrollRef={scrollRef} />
 
         <PlaylistTracks />
-        {showButton && (
-          <button
-            className="fixed bottom-28 isSm:bottom-36 right-2 isSm:right-4 rounded-full hover:scale-110 duration-150 ease-in-out"
-            onClick={scrollToTop}
-          >
-            <ArrowUpCircleIcon className="w-12 h-12 text-green-500" />
-          </button>
-        )}
+        {/* Scroll to top button */}
+        {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         <Footer />
       </div>
     </>
