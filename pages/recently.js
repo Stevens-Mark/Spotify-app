@@ -80,7 +80,7 @@ function RecentlyPlayedPage({ recent }) {
   return (
     <>
       <Head>
-        <title>Spotify - Recently Played Songs</title>
+        <title>Provided by Spotify - Recently Played Songs</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 

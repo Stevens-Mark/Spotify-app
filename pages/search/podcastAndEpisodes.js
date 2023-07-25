@@ -49,7 +49,7 @@ function PodcastAndEpisodes() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Podcasts/Shows & Episodes</title>
+        <title>Provided by Spotify - Results for Podcasts/Shows & Episodes</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

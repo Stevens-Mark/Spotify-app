@@ -102,7 +102,7 @@ function Playlists() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Playlists</title>
+        <title>Provided by Spotify - Results for Playlists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList

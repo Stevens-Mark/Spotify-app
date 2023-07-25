@@ -72,7 +72,7 @@ const EpisodePage = ({ episode }) => {
   return (
     <>
       <Head>
-        <title>Spotify - Episode</title>
+        <title>Provided by Spotify - Episode</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

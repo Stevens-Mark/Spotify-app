@@ -86,7 +86,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
   return (
     <>
       <Head>
-        <title>Artists</title>
+        <title>Provided by Spotify - Artists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

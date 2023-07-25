@@ -89,7 +89,7 @@ function All() {
   return (
     <>
       <Head>
-        <title>Spotify - All Search Results</title>
+        <title>Provided by Spotify - All Search Results</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

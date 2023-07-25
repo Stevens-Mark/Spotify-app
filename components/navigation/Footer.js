@@ -119,16 +119,6 @@ function Footer() {
                 <p>Vendors</p>
               </Link>
             </li>
-            <li>
-              <Link
-                href="#"
-                passHref
-                onClick={disableLinkClick}
-                className=" space-x-2 text-pink-swan hover:text-white"
-              >
-                <p>Spotify for work</p>
-              </Link>
-            </li>
           </ul>
 
           {/* group three */}
@@ -211,17 +201,47 @@ function Footer() {
           </p>
         </span>
 
-        <Link
-          href="https://stevensmarkportfolio.netlify.app/"
-          target="_blank"
-          rel="noopener noreferrer"
-          passHref
-        >
-          <p className="text-white whitespace-nowrap hover:underline">
-            © 2023 Mark Stevens
-          </p>
-        </Link>
+        <div className="flex flex-col items-start mt-4 md:mt-0 md:items-end">
+          <Link
+            href="https://stevensmarkportfolio.netlify.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            passHref
+          >
+            <p className="text-white whitespace-nowrap hover:underline">
+              Developed by Mark Stevens
+            </p>
+          </Link>
+          <p className="text-white">© 2023 Powered by</p>
+          <Image
+            className="w-32 mt-2"
+            src="/images/Spotify_logo_with_text.svg"
+            alt=""
+            width={100}
+            height={100}
+            style={{ objectFit: 'cover' }}
+            priority
+          />
+          <Link
+            href="https://open.spotify.com/download"
+            target="_blank"
+            rel="noopener noreferrer"
+            passHref
+          >
+            <p className="text-white hover:underline mt-2">GET SPOTIFY FREE</p>
+          </Link>
+          <p className="text-pink-swan mr-10">Or</p>
+          <Link
+            href="https://open.spotify.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            passHref
+          >
+            <p className="text-white hover:underline">Open Spotify</p>
+          </Link>
+        </div>
       </div>
+      <div className="px-8 flex justify-between flex-col md:flex-row"></div>
       <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mt-8 mb-28" />
     </nav>
   );

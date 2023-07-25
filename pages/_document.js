@@ -37,7 +37,7 @@ export default class MyDocument extends Document {
           <meta property="og:description" content="Spotify clone - A simple Spotify app by Mark Stevens" />
           <meta property="og:url" content="none yet" />
 
-          <link rel="apple-touch-icon" href="%PUBLIC_URL%/spotify192.png" />
+          <link rel="apple-touch-icon" href="%PUBLIC_URL%/mylogo192.png" />
         </Head>
         <body>
           <Main />

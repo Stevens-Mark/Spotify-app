@@ -1,6 +1,6 @@
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
+import Logo from '@/components/logo';
 
 /**
  * Renders 404 page
@@ -10,15 +10,7 @@ import Link from 'next/link';
 function Error() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center text-green-500 text-center">
-      <Image
-        className="w-64 sm:w-96 mb-8"
-        src="/images/Spotify_logo_with_text.svg"
-        alt=""
-        width={52}
-        height={52}
-        style={{ objectFit: 'cover' }}
-        priority
-      />
+      <Logo />
       <h1 className="text-7xl">404</h1>
       <h2 className="text-2xl sm:text-3xl md:text-4xl mb-3 p-5">
         Oops! It seems the page you are looking for doesn{"'"}t exist.

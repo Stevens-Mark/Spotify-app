@@ -115,7 +115,7 @@ function Episodes() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Episodes</title>
+        <title>Provided by Spotify - Results for Episodes</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList

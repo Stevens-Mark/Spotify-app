@@ -126,7 +126,7 @@ function Tracks() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Songs</title>
+        <title>Provided by Spotify - Results for Songs</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList

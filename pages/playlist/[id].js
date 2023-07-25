@@ -62,7 +62,7 @@ const PlaylistPage = ({ playlist }) => {
   return (
     <>
       <Head>
-        <title>Spotify - Playlists</title>
+        <title>Provided by Spotify - Playlists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

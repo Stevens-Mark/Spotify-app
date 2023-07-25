@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import Image from 'next/image';
+import Logo from '@/components/logo';
 // import { colors } from '@/styles/colors';
 
 // import component
@@ -78,39 +79,41 @@ function Welcome() {
           );
           setMessage('Have you connected to Spotify?');
           handleMyAlert();
-        });     
+        });
     }
   }, [spotifyApi]);
 
   return (
     <>
-    <div
-      className="flex-grow h-screen overflow-y-scroll scrollbar-hide relative"
-      ref={scrollRef}
-    >
-      <p
-        style={myAlert ? { display: 'block' } : { display: 'none' }}
-        className="text-white absolute text-center w-full"
+      <div
+        className="flex-grow h-screen overflow-y-scroll scrollbar-hide relative"
+        ref={scrollRef}
       >
-        {message}
-      </p>
-      <div className='flex flex-col items-center justify-center h-screen p-6 text-center text-green-500'>
-      <h1 className="text-3xl isSm:text-5xl mb-12 -mt-32">Welcome</h1>
-      <Image
-        className="w-64 sm:w-96 mb-5"
-        src="/images/Spotify_logo_with_text.svg"
-        alt=""
-        width={100}
-        height={100}
-        priority
-      />
-      <h2 className="text-2xl isSm:text-3xl mt-6">For Your Listening Pleasure ...</h2>
-      <h2 className="text-lg isSm:text-2xl mt-6">Why not listen to your playlists or search for something new...</h2>
-      <p className="text-sm mt-6">( Make sure to connect to your Spotify account & have a PREMIUM ACCOUNT to access all features )</p>
+        <p
+          style={myAlert ? { display: 'block' } : { display: 'none' }}
+          className="text-white absolute text-center w-full"
+        >
+          {message}
+        </p>
+        <div className="flex flex-col items-center justify-center h-screen p-6 text-center text-green-500">
+          <h1 className="text-3xl isSm:text-5xl mb-12 -mt-32">Welcome</h1>
+          <Logo />
+          <h2 className="text-2xl isSm:text-3xl mt-6">
+            For Your Listening Pleasure ...
+          </h2>
+          <h2 className="text-lg isSm:text-2xl mt-6">
+            Why not listen to your playlists or search for something new...
+          </h2>
+          <p className="text-sm mt-6">
+            ( To use this app you need to have Spotify running in the back ground. If you don&apos;t have an account, please follow one of the links in the right hand bottom corner )
+          </p>
+          <p className="text-sm mt-6">
+            ( Make sure to connect to your Spotify account & have a PREMIUM
+            ACCOUNT to access all features )
+          </p>
+        </div>
+        <Footer />
       </div>
-         <Footer />
-    </div>
-
     </>
   );
 }

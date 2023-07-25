@@ -169,7 +169,7 @@ const LikedPage = ({ likedTracks }) => {
   return (
     <>
       <Head>
-        <title>Liked Songs</title>
+        <title>Provided by Spotify -Liked Songs</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

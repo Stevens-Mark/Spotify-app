@@ -102,7 +102,7 @@ function Albums() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Albums</title>
+        <title>Provided by Spotify - Results for Albums</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
 

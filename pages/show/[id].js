@@ -177,7 +177,7 @@ const ShowPage = ({ showInfo }) => {
   return (
     <>
       <Head>
-        <title>Spotify - Shows</title>
+        <title>Provided by Spotify - Shows</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

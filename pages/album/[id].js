@@ -65,7 +65,7 @@ const AlbumPage = ({ album }) => {
   return (
     <>
       <Head>
-        <title>Spotify - Albums</title>
+        <title>Provided by Spotify - Albums</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div

@@ -98,7 +98,7 @@ function Shows() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Shows</title>
+        <title>Provided by Spotify - Results for Shows</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList

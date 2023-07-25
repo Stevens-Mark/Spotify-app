@@ -102,7 +102,7 @@ function Artists() {
   return (
     <>
       <Head>
-        <title>Spotify - Results for Artists</title>
+        <title>Provided by Spotify - Results for Artists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <MediaResultList
