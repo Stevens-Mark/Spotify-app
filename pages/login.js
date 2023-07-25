@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
 import { getProviders, signIn } from 'next-auth/react';
 import Image from 'next/image';
@@ -29,6 +30,11 @@ function Login({providers}) {
   // }, []);
 
   return (
+    <>
+    <Head>
+    <title>Spotify Clone - Login</title>
+    <link rel="icon" href="/spotify.ico"></link>
+  </Head>
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center">
       <Image
         className="w-64 sm:w-96 mb-16"
@@ -51,6 +57,7 @@ function Login({providers}) {
           </div>
         ))}
     </div>
+    </>
   );
 }
 
