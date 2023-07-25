@@ -11,8 +11,8 @@ function Error() {
   return (
     <div className="flex flex-col items-center bg-black min-h-screen w-full justify-center text-green-500 text-center">
       <Image
-        className="w-52 mb-8"
-        src="/images/Spotify_logo.svg"
+        className="w-64 sm:w-96 mb-8"
+        src="/images/Spotify_logo_with_text.svg"
         alt=""
         width={52}
         height={52}

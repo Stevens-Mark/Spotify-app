@@ -95,13 +95,13 @@ function Welcome() {
         {message}
       </p>
       <div className='flex flex-col items-center justify-center h-screen p-6 text-center text-green-500'>
-      <h1 className="text-3xl isSm:text-5xl mb-6 -mt-32">Welcome</h1>
+      <h1 className="text-3xl isSm:text-5xl mb-12 -mt-32">Welcome</h1>
       <Image
-        className="w-52 mb-5"
-        src="/images/Spotify_logo.svg"
+        className="w-64 sm:w-96 mb-5"
+        src="/images/Spotify_logo_with_text.svg"
         alt=""
-        width={52}
-        height={52}
+        width={100}
+        height={100}
         priority
       />
       <h2 className="text-2xl isSm:text-3xl mt-6">For Your Listening Pleasure ...</h2>
