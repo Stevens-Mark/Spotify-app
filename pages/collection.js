@@ -64,6 +64,10 @@ import BackToTopButton from '@/components/backToTopButton';
 //   };
 // }
 
+
+// AFTER TESTING I HAVE FOUND LOADING THE LIKED TRACKS LIST IN THE FRONT END
+// FASTER THAN ON THE SERVER FIRST (FROM A USER'S VIEW I.E, TIME TO SEE PAGE)
+
 // Helper function to merge and remove duplicates from the new data
 const mergeAndRemoveDuplicates = (existingData, newData) => {
   const mergedData = [...existingData];
@@ -82,7 +86,7 @@ const mergeAndRemoveDuplicates = (existingData, newData) => {
 /**
  * Renders Users Liked Songs
  * @function LikedPage (collection)
- * @param {object} likedTracks information about user's liked tracks
+ * @param {object} likedTracks information about user's liked tracks - NOT IN USE
  * @returns {JSX}
  */
 const LikedPage = () => {
@@ -95,6 +99,7 @@ const LikedPage = () => {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
 
+  // NEEDED IF USING "getServerSideProps" CODE ABOVE
   // useEffect(() => {
   //   setLikedTracklist(likedTracks);
   //   setLikedTrackUris(likedTracks?.items?.map((item) => item.track.uri)); // set uris to be used in player
@@ -111,67 +116,66 @@ const LikedPage = () => {
 
   useEffect(() => {
     // Get Current User's Liked Song Tracks
-    if (spotifyApi.getAccessToken()) {
+    if (likedTracks === null) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getMySavedTracks({
+            limit: 25,
+            offset: 0,
+          })
+          .then(
+            function (data) {
+              // add this information to allow us to create the media banner for liked songs
+              data.body.id = 'collection';
+              data.body.type = 'collection';
+              data.body.name = 'Liked Songs';
+              data.body.owner = {
+                display_name: session?.user.name,
+                id: session?.user?.username,
+              };
+              data.body.images = [
+                {
+                  height: 640,
+                  url: '/images/LikedSongs.png',
+                  width: 640,
+                },
+              ];
+              setLikedTracklist(data?.body);
+              setLikedTrackUris(
+                data.body?.items?.map((item) => item.track.uri)
+              ); // set uris to be used in player
+            },
+            function (err) {
+              console.log('Genres retrieval failed !');
+              toast.error('Genres retrieval failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
+    }
+  }, [likedTracks, session, setLikedTrackUris, setLikedTracklist, spotifyApi]);
+
+  // Function to fetch more data when the user scrolls down
+  const fetchMoreData = () => {
+    if (!stopFetch) {
+      const itemsPerPage = 25;
       spotifyApi
         .getMySavedTracks({
-          limit: 25,
-          offset: 0,
+          limit: itemsPerPage,
+          offset: currentOffset,
         })
         .then(
           function (data) {
-            // add this information to allow us to create the media banner for liked songs
-            data.body.id = 'collection';
-            data.body.type = 'collection';
-            data.body.name = 'Liked Songs';
-            data.body.owner = {
-              display_name: session?.user.name,
-              id: session?.user?.username,
-            };
-            data.body.images = [
-              {
-                height: 640,
-                url: '/images/LikedSongs.png',
-                width: 640,
-              },
-            ];
-            console.log("data ",data.body)
-            setLikedTracklist(data.body);
-            setLikedTrackUris(data.body?.items?.map((item) => item.track.uri)); // set uris to be used in player
-          },
-          function (err) {
-            console.log('Something went wrong!', err);
-          }
-        );
-    }
-  }, [session, setLikedTrackUris, setLikedTracklist, spotifyApi]);
-
-  // Function to fetch more data when the user scrolls down
-  const fetchMoreData = async () => {
-    if (!stopFetch) {
-      // If we reached the end, don't fetch more
-      const itemsPerPage = 25;
-      const nextOffset = currentOffset + itemsPerPage;
-
-      try {
-        const res = await fetch(
-          `https://api.spotify.com/v1/me/tracks?offset=${nextOffset}&limit=${itemsPerPage}`,
-          {
-            headers: {
-              Authorization: `Bearer ${session.user.accessToken}`,
-            },
-          }
-        );
-
-        if (res.ok) {
-          const data = await res.json();
-          if (data.items.length === 0) {
-            // If there's no more data, set stopFetch to true
-            setStopFetch(true);
-          } else {
+            // Check if there's no more data to fetch
+            if (data?.body?.items?.length === 0) {
+              setStopFetch(true);
+              return; // Exit the function early if there are no more items
+            }
             // Merge the new data with the existing data and remove duplicates
             setLikedTracklist((prev) => ({
               ...prev,
-              items: mergeAndRemoveDuplicates(prev.items, data.items),
+              items: mergeAndRemoveDuplicates(prev.items, data?.body?.items),
             }));
 
             // Update the likedTrackUris with the new URIs
@@ -179,26 +183,21 @@ const LikedPage = () => {
               // Convert the previous URIs to a Set for faster lookups
               const existingUris = new Set(prev);
               // Filter out duplicates from newItems by checking against existingUris
-              const newTrackUris = data.items
+              const newTrackUris = data?.body?.items
                 .filter((item) => !existingUris.has(item.track.uri))
                 .map((item) => item.track.uri);
               // Combine the existing URIs and the new URIs to form the new uris list
               return [...prev, ...newTrackUris];
             });
+            setCurrentOffset((prevOffset) => prevOffset + itemsPerPage); // Update the currentOffset using functional update
+          },
+          function (err) {
+            console.log('Failed to get genres!');
+            toast.error('Genres retrieval failed !', {
+              theme: 'colored',
+            });
           }
-        } else {
-          console.error('Error fetching more liked tracks:');
-          toast.error('Liked Songs retrieval failed !', {
-            theme: 'colored',
-          });
-        }
-      } catch (err) {
-        console.error('Error fetching more liked tracks:');
-        toast.error('Liked Songs retrieval failed !', {
-          theme: 'colored',
-        });
-      }
-      setCurrentOffset(nextOffset);
+        );
     }
   };
 
