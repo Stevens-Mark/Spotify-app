@@ -26,6 +26,7 @@ export const config = {
     '/episode/:path*',
     '/genre/:path*',
     '/recently/:path*',
+    '/collection/:path*',
   ],
 };
 
