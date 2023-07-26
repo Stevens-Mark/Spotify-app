@@ -7,8 +7,9 @@ import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { likedListState, likedUrisState } from '@/atoms/songAtom';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
@@ -42,6 +43,7 @@ const LikedPage = () => {
   const spotifyApi = useSpotify();
   const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [likedTracks, setLikedTracklist] = useRecoilState(likedListState);
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -101,19 +103,21 @@ const LikedPage = () => {
   // Function to fetch more data when the user scrolls down
   const fetchMoreData = () => {
     if (!stopFetch) {
-      const itemsPerPage = 25;
+      const nextOffset = currentOffset + itemsPerPage; // Calculate the next offset
+
       spotifyApi
         .getMySavedTracks({
           limit: itemsPerPage,
-          offset: currentOffset,
+          offset: nextOffset, // Use the next offset for fetching new data
         })
         .then(
           function (data) {
             // Check if there's no more data to fetch
             if (data?.body?.items?.length === 0) {
-              setStopFetch(true);
+              setStopFetch(true); // Set stopFetch to true if there are no more items
               return; // Exit the function early if there are no more items
             }
+
             // Merge the new data with the existing data and remove duplicates
             setLikedTracklist((prev) => ({
               ...prev,
@@ -131,7 +135,8 @@ const LikedPage = () => {
               // Combine the existing URIs and the new URIs to form the new uris list
               return [...prev, ...newTrackUris];
             });
-            setCurrentOffset((prevOffset) => prevOffset + itemsPerPage); // Update the currentOffset using functional update
+
+            setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
           },
           function (err) {
             console.log('Failed to get genres!');
