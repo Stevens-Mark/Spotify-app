@@ -80,8 +80,9 @@ function Welcome() {
         >
           {message}
         </p>
-        <div className="flex flex-col items-center justify-center h-screen p-6 text-center text-green-500">
-          <h1 className="text-3xl isSm:text-5xl mb-12 -mt-32">Welcome</h1>
+        <div className="h-[5rem] isMd:h-[4rem] md:h-[6rem]  lg:h-[10rem]"></div>
+        <div className="flex flex-col items-center justify-center p-6 text-center text-green-500">
+          <h1 className="text-3xl isSm:text-5xl mb-12">Welcome</h1>
           <Logo />
           <h2 className="text-2xl isSm:text-3xl mt-6">
             For Your Listening Pleasure ...
@@ -99,9 +100,11 @@ function Welcome() {
             ACCOUNT to access all features )
           </p>
           <p className="text-m mt-6">
-            ( NOTE: ALL content is being supplied and made available by Spotify )
+            ( NOTE: ALL content is being supplied and made available by Spotify
+            )
           </p>
         </div>
+        <div className="h-[5rem] isMd:h-[4rem] md:h-[6rem] lg:h-[10rem]"></div>
         <Footer />
       </div>
     </>
