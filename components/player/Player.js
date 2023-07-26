@@ -53,7 +53,7 @@ function Player() {
   const [originId, setOriginId] = useRecoilState(originIdState);
   const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
-  const [activeArtist, seActiveArtist] = useRecoilState(activeArtistState);
+  const activeArtist = useRecoilValue(activeArtistState);
 
   useEffect(() => {
     // take ID from url each time page changed

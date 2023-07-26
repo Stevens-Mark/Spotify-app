@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import React, { useState, useEffect } from 'react';
-import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 import { toast } from 'react-toastify';
 // custom hooks
@@ -14,43 +13,9 @@ import { recentlyListState, recentlyUrisState } from '@/atoms/songAtom';
 import Layout from '@/components/layouts/Layout';
 import MediaResultList from '@/components/lists/mediaResultList';
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-
-//   const fetchRecent = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://api.spotify.com/v1/me/player/recently-played?limit=${50}`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${session.user.accessToken}`,
-//           },
-//         }
-//       );
-//       const data = await res.json();
-//       return data;
-//     } catch (err) {
-//       console.error('Error retrieving recent tracks:', err);
-//       return null;
-//     }
-//   };
-
-//   const recent = await fetchRecent();
-
-//   return {
-//     props: {
-//       recent,
-//     },
-//   };
-// }
-
-// AFTER TESTING I HAVE FOUND LOADING THE RECENT PLAYED TRACKS IN THE FRONT END
-// FASTER THAN ON THE SERVER FIRST (FROM A USER'S VIEW I.E, TIME TO SEE PAGE)
-
 /**
  * Renders the list of the most recently played tracks (maximum 50)
  * @function RecentlyPlayedPage
- * @param {Object} recent played tracks - NOT IN USE
  * @returns {JSX}
  */
 function RecentlyPlayedPage() {

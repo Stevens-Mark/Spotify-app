@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
@@ -18,43 +17,9 @@ import GenreCard from '@/components/cards/genreCard';
 import Footer from '@/components/navigation/Footer';
 import BackToTopButton from '@/components/backToTopButton';
 
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-
-//   const fetchGenrelist = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://api.spotify.com/v1/browse/categories?country=US&limit=25`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${session.user.accessToken}`,
-//           },
-//         }
-//       );
-//       const data = await res.json();
-//       return data;
-//     } catch (err) {
-//       console.error('Error retrieving genre information: ', err);
-//       return null;
-//     }
-//   };
-
-//   const genreList = await fetchGenrelist();
-
-//   return {
-//     props: {
-//       genreList,
-//     },
-//   };
-// }
-
-// AFTER TESTING I HAVE FOUND LOADING THE GENRE LIST IN THE FRONT END
-// FASTER THAN ON THE SERVER FIRST (FROM A USER'S VIEW I.E, TIME TO SEE PAGE)
-
 /**
  * Renders search page
  * @function Search
- * @param {object} genreList list of genre/categories - NOT IN USE
  * @returns {JSX}
  */
 function Search() {
@@ -65,11 +30,6 @@ function Search() {
   const [currentOffset, setCurrentOffset] = useState(25); // Updated the initial value of currentOffset
   const [stopFetch, setStopFetch] = useState(false); // Updated the initial value of stopFetch
   const itemsPerPage = 25;
-
-  // NEEDED IF USING "getServerSideProps" CODE ABOVE
-  // useEffect(() => {
-  //   setGenres(genreList?.categories?.items);
-  // }, [genreList, setGenres]);
 
   useEffect(() => {
     if (genres === null) {

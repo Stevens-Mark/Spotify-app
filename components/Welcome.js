@@ -1,23 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import useSpotify from '@/hooks/useSpotify';
-import Image from 'next/image';
 import Logo from '@/components/logo';
-// import { colors } from '@/styles/colors';
-
 // import component
-
 import Footer from './navigation/Footer';
-
-// random color options for top background
-const colors = [
-  'from-indigo-500',
-  'from-blue-500',
-  'from-green-500',
-  'from-red-500',
-  'from-yellow-500',
-  'from-pink-500',
-  'from-purple-500',
-];
 
 /**
  * Renders welcome page

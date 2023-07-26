@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import React, { useEffect, useState, useRef } from 'react';
 import { toast } from 'react-toastify';
-import { getSession } from 'next-auth/react';
 import { useSession } from 'next-auth/react';
 // custom hooks
 import useSpotify from '@/hooks/useSpotify';
@@ -17,56 +16,6 @@ import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
 import LikedTracks from '@/components/trackListLiked/likedTracks';
 import BackToTopButton from '@/components/backToTopButton';
-
-// export async function getServerSideProps(context) {
-//   const session = await getSession(context);
-
-//   const fetchLiked = async () => {
-//     try {
-//       const res = await fetch(
-//         `https://api.spotify.com/v1/me/tracks?limit=${25}`,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${session.user.accessToken}`,
-//           },
-//         }
-//       );
-//       const data = await res.json();
-//       // add this information to allow us to create the media banner for liked songs
-//       data.id = 'collection';
-//       data.type = 'collection';
-//       data.name = 'Liked Songs';
-//       data.owner = {
-//         display_name: session?.user.name,
-//         id: session?.user?.username,
-//       };
-//       data.images = [
-//         {
-//           height: 640,
-//           url: '/images/LikedSongs.png',
-//           width: 640,
-//         },
-//       ];
-// console.log("feteched ", data)
-//       return data;
-//     } catch (err) {
-//       console.error('Error retrieving liked tracks:', err);
-//       return null;
-//     }
-//   };
-
-//   const likedTracks = await fetchLiked();
-
-//   return {
-//     props: {
-//       likedTracks,
-//     },
-//   };
-// }
-
-
-// AFTER TESTING I HAVE FOUND LOADING THE LIKED TRACKS LIST IN THE FRONT END
-// FASTER THAN ON THE SERVER FIRST (FROM A USER'S VIEW I.E, TIME TO SEE PAGE)
 
 // Helper function to merge and remove duplicates from the new data
 const mergeAndRemoveDuplicates = (existingData, newData) => {
@@ -86,7 +35,6 @@ const mergeAndRemoveDuplicates = (existingData, newData) => {
 /**
  * Renders Users Liked Songs
  * @function LikedPage (collection)
- * @param {object} likedTracks information about user's liked tracks - NOT IN USE
  * @returns {JSX}
  */
 const LikedPage = () => {
@@ -98,12 +46,6 @@ const LikedPage = () => {
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
-
-  // NEEDED IF USING "getServerSideProps" CODE ABOVE
-  // useEffect(() => {
-  //   setLikedTracklist(likedTracks);
-  //   setLikedTrackUris(likedTracks?.items?.map((item) => item.track.uri)); // set uris to be used in player
-  // }, [likedTracks, setLikedTrackUris, setLikedTracklist]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {

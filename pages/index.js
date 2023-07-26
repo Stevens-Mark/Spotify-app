@@ -2,7 +2,6 @@ import Head from 'next/head';
 // import { getSession } from 'next-auth/react';
 // import components
 import Layout from '@/components/layouts/Layout';
-
 import Welcome from '@/components/Welcome';
 // export async function getServerSideProps(context) {
 //   const session = await getSession(context);

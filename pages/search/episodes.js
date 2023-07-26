@@ -34,7 +34,7 @@ function Episodes() {
 
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
 
-  const [episodesUris, setEpisodesUris] = useRecoilState(episodesUrisState); // episodes uris (from search)
+  const setEpisodesUris = useSetRecoilState(episodesUrisState); // episodes uris (from search)
   const setEpisodesList = useSetRecoilState(episodesListState); // episodes list (from search)
 
   const [currentOffset, setCurrentOffset] = useState(0);
