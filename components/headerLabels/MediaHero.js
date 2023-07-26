@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
+import { useSession } from 'next-auth/react';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import {
-  backgroundColorState,
-} from '@/atoms/otherAtoms';
+import { backgroundColorState } from '@/atoms/otherAtoms';
 // import icon/images
 import Image from 'next/image';
 import noImage from '@/public/images/user_noImage.svg';
 import noCoverImage from '@/public/images/noImageAvailable.svg';
 // import functions
-import { shuffle } from 'lodash'; // function used to select random color
 import { msToTime } from '@/lib/time';
 import {
   totalDuration,
@@ -21,17 +19,6 @@ import {
 import { capitalize } from '@/lib/capitalize';
 import { analyseImageColor } from '@/lib/analyseImageColor.js';
 
-// random color options for top background
-const colors = [
-  'from-indigo-500',
-  'from-blue-500',
-  'from-green-500',
-  'from-red-500',
-  'from-yellow-500',
-  'from-pink-500',
-  'from-purple-500',
-];
-
 /**
  * Renders the Hero heading, image, title
  * @function MediaHeading
@@ -41,6 +28,7 @@ const colors = [
  */
 const MediaHeading = ({ item, itemTracks }) => {
   const spotifyApi = useSpotify();
+  const { data: session } = useSession();
 
   const [backgroundColor, setBackgroundColor] =
     useRecoilState(backgroundColorState);
@@ -82,7 +70,7 @@ const MediaHeading = ({ item, itemTracks }) => {
           .catch((err) => console.error('Artist image retrieval failed:'));
       }
     }
-  }, [item?.artists, item?.owner?.id, spotifyApi]);
+  }, [item?.artists, item?.owner?.id, spotifyApi, session]);
 
   return (
     <div

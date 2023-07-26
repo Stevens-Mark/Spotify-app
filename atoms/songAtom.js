@@ -38,7 +38,7 @@ export const songsUrisState = atom({
 // list of the users recently played tracks according to Spotify
 export const recentlyListState = atom({
   key: 'recentlyListState',
-  default: [],
+  default: null,
 });
 
 // list of recently played track uris for all recently played tracks according to Spotify
