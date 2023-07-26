@@ -3,7 +3,7 @@ import { atom } from 'recoil';
 // set the number of items to display (pagnation) globally
 export const itemsPerPageState = atom({
   key: 'itemsPerPageState ',
-  default: 25,
+  default: 14,
 });
 
 // keep track on naviagtion position for nav buttons

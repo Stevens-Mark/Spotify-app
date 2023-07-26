@@ -64,7 +64,7 @@ const LikedPage = () => {
       if (spotifyApi.getAccessToken()) {
         spotifyApi
           .getMySavedTracks({
-            limit: 25,
+            limit: itemsPerPage,
             offset: 0,
           })
           .then(
@@ -90,15 +90,15 @@ const LikedPage = () => {
               ); // set uris to be used in player
             },
             function (err) {
-              console.log('Genres retrieval failed !');
-              toast.error('Genres retrieval failed !', {
+              console.log('Songs retrieval failed !');
+              toast.error('Songs retrieval failed !', {
                 theme: 'colored',
               });
             }
           );
       }
     }
-  }, [likedTracks, session, setLikedTrackUris, setLikedTracklist, spotifyApi]);
+  }, [itemsPerPage, likedTracks, session, setLikedTrackUris, setLikedTracklist, spotifyApi]);
 
   // Function to fetch more data when the user scrolls down
   const fetchMoreData = () => {
@@ -139,8 +139,8 @@ const LikedPage = () => {
             setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
           },
           function (err) {
-            console.log('Failed to get genres!');
-            toast.error('Genres retrieval failed !', {
+            console.log('Songs retrieval failed !');
+            toast.error('Songs retrieval failed !', {
               theme: 'colored',
             });
           }

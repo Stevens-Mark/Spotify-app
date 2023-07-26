@@ -29,7 +29,7 @@ function Search() {
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
   const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [genres, setGenres] = useRecoilState(genreState);
-  const [currentOffset, setCurrentOffset] = useState(14); // Updated the initial value of currentOffset
+  const [currentOffset, setCurrentOffset] = useState(0); // Updated the initial value of currentOffset
   const [stopFetch, setStopFetch] = useState(false); // Updated the initial value of stopFetch
 
   useEffect(() => {
@@ -47,7 +47,10 @@ function Search() {
               setGenres(data?.body?.categories?.items);
             },
             function (err) {
-              console.log('Failed to get genres!', err);
+              console.log('Failed to get genres!');
+              toast.error('Genre retrieval failed !', {
+                theme: 'colored',
+              });
             }
           );
       }
@@ -68,13 +71,15 @@ function Search() {
    * @function fetchGenre
    * @returns {object} updated list of genres
    */
+  // Function to fetch more genres when the user scrolls down
   const fetchGenre = () => {
     if (!stopFetch) {
-      console.log("currentOffset ", currentOffset);
+      const nextOffset = currentOffset + itemsPerPage; // Calculate the next offset
+
       spotifyApi
         .getCategories({
           limit: itemsPerPage,
-          offset: currentOffset,
+          offset: nextOffset, // Use the next offset for fetching new data
           country: 'US', // FR, US, GB
           locale: 'en_US', // fr_FR, en_US, en_GB
         })
@@ -83,7 +88,7 @@ function Search() {
             // Check if there's no more data to fetch
             if (data?.body?.categories?.items?.length === 0) {
               setStopFetch(true);
-              // return; // Exit the function early if there are no more items
+              return; // Exit the function early if there are no more items
             }
             const updatedList = [...genres, ...data?.body?.categories?.items];
             // Always ensure there are no duplicate objects in the list of categories
@@ -93,10 +98,13 @@ function Search() {
                 updatedList.findIndex((other) => genre.id === other.id)
             );
             setGenres(genreList);
-            setCurrentOffset((prevOffset) => prevOffset + itemsPerPage); // Update the currentOffset using functional update
+            setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
           },
           function (err) {
             console.log('Failed to get genres!');
+            toast.error('Genre retrieval failed !', {
+              theme: 'colored',
+            });
           }
         );
     }
