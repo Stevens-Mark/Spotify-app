@@ -98,53 +98,61 @@ const LikedPage = () => {
           );
       }
     }
-  }, [itemsPerPage, likedTracks, session, setLikedTrackUris, setLikedTracklist, spotifyApi]);
+  }, [
+    itemsPerPage,
+    likedTracks,
+    session,
+    setLikedTrackUris,
+    setLikedTracklist,
+    spotifyApi,
+  ]);
 
   // Function to fetch more data when the user scrolls down
   const fetchMoreData = () => {
     if (!stopFetch) {
       const nextOffset = currentOffset + itemsPerPage; // Calculate the next offset
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getMySavedTracks({
+            limit: itemsPerPage,
+            offset: nextOffset, // Use the next offset for fetching new data
+          })
+          .then(
+            function (data) {
+              // Check if there's no more data to fetch
+              if (data?.body?.items?.length === 0) {
+                setStopFetch(true); // Set stopFetch to true if there are no more items
+                return; // Exit the function early if there are no more items
+              }
 
-      spotifyApi
-        .getMySavedTracks({
-          limit: itemsPerPage,
-          offset: nextOffset, // Use the next offset for fetching new data
-        })
-        .then(
-          function (data) {
-            // Check if there's no more data to fetch
-            if (data?.body?.items?.length === 0) {
-              setStopFetch(true); // Set stopFetch to true if there are no more items
-              return; // Exit the function early if there are no more items
+              // Merge the new data with the existing data and remove duplicates
+              setLikedTracklist((prev) => ({
+                ...prev,
+                items: mergeAndRemoveDuplicates(prev.items, data?.body?.items),
+              }));
+
+              // Update the likedTrackUris with the new URIs
+              setLikedTrackUris((prev) => {
+                // Convert the previous URIs to a Set for faster lookups
+                const existingUris = new Set(prev);
+                // Filter out duplicates from newItems by checking against existingUris
+                const newTrackUris = data?.body?.items
+                  .filter((item) => !existingUris.has(item.track.uri))
+                  .map((item) => item.track.uri);
+                // Combine the existing URIs and the new URIs to form the new uris list
+                return [...prev, ...newTrackUris];
+              });
+
+              setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
+            },
+            function (err) {
+              console.log('Songs retrieval failed !');
+              toast.error('Songs retrieval failed !', {
+                theme: 'colored',
+              });
             }
-
-            // Merge the new data with the existing data and remove duplicates
-            setLikedTracklist((prev) => ({
-              ...prev,
-              items: mergeAndRemoveDuplicates(prev.items, data?.body?.items),
-            }));
-
-            // Update the likedTrackUris with the new URIs
-            setLikedTrackUris((prev) => {
-              // Convert the previous URIs to a Set for faster lookups
-              const existingUris = new Set(prev);
-              // Filter out duplicates from newItems by checking against existingUris
-              const newTrackUris = data?.body?.items
-                .filter((item) => !existingUris.has(item.track.uri))
-                .map((item) => item.track.uri);
-              // Combine the existing URIs and the new URIs to form the new uris list
-              return [...prev, ...newTrackUris];
-            });
-
-            setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
-          },
-          function (err) {
-            console.log('Songs retrieval failed !');
-            toast.error('Songs retrieval failed !', {
-              theme: 'colored',
-            });
-          }
-        );
+          );
+      }
     }
   };
 

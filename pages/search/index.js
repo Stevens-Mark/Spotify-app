@@ -75,38 +75,39 @@ function Search() {
   const fetchGenre = () => {
     if (!stopFetch) {
       const nextOffset = currentOffset + itemsPerPage; // Calculate the next offset
-
-      spotifyApi
-        .getCategories({
-          limit: itemsPerPage,
-          offset: nextOffset, // Use the next offset for fetching new data
-          country: 'US', // FR, US, GB
-          locale: 'en_US', // fr_FR, en_US, en_GB
-        })
-        .then(
-          function (data) {
-            // Check if there's no more data to fetch
-            if (data?.body?.categories?.items?.length === 0) {
-              setStopFetch(true);
-              return; // Exit the function early if there are no more items
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getCategories({
+            limit: itemsPerPage,
+            offset: nextOffset, // Use the next offset for fetching new data
+            country: 'US', // FR, US, GB
+            locale: 'en_US', // fr_FR, en_US, en_GB
+          })
+          .then(
+            function (data) {
+              // Check if there's no more data to fetch
+              if (data?.body?.categories?.items?.length === 0) {
+                setStopFetch(true);
+                return; // Exit the function early if there are no more items
+              }
+              const updatedList = [...genres, ...data?.body?.categories?.items];
+              // Always ensure there are no duplicate objects in the list of categories
+              const genreList = updatedList.filter(
+                (genre, index) =>
+                  index ===
+                  updatedList.findIndex((other) => genre.id === other.id)
+              );
+              setGenres(genreList);
+              setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
+            },
+            function (err) {
+              console.log('Failed to get genres!');
+              toast.error('Genre retrieval failed !', {
+                theme: 'colored',
+              });
             }
-            const updatedList = [...genres, ...data?.body?.categories?.items];
-            // Always ensure there are no duplicate objects in the list of categories
-            const genreList = updatedList.filter(
-              (genre, index) =>
-                index ===
-                updatedList.findIndex((other) => genre.id === other.id)
-            );
-            setGenres(genreList);
-            setCurrentOffset(nextOffset); // Update the currentOffset with the nextOffset
-          },
-          function (err) {
-            console.log('Failed to get genres!');
-            toast.error('Genre retrieval failed !', {
-              theme: 'colored',
-            });
-          }
-        );
+          );
+      }
     }
   };
 
