@@ -6,7 +6,8 @@ import { useSession } from 'next-auth/react';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
-import { useSetRecoilState, useRecoilState } from 'recoil';
+import { useSetRecoilState, useRecoilState, useRecoilValue } from 'recoil';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 import {
   showEpisodesUrisState,
   showEpisodesListState,
@@ -62,6 +63,7 @@ const ShowPage = ({ showInfo }) => {
   const { id } = router.query;
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [lastShowEpisodeId, setLastShowEpisodeId] =
     useRecoilState(showEpisodeIdState); // show episodes Id
 
@@ -143,7 +145,6 @@ const ShowPage = ({ showInfo }) => {
    * @returns {object} updated list in showEpisodesUris/showEpisodesList
    */
   const fetchMoreData = () => {
-    const itemsPerPage = 25;
     const nextOffset = currentOffset + itemsPerPage;
     setCurrentOffset(nextOffset);
     fetch(
@@ -236,8 +237,8 @@ const ShowPage = ({ showInfo }) => {
             </div>
           </div>
 
-        {/* Scroll to top button */}
-        {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
+          {/* Scroll to top button */}
+          {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         </section>
         <Footer />
       </div>

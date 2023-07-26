@@ -7,8 +7,9 @@ import useSpotify from '@/hooks/useSpotify';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import useScrollToTop from '@/hooks/useScrollToTop';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { genreState } from '@/atoms/genreAtom';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 // import icons & components
 import Layout from '@/components/layouts/Layout';
 import NestedLayout from '@/components/layouts/NestedLayout';
@@ -26,10 +27,10 @@ function Search() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [genres, setGenres] = useRecoilState(genreState);
-  const [currentOffset, setCurrentOffset] = useState(25); // Updated the initial value of currentOffset
+  const [currentOffset, setCurrentOffset] = useState(14); // Updated the initial value of currentOffset
   const [stopFetch, setStopFetch] = useState(false); // Updated the initial value of stopFetch
-  const itemsPerPage = 25;
 
   useEffect(() => {
     if (genres === null) {
@@ -51,8 +52,7 @@ function Search() {
           );
       }
     }
-  }, [genres, setGenres, spotifyApi, session]);
-
+  }, [genres, setGenres, spotifyApi, session, itemsPerPage]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -70,6 +70,7 @@ function Search() {
    */
   const fetchGenre = () => {
     if (!stopFetch) {
+      console.log("currentOffset ", currentOffset);
       spotifyApi
         .getCategories({
           limit: itemsPerPage,
@@ -82,7 +83,7 @@ function Search() {
             // Check if there's no more data to fetch
             if (data?.body?.categories?.items?.length === 0) {
               setStopFetch(true);
-              return; // Exit the function early if there are no more items
+              // return; // Exit the function early if there are no more items
             }
             const updatedList = [...genres, ...data?.body?.categories?.items];
             // Always ensure there are no duplicate objects in the list of categories
@@ -119,7 +120,7 @@ function Search() {
         </h2>
         <div className="grid xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
           {/* genres list here */}
-          {genres?.slice(1).map((item, idx) => (
+          {genres?.map((item, idx) => (
             <GenreCard key={`${item?.id}-${idx}`} item={item} idx={idx} />
           ))}
         </div>

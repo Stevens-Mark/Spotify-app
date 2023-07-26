@@ -8,6 +8,7 @@ import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 import {
   searchResultState,
   queryState,
@@ -31,6 +32,7 @@ function Shows() {
   const router = useRouter();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [queryResults, setQueryResults] = useRecoilState(searchResultState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const query = useRecoilValue(queryState);
@@ -63,7 +65,6 @@ function Shows() {
    */
   const fetchMoreData = () => {
     if (!stopFetch) {
-      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
       setIsSearching(true);
 

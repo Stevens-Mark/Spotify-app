@@ -8,8 +8,9 @@ import { useRouter } from 'next/router';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { genreListState } from '@/atoms/genreAtom';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 // import layouts/components
 import Layout from '@/components/layouts/Layout';
 import MediaResultList from '@/components/lists/mediaResultList';
@@ -77,6 +78,7 @@ function Genres({ genreData }) {
   const router = useRouter();
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
 
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [genreList, setGenreList] = useRecoilState(genreListState);
   const [categoryId, setCategoryId] = useState(null);
   const [currentOffset, setCurrentOffset] = useState(0);
@@ -84,14 +86,13 @@ function Genres({ genreData }) {
 
   const totalNumber = genreData?.playlists?.total;
   const genreCategory = genreData?.categoryName;
-// Spotify returns a list of genres (see genre.js)
-  const error = genreData?.error || null; 
+  // Spotify returns a list of genres (see genre.js)
+  const error = genreData?.error || null;
 
   useEffect(() => {
     setGenreList(genreData?.playlists?.items);
   }, [genreData?.playlists?.items, setGenreList]);
 
-  
   useEffect(() => {
     setCategoryId((router?.asPath).split('/').pop());
   }, [router?.asPath]);
@@ -112,7 +113,6 @@ function Genres({ genreData }) {
    */
   const fetchMoreData = async () => {
     if (genreList && !stopFetch) {
-      const itemsPerPage = 25;
       const nextOffset = currentOffset + itemsPerPage;
       try {
         const res = await fetch(
@@ -145,7 +145,6 @@ function Genres({ genreData }) {
         <title>Provided by Spotify - Results for Playlists</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
-
 
       <MediaResultList
         heading={genreCategory}

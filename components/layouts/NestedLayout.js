@@ -4,8 +4,9 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { errorState } from '@/atoms/errorAtom';
+import { itemsPerPageState } from '@/atoms/otherAtoms';
 import {
   searchResultState,
   queryState,
@@ -29,6 +30,7 @@ import StatusSpinner from '../graphics/StatusSpinner';
  */
 const NestedLayout = ({ children }) => {
   const spotifyApi = useSpotify();
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
   const setQueryResults = useSetRecoilState(searchResultState);
   const setTopResults = useSetRecoilState(topResultState);
   const [query, setQuery] = useRecoilState(queryState);
@@ -66,7 +68,6 @@ const NestedLayout = ({ children }) => {
    */
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const itemsPerPage = 25;
     if (query?.length > 0) {
       setSubmitted(true);
       try {
