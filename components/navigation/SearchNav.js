@@ -22,20 +22,17 @@ function SearchNav() {
   return (
     <>
       {submitted && !isSearching && !isError && (
-        <nav
-          role="navigation"
-          aria-label="Search menu"
-          className="py-[3px]"
-        >
+        <nav role="navigation" aria-label="Search menu" className="py-[3px]">
           <ul className="px-5 xs:px-8 space-x-1 space-y-2 flex flex-wrap justify-center xs:justify-start w-full">
-            <li className='mt-2'>
+            <li className="mt-2">
               <Link
                 href="/search/all"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/all'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={path === '/search/all' ? 'page' : undefined}
               >
                 All
               </Link>
@@ -45,9 +42,10 @@ function SearchNav() {
                 href="/search/artists"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/artists'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={path === '/search/artists' ? 'page' : undefined}
               >
                 Artists
               </Link>
@@ -57,9 +55,10 @@ function SearchNav() {
                 href="/search/playlists"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/playlists'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={path === '/search/playlists' ? 'page' : undefined}
               >
                 Playlists
               </Link>
@@ -69,9 +68,10 @@ function SearchNav() {
                 href="/search/albums"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/albums'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={path === '/search/albums' ? 'page' : undefined}
               >
                 Albums
               </Link>
@@ -81,9 +81,12 @@ function SearchNav() {
                 href="/search/podcastAndEpisodes"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/podcastAndEpisodes'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={
+                  path === '/search/podcastAndEpisodes' ? 'page' : undefined
+                }
               >
                 Podcasts & Episodes
               </Link>
@@ -93,9 +96,10 @@ function SearchNav() {
                 href="/search/tracks"
                 className={`text-sm py-1 px-3 rounded-full ${
                   path === '/search/tracks'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800'
+                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                aria-current={path === '/search/tracks' ? 'page' : undefined}
               >
                 Songs
               </Link>

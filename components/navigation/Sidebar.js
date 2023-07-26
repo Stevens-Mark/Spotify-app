@@ -94,9 +94,9 @@ function Sidebar() {
   ]);
 
   const handleHome = () => {
+    router.push('/');
     setSubmitted(false);
     setQuery('');
-    router.push('/');
   };
 
   const handleClick = (id) => {
@@ -128,7 +128,7 @@ function Sidebar() {
           <ul className="space-y-4 w-full">
             <li>
               <button
-                className="flex items-center space-x-2 hover:text-white"
+                className="flex items-center space-x-2 hover:text-white focus:text-white"
                 onClick={handleHome}
                 aria-label="Go to Home"
               >
@@ -141,7 +141,7 @@ function Sidebar() {
               <Link
                 href="/search"
                 passHref
-                className="flex items-center space-x-2 hover:text-white"
+                className="flex items-center space-x-2 hover:text-white focus:text-white"
               >
                 <MagnifyingGlassIcon className="h-5 w-5 ml-3" />
                 <p>Search</p>
@@ -152,7 +152,7 @@ function Sidebar() {
               <Link
                 href="/recently"
                 passHref
-                className="flex items-center space-x-2 hover:text-white"
+                className="flex items-center space-x-2 hover:text-white focus:text-white"
               >
                 <BuildingLibraryIcon className="h-5 w-5 ml-3" />
                 <p>Recently Played</p>
@@ -160,7 +160,7 @@ function Sidebar() {
             </li>
 
             <li>
-              <button className="flex items-center space-x-2 mb-4 hover:text-white">
+              <button className="flex items-center space-x-2 mb-4 hover:text-white focus:text-white">
                 <PlusCircleIcon className="h-5 w-5 ml-3" />
                 <p>Create Playlist</p>
               </button>
@@ -171,7 +171,7 @@ function Sidebar() {
         <hr className="border-t-[0.1px] border-gray-900 " />
 
         <button
-          className="flex items-center py-4 space-x-2 hover:text-white"
+          className="flex items-center py-4 space-x-2 hover:text-white focus:text-white"
           onClick={() => signOut()}
         >
           <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
@@ -199,12 +199,12 @@ function Sidebar() {
               ${
                 activePlaylist == playlist?.id && isPlaying
                   ? 'text-green-500'
-                  : 'hover:text-white'
+                  : 'hover:text-white focus:text-white'
               } 
               ${
                 activePlaylistId == playlist?.id
-                  ? ` bg-gray-900 hover:bg-gray-800`
-                  : 'hover:bg-gray-900'
+                  ? ` bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
+                  : 'hover:bg-gray-900 focus:bg-gray-900'
               }
             `}
                 >

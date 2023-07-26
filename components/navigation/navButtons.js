@@ -46,7 +46,7 @@ function NavigationButtons() {
   return (
     <div className="absolute top-6 left-20 md:left-8 z-30 hidden md:inline">
       <button
-        className={`rounded-full mr-1 bg-gray-900 hover:bg-gray-800 text-pink-swan hover:text-white ${
+        className={`rounded-full mr-1 text-pink-swan bg-gray-900 hover:bg-gray-800 hover:text-white focus:bg-gray-800 focus:text-white ${
           !canGoBack && 'cursor-not-allowed'
         }`}
         onClick={handleGoBack}
@@ -56,7 +56,7 @@ function NavigationButtons() {
       </button>
 
       <button
-        className={`rounded-full mx-1 bg-gray-900 hover:bg-gray-800 text-pink-swan hover:text-white ${
+        className={`rounded-full mx-1 text-pink-swan bg-gray-900 hover:bg-gray-800 hover:text-white focus:bg-gray-800 focus:text-white ${
           !canGoForward && 'cursor-not-allowed'
         }`}
         onClick={handleGoForward}

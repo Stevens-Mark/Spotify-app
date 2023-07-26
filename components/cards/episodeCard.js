@@ -144,9 +144,13 @@ function EpisodeCard({ track, order, whichList }) {
   }, [currentItemId, currentTrackId, isPlaying, track?.id]);
 
   return (
-    <Link href={`/episode/${track?.id}`} passHref>
+    <Link
+      href={`/episode/${track?.id}`}
+      passHref
+      className=" focus:bg-gray-800"
+    >
       <div className="border-b-[0.25px] border-gray-800 max-w-2xl xl:max-w-6xl">
-        <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  text-white p-2 md:p-3 xl:p-4">
+        <div className="grid grid-cols-[max-content_1fr_1fr] md:grid-cols-[max-content_max-content_1fr_1fr] grid-rows-[max-content_max-content_1fr] rounded-lg hover:bg-gray-800  transition delay-100 duration-300 ease-in-out text-white p-2 md:p-3 xl:p-4">
           <Image
             className="col-span-1 row-start-1 row-end-1 md:row-end-4 aspect-square rounded-md shadow-image mr-5 w-16 md:w-32"
             src={track?.images?.[0]?.url || noImage}
@@ -177,9 +181,9 @@ function EpisodeCard({ track, order, whichList }) {
             aria-label="Play or Pause episode"
           >
             {activeStatus && order == currentSongIndex ? (
-              <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
+              <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 " />
             ) : (
-              <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110" />
+              <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110" />
             )}
           </button>
 

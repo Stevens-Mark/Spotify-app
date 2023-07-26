@@ -88,7 +88,7 @@ function Card({ item }) {
     <Link
       href={linkAddress}
       passHref
-      className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
+      className={`group relative rounded-lg cursor-pointer bg-gray-900 hover:bg-gray-800 focus:bg-gray-800 transition delay-100 duration-300 ease-in-out pb-8`}
     >
       <div className="relative p-2 sm:p-2 md:p-3 xl:p-4">
         <Image
@@ -103,10 +103,10 @@ function Card({ item }) {
         />
         {item?.type !== 'show' && item?.type !== 'episode' && (
           <button
-            className={`absolute bottom-24 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 ${
+            className={`absolute bottom-24 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 ${
               activeStatus
                 ? '-translate-y-2'
-                : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
+                : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100 group-focus:-translate-y-2 group-focus:opacity-100'
             }`}
             onClick={(event) => {
               HandleCardPlayPauseClick(event);

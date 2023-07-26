@@ -84,7 +84,7 @@ function TopResultCard({ item }) {
   }, [currentItemId, currentTrackId, isPlaying, item?.id]);
 
   return (
-    <Link href={linkAddress} passHref className="group">
+    <Link href={linkAddress} passHref className="group focus:bg-gray-800">
       <div className="relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60">
         <Image
           className={`aspect-square shadow-image ${
@@ -99,10 +99,10 @@ function TopResultCard({ item }) {
         />
 
         <button
-          className={`absolute bottom-4 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 ${
+          className={`absolute bottom-4 right-7 bg-black rounded-full shadow-3xl text-green-500 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 ${
             activeStatus
               ? '-translate-y-2'
-              : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100'
+              : 'opacity-0 group-hover:-translate-y-2 group-hover:opacity-100 group-focus:-translate-y-2 group-focus:opacity-100'
           }`}
           onClick={(event) => {
             HandleCardPlayPauseClick(event);

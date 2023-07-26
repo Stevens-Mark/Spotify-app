@@ -20,7 +20,7 @@ const TopSongCard = ({
 }) => {
   return (
     <div
-      className={`group flex justify-between text-pink-swan p-2 rounded-md hover:text-white hover:bg-gray-800 transition delay-100 duration-300 ease-in-out overflow-hidden ${
+      className={`group flex justify-between text-pink-swan p-2 rounded-md hover:text-white hover:bg-gray-800 focus:text-white focus:bg-gray-800 transition delay-100 duration-300 ease-in-out overflow-hidden ${
         activeStatus ? 'text-white bg-gray-800' : ''
       }`}
       onClick={(event) => {
@@ -38,7 +38,7 @@ const TopSongCard = ({
           style={{ objectFit: 'cover' }}
         />
         <span
-          className={`absolute inset-0 w-10 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity duration-300 ${
+          className={`absolute inset-0 w-10 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 group-focus:opacity-100 transition-opacity duration-300 ${
             activeStatus ? 'opacity-100' : ''
           }`}
         />
@@ -51,7 +51,7 @@ const TopSongCard = ({
           />
         ) : (
           <PlayIcon
-            className={`absolute text-white top-2.5 left-3 h-5 group-hover:opacity-100 opacity-0 transition delay-100 duration-300 ${
+            className={`absolute text-white top-2.5 left-3 h-5 group-hover:opacity-100 group-focus:opacity-100 opacity-0 transition delay-100 duration-300 ${
               activeStatus ? 'opacity-100' : ''
             }`}
           />

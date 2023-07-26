@@ -22,9 +22,10 @@ const Layout = ({ children }) => {
   return (
     <div className="bg-black h-screen overflow-hidden">
       <aside className="absolute top-5 right-5 z-[100]">
-        <div
+        <button
           className="flex items-center bg-gray-800 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 text-white"
           onClick={signOut}
+          aria-label="sign out"
         >
           <Image
             className="rounded-full w-9 h-9"
@@ -35,13 +36,9 @@ const Layout = ({ children }) => {
             style={{ objectFit: 'cover' }}
             priority
           />
-          <p className={`hidden  isMdLg:inline`}>
-            {session?.user?.name}
-          </p>
-          <ChevronDownIcon
-            className={`h-5 w-5 hidden  isMdLg:inline`}
-          />
-        </div>
+          <p className={`hidden  isMdLg:inline`}>{session?.user?.name}</p>
+          <ChevronDownIcon className={`h-5 w-5 hidden  isMdLg:inline`} />
+        </button>
       </aside>
       <main className="flex">
         <Sidebar />
