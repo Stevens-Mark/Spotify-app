@@ -72,7 +72,7 @@ function RenderTracks({
             <PlayIcon className="h-3.5" />
           )}
         </button>
-        {song?.album?.images?.[0].url && (
+        {song?.album?.images?.[0]?.url && (
           <Image
             className="h-10 w-10"
             src={song?.album?.images?.[0].url}

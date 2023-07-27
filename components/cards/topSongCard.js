@@ -75,7 +75,7 @@ const TopSongCard = ({
         <div>
           <Link
             href={`/album/${song?.album?.id}`}
-            className={` px-2 line-clamp-1 ${
+            className={` px-2 line-clamp-1 hover:underline focus:text-white focus:underline ${
               activeStatus ? 'text-green-500' : 'text-white'
             }`}
           >

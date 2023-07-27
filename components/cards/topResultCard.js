@@ -1,16 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
   currentTrackIdState,
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { albumIdState } from '@/atoms/albumAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
 import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
 // import functions
@@ -39,7 +38,6 @@ function TopResultCard({ item }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-  const currentAlbumId = useRecoilValue(albumIdState);
 
   const linkAddress =
     item?.type === 'album'
@@ -74,8 +72,12 @@ function TopResultCard({ item }) {
     );
   };
 
+  const linkRef = useRef(null);
+  // used for highlighting card for keyboard users
+  const [isFocused, setIsFocused] = useState(false);
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
+
   useEffect(() => {
     const newActiveStatus =
       (currentItemId === item?.id && isPlaying) ||
@@ -83,9 +85,24 @@ function TopResultCard({ item }) {
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, item?.id]);
 
+  const handleFocus = () => {
+    setIsFocused(true);
+  };
+
+  const handleBlur = () => {
+    setIsFocused(false);
+  };
+
   return (
-    <Link href={linkAddress} passHref className="group focus:bg-gray-800">
-      <div className="relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60">
+    <Link href={linkAddress} passHref className="group" ref={linkRef}>
+      <div
+        className={`relative p-4 rounded-lg bg-gray-900 hover:bg-gray-800 transition delay-100 duration-300 ease-in-out h-60 group-focus:bg-gray-800`}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+        style={{
+          background: isFocused ? 'rgb(31 41 55)' : '',
+        }}
+      >
         <Image
           className={`aspect-square shadow-image ${
             item?.type === 'artist' ? 'rounded-full' : 'rounded-md'
@@ -120,22 +137,31 @@ function TopResultCard({ item }) {
           {item?.name.replace('/', ' & ')}
         </h2>
 
-        <div className="flex flex-wrap text-pink-swan mt-2">
+        <div className="flex text-pink-swan mt-2 items-center">
           {/* album */}
           {item?.type === 'album' && (
             <>
-              <span className="truncate">
-                <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
-
-                {item?.artists?.slice(0, 2).map((item) => (
-                  <span className="trucate mr-5" key={item?.id}>
-                    {item?.name}.&nbsp;
-                  </span>
-                ))}
-                <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px]">
-                  {capitalize(item?.type)}
+              {item?.artists && (
+                <span className=" text-pink-swan line-clamp-1">
+                  {item?.artists?.map((artist, index) => (
+                    <span key={artist?.id}>
+                      {index > 0 && ', '}
+                      <Link
+                        href={`/artist/${artist?.id}`}
+                        className="hover:text-white hover:underline focus:underline focus:text-white "
+                      >
+                        {artist?.name}
+                      </Link>
+                    </span>
+                  ))}
                 </span>
-              </span>
+              )}
+              <Link
+                href={`/album/${item?.id}`}
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline flex-shrink-0 flex-grow-0"
+              >
+                {capitalize(item?.type)}
+              </Link>
             </>
           )}
 
@@ -145,28 +171,49 @@ function TopResultCard({ item }) {
               <span className="truncate mr-5">
                 By {capitalize(item?.owner.display_name)}
               </span>
-              <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] truncate">
+              <Link
+                href={`/playlist/${item?.id}`}
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline  flex-shrink-0 flex-grow-0"
+              >
                 {capitalize(item?.type)}
-              </span>
+              </Link>
             </>
           )}
 
           {/*artist*/}
           {item?.type === 'artist' && (
-            <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px]">
+            <Link
+              href={`/artist/${item?.id}`}
+              className=" text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline flex-shrink-0 flex-grow-0"
+            >
               {capitalize(item?.type)}
-            </span>
+            </Link>
           )}
 
           {/* track */}
           {item?.type === 'track' && (
             <>
-              <span className="truncate mr-5">
-                {capitalize(item?.artists?.[0]?.name)}
-              </span>
-              <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px]">
+              {item?.artists && (
+                <span className="text-pink-swan line-clamp-1">
+                  {item?.artists?.map((artist, index) => (
+                    <span key={artist?.id}>
+                      {index > 0 && ', '}
+                      <Link
+                        href={`/artist/${artist?.id}`}
+                        className="hover:text-white hover:underline focus:underline focus:text-white group-focus:bg-gray-800"
+                      >
+                        {artist?.name}
+                      </Link>
+                    </span>
+                  ))}
+                </span>
+              )}
+              <Link
+                href={`/album/${item?.album?.id}`}
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline focus:text-white flex-shrink-0 flex-grow-0"
+              >
                 Song
-              </span>
+              </Link>
             </>
           )}
         </div>

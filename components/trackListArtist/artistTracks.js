@@ -26,13 +26,14 @@ function ArtistTracks() {
         {artistTracklist?.tracks?.slice(0, number).map((track, i) => (
           <ArtistTrack key={`${track.id}-${i}`} track={track} order={i} />
         ))}
-
-        <button
-          className="self-start mt-3 px-5 text-sm md:text-xl text-white hover:text-green-500"
-          onClick={toggleNumber}
-        >
-          {number === 5 ? 'See More' : 'See Less'}
-        </button>
+        {artistTracklist?.tracks?.length > 5 && (
+          <button
+            className="self-start mt-3 px-5 text-sm md:text-xl text-white hover:text-green-500"
+            onClick={toggleNumber}
+          >
+            {number === 5 ? 'See More' : 'See Less'}
+          </button>
+        )}
       </div>
     </section>
   );
