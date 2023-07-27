@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import noAlbum from '@/public/images/blank.svg';
 // import custom hooks
@@ -19,8 +20,6 @@ function PlayingInfo() {
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const setIsPlaying = useSetRecoilState(isPlayState);
 
-  console.log("songinfo ", songInfo)
-
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
       // fetch the song info & set isPlaying & currentTrackId states
@@ -32,12 +31,21 @@ function PlayingInfo() {
               setCurrentTrackId(data.body?.item?.id);
               setIsPlaying(data.body?.is_playing);
             })
-            .catch((err) => console.error('Fetching current song information failed: '));
+            .catch((err) =>
+              console.error('Fetching current song information failed: ')
+            );
         }
       };
       fetchCurrentSong();
     }
   }, [setCurrentTrackId, setIsPlaying, songInfo, spotifyApi]);
+
+  const linkAddress =
+    songInfo?.type === 'episode'
+      ? `/episode/${songInfo?.id}`
+      : songInfo?.type === 'track'
+      ? `/album/${songInfo?.album?.id}`
+      : '/';
 
   return (
     <div className="flex items-center space-x-4">
@@ -54,16 +62,40 @@ function PlayingInfo() {
         style={{ objectFit: 'cover' }}
       />
       <div>
-        <span className="line-clamp-1">{songInfo?.name}</span>
+        <Link
+          href={linkAddress}
+          className="line-clamp-1 hover:text-white hover:underline"
+        >
+          {songInfo && songInfo.name ? (
+            songInfo.name
+          ) : (
+            <span className="sr-only">Home</span>
+          )}
+        </Link>
+
         {songInfo?.artists && (
-          <span className="text-xs text-pink-swan line-clamp-1">
-            {songInfo?.artists?.[0]?.name}
+          <span className=" text-xs text-pink-swan line-clamp-1">
+            {songInfo?.artists?.map((artist, index) => (
+              <span key={artist?.id}>
+                {index > 0 && ', '}
+                <Link
+                  href={`/artist/${artist?.id}`}
+                  className="hover:text-white hover:underline"
+                >
+                  {artist?.name}
+                </Link>
+              </span>
+            ))}
           </span>
         )}
+
         {songInfo?.show && (
-          <span className="text-xs text-pink-swan line-clamp-1">
+          <Link
+            href={`/show/${songInfo?.show?.id}`}
+            className="text-xs text-pink-swan line-clamp-1 hover:text-white hover:underline"
+          >
             {songInfo?.show?.name}
-          </span>
+          </Link>
         )}
       </div>
     </div>

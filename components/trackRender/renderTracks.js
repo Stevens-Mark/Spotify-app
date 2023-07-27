@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 // import functions
 import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 // import { getMonthDayYear } from '@/lib/time';
@@ -30,6 +32,19 @@ function RenderTracks({
   addedAt,
   collection,
 }) {
+  const router = useRouter();
+  const [linkAddress, setLinkAddress] = useState('');
+
+  // Spotify does not make song further info/lyric etc available to the public
+  // thus song name will direct to album, but no further
+  useEffect(() => {
+    if ((router?.asPath).includes('album')) {
+      setLinkAddress(`/album/${(router?.asPath).split('/').pop()}`);
+    } else {
+      setLinkAddress(`/album/${song?.album?.id}`);
+    }
+  }, [router?.asPath, song?.album?.id]);
+
   return (
     <div
       className="grid grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
@@ -42,6 +57,8 @@ function RenderTracks({
           onClick={(event) => {
             HandleTrackPlayPauseClick(event, order);
           }}
+          onFocus={() => setIsShown(true)} // Triggered when the element receives focus (keyboard navigation)
+          onBlur={() => setIsShown(false)} // Triggered when the element loses focus (keyboard navigation)
         >
           {!isShown ? (
             activeStatus ? (
@@ -66,16 +83,28 @@ function RenderTracks({
           />
         )}
         <div className="w-full">
-          <h3
-            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 ${
+          <Link
+            href={linkAddress}
+            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 line-clamp-1 hover:text-white hover:underline focus:text-white focus:underline truncate ${
               activeStatus ? 'text-green-500' : 'text-white'
-            } truncate`}
+            }`}
           >
             {song?.name}
-          </h3>
-          <h4 className="w-24 xxs:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 truncate">
-            {song?.artists?.[0].name}
-          </h4>
+          </Link>
+
+          <div className="w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 truncate">
+            {song?.artists?.map((artist, index) => (
+              <span key={artist?.id}>
+                {index > 0 && ', '}
+                <Link
+                  href={`/artist/${artist?.id}`}
+                  className="hover:text-white hover:underline focus:text-white focus:underline truncate"
+                >
+                  {artist?.name}
+                </Link>
+              </span>
+            ))}
+          </div>
         </div>
       </div>
       {song?.album?.name ? (
@@ -89,7 +118,6 @@ function RenderTracks({
             </span>
           )}
           <div className="flex items-center">
-
             {/**** DUMMY "like" heart to indicate part of likesongs list - currently NON FUNCTIONAL****/}
             {collection && <HeartIcon className="text-green-500 h-5 w-5" />}
 

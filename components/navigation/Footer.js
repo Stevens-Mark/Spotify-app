@@ -29,33 +29,30 @@ function Footer() {
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
-                <p>About</p>
+                About
               </Link>
             </li>
 
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
-                <p>Jobs</p>
+                Jobs
               </Link>
             </li>
 
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
-                <p>For the Record</p>
+                For the Record
               </Link>
             </li>
           </ul>
@@ -70,53 +67,48 @@ function Footer() {
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
-                <p>For Artists</p>
+                For Artists
               </Link>
             </li>
 
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="space-x-2 text-pink-swan hover:text-white"
               >
-                <p>Developers</p>
+                Developers
               </Link>
             </li>
 
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
-                <p>Advertising</p>
+                Advertising
               </Link>
             </li>
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
-                <p>Investors</p>
+                Investors
               </Link>
             </li>
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className=" space-x-2 text-pink-swan hover:text-white"
               >
-                <p>Vendors</p>
+                Vendors
               </Link>
             </li>
           </ul>
@@ -131,22 +123,20 @@ function Footer() {
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
-                <p>Support</p>
+                Support
               </Link>
             </li>
 
             <li>
               <Link
                 href="#"
-                passHref
                 onClick={disableLinkClick}
                 className="text-pink-swan hover:text-white"
               >
-                <p>Free Mobile App</p>
+                Free Mobile App
               </Link>
             </li>
           </ul>
@@ -206,11 +196,9 @@ function Footer() {
             href="https://stevensmarkportfolio.netlify.app/"
             target="_blank"
             rel="noopener noreferrer"
-            passHref
+            className="text-white whitespace-nowrap hover:underline"
           >
-            <p className="text-white whitespace-nowrap hover:underline">
-              Developed by Mark Stevens
-            </p>
+            Developed by Mark Stevens
           </Link>
           <p className="text-white">© 2023 Powered by</p>
           <Image
@@ -226,18 +214,18 @@ function Footer() {
             href="https://open.spotify.com/download"
             target="_blank"
             rel="noopener noreferrer"
-            passHref
+            className="text-white hover:underline mt-2"
           >
-            <p className="text-white hover:underline mt-2">GET SPOTIFY FREE</p>
+            GET SPOTIFY FREE
           </Link>
           <p className="text-pink-swan mr-10">Or</p>
           <Link
             href="https://open.spotify.com/"
             target="_blank"
             rel="noopener noreferrer"
-            passHref
+            className="text-white hover:underline"
           >
-            <p className="text-white hover:underline">Open Spotify</p>
+            Open Spotify
           </Link>
         </div>
       </div>
