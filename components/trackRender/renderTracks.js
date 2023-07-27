@@ -47,7 +47,7 @@ function RenderTracks({
 
   return (
     <div
-      className="grid grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
+      className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
@@ -85,14 +85,14 @@ function RenderTracks({
         <div className="w-full">
           <Link
             href={linkAddress}
-            className={`w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 line-clamp-1 hover:text-white hover:underline focus:text-white focus:underline truncate ${
+            className={`pr-2 hover:text-white hover:underline focus:text-white focus:underline line-clamp-1 ${
               activeStatus ? 'text-green-500' : 'text-white'
             }`}
           >
             {song?.name}
           </Link>
 
-          <div className="w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2 truncate">
+          <div className="pr-2 line-clamp-1">
             {song?.artists?.map((artist, index) => (
               <span key={artist?.id}>
                 {index > 0 && ', '}

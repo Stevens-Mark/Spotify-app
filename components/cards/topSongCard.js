@@ -45,7 +45,7 @@ const TopSongCard = ({
           aria-label="Play or Pause track"
         >
           <Image
-            className="h-10 w-10 rounded-sm"
+            className="h-10 w-10 min-w-[2.5rem]  rounded-sm"
             src={song?.album?.images?.[0]?.url || noImage}
             alt=""
             width={100}
