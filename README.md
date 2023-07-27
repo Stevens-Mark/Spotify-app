@@ -8,7 +8,14 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/59f221d2-28a3-4917-97bc-aa0e42de666f/deploy-status)](https://app.netlify.com/sites/spotifyclone2023/deploys)
 
-You can see the website at [Spotify-clone](https://spotifyclone2023.netlify.app/)
+You can see the website at [Spotify-clone](https://musicontrol2023.netlify.app/)
+
+I'm proud to present my latest project (using Next.js Tailwind & Recoil for the first time. Phew, that wasn't easy!
+  
+If anyone is interested in my work, you log into your Spotify account and then launch my application. The application 'controls' the streaming service.
+
+You need to have a Spotify Premium account and contact me so that I can put you on the 'white list' (I need the email address you use to connect to Spotify). This is currently the only way as I'm still waiting to hear from Spotify whether I can have extended access so that anyone can connect...
+Thanks in advance
 
 NOTE: It runs better on chrome than firefox I think, but for some reason Chrome keeps blocking the site as dangerous. I  have asked them to review it as it's not a danger, but at time of wrting I am still waiting for a reply!!
 
@@ -144,7 +151,14 @@ yarn dev
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/59f221d2-28a3-4917-97bc-aa0e42de666f/deploy-status)](https://app.netlify.com/sites/spotifyclone2023/deploys)
 
-Vous pouvez voir le site web à l'adresse suivante : [Spotify-clone](https://spotifyclone2023.netlify.app/)
+Vous pouvez voir le site web à l'adresse suivante : [Spotify-clone](https://musicontrol2023.netlify.app/)
+
+Je suis fier de vous présenter mon dernier projet (utilisant Next.js Tailwind & Recoil pour la première fois. Ouf, ce n'était pas facile !  
+
+Si quelqu'un est intéressé par mon travail, vous vous connectez à votre compte Spotify et vous lancez mon application. L'application "contrôle" le service de streaming.
+
+Vous devez avoir un compte Spotify Premium et me contacter pour que je puisse vous mettre sur la "liste blanche" (j'ai besoin de l'adresse email que vous utilisez pour vous connecter à Spotify). C'est actuellement le seul moyen car j'attends toujours que Spotify me dise si je peux avoir un accès étendu pour que n'importe qui puisse se connecter...
+Merci d'avance
 
 NOTE : Il fonctionne mieux sur chrome que sur firefox je pense, mais pour une raison quelconque Chrome continue de bloquer le site comme étant dangereux. Je leur ai demandé de le revoir car il n'est pas dangereux, mais à l'heure où j'écris ces lignes, j'attends toujours une réponse !
 
