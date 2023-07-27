@@ -40,7 +40,7 @@ function PlaylistTrack({ track, order }) {
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
@@ -99,9 +99,9 @@ function PlaylistTrack({ track, order }) {
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus =
-      song?.id === currentTrackId && order === currentSongIndex && isPlaying;
+      song?.id === currentTrackId && order === currentSongIndex && currentItemId === originId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [currentSongIndex, currentTrackId, isPlaying, order, song?.id]);
+  }, [currentItemId, currentSongIndex, currentTrackId, isPlaying, order, originId, song?.id]);
 
   return (
     <RenderTracks

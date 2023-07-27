@@ -39,12 +39,13 @@ function RecentPlayedTrack({ track, order }) {
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
@@ -84,9 +85,9 @@ function RecentPlayedTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && currentItemId === originId  && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [song?.id, currentTrackId, isPlaying]);
+  }, [song?.id, currentTrackId, isPlaying, currentItemId, originId]);
 
   return (
     <RenderTracks
