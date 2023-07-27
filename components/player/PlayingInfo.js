@@ -19,6 +19,8 @@ function PlayingInfo() {
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const setIsPlaying = useSetRecoilState(isPlayState);
 
+  console.log("songinfo ", songInfo)
+
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
       // fetch the song info & set isPlaying & currentTrackId states
@@ -46,15 +48,15 @@ function PlayingInfo() {
           songInfo?.images?.[0]?.url ||
           noAlbum
         }
-        alt=""
+        alt="Artwork of track currently playing"
         width={100}
         height={100}
         style={{ objectFit: 'cover' }}
       />
       <div>
         <span className="line-clamp-1">{songInfo?.name}</span>
-        {songInfo?.artist && (
-          <span className="text-sm line-clamp-1">
+        {songInfo?.artists && (
+          <span className="text-xs text-pink-swan line-clamp-1">
             {songInfo?.artists?.[0]?.name}
           </span>
         )}

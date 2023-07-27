@@ -160,7 +160,10 @@ function Sidebar() {
             </li>
 
             <li>
-              <button className="flex items-center space-x-2 mb-4 hover:text-white focus:text-white">
+              <button
+                aria-label="Create Playlist"
+                className="flex items-center space-x-2 mb-4 hover:text-white focus:text-white"
+              >
                 <PlusCircleIcon className="h-5 w-5 ml-3" />
                 <p>Create Playlist</p>
               </button>
@@ -173,6 +176,7 @@ function Sidebar() {
         <button
           className="flex items-center py-4 space-x-2 hover:text-white focus:text-white"
           onClick={() => signOut()}
+          aria-label="Log out"
         >
           <ArrowLeftOnRectangleIcon className="h-5 w-5 ml-3" />
           <p>Logout</p>
@@ -194,6 +198,7 @@ function Sidebar() {
             {myPlaylists?.map((playlist) => (
               <li key={playlist?.id}>
                 <button
+                  aria-label="Go to playlist"
                   onClick={() => handleClick(playlist?.id)}
                   className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
               ${

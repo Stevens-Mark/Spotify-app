@@ -20,7 +20,7 @@ const Layout = ({ children }) => {
   const { data: session } = useSession();
 
   return (
-    <div className="bg-black h-screen overflow-hidden">
+    <main className="bg-black h-screen overflow-hidden">
       <aside className="absolute top-5 right-5 z-[100]">
         <button
           className="flex items-center bg-gray-800 space-x-3 opacity-90 hover:opacity-80 cursor-pointer rounded-full p-1 text-white"
@@ -40,18 +40,18 @@ const Layout = ({ children }) => {
           <ChevronDownIcon className={`h-5 w-5 hidden  isMdLg:inline`} />
         </button>
       </aside>
-      <main className="flex">
+      <div className="flex">
         <Sidebar />
         <div className="relative w-full">
           <NavigationButtons />
           {children}
         </div>
-      </main>
+      </div>
 
       <div className="sticky bottom-0 z-20">
         <Player />
       </div>
-    </div>
+    </main>
   );
 };
 

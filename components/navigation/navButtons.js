@@ -44,7 +44,7 @@ function NavigationButtons() {
   };
 
   return (
-    <div className="absolute top-6 left-20 md:left-8 z-30 hidden md:inline">
+    <nav className="absolute top-6 left-20 md:left-8 z-30 hidden md:inline">
       <button
         className={`rounded-full mr-1 text-pink-swan bg-gray-900 hover:bg-gray-800 hover:text-white focus:bg-gray-800 focus:text-white ${
           !canGoBack && 'cursor-not-allowed'
@@ -64,7 +64,7 @@ function NavigationButtons() {
       >
         <ChevronRightIcon className="p-1 w-8 h-8 pr-[1px]" />
       </button>
-    </div>
+    </nav>
   );
 }
 
