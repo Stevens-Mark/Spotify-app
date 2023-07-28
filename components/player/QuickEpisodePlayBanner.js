@@ -60,9 +60,9 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
   const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
 
-  useEffect(() => {
-    setOriginId((router?.asPath).split('/').pop());
-  }, [router?.asPath, setOriginId]);
+  // useEffect(() => {
+  //   setOriginId((router?.asPath).split('/').pop());
+  // }, [router?.asPath, setOriginId]);
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
@@ -119,11 +119,13 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
                 );
                 const currentTrackIndex =
                   index < 0 || index === null ? 0 : index;
-
+                // uris: [item?.uri],
                 spotifyApi
                   .play({
-                    uris: [item?.uri],
+                    uris: showEpisodesUris,
+                    offset: { position: currentTrackIndex },
                   })
+
                   .then(() => {
                     setPlayerInfoType('episode');
                     setIsPlaying(true);
@@ -173,9 +175,9 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, item?.id, originId]);
 
-  console.log('trackid ', currentTrackId)
-  console.log('currentItemId  ', currentItemId )
-  console.log('originId  ', originId )
+  console.log('trackid ', currentTrackId);
+  console.log('currentItemId  ', currentItemId);
+  console.log('originId  ', originId);
   return (
     <>
       <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
