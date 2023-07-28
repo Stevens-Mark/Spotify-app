@@ -10,7 +10,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activePlaylistState } from '@/atoms/playListAtom';
-import { showEpisodesUrisState } from '@/atoms/showAtom';
+import { showEpisodesUrisState, episodeDurationState } from '@/atoms/showAtom';
 import {
   currentItemIdState,
   playerInfoTypeState,
@@ -29,12 +29,12 @@ import {
 
 /**
  * Renders quick play start button for epsiode
- * @function QuickShowPlayBanner
+ * @function QuickEpisodePlayBanner
  * @param {object} item epsiode information
  * @param {object} scrollRef ref for container scroll
  * @returns {JSX}
  */
-function QuickShowPlayBanner({ item, scrollRef }) {
+function QuickEpisodePlayBanner({ item, scrollRef }) {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [originId, setOriginId] = useRecoilState(originIdState);
@@ -49,6 +49,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+  // used to set duration length in player fro an episode
+  const [episodeDuration, setEpisodeDuration] =
+    useRecoilState(episodeDurationState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
@@ -57,9 +60,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   const [isVisible, setIsVisible] = useState(false);
   const [opacity, setOpacity] = useState(0);
 
-  // useEffect(() => {
-  //   setOriginId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setOriginId]);
+  useEffect(() => {
+    setOriginId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setOriginId]);
 
   const HandleEpisodePlayPauseClick = (event) => {
     event.preventDefault();
@@ -87,6 +90,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
               .play()
               .then(() => {
                 setIsPlaying(true);
+                setEpisodeDuration(item?.duration_ms);
               })
               .catch((err) => {
                 console.error('Playback failed: ');
@@ -126,6 +130,7 @@ function QuickShowPlayBanner({ item, scrollRef }) {
                     setCurrentItemId(originId);
                     setCurrentTrackId(originId);
                     setCurrentSongIndex(currentTrackIndex);
+                    setEpisodeDuration(item?.duration_ms);
                     setActivePlaylist(null); //episode playing so user's playlist null
                   })
                   .catch((err) => {
@@ -168,6 +173,9 @@ function QuickShowPlayBanner({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, item?.id, originId]);
 
+  console.log('trackid ', currentTrackId)
+  console.log('currentItemId  ', currentItemId )
+  console.log('originId  ', originId )
   return (
     <>
       <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
@@ -235,4 +243,4 @@ function QuickShowPlayBanner({ item, scrollRef }) {
   );
 }
 
-export default QuickShowPlayBanner;
+export default QuickEpisodePlayBanner;

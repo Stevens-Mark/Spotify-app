@@ -18,6 +18,7 @@ import {
   episodesListState,
   episodesUrisState,
   activeListInUseState,
+  episodeDurationState
 } from '@/atoms/showAtom';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
@@ -38,8 +39,6 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
 
-  console.log("eipsodecard ", track)
-
   // used to determine what type of info to load/display in plyer window
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 
@@ -57,7 +56,8 @@ function EpisodeCard({ track, order, whichList }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
-
+  // used to set duration length in player for an episode
+ const [episodeDuration, setEpisodeDuration] = useRecoilState(episodeDurationState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
   // used to set play/pause icons
@@ -95,6 +95,7 @@ function EpisodeCard({ track, order, whichList }) {
   const HandleEpisodePlayPause = (event, currentTrackIndex) => {
     event.preventDefault();
     event.stopPropagation();
+    // console.log('eipsodecard ', track);
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track?.id == currentTrackId) {
         spotifyApi
@@ -122,6 +123,7 @@ function EpisodeCard({ track, order, whichList }) {
             setCurrentItemId(track?.id);
             setCurrentTrackId(track?.id);
             setCurrentSongIndex(currentTrackIndex);
+            setEpisodeDuration(track?.duration_ms)
             setActiveListInUse(
               whichList === 'show' ? showEpisodesList : episodesList
             ); // set list to reference for player

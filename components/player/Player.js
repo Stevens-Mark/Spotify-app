@@ -15,7 +15,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
-import { activeListInUseState } from '@/atoms/showAtom';
+import { activeListInUseState, episodeDurationState } from '@/atoms/showAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -52,6 +52,8 @@ function Player() {
   );
   // playlist list to reference when finding episode or show ID
   const activeListInUse = useRecoilValue(activeListInUseState);
+  const [episodeDuration, setEpisodeDuration] =
+    useRecoilState(episodeDurationState);
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
@@ -59,8 +61,6 @@ function Player() {
   const [isArtist, setIsArtist] = useState(false);
   const activeArtist = useRecoilValue(activeArtistState);
   const [progressData, setProgressData] = useState();
-
-  console.log(progressData);
 
   useEffect(() => {
     // take ID from url each time page changed
@@ -77,7 +77,6 @@ function Player() {
   }, [router?.asPath]);
 
   useEffect(() => {
-
     if (!isPlaying) {
       // If not playing, clear the interval to stop fetching data
       return;
@@ -85,16 +84,21 @@ function Player() {
     if (spotifyApi.getAccessToken()) {
       // Fetch the currently playing track periodically
       const fetchCurrentSong = () => {
-        console.log('playinginfo function called!!!!!!!!!');
         spotifyApi
           .getMyCurrentPlayingTrack()
           .then((data) => {
-            console.log("data ", data)
             if (data.body?.is_playing) {
-              setProgressData({
-                duration: data.body?.item?.duration_ms,
-                progress: data.body?.progress_ms,
-              });
+              if (data.body?.item) {
+                setProgressData({
+                  duration: data.body?.item?.duration_ms,
+                  progress: data.body?.progress_ms,
+                });
+              } else {
+                setProgressData({
+                  duration: episodeDuration,
+                  progress: data.body?.progress_ms,
+                });
+              }
             } else {
               setProgressData({
                 duration: 0,
@@ -108,7 +112,7 @@ function Player() {
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
       return () => clearInterval(interval);
     }
-  }, [spotifyApi, session, isPlaying]);
+  }, [spotifyApi, session, isPlaying, episodeDuration]);
 
   const debounceAdjustVolume = useMemo(
     () =>
@@ -177,14 +181,24 @@ function Player() {
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
    * @function findPreviousEpisodeId
-   * @returns the Id for the previous episode
+   * @returns the Id for the previous episode & the duration of the episode
    */
   const findPreviousEpisodeId = () => {
+    console.log('activeListInUse ', activeListInUse);
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
+
     const previousEpisodeId =
       episodeIndex > 0 ? activeListInUse[episodeIndex - 1]?.id : null;
+
+    const previousDuration =
+      episodeIndex > 0 ? activeListInUse[episodeIndex - 1]?.duration_ms : null;
+
+    if (previousDuration !== null) {
+      setEpisodeDuration(previousDuration);
+    }
+
     return previousEpisodeId || currentTrackId;
   };
 
@@ -202,7 +216,7 @@ function Player() {
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
                     if (data.body?.currently_playing_type === 'episode') {
-                      setCurrentTrackId(findPreviousEpisodeId);
+                      setCurrentTrackId(findPreviousEpisodeId());
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
@@ -248,13 +262,21 @@ function Player() {
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
    * @function findEpisodeId
-   * @returns the Id for the current episode
+   * @returns the Id for the current episode & the duration of the episode
    */
   const findEpisodeId = () => {
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
-    return episodeIndex !== -1 ? currentTrackId : null;
+
+    // Check if the episodeIndex is valid and not -1
+    if (episodeIndex !== -1) {
+      const currentDuration = activeListInUse[episodeIndex]?.duration_ms;
+      setEpisodeDuration(currentDuration);
+      return currentTrackId;
+    }
+
+    return null; // Return null if the episode is not found
   };
 
   /* either play or pause a track */
@@ -279,7 +301,7 @@ function Player() {
             .play()
             .then(() => {
               if (dataType === 'episode') {
-                setCurrentTrackId(findEpisodeId);
+                setCurrentTrackId(findEpisodeId());
               } else {
                 setCurrentTrackId(data.body?.item?.id);
               }
@@ -302,16 +324,26 @@ function Player() {
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
    * @function findNextEpisodeId
-   * @returns the Id for the next episode
+   * @returns the Id for the next episode & the duration of the episode
    */
   const findNextEpisodeId = () => {
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
+
     const nextEpisodeId =
-      episodeIndex < activeListInUse?.length - 1
+      episodeIndex < activeListInUse.length - 1
         ? activeListInUse[episodeIndex + 1]?.id
         : null;
+
+    const nextDuration =
+      episodeIndex < activeListInUse.length - 1
+        ? activeListInUse[episodeIndex + 1]?.duration_ms
+        : null;
+
+    if (nextDuration !== null) {
+      setEpisodeDuration(nextDuration);
+    }
     return nextEpisodeId || currentTrackId;
   };
 
@@ -329,7 +361,7 @@ function Player() {
                   .getMyCurrentPlayingTrack()
                   .then((data) => {
                     if (data.body?.currently_playing_type === 'episode') {
-                      setCurrentTrackId(findNextEpisodeId);
+                      setCurrentTrackId(findNextEpisodeId());
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }

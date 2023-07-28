@@ -30,9 +30,7 @@ import noImage from '@/public/images/noImageAvailable.svg';
 function Card({ item }) {
   const spotifyApi = useSpotify();
 
-  console.log("card ", item)
-
-  // used to determine what type of info to load
+    // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);

@@ -8,7 +8,7 @@ import { getMonthYear, msToTime } from '@/lib/time';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
-import QuickEpisodePlayBanner from '@/components/player/QuickShowPlayBanner';
+import QuickEpisodePlayBanner from '@/components/player/QuickEpisodePlayBanner';
 import Footer from '@/components/navigation/Footer';
 
 export async function getServerSideProps(context) {
@@ -48,6 +48,7 @@ export async function getServerSideProps(context) {
 const EpisodePage = ({ episode }) => {
   const textRef = useRef(null);
   const scrollRef = useRef(null);
+
 
   const [expandABoutText, setExpandABoutText] = useState(false); // show expand/collapse About text
   const [expandABoutButton, setExpandABoutButton] = useState(false); // show/hide see more/less button
