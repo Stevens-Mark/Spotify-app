@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
+import { useSession } from 'next-auth/react';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
+
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import { currentItemIdState, originIdState } from '@/atoms/otherAtoms';
@@ -26,6 +28,7 @@ import {
   PlayCircleIcon,
 } from '@heroicons/react/24/solid';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
+import SongProgress from './songProgress';
 
 /**
  * Renders the track player at the bottom of screen
@@ -35,6 +38,7 @@ import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 function Player() {
   const spotifyApi = useSpotify();
   const router = useRouter();
+  const { data: session } = useSession();
 
   const [shuffleState, setShuffletState] = useState(false); // shuffle functionality
   const [repeatState, setRepeatState] = useState(0); // repeat functionality
@@ -54,6 +58,9 @@ function Player() {
   const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
   const activeArtist = useRecoilValue(activeArtistState);
+  const [progressData, setProgressData] = useState();
+
+  console.log(progressData);
 
   useEffect(() => {
     // take ID from url each time page changed
@@ -68,6 +75,40 @@ function Player() {
     const isArtist = (router?.asPath).includes('artist');
     setIsArtist(isArtist);
   }, [router?.asPath]);
+
+  useEffect(() => {
+
+    if (!isPlaying) {
+      // If not playing, clear the interval to stop fetching data
+      return;
+    }
+    if (spotifyApi.getAccessToken()) {
+      // Fetch the currently playing track periodically
+      const fetchCurrentSong = () => {
+        console.log('playinginfo function called!!!!!!!!!');
+        spotifyApi
+          .getMyCurrentPlayingTrack()
+          .then((data) => {
+            console.log("data ", data)
+            if (data.body?.is_playing) {
+              setProgressData({
+                duration: data.body?.item?.duration_ms,
+                progress: data.body?.progress_ms,
+              });
+            } else {
+              setProgressData({
+                duration: 0,
+                progress: 0,
+              });
+            }
+          })
+          .catch((err) => console.error('Fetching progress data failed: '));
+      };
+
+      const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
+      return () => clearInterval(interval);
+    }
+  }, [spotifyApi, session, isPlaying]);
 
   const debounceAdjustVolume = useMemo(
     () =>
@@ -344,66 +385,72 @@ function Player() {
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
       <PlayingInfo /> {/* left hand side - album photo/info */}
       {/* player controls */}
-    
-      <div className="flex items-center justify-evenly">
-        <button
-          className="hidden sm:inline relative"
-          onClick={() => setShuffle()}
-          aria-label="shuffle songs on/off"
-        >
-          <ArrowsRightLeftIcon
-            className={`button ${
-              shuffleState === false ? 'text-white' : 'text-green-500'
-            }`}
-          />
-          {shuffleState && (
-            <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
-          )}
-        </button>
+      <div className="flex flex-col items-center justify-center">
+        <div className="flex items-center justify-evenly  w-full">
+          <button
+            className="hidden sm:inline relative"
+            onClick={() => setShuffle()}
+            aria-label="shuffle songs on/off"
+          >
+            <ArrowsRightLeftIcon
+              className={`button ${
+                shuffleState === false ? 'text-white' : 'text-green-500'
+              }`}
+            />
+            {shuffleState && (
+              <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
+            )}
+          </button>
 
-        <button
-          onClick={() => skipToPrevious()}
-          aria-label="skip To Previous Track"
-        >
-          <BackwardIcon className="button" />
-        </button>
+          <button
+            onClick={() => skipToPrevious()}
+            aria-label="skip To Previous Track"
+          >
+            <BackwardIcon className="button" />
+          </button>
 
-        <button onClick={handlePlayPause} aria-label="Play/Pause a track">
-          {isPlaying ? (
-            <PauseCircleIcon className="button w-10 h-10" />
-          ) : (
-            <PlayCircleIcon className="button w-10 h-10" />
-          )}
-        </button>
+          <button onClick={handlePlayPause} aria-label="Play/Pause a track">
+            {isPlaying ? (
+              <PauseCircleIcon className="button w-10 h-10" />
+            ) : (
+              <PlayCircleIcon className="button w-10 h-10" />
+            )}
+          </button>
 
-        <button onClick={() => skipToNext()} aria-label="skip To Next Track">
-          <ForwardIcon className="button" />
-        </button>
+          <button onClick={() => skipToNext()} aria-label="skip To Next Track">
+            <ForwardIcon className="button" />
+          </button>
 
-        <button
-          className="hidden sm:inline relative"
-          onClick={() => handleRepeatToggle()}
-          aria-label="repeat track toggle"
-        >
-          <ArrowPathRoundedSquareIcon
-            className={`button w-6 h-6 ${
-              repeatState === 0 ? 'text-white' : 'text-green-500'
-            }`}
-          />
-          {repeatState === 1 || repeatState === 2 ? (
-            <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
-          ) : (
-            ''
-          )}
+          <button
+            className="hidden sm:inline relative"
+            onClick={() => handleRepeatToggle()}
+            aria-label="repeat track toggle"
+          >
+            <ArrowPathRoundedSquareIcon
+              className={`button w-6 h-6 ${
+                repeatState === 0 ? 'text-white' : 'text-green-500'
+              }`}
+            />
+            {repeatState === 1 || repeatState === 2 ? (
+              <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
+            ) : (
+              ''
+            )}
 
-          {repeatState === 2 ? (
-            <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-green-500 pointer-events-none pr-[1.1px]">
-              1
-            </span>
-          ) : (
-            ''
-          )}
-        </button>
+            {repeatState === 2 ? (
+              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-green-500 pointer-events-none pr-[1.1px]">
+                1
+              </span>
+            ) : (
+              ''
+            )}
+          </button>
+        </div>
+        {/* progress bar */}
+        <SongProgress
+          currentPosition={progressData?.progress}
+          duration={progressData?.duration}
+        />
       </div>
       {/* volume control */}
       <div className="flex items-center space-x-3 md:space-x-4 justify-end pr-5">

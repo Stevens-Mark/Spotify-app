@@ -38,6 +38,8 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
 
+  console.log("eipsodecard ", track)
+
   // used to determine what type of info to load/display in plyer window
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 

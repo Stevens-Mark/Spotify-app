@@ -20,25 +20,26 @@ function PlayingInfo() {
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const setIsPlaying = useSetRecoilState(isPlayState);
 
-  useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      // fetch the song info & set isPlaying & currentTrackId states
-      const fetchCurrentSong = () => {
-        if (!songInfo) {
-          spotifyApi
-            .getMyCurrentPlayingTrack()
-            .then((data) => {
-              setCurrentTrackId(data.body?.item?.id);
-              setIsPlaying(data.body?.is_playing);
-            })
-            .catch((err) =>
-              console.error('Fetching current song information failed: ')
-            );
-        }
-      };
-      fetchCurrentSong();
-    }
-  }, [setCurrentTrackId, setIsPlaying, songInfo, spotifyApi]);
+  // useEffect(() => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     // fetch the song info & set isPlaying & currentTrackId states
+  //     const fetchCurrentSong = () => {
+  //       if (!songInfo) {
+  //         console.log("playinginfo function called!!!!!!!!!")
+  //         spotifyApi
+  //           .getMyCurrentPlayingTrack()
+  //           .then((data) => {
+  //             setCurrentTrackId(data.body?.item?.id);
+  //             setIsPlaying(data.body?.is_playing);
+  //           })
+  //           .catch((err) =>
+  //             console.error('Fetching current song information failed: ')
+  //           );
+  //       }
+  //     };
+  //     fetchCurrentSong();
+  //   }
+  // }, [setCurrentTrackId, setIsPlaying, songInfo, spotifyApi]);
 
   const linkAddress =
     songInfo?.type === 'episode'

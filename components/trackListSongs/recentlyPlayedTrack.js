@@ -85,7 +85,7 @@ function RecentPlayedTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && currentItemId === originId  && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId  && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [song?.id, currentTrackId, isPlaying, currentItemId, originId]);
 
