@@ -174,7 +174,7 @@ const MediaHeading = ({ item, itemTracks }) => {
                   <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
                   <span className="text-base">
                     {item?.tracks?.items?.length}{' '}
-                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}
+                    {item?.tracks?.items?.length > 1 ? 'songs' : 'song'},{' '}&nbsp;
                   </span>
                   <span className="text-base truncate text-pink-swan">
                     {msToTime(totalAlbumDuration(item))}

@@ -43,7 +43,7 @@ export const activeListInUseState = atom({
   default: [],
 });
 
-// holds the epsiode duration/time used in the progress bar in the palyer (for epsiode)
+// holds the epsiode duration/time used in the progress bar in the player (for epsiodes)
 export const episodeDurationState = atom({
   key: 'episodeDurationState',
   default: null,

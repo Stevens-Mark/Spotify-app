@@ -118,7 +118,7 @@ const EpisodePage = ({ episode }) => {
 
         <QuickEpisodePlayBanner item={episode} scrollRef={scrollRef} />
 
-        <section className="p-5 xs:px-8 max-w-4xl mb-14">
+        <section className="p-5 xs:px-8 max-w-4xl mb-12">
           <h2 className="text-white text-xl md:text-2xl xl:text-3xl mb-5">
             Episode Desciption
           </h2>
