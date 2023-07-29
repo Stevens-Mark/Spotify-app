@@ -38,26 +38,24 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const [originId, setOriginId] = useRecoilState(originIdState);
-  // used for quick play banner coloring
 
-  const backgroundColor = useRecoilValue(backgroundColorState);
+  const backgroundColor = useRecoilValue(backgroundColorState); // used for quick play banner coloring
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const showEpisodesUris = useRecoilValue(showEpisodesUrisState); // episodes uris from a SHOW
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  // used to set play/pause icons
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-  // used to set duration length in player fro an episode
-  const [episodeDuration, setEpisodeDuration] =
-    useRecoilState(episodeDurationState);
+
+  const setEpisodeDuration = useSetRecoilState(episodeDurationState); // used to set duration length in player fro an episode
+
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
 
-  // show track info when play button at top of screen
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // show track info when play button at top of screen
   const [opacity, setOpacity] = useState(0);
 
   // useEffect(() => {

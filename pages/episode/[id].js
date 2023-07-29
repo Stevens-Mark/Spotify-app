@@ -2,6 +2,10 @@ import Head from 'next/head';
 import { getSession } from 'next-auth/react';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
+// import state management recoil
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
+import { progressDataState } from '@/atoms/otherAtoms';
 //import functions
 import TrackProgressBar from '@/components/graphics/TrackProgressBar';
 import { getMonthYear, msToTime } from '@/lib/time';
@@ -49,9 +53,23 @@ const EpisodePage = ({ episode }) => {
   const textRef = useRef(null);
   const scrollRef = useRef(null);
 
-
   const [expandABoutText, setExpandABoutText] = useState(false); // show expand/collapse About text
   const [expandABoutButton, setExpandABoutButton] = useState(false); // show/hide see more/less button
+
+  const [activeStatus, setActiveStatus] = useState(false);
+  const isPlaying = useRecoilValue(isPlayState);
+  const currentTrackId = useRecoilValue(currentTrackIdState);
+  const progressData = useRecoilValue(progressDataState);
+
+  useEffect(() => {
+    const newActiveStatus = episode?.id === currentTrackId && isPlaying;
+    setActiveStatus(newActiveStatus);
+  }, [currentTrackId, episode?.id, isPlaying]);
+
+  // Update currentposition if the episode is active (so progress bar changes (different from player progress bar))
+  const currentposition = activeStatus
+    ? progressData?.progress
+    : episode?.resume_point?.resume_position_ms;
 
   // calculate if About text is more than 4 lines high ?
   // if not, hide see more button as not needed
@@ -88,14 +106,12 @@ const EpisodePage = ({ episode }) => {
             {getMonthYear(episode?.release_date)}&nbsp;•&nbsp;
           </span>
           <span className="line-clamp-1">
-            {msToTime(
-              episode?.duration_ms - episode?.resume_point?.resume_position_ms
-            )}
+            {msToTime(episode?.duration_ms - currentposition)}
             {episode?.resume_point?.fully_played ? '' : ' left'}
           </span>
 
           <TrackProgressBar
-            resumePosition={episode?.resume_point?.resume_position_ms}
+            resumePosition={currentposition}
             duration={episode?.duration_ms}
           />
         </div>
