@@ -1,6 +1,12 @@
 import React from 'react';
 import { millisToMinutesAndSeconds } from '@/lib/time';
 
+/**
+ * @function SongProgress
+ * @param {number} currentPosition of track in ms
+ * @param {number} duration total duration of track in ms
+ * @returns {JSX} progress bar in player
+ */
 function SongProgress({ currentPosition, duration }) {
   const progressPercentage = (currentPosition / duration) * 100;
   return (
