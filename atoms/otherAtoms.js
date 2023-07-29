@@ -36,3 +36,7 @@ export const backgroundColorState = atom({
   default: null,
 });
 
+export const progressDataState = atom({
+  key: 'progressDataState',
+  default: null,
+});

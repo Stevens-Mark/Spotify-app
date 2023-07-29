@@ -10,7 +10,11 @@ import {
   currentSongIndexState,
   isPlayState,
 } from '@/atoms/songAtom';
-import { playerInfoTypeState, currentItemIdState } from '@/atoms/otherAtoms';
+import {
+  playerInfoTypeState,
+  currentItemIdState,
+  progressDataState,
+} from '@/atoms/otherAtoms';
 import { activePlaylistState } from '@/atoms/playListAtom';
 import {
   showEpisodesUrisState,
@@ -18,7 +22,7 @@ import {
   episodesListState,
   episodesUrisState,
   activeListInUseState,
-  episodeDurationState
+  episodeDurationState,
 } from '@/atoms/showAtom';
 // import functions
 import { msToTime, getMonthYear } from '@/lib/time';
@@ -56,8 +60,11 @@ function EpisodeCard({ track, order, whichList }) {
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
   );
+
   // used to set duration length in player for an episode
- const [episodeDuration, setEpisodeDuration] = useRecoilState(episodeDurationState);
+  const setEpisodeDuration = useSetRecoilState(episodeDurationState);
+  const progressData = useRecoilValue(progressDataState);
+
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
   // used to set play/pause icons
@@ -95,7 +102,7 @@ function EpisodeCard({ track, order, whichList }) {
   const HandleEpisodePlayPause = (event, currentTrackIndex) => {
     event.preventDefault();
     event.stopPropagation();
-    // console.log('eipsodecard ', track);
+
     spotifyApi.getMyCurrentPlaybackState().then((data) => {
       if (data.body?.is_playing && track?.id == currentTrackId) {
         spotifyApi
@@ -123,7 +130,7 @@ function EpisodeCard({ track, order, whichList }) {
             setCurrentItemId(track?.id);
             setCurrentTrackId(track?.id);
             setCurrentSongIndex(currentTrackIndex);
-            setEpisodeDuration(track?.duration_ms)
+            setEpisodeDuration(track?.duration_ms);
             setActiveListInUse(
               whichList === 'show' ? showEpisodesList : episodesList
             ); // set list to reference for player
@@ -139,7 +146,13 @@ function EpisodeCard({ track, order, whichList }) {
     });
   };
 
-  // used to set play/pause icons
+  // Update currentposition when the card is active (so progress bar changes (different from player progress bar))
+  const currentposition =
+    activeStatus && order === currentSongIndex
+      ? progressData?.progress
+      : track?.resume_point?.resume_position_ms;
+
+  // used to set play/pause icons etc... states if the card is active/playing
   useEffect(() => {
     const newActiveStatus =
       (track?.id === currentTrackId && isPlaying) ||
@@ -166,7 +179,7 @@ function EpisodeCard({ track, order, whichList }) {
           <h3
             className={`col-span-3 row-start-1 capitalize line-clamp-2 self-center
            ${
-             activeStatus && order == currentSongIndex
+             activeStatus && order === currentSongIndex
                ? 'text-green-500'
                : 'text-white'
            }`}
@@ -184,7 +197,7 @@ function EpisodeCard({ track, order, whichList }) {
             }}
             aria-label="Play or Pause episode"
           >
-            {activeStatus && order == currentSongIndex ? (
+            {activeStatus && order === currentSongIndex ? (
               <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 " />
             ) : (
               <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110" />
@@ -196,14 +209,12 @@ function EpisodeCard({ track, order, whichList }) {
               {getMonthYear(track?.release_date)}&nbsp;•&nbsp;
             </span>
             <span className="line-clamp-1">
-              {msToTime(
-                track?.duration_ms - track?.resume_point?.resume_position_ms
-              )}
+              {msToTime(track?.duration_ms - currentposition)}
               {track?.resume_point?.fully_played ? '' : ' left'}
             </span>
 
             <TrackProgressBar
-              resumePosition={track?.resume_point?.resume_position_ms}
+              resumePosition={currentposition}
               duration={track?.duration_ms}
             />
           </div>

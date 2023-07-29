@@ -83,7 +83,7 @@ const EpisodePage = ({ episode }) => {
         {/* Hero bar with image, album title & author etc */}
         <MediaHeading item={episode} />
 
-        <aside className="flex items-center text-pink-swan ml-5 xs:ml-83">
+        <div className="flex items-center text-pink-swan ml-5 xs:ml-8">
           <span className="line-clamp-1">
             {getMonthYear(episode?.release_date)}&nbsp;•&nbsp;
           </span>
@@ -98,7 +98,7 @@ const EpisodePage = ({ episode }) => {
             resumePosition={episode?.resume_point?.resume_position_ms}
             duration={episode?.duration_ms}
           />
-        </aside>
+        </div>
 
         <QuickEpisodePlayBanner item={episode} scrollRef={scrollRef} />
 

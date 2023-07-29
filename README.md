@@ -30,7 +30,7 @@ Frustrated with the basic featues, I decided to turn it into a more robust proje
 
 Each time I solved one problem, another arrived & I just kept adding more & more pages/components/features. The logic to make all the different components work together in relation to when to start/pause a track (thus showing the correct icon) I found slightly complicated to say the least. I think I improved some features though. 
 
-For example (at the time of wrting this) with my app, on the shows page, you can use the player controls to navigate between the different episodes, but on spotify, using the player controls navigates away from show episodes & plays a track from elsewhere that I think makes no sense. 
+For example (at the time of writing this) with my app, on the shows page, you can use the player controls to navigate between the different episodes, but on spotify, using the player controls navigates away from show episodes & plays a track from elsewhere that I think makes no sense. 
 
 The same problem occurs with the songs page and the "songs window" on the all search results page. Again, if you select a track & then try to navigate using the player controls (like you can on a playlist, album or artist page) Spotify plays a totally different track from elsewhere. From a user point of view there's no continuity.
 
@@ -68,7 +68,6 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] The spotify site is (deceptively) huge, with a lot of functionality & features. I have not attempted to replicate the whole site.
 - [x] You cannot add/delete/modify your playlists/liked songs from this app (maybe in the future).
 - [x] Episode ("up next") not implemented on show page.
-- [x] When a track has finished playing the green highlighting does not move along. This app "controls" the streaming service so does not receive real-time updates/feedback to update the states.
 - [x] The Algorithms used by Spotify to create the various lists are not all available, so I cannot create lists like "jump back in" or "mixes for...." etc
 - [x] There are a presently a few known issues with my implementation, listed below:
 
@@ -76,8 +75,9 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
 - [x] If an episode is currently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
+- [x] When a track has finished playing, the green highlight does not move.
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing so these is not features implemented by Spotify anyway.
-- [x] Quickplay Banner loses "pause icon" state (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, likedsongs or an artist). This is because "getMyCurrentPlayingTrack" does not return the required info to set the trackid. It's to do with the way Spotify allows us to access/retrieve the likedsongs, episodes & top 10 artists tracks lists (which I have then put into an array of uris in order to be able to play them). Thus they are handled differently to album/playlists which return a "context".
+- [x] Quickplay Banner loses "pause icon" state & track duration disappears from the player progress bar (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, likedsongs or an artist). This is because "getMyCurrentPlayingTrack" does not return the required info to set the trackid. It's to do with the way Spotify allows us to access/retrieve the likedsongs, episodes & top 10 artists tracks lists (which I have then put into an array of uris in order to be able to play them). Thus they are handled differently to album/playlists which return a "context".
 - [x] For a similar reason I couldn't implement the speaker highlight in the sidebar when the liked songs list is playing (like with the user playlists).
 - [x] On a Show page: If an episode has been selected & is playing, the green highlight, that indicates which track is playing, disappears if the user refreshes/reloads the page.
 - [x] There are probably some other issues that I haven't spotted as yet.
@@ -210,7 +210,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Le site spotify est (faussement) énorme, avec beaucoup de fonctionnalités et de caractéristiques. Je n'ai pas essayé de reproduire l'ensemble du site.
 - [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture/chansons préférées à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
-- Lorsqu'un morceau a fini d'être joué, le surlignage vert ne se déplace pas. Cette application "contrôle" le service de streaming et ne reçoit donc pas d'informations en temps réel pour mettre à jour les états.
+- [x] Lorsqu'un morceau a fini d'être joué, le surlignage vert ne se déplace pas. 
 - Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas tous disponibles, donc je ne peux pas créer des listes comme "jump back in" ou "mixes for...." etc.
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :
 
@@ -220,7 +220,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Si la piste sélectionnée apparaît à la même position (index dans la liste des pistes) dans un autre album/liste de lecture, elle est également surlignée en vert (ce qui ne devrait pas être le cas puisqu'elle se trouve dans un autre album/liste de lecture).
 - [x] Si un épisode est en cours de lecture, "getMyCurrentPlayingTrack" ne renvoie aucune information sur la piste (seulement qu'un épisode est en cours de lecture), donc lors du rechargement de la page, aucune information sur la piste n'est affichée dans le coin inférieur gauche. Pour une piste "normale", cela fonctionne. Problème de réponse de Spotify ??
 - [x] Aucun des problèmes ci-dessous n'est rédhibitoire car il est peu probable que l'utilisateur rafraîchisse la page soudainement. Dans Spotify, si vous rafraîchissez la page, tout s'arrête, donc ce ne sont pas des fonctionnalités implémentées par Spotify de toute façon.
-- [x] La bannière Quickplay perd l'état "icône de pause" (bien qu'un titre soit en cours de lecture) lorsque l'utilisateur rafraîchit/recharge la page (cela se produit pour un épisode, les likedsongs ou un artiste). Ceci est dû au fait que "getMyCurrentPlayingTrack" ne renvoie pas les informations nécessaires pour définir l'identifiant de la piste. C'est lié à la façon dont Spotify nous permet d'accéder/récupérer les listes de chansons likedsongs, d'épisodes et de titres du top 10 des artistes (que j'ai ensuite mis dans un tableau d'uris pour pouvoir les jouer). Elles sont donc gérées différemment des listes d'albums et de lecture qui renvoient un "contexte".
+- [x] La bannière Quickplay perd l'état "icône de pause" & la durée de le "track" disparaît de la barre de progression du lecteur (bien qu'un titre soit en cours de lecture) lorsque l'utilisateur rafraîchit/recharge la page (cela se produit pour un épisode, les likedsongs ou un artiste). Ceci est dû au fait que "getMyCurrentPlayingTrack" ne renvoie pas les informations nécessaires pour définir l'identifiant de la piste. C'est lié à la façon dont Spotify nous permet d'accéder/récupérer les listes de chansons likedsongs, d'épisodes et de titres du top 10 des artistes (que j'ai ensuite mis dans un tableau d'uris pour pouvoir les jouer). Elles sont donc gérées différemment des listes d'albums et de lecture qui renvoient un "contexte".
 - [x] Pour une raison similaire, je n'ai pas pu implémenter la mise en avant du haut-parleur dans la barre latérale lorsque la liste des chansons aimées est en cours de lecture (comme pour les listes de lecture des utilisateurs).
 - [x] Sur la page d'une émission : Si un épisode a été sélectionné et est en cours de lecture, la surbrillance verte, qui indique la piste en cours de lecture, disparaît si l'utilisateur rafraîchit/recharge la page.
 - [x] Il y a probablement d'autres problèmes que je n'ai pas encore détectés.

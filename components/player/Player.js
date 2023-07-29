@@ -8,7 +8,11 @@ import { debounce } from 'lodash';
 
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { currentItemIdState, originIdState } from '@/atoms/otherAtoms';
+import {
+  currentItemIdState,
+  originIdState,
+  progressDataState,
+} from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -60,7 +64,7 @@ function Player() {
   const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
   const activeArtist = useRecoilValue(activeArtistState);
-  const [progressData, setProgressData] = useState();
+  const [progressData, setProgressData] = useRecoilState(progressDataState);
 
   useEffect(() => {
     // take ID from url each time page changed
@@ -112,7 +116,7 @@ function Player() {
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
       return () => clearInterval(interval);
     }
-  }, [spotifyApi, session, isPlaying, episodeDuration]);
+  }, [spotifyApi, session, isPlaying, episodeDuration, setProgressData]);
 
   const debounceAdjustVolume = useMemo(
     () =>

@@ -175,9 +175,6 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, item?.id, originId]);
 
-  console.log('trackid ', currentTrackId);
-  console.log('currentItemId  ', currentItemId);
-  console.log('originId  ', originId);
   return (
     <>
       <div className="absolute top-0 h-20 w-full z-20 flex flex-col">
