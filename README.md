@@ -75,7 +75,6 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
 - [x] If an episode is currently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
-- [x] When a track has finished playing, the green highlight does not move.
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing so these is not features implemented by Spotify anyway.
 - [x] Quickplay Banner loses "pause icon" state & track duration disappears from the player progress bar (although a track is playing) when a user refreshes/reloads the page (this occurs for an episode, likedsongs or an artist). This is because "getMyCurrentPlayingTrack" does not return the required info to set the trackid. It's to do with the way Spotify allows us to access/retrieve the likedsongs, episodes & top 10 artists tracks lists (which I have then put into an array of uris in order to be able to play them). Thus they are handled differently to album/playlists which return a "context".
 - [x] For a similar reason I couldn't implement the speaker highlight in the sidebar when the liked songs list is playing (like with the user playlists).
@@ -210,7 +209,6 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Le site spotify est (faussement) énorme, avec beaucoup de fonctionnalités et de caractéristiques. Je n'ai pas essayé de reproduire l'ensemble du site.
 - [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture/chansons préférées à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
-- [x] Lorsqu'un morceau a fini d'être joué, le surlignage vert ne se déplace pas. 
 - Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas tous disponibles, donc je ne peux pas créer des listes comme "jump back in" ou "mixes for...." etc.
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :
 

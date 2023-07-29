@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
 import { useSession } from 'next-auth/react';
@@ -80,44 +80,6 @@ function Player() {
     setIsArtist(isArtist);
   }, [router?.asPath]);
 
-  useEffect(() => {
-    if (!isPlaying) {
-      // If not playing, clear the interval to stop fetching data
-      return;
-    }
-    if (spotifyApi.getAccessToken()) {
-      // Fetch the currently playing track periodically
-      const fetchCurrentSong = () => {
-        spotifyApi
-          .getMyCurrentPlayingTrack()
-          .then((data) => {
-            if (data.body?.is_playing) {
-              if (data.body?.item) {
-                setProgressData({
-                  duration: data.body?.item?.duration_ms,
-                  progress: data.body?.progress_ms,
-                });
-              } else {
-                setProgressData({
-                  duration: episodeDuration,
-                  progress: data.body?.progress_ms,
-                });
-              }
-            } else {
-              setProgressData({
-                duration: 0,
-                progress: 0,
-              });
-            }
-          })
-          .catch((err) => console.error('Fetching progress data failed: '));
-      };
-
-      const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
-      return () => clearInterval(interval);
-    }
-  }, [spotifyApi, session, isPlaying, episodeDuration, setProgressData]);
-
   const debounceAdjustVolume = useMemo(
     () =>
       debounce((volume) => {
@@ -187,7 +149,7 @@ function Player() {
    * @function findPreviousEpisodeId
    * @returns the Id for the previous episode & the duration of the episode
    */
-  const findPreviousEpisodeId = () => {
+  const findPreviousEpisodeId = useCallback(() => {
     console.log('activeListInUse ', activeListInUse);
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
@@ -204,10 +166,10 @@ function Player() {
     }
 
     return previousEpisodeId || currentTrackId;
-  };
+  }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
   /* go back a track if playing : disable if on a single episode page */
-  const skipToPrevious = () => {
+  const skipToPrevious = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
@@ -261,7 +223,18 @@ function Player() {
           theme: 'colored',
         });
       });
-  };
+  }, [
+    spotifyApi,
+    isEpisode,
+    activeArtist,
+    isArtist,
+    originId,
+    currentSongIndex,
+    setCurrentTrackId,
+    findPreviousEpisodeId,
+    setCurrentItemId,
+    setCurrentSongIndex,
+  ]);
 
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
@@ -330,7 +303,7 @@ function Player() {
    * @function findNextEpisodeId
    * @returns the Id for the next episode & the duration of the episode
    */
-  const findNextEpisodeId = () => {
+  const findNextEpisodeId = useCallback(() => {
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
@@ -349,10 +322,10 @@ function Player() {
       setEpisodeDuration(nextDuration);
     }
     return nextEpisodeId || currentTrackId;
-  };
+  }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
   /* go forward a track if playing : disable if on a single episode page */
-  const skipToNext = () => {
+  const skipToNext = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
@@ -402,7 +375,18 @@ function Player() {
           theme: 'colored',
         });
       });
-  };
+  }, [
+    spotifyApi,
+    isEpisode,
+    activeArtist,
+    isArtist,
+    originId,
+    setCurrentSongIndex,
+    currentSongIndex,
+    setCurrentTrackId,
+    findNextEpisodeId,
+    setCurrentItemId,
+  ]);
 
   // handles 3 way toggle, off, repeat, repeat  once
   const handleRepeatToggle = () => {
@@ -416,6 +400,58 @@ function Player() {
       });
     });
   };
+
+  useEffect(() => {
+    if (!isPlaying) {
+      // If not playing, clear the interval to stop fetching data
+      return;
+    }
+    if (spotifyApi.getAccessToken()) {
+      // Fetch the currently playing track periodically
+      const fetchCurrentSong = () => {
+        spotifyApi
+          .getMyCurrentPlayingTrack()
+          .then((data) => {
+            if (data.body?.is_playing) {
+              if (data.body?.item) {
+                setProgressData({
+                  duration: data.body?.item?.duration_ms,
+                  progress: data.body?.progress_ms,
+                });
+                // Check if the current track has finished playing
+                if (
+                  data.body?.progress_ms >=
+                  data.body?.item?.duration_ms - 2000
+                ) {
+                  skipToNext(); // Move to the next track automatically
+                }
+              } else {
+                setProgressData({
+                  duration: episodeDuration,
+                  progress: data.body?.progress_ms,
+                });
+              }
+            } else {
+              setProgressData({
+                duration: 0,
+                progress: 0,
+              });
+            }
+          })
+          .catch((err) => console.error('Fetching progress data failed: '));
+      };
+
+      const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
+      return () => clearInterval(interval);
+    }
+  }, [
+    spotifyApi,
+    session,
+    isPlaying,
+    episodeDuration,
+    setProgressData,
+    skipToNext,
+  ]);
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
