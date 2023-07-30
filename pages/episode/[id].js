@@ -8,7 +8,6 @@ import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { progressDataState } from '@/atoms/otherAtoms';
 //import functions
 import TrackProgressBar from '@/components/graphics/TrackProgressBar';
-import { getMonthYear, msToTime } from '@/lib/time';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
@@ -103,14 +102,6 @@ const EpisodePage = ({ episode }) => {
         <MediaHeading item={episode} />
 
         <div className="flex items-center text-pink-swan ml-5 xs:ml-8">
-          {/* <span className="line-clamp-1">
-            {getMonthYear(episode?.release_date)}&nbsp;•&nbsp;
-          </span>
-          <span className="line-clamp-1">
-            {msToTime(episode?.duration_ms - currentposition)}
-            {episode?.resume_point?.fully_played ? '' : ' left'}
-          </span> */}
-
           <TrackProgressBar
             currentPosition={currentPosition}
             episode={episode}

@@ -24,8 +24,6 @@ import {
   activeListInUseState,
   episodeDurationState,
 } from '@/atoms/showAtom';
-// import functions
-import { msToTime, getMonthYear } from '@/lib/time';
 // import icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
@@ -206,18 +204,6 @@ function EpisodeCard({ track, order, whichList }) {
           </button>
 
           <div className="col-start-2 md:col-start-3 col-span-2 row-start-3 flex items-center text-pink-swan -ml-3  md:ml-3">
-            {/* <span className="line-clamp-1">
-              {getMonthYear(track?.release_date)}&nbsp;•&nbsp;
-            </span>
-            <span className="line-clamp-1">
-              {msToTime(track?.duration_ms - currentposition)}
-              {track?.resume_point?.fully_played ? '' : ' left'}
-            </span>
-
-            <TrackProgressBar
-              resumePosition={currentposition}
-              duration={track?.duration_ms}
-            /> */}
             <TrackProgressBar
               currentPosition={currentPosition}
               episode={track}
