@@ -2,7 +2,11 @@ import React, { useState, useEffect } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { artistTrackUrisState, activeArtistState } from '@/atoms/artistAtom';
+import {
+  artistTrackListState,
+  artistTrackUrisState,
+  activeArtistState,
+} from '@/atoms/artistAtom';
 import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
@@ -32,6 +36,8 @@ function ArtistTrack({ track, order }) {
   const song = track;
 
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
+  const artistTracklist = useRecoilValue(artistTrackListState);
+  console.log("track ", artistTracklist?.tracks)
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
@@ -42,11 +48,28 @@ function ArtistTrack({ track, order }) {
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
   // to identify the track position for the green highlight of the active track
-  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
+  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
+    currentSongIndexState
+  );
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     if (
+  //       currentSongIndex == null &&
+  //       currentTrackId !== null &&
+  //       artistTracklist !== null
+  //     ) {
+  //       const indexPosition = artistTracklist?.tracks?.findIndex(
+  //         (x) => x.id == currentTrackId
+  //       );
+  //       setCurrentSongIndex(indexPosition);
+  //     }
+  //   }, 500);
+  // }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track
@@ -83,7 +106,8 @@ function ArtistTrack({ track, order }) {
   // used to set play/pause icons
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && currentItemId === originId &&  isPlaying;
+    const newActiveStatus =
+      song?.id === currentTrackId && currentItemId === originId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
 
