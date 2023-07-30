@@ -3,7 +3,7 @@ import { getSession } from 'next-auth/react';
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 // import state management recoil
-import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilValue } from 'recoil';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { progressDataState } from '@/atoms/otherAtoms';
 //import functions
@@ -66,8 +66,9 @@ const EpisodePage = ({ episode }) => {
     setActiveStatus(newActiveStatus);
   }, [currentTrackId, episode?.id, isPlaying]);
 
-  // Update currentposition if the episode is active (so progress bar changes (different from player progress bar))
-  const currentposition = activeStatus
+  // Update currentposition if the episode is active 
+  //(so progress bar changes (different from player progress bar))
+  const currentPosition = activeStatus
     ? progressData?.progress
     : episode?.resume_point?.resume_position_ms;
 
@@ -102,17 +103,17 @@ const EpisodePage = ({ episode }) => {
         <MediaHeading item={episode} />
 
         <div className="flex items-center text-pink-swan ml-5 xs:ml-8">
-          <span className="line-clamp-1">
+          {/* <span className="line-clamp-1">
             {getMonthYear(episode?.release_date)}&nbsp;•&nbsp;
           </span>
           <span className="line-clamp-1">
             {msToTime(episode?.duration_ms - currentposition)}
             {episode?.resume_point?.fully_played ? '' : ' left'}
-          </span>
+          </span> */}
 
           <TrackProgressBar
-            resumePosition={currentposition}
-            duration={episode?.duration_ms}
+            currentPosition={currentPosition}
+            episode={episode}
           />
         </div>
 

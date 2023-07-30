@@ -43,7 +43,7 @@ import TrackProgressBar from '../graphics/TrackProgressBar';
 function EpisodeCard({ track, order, whichList }) {
   const spotifyApi = useSpotify();
 
-  // used to determine what type of info to load/display in plyer window
+  // used to determine what type of info to load/display in player window
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
 
   const showEpisodesList = useRecoilValue(showEpisodesListState);
@@ -56,10 +56,10 @@ function EpisodeCard({ track, order, whichList }) {
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-  // to identify the track position for the green highlight of the active track
+
   const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
     currentSongIndexState
-  );
+  ); // to identify the track position for the green highlight of the active track
 
   // used to set duration length in player for an episode
   const setEpisodeDuration = useSetRecoilState(episodeDurationState);
@@ -146,8 +146,9 @@ function EpisodeCard({ track, order, whichList }) {
     });
   };
 
-  // Update currentposition when the card is active (so progress bar changes (different from player progress bar))
-  const currentposition =
+  // Update currentposition when the card is active
+  // (so progress bar changes (different from player progress bar))
+  const currentPosition =
     activeStatus && order === currentSongIndex
       ? progressData?.progress
       : track?.resume_point?.resume_position_ms;
@@ -205,7 +206,7 @@ function EpisodeCard({ track, order, whichList }) {
           </button>
 
           <div className="col-start-2 md:col-start-3 col-span-2 row-start-3 flex items-center text-pink-swan -ml-3  md:ml-3">
-            <span className="line-clamp-1">
+            {/* <span className="line-clamp-1">
               {getMonthYear(track?.release_date)}&nbsp;•&nbsp;
             </span>
             <span className="line-clamp-1">
@@ -216,6 +217,10 @@ function EpisodeCard({ track, order, whichList }) {
             <TrackProgressBar
               resumePosition={currentposition}
               duration={track?.duration_ms}
+            /> */}
+            <TrackProgressBar
+              currentPosition={currentPosition}
+              episode={track}
             />
           </div>
         </div>

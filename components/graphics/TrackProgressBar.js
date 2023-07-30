@@ -1,12 +1,26 @@
 import React from 'react';
+import { getMonthYear, msToTime } from '@/lib/time';
 
-const TrackProgressBar = ({ resumePosition, duration }) => {
-  const progressPercentage = (resumePosition / duration) * 100;
+const TrackProgressBar = ({ currentPosition, episode}) => {
+  const progressPercentage = (currentPosition / episode?.duration_ms) * 100;
 
   return (
-    <div className="mx-3 h-1 w-20 rounded-md bg-pink-swan hidden xs:inline md:hidden lg:inline">
-      <div className="h-1 rounded-md bg-white" style={{ width: `${progressPercentage}%` }}></div>
-    </div>
+    <>
+      <span className="line-clamp-1">
+        {getMonthYear(episode?.release_date)}&nbsp;•&nbsp;
+      </span>
+      <span className="line-clamp-1">
+        {msToTime(episode?.duration_ms - currentPosition)}
+        {episode?.resume_point?.fully_played ? '' : ' left'}
+      </span>
+
+      <div className="mx-3 h-1 w-20 rounded-md bg-pink-swan hidden xs:inline md:hidden lg:inline">
+        <div
+          className="h-1 rounded-md bg-white"
+          style={{ width: `${progressPercentage}%` }}
+        ></div>
+      </div>
+    </>
   );
 };
 
