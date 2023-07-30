@@ -58,7 +58,7 @@ function LikedSongsButton({
             `}
     >
       <Image
-        className="h-8 w-8 mr-1 rounded-sm"
+        className="h-10 w-10 mr-2 rounded-sm"
         src={collection?.images?.[0].url}
         alt=""
         width={100}

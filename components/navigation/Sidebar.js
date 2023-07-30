@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
+// import state management recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import {
@@ -13,6 +14,9 @@ import {
 } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
+// import functions
+import { capitalize } from '@/lib/capitalize';
+// import icon/images
 import { SpeakerWaveIcon, Bars3Icon } from '@heroicons/react/24/solid';
 import {
   HomeIcon,
@@ -21,8 +25,9 @@ import {
   PlusCircleIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
-import LikedButton from './likedSongsButton';
 import noCoverImage from '@/public/images/noImageAvailable.svg';
+// import component
+import LikedButton from './likedSongsButton';
 
 function Sidebar() {
   const router = useRouter();
@@ -71,7 +76,8 @@ function Sidebar() {
       if (spotifyApi.getAccessToken()) {
         try {
           const userPlaylists = await spotifyApi.getUserPlaylists();
-          setMyPlaylists(userPlaylists.body.items);
+          console.log('sidebar playlist ', userPlaylists.body.items);
+          setMyPlaylists(userPlaylists?.body?.items);
         } catch (err) {
           console.error('Failed to get user playlists');
           toast.error('Playlists Retrieval failed !', {
@@ -200,29 +206,40 @@ function Sidebar() {
                 <button
                   aria-label="Go to playlist"
                   onClick={() => handleClick(playlist?.id)}
-                  className={`flex items-center p-3 rounded-lg min-w-full cursor-pointer
-              ${
-                activePlaylist == playlist?.id && isPlaying
-                  ? 'text-green-500'
-                  : 'hover:text-white focus:text-white'
-              } 
-              ${
-                activePlaylistId == playlist?.id
-                  ? ` bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
-                  : 'hover:bg-gray-900 focus:bg-gray-900'
-              }
-            `}
+                  className={`group flex items-center p-3 rounded-lg min-w-full ${
+                    activePlaylistId == playlist?.id
+                      ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
+                      : 'hover:bg-gray-900 focus:bg-gray-900'
+                  }`}
                 >
                   <Image
-                    className="h-8 w-8 mr-1 rounded-sm"
+                    className="h-10 w-10 mr-2 rounded-sm"
                     src={playlist?.images?.[0]?.url || noCoverImage}
                     alt=""
                     width={100}
                     height={100}
                     style={{ objectFit: 'cover' }}
                   />
-                  <p className="line-clamp-1">{playlist?.name}</p>
-                  <span className="pl-2">
+                  <div className="flex flex-col text-left w-full">
+                    <span
+                      className={`line-clamp-1 ${
+                        activePlaylist == playlist?.id && isPlaying
+                          ? 'text-green-500'
+                          : 'group-hover:text-white group-focus:text-white'
+                      } `}
+                    >
+                      {playlist?.name}
+                    </span>
+
+                    <span className="flex">
+                      <span>{capitalize(playlist?.type)}</span>
+                      &nbsp;•&nbsp;
+                      <span className="line-clamp-1">
+                        {capitalize(playlist?.owner?.display_name)}
+                      </span>
+                    </span>
+                  </div>
+                  <span className="pl-2 justify-end">
                     {activePlaylist == playlist?.id && isPlaying ? (
                       <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
                     ) : (

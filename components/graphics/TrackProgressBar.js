@@ -1,6 +1,12 @@
 import React from 'react';
 import { getMonthYear, msToTime } from '@/lib/time';
 
+/**
+ * @function TrackProgressBar
+ * @param {*} currentPosition of track in ms
+ * @param {*} episode information
+ * @returns {JSX} progress bar in episode card & individual episode page
+ */
 const TrackProgressBar = ({ currentPosition, episode}) => {
   const progressPercentage = (currentPosition / episode?.duration_ms) * 100;
 
