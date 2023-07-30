@@ -150,7 +150,6 @@ function Player() {
    * @returns the Id for the previous episode & the duration of the episode
    */
   const findPreviousEpisodeId = useCallback(() => {
-    console.log('activeListInUse ', activeListInUse);
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );

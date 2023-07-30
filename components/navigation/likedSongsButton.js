@@ -13,10 +13,10 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
  */
 function LikedSongsButton({
   activePlaylistId,
-  // activePlaylist,
+  activePlaylist,
   isPlaying,
 }) {
-  const activePlaylist = null; // disabled highlight on active functionality as issues
+  // const activePlaylist = null; // disabled highlight on active functionality as issues
 
   const router = useRouter();
 
@@ -44,7 +44,7 @@ function LikedSongsButton({
     <button
       onClick={() => handleCollectionClick(collection?.id)}
       aria-label="Go to Liked Songs"
-      className={`flex items-center p-3  rounded-lg min-w-full cursor-pointer
+      className={`flex items-center p-3 rounded-lg text-left w-full
               ${
                 activePlaylist == collection?.id && isPlaying
                   ? 'text-green-500'
@@ -65,8 +65,8 @@ function LikedSongsButton({
         height={100}
         style={{ objectFit: 'cover' }}
       />
-      <p className="line-clamp-1">{collection?.name}</p>
-      <span className="pl-2">
+      <span className="line-clamp-1 w-full">{collection?.name}</span>
+      <span className="pl-2 justify-end">
         {activePlaylist == collection?.id && isPlaying ? (
           <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
         ) : (

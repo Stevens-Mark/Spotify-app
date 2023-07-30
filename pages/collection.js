@@ -10,6 +10,7 @@ import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { likedListState, likedUrisState } from '@/atoms/songAtom';
 import { itemsPerPageState } from '@/atoms/otherAtoms';
+import { playlistIdState } from '@/atoms/playListAtom';
 // import components
 import Layout from '@/components/layouts/Layout';
 import MediaHeading from '@/components/headerLabels/MediaHero';
@@ -43,6 +44,7 @@ const LikedPage = () => {
   const spotifyApi = useSpotify();
   const scrollRef = useRef(null);
   const { scrollableSectionRef, showButton, scrollToTop } = useScrollToTop(); // scroll button
+  const setCurrentPlaylistId = useSetRecoilState(playlistIdState);
   const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [likedTracks, setLikedTracklist] = useRecoilState(likedListState);
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
@@ -57,6 +59,10 @@ const LikedPage = () => {
       });
     }
   }, [stopFetch]);
+
+  useEffect(() => {
+    setCurrentPlaylistId(likedTracks?.id);
+  }, [likedTracks?.id, setCurrentPlaylistId]);
 
   useEffect(() => {
     // Get Current User's Liked Song Tracks
@@ -84,6 +90,7 @@ const LikedPage = () => {
                   width: 640,
                 },
               ];
+              setCurrentPlaylistId(data?.body?.id);
               setLikedTracklist(data?.body);
               setLikedTrackUris(
                 data.body?.items?.map((item) => item.track.uri)
@@ -102,6 +109,7 @@ const LikedPage = () => {
     itemsPerPage,
     likedTracks,
     session,
+    setCurrentPlaylistId,
     setLikedTrackUris,
     setLikedTracklist,
     spotifyApi,

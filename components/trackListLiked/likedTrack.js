@@ -15,7 +15,7 @@ import {
   currentItemIdState,
   originIdState,
 } from '@/atoms/otherAtoms';
-import { activePlaylistState } from '@/atoms/playListAtom';
+import { playlistIdState, activePlaylistState } from '@/atoms/playListAtom';
 // import player play/pause function
 import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 // import component
@@ -33,6 +33,7 @@ function LikedTrack({ track, order }) {
   const song = track.track;
 
   const likedTrackUris = useRecoilValue(likedUrisState);
+  const playlistId = useRecoilValue(playlistIdState);
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
@@ -63,6 +64,7 @@ function LikedTrack({ track, order }) {
     const likedOptions = {
       originId,
       song,
+      playlistId,
       mediaTrackUris, //send array of uris to play in play/pause function
       setCurrentItemId,
       currentTrackIndex,

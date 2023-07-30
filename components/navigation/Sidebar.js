@@ -76,7 +76,6 @@ function Sidebar() {
       if (spotifyApi.getAccessToken()) {
         try {
           const userPlaylists = await spotifyApi.getUserPlaylists();
-          console.log('sidebar playlist ', userPlaylists.body.items);
           setMyPlaylists(userPlaylists?.body?.items);
         } catch (err) {
           console.error('Failed to get user playlists');
