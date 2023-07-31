@@ -109,7 +109,7 @@ function ArtistTrack({ track, order }) {
   useEffect(() => {
     const newActiveStatus =
       song?.id === currentTrackId 
-      // && currentItemId === originId 
+      && currentItemId === originId 
       && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
