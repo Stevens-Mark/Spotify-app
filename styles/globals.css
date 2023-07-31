@@ -4,7 +4,7 @@
 
 @layer base {
   .font-outline-2 {
-    -webkit-text-stroke:0.5px black;
+    -webkit-text-stroke: 0.5px black;
   }
   .font-outline-4 {
     -webkit-text-stroke: 4px black;
@@ -17,7 +17,6 @@
     @apply h-5 w-5 cursor-pointer hover:scale-125 transition transform duration-150 ease-in-out;
   }
 }
-
 
 :root {
   --foreground-rgb: 0, 0, 0;
@@ -37,7 +36,7 @@
 .Toastify__toast {
   border-radius: 12px 3px 12px 3px !important;
   min-height: 50px !important;
-} 
+}
 
 /* position adjustments for magnify glass in seach bar*/
 /* Your specific CSS rules for Chrome */
@@ -54,10 +53,12 @@
   }
 }
 
+
+/* styling for seek bar in player */
 #seek {
   /* removing default appearance */
   -webkit-appearance: none;
-  appearance: none; 
+  appearance: none;
   /* creating a custom design */
   width: 100%;
   cursor: pointer;
@@ -69,15 +70,13 @@
 
 /* Track: webkit browsers */
 #seek::-webkit-slider-runnable-track {
-  /* height: 15px; */
-  background: #B3B3B3;
+  background: #b3b3b3;
   border-radius: 16px;
 }
 
 /* Track: Mozilla Firefox */
 #seek::-moz-range-track {
-  /* height: 15px; */
-  background: #B3B3B3;
+  background: #b3b3b3;
   border-radius: 16px;
 }
 
@@ -85,7 +84,7 @@
 #seek::-webkit-slider-thumb {
   /* removing default appearance */
   -webkit-appearance: none;
-  appearance: none; 
+  appearance: none;
   /* creating a custom design */
   height: 4px;
   width: 4px;
@@ -107,3 +106,36 @@
   box-shadow: -402px 0 0 400px white;
 }
 
+/* Hover styles */
+#seek:hover::-moz-range-thumb {
+  /* styles for the thumb on hover (Firefox) */
+  background-color: green;
+  border-color: green;
+  box-shadow: -402px 0 0 400px green;
+}
+
+#seek:hover::-webkit-slider-thumb {
+  /* styles for the thumb on hover (Webkit) */
+  background-color: green;
+  border-color: green;
+  box-shadow: -402px 0 0 400px green;
+}
+
+/* Adding keyboard focus styles */
+#seek:focus-visible {
+  outline: 2px solid green;
+}
+
+#seek:focus-visible::-moz-range-thumb {
+  /* styles for the thumb on hover (Firefox) */
+  background-color: green;
+  border-color: green;
+  box-shadow: -402px 0 0 400px green;
+}
+
+#seek:focus-visible::-webkit-slider-thumb {
+  /* styles for the thumb on hover (Webkit) */
+  background-color: green;
+  border-color: green;
+  box-shadow: -402px 0 0 400px green;
+}

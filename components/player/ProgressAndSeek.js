@@ -13,11 +13,9 @@ import { millisToMinutesAndSeconds } from '@/lib/time';
  */
 function ProgressAndSeek({ currentPosition, duration }) {
   const spotifyApi = useSpotify();
-  const progressPercentage = (currentPosition / duration) * 100;
   const [seek, setSeek] = useState(0); // seek functionality
   const [isInteracting, setIsInteracting] = useState(false);
 
- 
   const debounceAdjustSeek = useMemo(
     () =>
       debounce((seek) => {
@@ -60,7 +58,10 @@ function ProgressAndSeek({ currentPosition, duration }) {
   }, [debounceAdjustSeek, duration, seek]);
 
   return (
-    <div className="flex items-center w-full mt-1 pr-5">
+    <div
+      className="flex items-center w-full mt-1 pr-5"
+      onBlur={() => setIsInteracting(false)}
+    >
       {currentPosition ? (
         <span className="pr-2 text-xs md:text-base">
           {millisToMinutesAndSeconds(isInteracting ? seek : currentPosition)}
@@ -68,14 +69,6 @@ function ProgressAndSeek({ currentPosition, duration }) {
       ) : (
         <span className="pr-2 text-xs md:text-base">0.00</span>
       )}
-      {/* 
-      <span className="mx-3 h-1 w-full rounded-md bg-pink-swan">
-        <div
-          className="h-1 rounded-md bg-white"
-          style={{ width: `${progressPercentage}%` }}
-        ></div>
-      </span> */}
-
       {/* Seeks to the given position in the user’s currently playing track. */}
       <label htmlFor="seek" className="sr-only">
         Seek-to-position-control
@@ -88,6 +81,22 @@ function ProgressAndSeek({ currentPosition, duration }) {
         onChange={(e) => {
           setSeek(Number(e.target.value));
           setIsInteracting(true);
+        }}
+        onMouseLeave={() => {
+          if (isInteracting) {
+            setIsInteracting(false);
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setIsInteracting(false); // Release the slider when Enter or Space is pressed
+          }
+          // Handle arrow keys to adjust the seek value
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            setSeek((prevSeek) => Math.max(0, prevSeek - 1000)); // Decrease by 1 second (1000ms)
+          } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            setSeek((prevSeek) => Math.min(duration, prevSeek + 1000)); // Increase by 1 second (1000ms)
+          }
         }}
         onMouseUp={() => setIsInteracting(false)}
         onTouchEnd={() => setIsInteracting(false)}
