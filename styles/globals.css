@@ -53,7 +53,6 @@
   }
 }
 
-
 /* styling for seek bar in player */
 #seek {
   /* removing default appearance */
@@ -68,20 +67,39 @@
   border-radius: 16px;
 }
 
+#volume-control {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none;
+  /* creating a custom design */
+  /* width: 100%; */
+  cursor: pointer;
+  outline: none;
+  /*  slider progress track  */
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+
 /* Track: webkit browsers */
-#seek::-webkit-slider-runnable-track {
+#seek::-webkit-slider-runnable-track,
+#volume-control::-webkit-slider-runnable-track {
+  height: 4px;
   background: #b3b3b3;
   border-radius: 16px;
 }
 
 /* Track: Mozilla Firefox */
-#seek::-moz-range-track {
+#seek::-moz-range-track,
+#volume-control::-moz-range-track {
+  height: 4px;
   background: #b3b3b3;
   border-radius: 16px;
 }
 
 /* Thumb: webkit */
-#seek::-webkit-slider-thumb {
+#seek::-webkit-slider-thumb,
+#volume-control::-webkit-slider-thumb {
   /* removing default appearance */
   -webkit-appearance: none;
   appearance: none;
@@ -96,7 +114,8 @@
 }
 
 /* Thumb: Firefox */
-#seek::-moz-range-thumb {
+#seek::-moz-range-thumb,
+#volume-control::-moz-range-thumb {
   height: 4px;
   width: 4px;
   background-color: white;
@@ -107,35 +126,58 @@
 }
 
 /* Hover styles */
-#seek:hover::-moz-range-thumb {
+#seek:hover::-moz-range-thumb,
+#volume-control:hover::-moz-range-thumb {
   /* styles for the thumb on hover (Firefox) */
-  background-color: green;
-  border-color: green;
-  box-shadow: -402px 0 0 400px green;
+  background-color: #22C55E;
+  border-color: #22C55E;
+  box-shadow: -402px 0 0 400px #22C55E;
 }
 
-#seek:hover::-webkit-slider-thumb {
+#seek:hover::-webkit-slider-thumb,
+#volume-control:hover::-webkit-slider-thumb {
   /* styles for the thumb on hover (Webkit) */
-  background-color: green;
-  border-color: green;
-  box-shadow: -402px 0 0 400px green;
+  background-color: #22C55E;
+  border-color: #22C55E;
+  box-shadow: -402px 0 0 400px #22C55E;
+}
+
+/* Track: webkit browsers */
+#seek:hover::-webkit-slider-runnable-track,
+#volume-control:hover::-webkit-slider-runnable-track {
+  height: 4px;
+  background: white;
+  border-radius: 16px;
+}
+
+/* Track: Mozilla Firefox */
+#seek:hover::-moz-range-track,
+#volume-control:hover::-moz-range-track {
+  height: 4px;
+  background: white;
+  border-radius: 16px;
 }
 
 /* Adding keyboard focus styles */
-#seek:focus-visible {
-  outline: 2px solid green;
+#seek:focus-visible,
+#volume-control:focus-visible {
+  outline: 2px solid #22C55E;
 }
 
-#seek:focus-visible::-moz-range-thumb {
+#seek:focus-visible::-moz-range-thumb,
+#volume-control:focus-visible::-moz-range-thumb {
   /* styles for the thumb on hover (Firefox) */
-  background-color: green;
-  border-color: green;
-  box-shadow: -402px 0 0 400px green;
+  background-color: #22C55E;
+  border-color: #22C55E;
+  box-shadow: -402px 0 0 400px #22C55E;
 }
 
-#seek:focus-visible::-webkit-slider-thumb {
+#seek:focus-visible::-webkit-slider-thumb,
+#volume-control:focus-visible::-webkit-slider-thumb {
   /* styles for the thumb on hover (Webkit) */
-  background-color: green;
-  border-color: green;
-  box-shadow: -402px 0 0 400px green;
+  background-color: #22C55E;
+  border-color: #22C55E;
+  box-shadow: -402px 0 0 400px #22C55E;
 }
+
+

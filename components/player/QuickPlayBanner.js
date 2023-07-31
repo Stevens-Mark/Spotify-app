@@ -15,6 +15,7 @@ import {
   playerInfoTypeState,
   backgroundColorState,
   originIdState,
+  progressDataState,
 } from '@/atoms/otherAtoms';
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import functions
@@ -44,6 +45,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveArtist = useSetRecoilState(activeArtistState);
+  const [progressData, setProgressData] = useRecoilState(progressDataState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState); // to control player information window
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 

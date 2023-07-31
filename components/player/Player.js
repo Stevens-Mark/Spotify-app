@@ -423,6 +423,10 @@ function Player() {
                   data.body?.item?.duration_ms - 2000
                 ) {
                   skipToNext(); // Move to the next track automatically
+                  setProgressData({
+                    duration: 0,
+                    progress: 0,
+                  });
                 }
               } else {
                 setProgressData({
@@ -535,7 +539,7 @@ function Player() {
         </label>
         <input
           id="volume-control"
-          className="w-14 md:w-28"
+          className="w-14 md:w-28 h-1"
           type="range"
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}
