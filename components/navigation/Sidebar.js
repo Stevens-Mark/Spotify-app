@@ -50,9 +50,9 @@ function Sidebar() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // useEffect(() => {
-  //   setActivePlaylistId((router?.asPath).split('/').pop());
-  // }, [router?.asPath, setActivePlaylistId]);
+  useEffect(() => {
+    setActivePlaylistId((router?.asPath).split('/').pop());
+  }, [router?.asPath, setActivePlaylistId]);
 
   useEffect(() => {
     const fetchCurrentTrack = async () => {
@@ -89,7 +89,14 @@ function Sidebar() {
     };
     fetchUserPlaylists();
     fetchCurrentTrack();
-  }, [spotifyApi, session, router?.asPath, setPlayerInfoType, setIsPlaying, setCurrentTrackId, setActivePlaylist, setCurrentItemId]);
+  }, [    spotifyApi,
+    session,
+    setCurrentTrackId,
+    setActivePlaylist,
+    setPlayerInfoType,
+    setCurrentItemId,
+    setIsPlaying,
+    setActivePlaylistId,]);
 
   const handleHome = () => {
     router.push('/');
