@@ -13,49 +13,52 @@ import { millisToMinutesAndSeconds } from '@/lib/time';
  */
 function ProgressAndSeek({ currentPosition, duration }) {
   const spotifyApi = useSpotify();
-  const [seek, setSeek] = useState(0); // seek functionality
+  const [seek, setSeek] = useState(0);
   const [isInteracting, setIsInteracting] = useState(false);
 
-  const debounceAdjustSeek = useMemo(
-    () =>
-      debounce((seek) => {
-        if (spotifyApi.getAccessToken()) {
-          spotifyApi
-            .getMyDevices()
-            .then((data) => {
-              const activeDevice = data.body?.devices.find(
-                (device) => device.is_active
-              );
-              console.log(
-                activeDevice
-                  ? 'Device Found'
-                  : 'NO Device Found - Connect to Spotify'
-              );
-              if (activeDevice) {
-                spotifyApi.seek(seek).catch((err) => {
-                  console.error('Something went wrong !');
-                  toast.error('Something went wrong !', {
-                    theme: 'colored',
-                  });
-                });
-              }
-            })
-            .catch((err) => {
-              console.error('Something went wrong !');
-              toast.error('Something went wrong !', {
-                theme: 'colored',
-              });
-            });
-        }
-      }, 500),
-    [spotifyApi]
-  );
+  // set new skip to position
+  const SetNewPosition = (e) => {
+    const seekValue = Number(e.target.value);
+    setSeek(seekValue);
+  };
 
-  useEffect(() => {
-    if (seek > 0 && seek < duration) {
-      debounceAdjustSeek(seek);
+      // Update the seek position when the user releases the mouse or touch
+  const ExecuteNewPosition = () => {
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi
+        .getMyDevices()
+        .then((data) => {
+          const activeDevice = data.body?.devices.find(
+            (device) => device.is_active
+          );
+          console.log(
+            activeDevice
+              ? 'Device Found'
+              : 'NO Device Found - Connect to Spotify'
+          );
+          if (activeDevice) {
+            spotifyApi
+              .seek(seek)
+              .then(() => {
+                // After seeking, update the current progress position
+                setSeek(0);
+              })
+              .catch((err) => {
+                console.error('Skip to new position Failed !');
+                toast.error('Something went wrong !', {
+                  theme: 'colored',
+                });
+              });
+          }
+        })
+        .catch((err) => {
+          console.error('Skip to new position Failed !');
+          toast.error('Something went wrong !', {
+            theme: 'colored',
+          });
+        });
     }
-  }, [debounceAdjustSeek, duration, seek]);
+  };
 
   return (
     <div
@@ -73,37 +76,19 @@ function ProgressAndSeek({ currentPosition, duration }) {
       <label htmlFor="seek" className="sr-only">
         Seek-to-position-control
       </label>
+
       <input
-        id="seek"
-        className="seek-input mx-3 w-full h-1 rounded-md bg-pink-swan"
+      id="seek"
+      className="seek-input mx-3 w-full h-1 rounded-md bg-pink-swan"
         type="range"
-        value={isInteracting ? seek : currentPosition}
-        onChange={(e) => {
-          setSeek(Number(e.target.value));
-          setIsInteracting(true);
-        }}
-        onMouseLeave={() => {
-          if (isInteracting) {
-            setIsInteracting(false);
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            setIsInteracting(false); // Release the slider when Enter or Space is pressed
-          }
-          // Handle arrow keys to adjust the seek value
-          else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
-            setSeek((prevSeek) => Math.max(0, prevSeek - 1000)); // Decrease by 1 second (1000ms)
-          } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
-            setSeek((prevSeek) => Math.min(duration, prevSeek + 1000)); // Increase by 1 second (1000ms)
-          }
-        }}
-        onMouseUp={() => setIsInteracting(false)}
-        onTouchEnd={() => setIsInteracting(false)}
         min={0}
         max={duration}
+        value={seek || currentPosition}
+        onChange={SetNewPosition}
+        onMouseUp={ExecuteNewPosition}
+        onTouchEnd={ExecuteNewPosition}
       />
-
+   
       {duration ? (
         <span className="pl-2 text-xs md:text-base">
           {millisToMinutesAndSeconds(duration)}
