@@ -37,7 +37,8 @@ function ArtistTrack({ track, order }) {
 
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
   const artistTracklist = useRecoilValue(artistTrackListState);
-  console.log("track ", artistTracklist?.tracks)
+
+  // console.log("track ", artistTracklist?.tracks)
 
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // used to determine what type of info to load
@@ -107,7 +108,9 @@ function ArtistTrack({ track, order }) {
   const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus =
-      song?.id === currentTrackId && currentItemId === originId && isPlaying;
+      song?.id === currentTrackId 
+      // && currentItemId === originId 
+      && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
 

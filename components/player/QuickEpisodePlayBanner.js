@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify';
@@ -98,49 +98,51 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
               });
           } else {
             // otherwise no track played from the curent page yet, so start with first track
-            spotifyApi.getMyCurrentPlaybackState().then((data) => {
-              if (data.body?.is_playing && originId === currentTrackId) {
-                spotifyApi
-                  .pause()
-                  .then(() => {
-                    setIsPlaying(false);
-                  })
-                  .catch((err) => {
-                    console.error('Pause failed: ');
-                    toast.error('Pause failed !', {
-                      theme: 'colored',
+            if (spotifyApi.getAccessToken()) {
+              spotifyApi.getMyCurrentPlaybackState().then((data) => {
+                if (data.body?.is_playing && originId === currentTrackId) {
+                  spotifyApi
+                    .pause()
+                    .then(() => {
+                      setIsPlaying(false);
+                    })
+                    .catch((err) => {
+                      console.error('Pause failed: ');
+                      toast.error('Pause failed !', {
+                        theme: 'colored',
+                      });
                     });
-                  });
-              } else {
-                const index = showEpisodesUris.findIndex((element) =>
-                  element.includes(item?.id)
-                );
-                const currentTrackIndex =
-                  index < 0 || index === null ? 0 : index;
-                // uris: [item?.uri],
-                spotifyApi
-                  .play({
-                    uris: showEpisodesUris,
-                    offset: { position: currentTrackIndex },
-                  })
+                } else {
+                  const index = showEpisodesUris.findIndex((element) =>
+                    element.includes(item?.id)
+                  );
+                  const currentTrackIndex =
+                    index < 0 || index === null ? 0 : index;
+                  // uris: [item?.uri],
+                  spotifyApi
+                    .play({
+                      uris: showEpisodesUris,
+                      offset: { position: currentTrackIndex },
+                    })
 
-                  .then(() => {
-                    setPlayerInfoType('episode');
-                    setIsPlaying(true);
-                    setCurrentItemId(originId);
-                    setCurrentTrackId(originId);
-                    setCurrentSongIndex(currentTrackIndex);
-                    setEpisodeDuration(item?.duration_ms);
-                    setActivePlaylist(null); //episode playing so user's playlist null
-                  })
-                  .catch((err) => {
-                    console.error('Playback failed: ');
-                    toast.error('Playback failed !', {
-                      theme: 'colored',
+                    .then(() => {
+                      setPlayerInfoType('episode');
+                      setIsPlaying(true);
+                      setCurrentItemId(originId);
+                      setCurrentTrackId(originId);
+                      setCurrentSongIndex(currentTrackIndex);
+                      setEpisodeDuration(item?.duration_ms);
+                      setActivePlaylist(null); //episode playing so user's playlist null
+                    })
+                    .catch((err) => {
+                      console.error('Playback failed: ');
+                      toast.error('Playback failed !', {
+                        theme: 'colored',
+                      });
                     });
-                  });
-              }
-            });
+                }
+              });
+            }
           }
         }
       });
