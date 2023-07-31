@@ -50,18 +50,18 @@ function Sidebar() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  useEffect(() => {
-    setActivePlaylistId((router?.asPath).split('/').pop());
-  }, [router?.asPath, setActivePlaylistId]);
+  // useEffect(() => {
+  //   setActivePlaylistId((router?.asPath).split('/').pop());
+  // }, [router?.asPath, setActivePlaylistId]);
 
   useEffect(() => {
     const fetchCurrentTrack = async () => {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
-          const currentPlaylistId = data.body?.context?.uri.split(':').pop();
-          console.log("currentPlaylistId ", currentPlaylistId)
-          console.log("sidebar ", data)
+
+            const currentPlaylistId = data.body?.context?.uri.split(':').pop();
+
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
@@ -89,16 +89,7 @@ function Sidebar() {
     };
     fetchUserPlaylists();
     fetchCurrentTrack();
-  }, [
-    spotifyApi,
-    session,
-    setCurrentTrackId,
-    setActivePlaylist,
-    setPlayerInfoType,
-    setCurrentItemId,
-    setIsPlaying,
-    setActivePlaylistId,
-  ]);
+  }, [spotifyApi, session, router?.asPath, setPlayerInfoType, setIsPlaying, setCurrentTrackId, setActivePlaylist, setCurrentItemId]);
 
   const handleHome = () => {
     router.push('/');

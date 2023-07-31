@@ -33,6 +33,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { SpeakerWaveIcon, SpeakerXMarkIcon } from '@heroicons/react/24/outline';
 import SongProgress from './songProgress';
+import ProgressAndSeek from './ProgressAndSeek';
 
 /**
  * Renders the track player at the bottom of screen
@@ -518,7 +519,12 @@ function Player() {
           </button>
         </div>
         {/* progress bar */}
-        <SongProgress
+        {/* <SongProgress
+          currentPosition={progressData?.progress}
+          duration={progressData?.duration}
+        /> */}
+
+        <ProgressAndSeek
           currentPosition={progressData?.progress}
           duration={progressData?.duration}
         />
