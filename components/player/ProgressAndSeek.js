@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { toast } from 'react-toastify';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
@@ -59,10 +60,10 @@ function ProgressAndSeek({ currentPosition, duration }) {
   }, [debounceAdjustSeek, duration, seek]);
 
   return (
-    <div className="flex items-center w-full mt-1  pr-5">
+    <div className="flex items-center w-full mt-1 pr-5">
       {currentPosition ? (
         <span className="pr-2 text-xs md:text-base">
-          {millisToMinutesAndSeconds(currentPosition)}
+          {millisToMinutesAndSeconds(isInteracting ? seek : currentPosition)}
         </span>
       ) : (
         <span className="pr-2 text-xs md:text-base">0.00</span>
@@ -76,11 +77,11 @@ function ProgressAndSeek({ currentPosition, duration }) {
       </span> */}
 
       {/* Seeks to the given position in the user’s currently playing track. */}
-      <label htmlFor="seek-to-position-control" className="sr-only">
+      <label htmlFor="seek" className="sr-only">
         Seek-to-position-control
       </label>
       <input
-        id="seek-to-position-control"
+        id="seek"
         className="seek-input mx-3 w-full h-1 rounded-md bg-pink-swan"
         type="range"
         value={isInteracting ? seek : currentPosition}

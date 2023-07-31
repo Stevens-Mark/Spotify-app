@@ -54,4 +54,56 @@
   }
 }
 
+#seek {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none; 
+  /* creating a custom design */
+  width: 100%;
+  cursor: pointer;
+  outline: none;
+  /*  slider progress track  */
+  overflow: hidden;
+  border-radius: 16px;
+}
+
+/* Track: webkit browsers */
+#seek::-webkit-slider-runnable-track {
+  /* height: 15px; */
+  background: #B3B3B3;
+  border-radius: 16px;
+}
+
+/* Track: Mozilla Firefox */
+#seek::-moz-range-track {
+  /* height: 15px; */
+  background: #B3B3B3;
+  border-radius: 16px;
+}
+
+/* Thumb: webkit */
+#seek::-webkit-slider-thumb {
+  /* removing default appearance */
+  -webkit-appearance: none;
+  appearance: none; 
+  /* creating a custom design */
+  height: 4px;
+  width: 4px;
+  background-color: white;
+  border-radius: 4px;
+  border: 2px solid white;
+  /*  slider progress track  */
+  box-shadow: -402px 0 0 400px white;
+}
+
+/* Thumb: Firefox */
+#seek::-moz-range-thumb {
+  height: 4px;
+  width: 4px;
+  background-color: white;
+  border-radius: 4px;
+  border: 1px solid white;
+  /*  slider progress track  */
+  box-shadow: -402px 0 0 400px white;
+}
 
