@@ -421,29 +421,37 @@ function Player() {
       const fetchCurrentSong = () => {
         // Fetch the currently playing track periodically
         spotifyApi
-          .getMyCurrentPlayingTrack()
+          .getMyCurrentPlaybackState()
           .then((data) => {
+            console.log('data', data);
             if (data.body?.is_playing) {
               if (data.body?.item) {
-                // if track set duration & current progress
+                // set track id to ensure shuffle highlights properly
+                // const durationMs = data.body?.item?.duration_ms;
+                // if (durationMs && durationMs > 0 && durationMs < 2500) {
+                  // setCurrentTrackId(data.body?.item?.id);
+                  // setCurrentItemId(data.body?.context?.uri.split(':').pop());
+                // }
+                // if track: set duration & current progress
                 setProgressData({
                   duration: data.body?.item?.duration_ms,
                   progress: data.body?.progress_ms,
                 });
               } else {
                 setProgressData({
-                  // otherwise episode set duration & current porogress
+                  // otherwise episode set duration & current progress
                   duration: episodeDuration, // duration collected elsewhere as not returned in data
                   progress: data.body?.progress_ms,
                 });
               }
-              // Check if the current track has finished playing
+
+              // Check if the current track finished: skip to next
               if (
                 (data.body?.item &&
                   data.body?.progress_ms >=
-                    data.body?.item?.duration_ms - 2000) ||
+                    data.body?.item?.duration_ms - 1500) ||
                 (data.body?.currently_playing_type === 'episode' &&
-                  data.body?.progress_ms >= episodeDuration - 2000)
+                  data.body?.progress_ms >= episodeDuration - 1500)
               ) {
                 skipToNext(); // Move to the next track automatically
                 setProgressData({
@@ -466,14 +474,7 @@ function Player() {
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
       return () => clearInterval(interval);
     }
-  }, [
-    spotifyApi,
-    session,
-    isPlaying,
-    episodeDuration,
-    setProgressData,
-    skipToNext,
-  ]);
+  }, [spotifyApi, session, isPlaying, episodeDuration, setProgressData, skipToNext, setCurrentTrackId, setCurrentItemId]);
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
