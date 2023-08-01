@@ -176,7 +176,7 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        if (data.body?.is_playing && !isEpisode) {
+        if (data.body?.is_playing) {
           spotifyApi
             .skipToPrevious()
             .then(() => {
@@ -186,6 +186,7 @@ function Player() {
                   .then((data) => {
                     if (data.body?.currently_playing_type === 'episode') {
                       setCurrentTrackId(findPreviousEpisodeId());
+                      setCurrentItemId(findPreviousEpisodeId());
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
@@ -226,25 +227,28 @@ function Player() {
           theme: 'colored',
         });
       });
-  }, [
-    spotifyApi,
-    isEpisode,
-    activeArtist,
-    isArtist,
-    originId,
-    currentSongIndex,
-    setCurrentTrackId,
-    findPreviousEpisodeId,
-    setCurrentItemId,
-    setCurrentSongIndex,
-  ]);
+  }, [spotifyApi, activeArtist, isArtist, originId, currentSongIndex, setCurrentTrackId, findPreviousEpisodeId, setCurrentItemId, setCurrentSongIndex]);
 
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
    * @function findEpisodeId
    * @returns the Id for the current episode & the duration of the episode
    */
-  const findEpisodeId = () => {
+  // const findEpisodeId = () => {
+  //   const episodeIndex = activeListInUse.findIndex(
+  //     (episode) => episode.id === currentTrackId
+  //   );
+
+  //   // Check if the episodeIndex is valid and not -1
+  //   if (episodeIndex !== -1) {
+  //     const currentDuration = activeListInUse[episodeIndex]?.duration_ms;
+  //     setEpisodeDuration(currentDuration);
+  //     return currentTrackId;
+  //   }
+
+  //   return null; // Return null if the episode is not found
+  // };
+  const findEpisodeId = useCallback(() => {
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
     );
@@ -257,7 +261,7 @@ function Player() {
     }
 
     return null; // Return null if the episode is not found
-  };
+  }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
   /* either play or pause a track */
   const handlePlayPause = () => {
@@ -282,6 +286,8 @@ function Player() {
             .then(() => {
               if (dataType === 'episode') {
                 setCurrentTrackId(findEpisodeId());
+                setCurrentItemId(findEpisodeId());
+                
               } else {
                 setCurrentTrackId(data.body?.item?.id);
               }
@@ -332,7 +338,7 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        if (data.body?.is_playing && !isEpisode) {
+        if (data.body?.is_playing ) {
           spotifyApi
             .skipToNext()
             .then(() => {
@@ -342,6 +348,7 @@ function Player() {
                   .then((data) => {
                     if (data.body?.currently_playing_type === 'episode') {
                       setCurrentTrackId(findNextEpisodeId());
+                      setCurrentItemId(findNextEpisodeId());
                     } else {
                       setCurrentTrackId(data.body?.item?.id);
                     }
@@ -378,18 +385,7 @@ function Player() {
           theme: 'colored',
         });
       });
-  }, [
-    spotifyApi,
-    isEpisode,
-    activeArtist,
-    isArtist,
-    originId,
-    setCurrentSongIndex,
-    currentSongIndex,
-    setCurrentTrackId,
-    findNextEpisodeId,
-    setCurrentItemId,
-  ]);
+  }, [activeArtist, currentSongIndex, findNextEpisodeId, isArtist, originId, setCurrentItemId, setCurrentSongIndex, setCurrentTrackId, spotifyApi]);
 
   // handles 3 way toggle, off, repeat, repeat  once
   const handleRepeatToggle = () => {
