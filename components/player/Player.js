@@ -5,7 +5,6 @@ import { useSession } from 'next-auth/react';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
 import { debounce } from 'lodash';
-
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
@@ -61,7 +60,7 @@ function Player() {
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-  // const [isEpisode, setIsEpisode] = useState(false);
+  const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
   const activeArtist = useRecoilValue(activeArtistState);
   const [progressData, setProgressData] = useRecoilState(progressDataState);
@@ -72,12 +71,12 @@ function Player() {
   }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
-    // check whether on a single episode page (to disable skip forward/previous controls)
-    // const isEpisode = (router?.asPath).includes('episode');
-    // setIsEpisode(isEpisode);
-    // check whether on a single artist page (to disable setting CurrentItemId to album.id in skip forward/previous controls)
-    const isArtist = (router?.asPath).includes('artist');
-    setIsArtist(isArtist);
+    const isEpisode =
+      router?.asPath &&
+      /(episode|show|podcastAndEpisodes)/i.test(router.asPath); // check if episode/show pages to remove repeat & shuffle controls
+    setIsEpisode(isEpisode);
+    const isArtist = (router?.asPath).includes('artist'); // check if single artist page (to disable setting CurrentItemId
+    setIsArtist(isArtist); // to album.id in skip forward/previous controls)
   }, [router?.asPath]);
 
   /* onload set state for playing, */
@@ -88,7 +87,7 @@ function Player() {
         spotifyApi.getMyCurrentPlaybackState().then((data) => {
           setShuffletState(data.body?.shuffle_state);
           setRepeatState(data.body?.repeat_state);
-            setIsPlaying(data.body?.is_playing);
+          setIsPlaying(data.body?.is_playing);
         });
       }
     }, 500);
@@ -171,7 +170,7 @@ function Player() {
     return previousEpisodeId || currentTrackId;
   }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
-  /* go back a track if playing : disable if on a single episode page - NOT IN USE*/
+  /* go back a track if playing */
   const skipToPrevious = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
@@ -244,20 +243,6 @@ function Player() {
    * @function findEpisodeId
    * @returns the Id for the current episode & the duration of the episode
    */
-  // const findEpisodeId = () => {
-  //   const episodeIndex = activeListInUse.findIndex(
-  //     (episode) => episode.id === currentTrackId
-  //   );
-
-  //   // Check if the episodeIndex is valid and not -1
-  //   if (episodeIndex !== -1) {
-  //     const currentDuration = activeListInUse[episodeIndex]?.duration_ms;
-  //     setEpisodeDuration(currentDuration);
-  //     return currentTrackId;
-  //   }
-
-  //   return null; // Return null if the episode is not found
-  // };
   const findEpisodeId = useCallback(() => {
     const episodeIndex = activeListInUse.findIndex(
       (episode) => episode.id === currentTrackId
@@ -342,7 +327,7 @@ function Player() {
     return nextEpisodeId || currentTrackId;
   }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
-  /* go forward a track if playing : disable if on a single episode page - NOT IN USE*/
+  /* go forward a track if playing */
   const skipToNext = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
@@ -433,14 +418,14 @@ function Player() {
       return;
     }
     if (spotifyApi.getAccessToken()) {
-      // Fetch the currently playing track periodically
       const fetchCurrentSong = () => {
+        // Fetch the currently playing track periodically
         spotifyApi
           .getMyCurrentPlayingTrack()
           .then((data) => {
             if (data.body?.is_playing) {
               if (data.body?.item) {
-                // if track set duration & current porogress
+                // if track set duration & current progress
                 setProgressData({
                   duration: data.body?.item?.duration_ms,
                   progress: data.body?.progress_ms,
@@ -492,24 +477,29 @@ function Player() {
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
-      <PlayingInfo /> {/* left hand side - album photo/info */}
+      {/* left hand side - album photo/info */}
+      <PlayingInfo />
+
       {/* player controls */}
       <div className="flex flex-col items-center justify-center">
-        <div className="flex items-center justify-evenly  w-full">
-          <button
-            className="hidden sm:inline relative"
-            onClick={() => setShuffle()}
-            aria-label="shuffle songs on/off"
-          >
-            <ArrowsRightLeftIcon
-              className={`button ${
-                shuffleState === false ? 'text-white' : 'text-green-500'
-              }`}
-            />
-            {shuffleState && (
-              <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
-            )}
-          </button>
+        <div className="flex items-center justify-evenly w-full">
+          {/* hide shuffle if on episode/show pages  */}
+          {!isEpisode && (
+            <button
+              className="hidden sm:inline relative"
+              onClick={() => setShuffle()}
+              aria-label="shuffle songs on/off"
+            >
+              <ArrowsRightLeftIcon
+                className={`button ${
+                  shuffleState === false ? 'text-white' : 'text-green-500'
+                }`}
+              />
+              {shuffleState && (
+                <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
+              )}
+            </button>
+          )}
 
           <button
             onClick={() => skipToPrevious()}
@@ -530,30 +520,33 @@ function Player() {
             <ForwardIcon className="button" />
           </button>
 
-          <button
-            className="hidden sm:inline relative"
-            onClick={() => handleRepeatToggle()}
-            aria-label="repeat track toggle"
-          >
-            <ArrowPathRoundedSquareIcon
-              className={`button w-6 h-6 ${
-                repeatState === 'off' ? 'text-white' : 'text-green-500'
-              }`}
-            />
-            {repeatState === 'track' || repeatState === 'context' ? (
-              <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
-            ) : (
-              ''
-            )}
+          {/* hide repeat if on episode/show pages  */}
+          {!isEpisode && (
+            <button
+              className="hidden sm:inline relative"
+              onClick={() => handleRepeatToggle()}
+              aria-label="repeat track toggle"
+            >
+              <ArrowPathRoundedSquareIcon
+                className={`button w-6 h-6 ${
+                  repeatState === 'off' ? 'text-white' : 'text-green-500'
+                }`}
+              />
+              {repeatState === 'track' || repeatState === 'context' ? (
+                <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
+              ) : (
+                ''
+              )}
 
-            {repeatState === 'track' ? (
-              <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-green-500 pointer-events-none pr-[1.1px]">
-                1
-              </span>
-            ) : (
-              ''
-            )}
-          </button>
+              {repeatState === 'track' ? (
+                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-green-500 pointer-events-none pr-[1.1px]">
+                  1
+                </span>
+              ) : (
+                ''
+              )}
+            </button>
+          )}
         </div>
         {/* progress bar */}
         <ProgressAndSeek
