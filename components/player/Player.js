@@ -61,7 +61,7 @@ function Player() {
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
-  const [isEpisode, setIsEpisode] = useState(false);
+  // const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
   const activeArtist = useRecoilValue(activeArtistState);
   const [progressData, setProgressData] = useRecoilState(progressDataState);
@@ -73,8 +73,8 @@ function Player() {
 
   useEffect(() => {
     // check whether on a single episode page (to disable skip forward/previous controls)
-    const isEpisode = (router?.asPath).includes('episode');
-    setIsEpisode(isEpisode);
+    // const isEpisode = (router?.asPath).includes('episode');
+    // setIsEpisode(isEpisode);
     // check whether on a single artist page (to disable setting CurrentItemId to album.id in skip forward/previous controls)
     const isArtist = (router?.asPath).includes('artist');
     setIsArtist(isArtist);
@@ -171,7 +171,7 @@ function Player() {
     return previousEpisodeId || currentTrackId;
   }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
-  /* go back a track if playing : disable if on a single episode page */
+  /* go back a track if playing : disable if on a single episode page - NOT IN USE*/
   const skipToPrevious = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
@@ -333,7 +333,7 @@ function Player() {
     return nextEpisodeId || currentTrackId;
   }, [activeListInUse, currentTrackId, setEpisodeDuration]);
 
-  /* go forward a track if playing : disable if on a single episode page */
+  /* go forward a track if playing : disable if on a single episode page - NOT IN USE*/
   const skipToNext = useCallback(() => {
     spotifyApi
       .getMyCurrentPlayingTrack()
@@ -411,7 +411,6 @@ function Player() {
         spotifyApi
           .getMyCurrentPlayingTrack()
           .then((data) => {
-            console.log("data in player ", data)
             if (data.body?.is_playing) {
               if (data.body?.item) {       // if track set duration & current porogress
                 setProgressData({
@@ -424,13 +423,12 @@ function Player() {
                   progress: data.body?.progress_ms,
                 });
               }
-
               // Check if the current track has finished playing
               if (
-                data.body?.progress_ms >=
+                data.body?.item && data.body?.progress_ms >=
                 data.body?.item?.duration_ms - 2000 ||
-                data.body?.progress_ms >=
-                episodeDuration - 2000 
+                data.body?.currently_playing_type === 'episode' && data.body?.progress_ms >=
+                (episodeDuration - 2000)
               ) {
                 skipToNext(); // Move to the next track automatically
                 setProgressData({
