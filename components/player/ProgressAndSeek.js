@@ -20,6 +20,7 @@ function ProgressAndSeek({ currentPosition, duration }) {
   const SetNewPosition = (e) => {
     const seekValue = Number(e.target.value);
     setSeek(seekValue);
+    setIsInteracting(true);
   };
 
   // Update the seek position when the user releases the mouse or touch
@@ -83,10 +84,27 @@ function ProgressAndSeek({ currentPosition, duration }) {
         type="range"
         min={0}
         max={duration}
-        value={seek || currentPosition}
+        value={isInteracting ? seek : currentPosition}
         onChange={SetNewPosition}
         onMouseUp={ExecuteNewPosition}
         onTouchEnd={ExecuteNewPosition}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            setIsInteracting(false); // Release the slider when Enter or Space is pressed
+          }
+          // Handle arrow keys to adjust the seek value
+          else if (e.key === 'ArrowLeft' || e.key === 'ArrowDown') {
+            setSeek((prevSeek) => Math.max(0, prevSeek - 1000)); // Decrease by 1 second (1000ms)
+          } else if (e.key === 'ArrowRight' || e.key === 'ArrowUp') {
+            setSeek((prevSeek) => Math.min(duration, prevSeek + 1000)); // Increase by 1 second (1000ms)
+          }
+        }}
+        onMouseLeave={() => {
+          if (isInteracting) {
+            setIsInteracting(false);
+          }
+        }}
+
       />
    
       {duration ? (
