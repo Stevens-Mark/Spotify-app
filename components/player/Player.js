@@ -45,7 +45,7 @@ function Player() {
   const { data: session } = useSession();
 
   const [shuffleState, setShuffletState] = useState(false); // shuffle functionality
-  const [repeatState, setRepeatState] = useState(0); // repeat functionality
+  const [repeatState, setRepeatState] = useState('off'); // repeat functionality
   const [volume, setVolume] = useState(50); // volume functionality
 
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
@@ -79,6 +79,20 @@ function Player() {
     const isArtist = (router?.asPath).includes('artist');
     setIsArtist(isArtist);
   }, [router?.asPath]);
+
+  /* onload set state for playing, */
+  /* shuffle & repeat (taken from spotify*/
+  useEffect(() => {
+    setTimeout(() => {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi.getMyCurrentPlaybackState().then((data) => {
+          setShuffletState(data.body?.shuffle_state);
+          setRepeatState(data.body?.repeat_state);
+            setIsPlaying(data.body?.is_playing);
+        });
+      }
+    }, 500);
+  }, [setIsPlaying, spotifyApi, session]);
 
   /* set volume depending on user choose */
   /* debounce to avoid excessive calls */
@@ -122,20 +136,6 @@ function Player() {
       debounceAdjustVolume(volume);
     }
   }, [debounceAdjustVolume, volume]);
-
-  /* check status of media & if playing set state */
-  /* button will then change to pause */
-  useEffect(() => {
-    setTimeout(() => {
-      if (spotifyApi.getAccessToken()) {
-        spotifyApi.getMyCurrentPlayingTrack().then((data) => {
-          if (data.body?.is_playing) {
-            setIsPlaying(true);
-          }
-        });
-      }
-    }, 500);
-  }, [setIsPlaying, spotifyApi]);
 
   /* set shuffle of tracks on or off */
   const setShuffle = () => {
@@ -227,7 +227,17 @@ function Player() {
           theme: 'colored',
         });
       });
-  }, [spotifyApi, activeArtist, isArtist, originId, currentSongIndex, setCurrentTrackId, findPreviousEpisodeId, setCurrentItemId, setCurrentSongIndex]);
+  }, [
+    spotifyApi,
+    activeArtist,
+    isArtist,
+    originId,
+    currentSongIndex,
+    setCurrentTrackId,
+    findPreviousEpisodeId,
+    setCurrentItemId,
+    setCurrentSongIndex,
+  ]);
 
   /**
    * ID not returned by getMyCurrentPlayingTrack for an episode so find the episode ID manually
@@ -287,7 +297,6 @@ function Player() {
               if (dataType === 'episode') {
                 setCurrentTrackId(findEpisodeId());
                 setCurrentItemId(findEpisodeId());
-                
               } else {
                 setCurrentTrackId(data.body?.item?.id);
               }
@@ -338,7 +347,7 @@ function Player() {
     spotifyApi
       .getMyCurrentPlayingTrack()
       .then((data) => {
-        if (data.body?.is_playing ) {
+        if (data.body?.is_playing) {
           spotifyApi
             .skipToNext()
             .then(() => {
@@ -385,16 +394,34 @@ function Player() {
           theme: 'colored',
         });
       });
-  }, [activeArtist, currentSongIndex, findNextEpisodeId, isArtist, originId, setCurrentItemId, setCurrentSongIndex, setCurrentTrackId, spotifyApi]);
+  }, [
+    activeArtist,
+    currentSongIndex,
+    findNextEpisodeId,
+    isArtist,
+    originId,
+    setCurrentItemId,
+    setCurrentSongIndex,
+    setCurrentTrackId,
+    spotifyApi,
+  ]);
 
   // handles 3 way toggle, off, repeat, repeat  once
   const handleRepeatToggle = () => {
-    let adjusted = repeatState == 0 ? 1 : repeatState == 2 ? 0 : 2;
-    let value = adjusted === 0 ? 'off' : adjusted === 1 ? 'context' : 'track';
-    setRepeatState((prevState) => (prevState + 1) % 3);
-    spotifyApi.setRepeat(`${value}`, {}).catch((err) => {
-      console.error('Repeat failed: ');
-      toast.error('Repeat failed !', {
+    // Adjust the repeat state: 'off' -> 'track' -> 'context' -> 'off'
+    let adjusted =
+      repeatState === 'off'
+        ? 'track'
+        : repeatState === 'track'
+        ? 'context'
+        : 'off';
+
+    setRepeatState(adjusted); // Update the state with the new repeat state
+
+    // Apply the new repeat state to the Spotify player
+    spotifyApi.setRepeat(adjusted).catch((err) => {
+      console.error('Repeat failed: ', err);
+      toast.error('Repeat failed!', {
         theme: 'colored',
       });
     });
@@ -412,23 +439,26 @@ function Player() {
           .getMyCurrentPlayingTrack()
           .then((data) => {
             if (data.body?.is_playing) {
-              if (data.body?.item) {       // if track set duration & current porogress
+              if (data.body?.item) {
+                // if track set duration & current porogress
                 setProgressData({
                   duration: data.body?.item?.duration_ms,
                   progress: data.body?.progress_ms,
                 });
               } else {
-                setProgressData({             // otherwise episode set duration & current porogress
-                  duration: episodeDuration,  // duration collected elsewhere as not returned in data
+                setProgressData({
+                  // otherwise episode set duration & current porogress
+                  duration: episodeDuration, // duration collected elsewhere as not returned in data
                   progress: data.body?.progress_ms,
                 });
               }
               // Check if the current track has finished playing
               if (
-                data.body?.item && data.body?.progress_ms >=
-                data.body?.item?.duration_ms - 2000 ||
-                data.body?.currently_playing_type === 'episode' && data.body?.progress_ms >=
-                (episodeDuration - 2000)
+                (data.body?.item &&
+                  data.body?.progress_ms >=
+                    data.body?.item?.duration_ms - 2000) ||
+                (data.body?.currently_playing_type === 'episode' &&
+                  data.body?.progress_ms >= episodeDuration - 2000)
               ) {
                 skipToNext(); // Move to the next track automatically
                 setProgressData({
@@ -443,7 +473,9 @@ function Player() {
               });
             }
           })
-          .catch((err) => console.error('Fetching progress data failed: ',err));
+          .catch((err) =>
+            console.error('Fetching progress data failed: ', err)
+          );
       };
 
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
@@ -505,16 +537,16 @@ function Player() {
           >
             <ArrowPathRoundedSquareIcon
               className={`button w-6 h-6 ${
-                repeatState === 0 ? 'text-white' : 'text-green-500'
+                repeatState === 'off' ? 'text-white' : 'text-green-500'
               }`}
             />
-            {repeatState === 1 || repeatState === 2 ? (
+            {repeatState === 'track' || repeatState === 'context' ? (
               <span className="absolute top-6 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-green-500 rounded-full"></span>
             ) : (
               ''
             )}
 
-            {repeatState === 2 ? (
+            {repeatState === 'track' ? (
               <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-xs text-green-500 pointer-events-none pr-[1.1px]">
                 1
               </span>

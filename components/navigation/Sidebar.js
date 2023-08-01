@@ -59,9 +59,7 @@ function Sidebar() {
       try {
         if (spotifyApi.getAccessToken()) {
           const data = await spotifyApi.getMyCurrentPlayingTrack();
-
-            const currentPlaylistId = data.body?.context?.uri.split(':').pop();
-
+          const currentPlaylistId = data.body?.context?.uri.split(':').pop();
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
@@ -89,14 +87,16 @@ function Sidebar() {
     };
     fetchUserPlaylists();
     fetchCurrentTrack();
-  }, [    spotifyApi,
+  }, [
+    spotifyApi,
     session,
     setCurrentTrackId,
     setActivePlaylist,
     setPlayerInfoType,
     setCurrentItemId,
     setIsPlaying,
-    setActivePlaylistId,]);
+    setActivePlaylistId,
+  ]);
 
   const handleHome = () => {
     router.push('/');
