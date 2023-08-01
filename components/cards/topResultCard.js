@@ -155,7 +155,8 @@ function TopResultCard({ item }) {
                       <button
                         aria-label='go to artist'
                         className="hover:text-white hover:underline focus:underline focus:text-white "
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.preventDefault(); 
                           handleNavigationClick(`/artist/${artist?.id}`);
                         }}
                       >
@@ -206,7 +207,8 @@ function TopResultCard({ item }) {
                       <button
                         aria-label='go to artist'
                         className="hover:text-white hover:underline focus:underline focus:text-white group-focus:bg-gray-800"
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.preventDefault(); 
                           handleNavigationClick(`/artist/${artist?.id}`);
                         }}
                       >

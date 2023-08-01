@@ -91,20 +91,22 @@ function RenderTracks({
           >
             {song?.name}
           </Link>
-
-          <div className="pr-2 line-clamp-1">
-            {song?.artists?.map((artist, index) => (
-              <span key={artist?.id}>
-                {index > 0 && ', '}
-                <Link
-                  href={`/artist/${artist?.id}`}
-                  className="hover:text-white hover:underline focus:text-white focus:underline truncate"
-                >
-                  {artist?.name}
-                </Link>
-              </span>
-            ))}
-          </div>
+          {/* show link(s) to artist(s) if not on artist page */}
+          {!(router?.asPath).includes('artist') &&
+            <div className="pr-2 line-clamp-1">
+              {song?.artists?.map((artist, index) => (
+                <span key={artist?.id}>
+                  {index > 0 && ', '}
+                  <Link
+                    href={`/artist/${artist?.id}`}
+                    className="hover:text-white hover:underline focus:text-white focus:underline truncate"
+                  >
+                    {artist?.name}
+                  </Link>
+                </span>
+              ))}
+            </div>
+          }
         </div>
       </div>
       {song?.album?.name ? (
