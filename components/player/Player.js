@@ -67,7 +67,7 @@ function Player() {
   const [progressData, setProgressData] = useRecoilState(progressDataState);
 
   useEffect(() => {
-    // take ID from url each time page changed
+    // take ID from url each time page changes
     setOriginId((router?.asPath).split('/').pop());
   }, [router?.asPath, setOriginId]);
 
@@ -80,6 +80,8 @@ function Player() {
     setIsArtist(isArtist);
   }, [router?.asPath]);
 
+  /* set volume depending on user choose */
+  /* debounce to avoid excessive calls */
   const debounceAdjustVolume = useMemo(
     () =>
       debounce((volume) => {
@@ -121,6 +123,8 @@ function Player() {
     }
   }, [debounceAdjustVolume, volume]);
 
+  /* check status of media & if playing set state */
+  /* button will then change to pause */
   useEffect(() => {
     setTimeout(() => {
       if (spotifyApi.getAccessToken()) {
@@ -201,8 +205,8 @@ function Player() {
                     }
                   })
                   .catch((err) => {
-                    console.error('Get Current Track ID failed: ');
-                    toast.error('Something went wrong !', {
+                    console.error('Get Current Playing Track failed:');
+                    toast.error('Skip to Previous failed !', {
                       theme: 'colored',
                     });
                   });
@@ -217,8 +221,8 @@ function Player() {
         }
       })
       .catch((err) => {
-        console.error('Get Current Playing Track failed: ');
-        toast.error('Something went wrong !', {
+        console.error('Get Current Playing Track failed:');
+        toast.error('Skip to Previous failed !', {
           theme: 'colored',
         });
       });
@@ -412,26 +416,27 @@ function Player() {
           .getMyCurrentPlayingTrack()
           .then((data) => {
             if (data.body?.is_playing) {
-              if (data.body?.item) {
+              if (data.body?.item) {       // if track set duration & current porogress
                 setProgressData({
                   duration: data.body?.item?.duration_ms,
                   progress: data.body?.progress_ms,
                 });
-                // Check if the current track has finished playing
-                if (
-                  data.body?.progress_ms >=
-                  data.body?.item?.duration_ms - 2000
-                ) {
-                  skipToNext(); // Move to the next track automatically
-                  setProgressData({
-                    duration: 0,
-                    progress: 0,
-                  });
-                }
               } else {
-                setProgressData({
-                  duration: episodeDuration,
+                setProgressData({             // otherwise episode set duration & current porogress
+                  duration: episodeDuration,  // duration collected elsewhere as not returned in data
                   progress: data.body?.progress_ms,
+                });
+              }
+
+              // Check if the current track has finished playing
+              if (
+                data.body?.progress_ms >=
+                data.body?.item?.duration_ms - 2000
+              ) {
+                skipToNext(); // Move to the next track automatically
+                setProgressData({
+                  duration: 0,
+                  progress: 0,
                 });
               }
             } else {
@@ -539,7 +544,7 @@ function Player() {
         </label>
         <input
           id="volume-control"
-          className="w-14 md:w-28 h-1"
+          className="w-14 md:w-28 1.5"
           type="range"
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}

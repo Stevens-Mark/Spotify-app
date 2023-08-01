@@ -38,14 +38,15 @@
   min-height: 50px !important;
 }
 
-/* position adjustments for magnify glass in seach bar*/
-/* Your specific CSS rules for Chrome */
+
+/* POSITION ADJUSTMENTS FOR MAGNIFY GLASS IN SEARCH BAR */
+/* specific CSS rules for Chrome */
 @media screen and (-webkit-min-device-pixel-ratio: 0) {
   .magnifying-glass-icon {
     top: 24px;
   }
 }
-/* Your specific CSS rules for Firefox */
+/* specific CSS rules for Firefox */
 @-moz-document url-prefix() {
   .magnifying-glass-icon {
     top: 40px;
@@ -53,7 +54,8 @@
   }
 }
 
-/* styling for seek bar in player */
+/* SYLING FOR VOLUME & PLAYER PROGRESS BARS */
+/* TRACK & THUMB IN INPUT */
 #seek {
   /* removing default appearance */
   -webkit-appearance: none;
@@ -84,7 +86,7 @@
 /* Track: webkit browsers */
 #seek::-webkit-slider-runnable-track,
 #volume-control::-webkit-slider-runnable-track {
-  height: 4px;
+  height: 6px;
   background: #b3b3b3;
   border-radius: 16px;
 }
@@ -92,7 +94,7 @@
 /* Track: Mozilla Firefox */
 #seek::-moz-range-track,
 #volume-control::-moz-range-track {
-  height: 4px;
+  height: 6px;
   background: #b3b3b3;
   border-radius: 16px;
 }
@@ -104,10 +106,10 @@
   -webkit-appearance: none;
   appearance: none;
   /* creating a custom design */
-  height: 4px;
-  width: 12px;
+  height: 6px;
+  width: 10px;
   background-color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 2px solid white;
   /*  slider progress track  */
   box-shadow: -402px 0 0 400px white;
@@ -116,16 +118,16 @@
 /* Thumb: Firefox */
 #seek::-moz-range-thumb,
 #volume-control::-moz-range-thumb {
-  height: 4px;
-  width: 4px;
+  height: 6px;
+  width: 6px;
   background-color: white;
-  border-radius: 4px;
+  border-radius: 6px;
   border: 1px solid white;
   /*  slider progress track  */
   box-shadow: -402px 0 0 400px white;
 }
 
-/* Hover styles */
+/* HOVER STYLES*/
 #seek:hover::-moz-range-thumb,
 #volume-control:hover::-moz-range-thumb {
   /* styles for the thumb on hover (Firefox) */
@@ -133,7 +135,6 @@
   border-color: #22C55E;
   box-shadow: -402px 0 0 400px #22C55E;
 }
-
 #seek:hover::-webkit-slider-thumb,
 #volume-control:hover::-webkit-slider-thumb {
   /* styles for the thumb on hover (Webkit) */
@@ -145,7 +146,7 @@
 /* Track: webkit browsers */
 #seek:hover::-webkit-slider-runnable-track,
 #volume-control:hover::-webkit-slider-runnable-track {
-  height: 4px;
+  height: 6px;
   /* background: white; */
   border-radius: 16px;
 }
@@ -153,12 +154,12 @@
 /* Track: Mozilla Firefox */
 #seek:hover::-moz-range-track,
 #volume-control:hover::-moz-range-track {
-  height: 4px;
+  height: 6px;
   /* background: white; */
   border-radius: 16px;
 }
 
-/* Adding keyboard focus styles */
+/* KEYBOARD FOCUS styles */
 #seek:focus-visible,
 #volume-control:focus-visible {
   outline: 2px solid #22C55E;

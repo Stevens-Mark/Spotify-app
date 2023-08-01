@@ -2,7 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { toast } from 'react-toastify';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
-import { debounce } from 'lodash';
+// import { debounce } from 'lodash';
 import { millisToMinutesAndSeconds } from '@/lib/time';
 
 /**
@@ -22,7 +22,7 @@ function ProgressAndSeek({ currentPosition, duration }) {
     setSeek(seekValue);
   };
 
-      // Update the seek position when the user releases the mouse or touch
+  // Update the seek position when the user releases the mouse or touch
   const ExecuteNewPosition = () => {
     if (spotifyApi.getAccessToken()) {
       spotifyApi
@@ -62,7 +62,7 @@ function ProgressAndSeek({ currentPosition, duration }) {
 
   return (
     <div
-      className="flex items-center w-full mt-1 pr-5"
+      className="flex items-center w-full mt-1 pr-5 text-pink-swan"
       onBlur={() => setIsInteracting(false)}
     >
       {currentPosition ? (
@@ -79,7 +79,7 @@ function ProgressAndSeek({ currentPosition, duration }) {
 
       <input
       id="seek"
-      className="seek-input mx-3 w-full h-1 rounded-md bg-pink-swan"
+      className="seek-input mx-3 w-full h-1.5 rounded-md bg-pink-swan"
         type="range"
         min={0}
         max={duration}
