@@ -415,6 +415,7 @@ function Player() {
         spotifyApi
           .getMyCurrentPlayingTrack()
           .then((data) => {
+            console.log("data in player ", data)
             if (data.body?.is_playing) {
               if (data.body?.item) {       // if track set duration & current porogress
                 setProgressData({
@@ -431,7 +432,9 @@ function Player() {
               // Check if the current track has finished playing
               if (
                 data.body?.progress_ms >=
-                data.body?.item?.duration_ms - 2000
+                data.body?.item?.duration_ms - 2000 ||
+                data.body?.progress_ms >=
+                episodeDuration - 2000 
               ) {
                 skipToNext(); // Move to the next track automatically
                 setProgressData({
@@ -446,7 +449,7 @@ function Player() {
               });
             }
           })
-          .catch((err) => console.error('Fetching progress data failed: '));
+          .catch((err) => console.error('Fetching progress data failed: ',err));
       };
 
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
