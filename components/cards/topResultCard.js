@@ -2,6 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useSetRecoilState } from 'recoil';
 import {
@@ -27,6 +28,7 @@ import noImage from '@/public/images/noImageAvailable.svg';
  */
 function TopResultCard({ item }) {
   const spotifyApi = useSpotify();
+  const router = useRouter();
 
   // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -47,6 +49,10 @@ function TopResultCard({ item }) {
       : item?.type === 'artist'
       ? `/artist/${item?.id}`
       : '';
+
+  const handleNavigationClick = (link) => {
+      router.push(link);
+  };
 
   /**
    * Either play or pause current track
@@ -142,26 +148,28 @@ function TopResultCard({ item }) {
           {item?.type === 'album' && (
             <>
               {item?.artists && (
-                <span className=" text-pink-swan line-clamp-1">
+                <div className=" text-pink-swan line-clamp-1 mr-5">
                   {item?.artists?.map((artist, index) => (
-                    <span key={artist?.id}>
+                    <div key={artist?.id}>
                       {index > 0 && ', '}
-                      <Link
-                        href={`/artist/${artist?.id}`}
+                      <button
+                        aria-label='go to artist'
                         className="hover:text-white hover:underline focus:underline focus:text-white "
+                        onClick={() => {
+                          handleNavigationClick(`/artist/${artist?.id}`);
+                        }}
                       >
                         {artist?.name}
-                      </Link>
-                    </span>
+                      </button>
+                    </div>
                   ))}
-                </span>
+                </div>
               )}
-              <Link
-                href={`/album/${item?.id}`}
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline flex-shrink-0 flex-grow-0"
+              <div
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
               >
                 {capitalize(item?.type)}
-              </Link>
+              </div>
             </>
           )}
 
@@ -171,49 +179,48 @@ function TopResultCard({ item }) {
               <span className="truncate mr-5">
                 By {capitalize(item?.owner.display_name)}
               </span>
-              <Link
-                href={`/playlist/${item?.id}`}
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline  flex-shrink-0 flex-grow-0"
+              <span
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
               >
                 {capitalize(item?.type)}
-              </Link>
+              </span>
             </>
           )}
 
           {/*artist*/}
           {item?.type === 'artist' && (
-            <Link
-              href={`/artist/${item?.id}`}
-              className=" text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline flex-shrink-0 flex-grow-0"
+            <span className=" text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
             >
               {capitalize(item?.type)}
-            </Link>
+            </span>
           )}
 
           {/* track */}
           {item?.type === 'track' && (
             <>
               {item?.artists && (
-                <span className="text-pink-swan line-clamp-1">
+                <span className="text-pink-swan line-clamp-1  mr-5">
                   {item?.artists?.map((artist, index) => (
                     <span key={artist?.id}>
                       {index > 0 && ', '}
-                      <Link
-                        href={`/artist/${artist?.id}`}
+                      <button
+                        aria-label='go to artist'
                         className="hover:text-white hover:underline focus:underline focus:text-white group-focus:bg-gray-800"
+                        onClick={() => {
+                          handleNavigationClick(`/artist/${artist?.id}`);
+                        }}
                       >
                         {artist?.name}
-                      </Link>
+                      </button>
                     </span>
                   ))}
                 </span>
               )}
-              <Link
-                href={`/album/${item?.album?.id}`}
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 hover:text-white hover:underline focus:text-white flex-shrink-0 flex-grow-0"
-              >
+              <span
+                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
+               >
                 Song
-              </Link>
+              </span>
             </>
           )}
         </div>
