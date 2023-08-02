@@ -425,27 +425,28 @@ function Player() {
           .getMyCurrentPlaybackState()
           .then((data) => {
             if (data.body?.is_playing) {
-              if (data.body?.item) {
+              const { item, progress_ms, currently_playing_type } = data.body;
+              if (item) {
                 // set track id to ensure shuffle highlights properly
-                // const durationMs = data.body?.item?.duration_ms;
+                // const durationMs = item?.duration_ms;
                 // if (durationMs && durationMs > 0 && durationMs < 2500) {
-                // setCurrentTrackId(data.body?.item?.id);
+                // setCurrentTrackId(item?.id);
                 // setCurrentItemId(data.body?.context?.uri.split(':').pop());
                 // }
                 // if track: set duration & current progress
                 setProgressData({
-                  duration: data.body?.item?.duration_ms,
-                  progress: data.body?.progress_ms,
+                  duration: item?.duration_ms,
+                  progress: progress_ms,
                 });
               } else {
                 setProgressData({
                   // otherwise episode set duration & current progress
                   duration: episodeDuration, // duration collected elsewhere as not returned in data
-                  progress: data.body?.progress_ms,
+                  progress: progress_ms,
                 });
               }
               // ensure neither shuffle/repeat is still active for episodes
-              if (data?.body?.currently_playing_type === 'episode') {
+              if (currently_playing_type === 'episode') {
                 if (data?.body?.repeat_state !== 'off') {
                   setRepeatState('off');
                 }
@@ -456,11 +457,9 @@ function Player() {
 
               // Check if the current track finished: the skip to next
               if (
-                (data.body?.item &&
-                  data.body?.progress_ms >=
-                    data.body?.item?.duration_ms - 1500) ||
-                (data.body?.currently_playing_type === 'episode' &&
-                  data.body?.progress_ms >= episodeDuration - 1500)
+                (item && progress_ms >= item?.duration_ms - 1500) ||
+                (currently_playing_type === 'episode' &&
+                  progress_ms >= episodeDuration - 1500)
               ) {
                 skipToNext(); // Move to the next track automatically
                 setProgressData({

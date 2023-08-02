@@ -54,7 +54,7 @@ function PlaylistTrack({ track, order }) {
   useEffect(() => {
     setTimeout(() => {
       if (
-        // currentSongIndex == null &&   //disabled as seems to effect/help shuffle ??
+        currentSongIndex == null &&   //disabled as seems to effect/help shuffle ??
         currentTrackId !== null &&
         playlist !== null
       ) {
