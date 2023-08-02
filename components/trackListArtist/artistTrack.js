@@ -56,6 +56,8 @@ function ArtistTrack({ track, order }) {
   const setActiveArtist = useSetRecoilState(activeArtistState);
   const [activeStatus, setActiveStatus] = useState(false);
 
+
+  // LEFT FOR NOW AS STILL TRYING TO FIND A SOLUTION TO LOSS OF HIGHLIGHT ON RELOAD
   // useEffect(() => {
   //   setTimeout(() => {
   //     if (

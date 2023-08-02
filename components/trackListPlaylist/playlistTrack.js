@@ -54,7 +54,7 @@ function PlaylistTrack({ track, order }) {
   useEffect(() => {
     setTimeout(() => {
       if (
-        currentSongIndex == null &&
+        // currentSongIndex == null &&   //disabled as seems to effect/help shuffle ??
         currentTrackId !== null &&
         playlist !== null
       ) {
@@ -99,7 +99,7 @@ function PlaylistTrack({ track, order }) {
   useEffect(() => {
     const newActiveStatus =
       song?.id === currentTrackId 
-      // && order === currentSongIndex && 
+      && order === currentSongIndex && 
       currentItemId === originId 
       && isPlaying;
     setActiveStatus(newActiveStatus);

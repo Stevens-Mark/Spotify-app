@@ -412,6 +412,7 @@ function Player() {
     });
   };
 
+  // keep calling spotify (each 1 second) to receive current track position updates
   useEffect(() => {
     if (!isPlaying) {
       // If not playing, clear the interval to stop fetching data
@@ -423,14 +424,13 @@ function Player() {
         spotifyApi
           .getMyCurrentPlaybackState()
           .then((data) => {
-            console.log('data', data);
             if (data.body?.is_playing) {
               if (data.body?.item) {
                 // set track id to ensure shuffle highlights properly
                 // const durationMs = data.body?.item?.duration_ms;
                 // if (durationMs && durationMs > 0 && durationMs < 2500) {
-                  // setCurrentTrackId(data.body?.item?.id);
-                  // setCurrentItemId(data.body?.context?.uri.split(':').pop());
+                // setCurrentTrackId(data.body?.item?.id);
+                // setCurrentItemId(data.body?.context?.uri.split(':').pop());
                 // }
                 // if track: set duration & current progress
                 setProgressData({
@@ -444,8 +444,17 @@ function Player() {
                   progress: data.body?.progress_ms,
                 });
               }
+              // ensure neither shuffle/repeat is still active for episodes
+              if (data?.body?.currently_playing_type === 'episode') {
+                if (data?.body?.repeat_state !== 'off') {
+                  setRepeatState('off');
+                }
+                if (data?.body?.shuffle_state !== false) {
+                  setShuffletState(false);
+                }
+              }
 
-              // Check if the current track finished: skip to next
+              // Check if the current track finished: the skip to next
               if (
                 (data.body?.item &&
                   data.body?.progress_ms >=
@@ -474,7 +483,16 @@ function Player() {
       const interval = setInterval(fetchCurrentSong, 1000); // Fetch track info every 1 seconds
       return () => clearInterval(interval);
     }
-  }, [spotifyApi, session, isPlaying, episodeDuration, setProgressData, skipToNext, setCurrentTrackId, setCurrentItemId]);
+  }, [
+    spotifyApi,
+    session,
+    isPlaying,
+    episodeDuration,
+    setProgressData,
+    skipToNext,
+    setCurrentTrackId,
+    setCurrentItemId,
+  ]);
 
   return (
     <div className="h-20 xs:h-24 bg-gradient-to-b from-black to-gray-900 text-white text-sm md:text-base px-2 md:px-8 grid grid-cols-3 border-t-[0.1px] border-gray-900">
