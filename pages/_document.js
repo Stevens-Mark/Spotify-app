@@ -19,7 +19,7 @@ export default class MyDocument extends Document {
     return (
       <Html lang="en">
         <Head>
-          {/* Add your metadata tags here */}
+          {/* Add  metadata tags here */}
           <meta
             name="description"
             content="Spotify Clone - A Spotify clone by Mark Stevens. A project to make a simple Spotify clone using the Spotify web api which enables the creation of applications that can interact with Spotify's streaming service, such as retrieving content metadata, getting recommendations, creating and managing playlists, or controlling playback."

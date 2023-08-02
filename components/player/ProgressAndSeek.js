@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { toast } from 'react-toastify';
 // import custom hooks
 import useSpotify from '@/hooks/useSpotify';
@@ -79,8 +79,8 @@ function ProgressAndSeek({ currentPosition, duration }) {
       </label>
 
       <input
-      id="seek"
-      className="seek-input mx-3 w-full h-1.5 rounded-md bg-pink-swan"
+        id="seek"
+        className="seek-input mx-3 w-full h-1.5 rounded-md bg-pink-swan"
         type="range"
         min={0}
         max={duration}
@@ -104,9 +104,8 @@ function ProgressAndSeek({ currentPosition, duration }) {
             setIsInteracting(false);
           }
         }}
-
       />
-   
+
       {duration ? (
         <span className="pl-2 text-xs md:text-base">
           {millisToMinutesAndSeconds(duration)}

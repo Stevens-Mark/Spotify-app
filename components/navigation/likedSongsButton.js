@@ -11,13 +11,7 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
  * @param {boolean} isPlaying
  * @returns {JSX}
  */
-function LikedSongsButton({
-  activePlaylistId,
-  activePlaylist,
-  isPlaying,
-}) {
-  // const activePlaylist = null; // disabled highlight on active functionality as issues
-
+function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
   const router = useRouter();
 
   const collection = {
@@ -34,8 +28,8 @@ function LikedSongsButton({
   };
 
   const handleCollectionClick = () => {
+    // if on likesongs page this check stops the page being reloaded & loosing previously loaded song data
     if (activePlaylistId !== collection?.id) {
-      // if on likesongs page this check stops the page being reloaded & loosing previously loaded song data
       router.push(`/collection`);
     }
   };

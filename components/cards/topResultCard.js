@@ -51,7 +51,7 @@ function TopResultCard({ item }) {
       : '';
 
   const handleNavigationClick = (link) => {
-      router.push(link);
+    router.push(link);
   };
 
   /**
@@ -79,10 +79,8 @@ function TopResultCard({ item }) {
   };
 
   const linkRef = useRef(null);
-  // used for highlighting card for keyboard users
-  const [isFocused, setIsFocused] = useState(false);
-  // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
+  const [isFocused, setIsFocused] = useState(false); // used for highlighting card for keyboard users
+  const [activeStatus, setActiveStatus] = useState(false); // used to set play/pause icons
 
   useEffect(() => {
     const newActiveStatus =
@@ -153,10 +151,10 @@ function TopResultCard({ item }) {
                     <div key={artist?.id}>
                       {index > 0 && ', '}
                       <button
-                        aria-label='go to artist'
+                        aria-label="go to artist"
                         className="hover:text-white hover:underline focus:underline focus:text-white "
                         onClick={(event) => {
-                          event.preventDefault(); 
+                          event.preventDefault();
                           handleNavigationClick(`/artist/${artist?.id}`);
                         }}
                       >
@@ -166,9 +164,7 @@ function TopResultCard({ item }) {
                   ))}
                 </div>
               )}
-              <div
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
-              >
+              <div className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0">
                 {capitalize(item?.type)}
               </div>
             </>
@@ -180,9 +176,7 @@ function TopResultCard({ item }) {
               <span className="truncate mr-5">
                 By {capitalize(item?.owner.display_name)}
               </span>
-              <span
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
-              >
+              <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0">
                 {capitalize(item?.type)}
               </span>
             </>
@@ -190,8 +184,7 @@ function TopResultCard({ item }) {
 
           {/*artist*/}
           {item?.type === 'artist' && (
-            <span className=" text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
-            >
+            <span className=" text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0">
               {capitalize(item?.type)}
             </span>
           )}
@@ -205,10 +198,10 @@ function TopResultCard({ item }) {
                     <span key={artist?.id}>
                       {index > 0 && ', '}
                       <button
-                        aria-label='go to artist'
+                        aria-label="go to artist"
                         className="hover:text-white hover:underline focus:underline focus:text-white group-focus:bg-gray-800"
                         onClick={(event) => {
-                          event.preventDefault(); 
+                          event.preventDefault();
                           handleNavigationClick(`/artist/${artist?.id}`);
                         }}
                       >
@@ -218,9 +211,7 @@ function TopResultCard({ item }) {
                   ))}
                 </span>
               )}
-              <span
-                className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0"
-               >
+              <span className="text-white bg-zinc-800 rounded-3xl px-3 py-[0.5px] line-clamp-1 flex-shrink-0 flex-grow-0">
                 Song
               </span>
             </>

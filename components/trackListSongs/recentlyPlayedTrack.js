@@ -49,7 +49,8 @@ function RecentPlayedTrack({ track, order }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
-
+  const [activeStatus, setActiveStatus] = useState(false);
+  
   /**
    * Either play or pause current track
    * @function  HandleTrackPlayPauseClick
@@ -83,7 +84,6 @@ function RecentPlayedTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId  && isPlaying;
     setActiveStatus(newActiveStatus);

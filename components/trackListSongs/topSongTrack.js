@@ -32,16 +32,12 @@ import TopSongCard from '../cards/topSongCard';
 function TopSongTrack({ track, order }) {
   const spotifyApi = useSpotify();
   const song = track;
-
   const router = useRouter();
 
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
-
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
 
-  // used to determine what type of info to load
-  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-
+   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
@@ -51,6 +47,7 @@ function TopSongTrack({ track, order }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveArtist = useSetRecoilState(activeArtistState);
+  const [activeStatus, setActiveStatus] = useState(false);
 
   useEffect(() => {
     setOriginId((router?.asPath).split('/').pop());
@@ -89,7 +86,6 @@ function TopSongTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);

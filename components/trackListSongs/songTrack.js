@@ -33,12 +33,9 @@ function SongTrack({ track, order }) {
   const song = track;
 
   const songsUris = useRecoilValue(songsUrisState); // song uris (from search)
-
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
 
-  // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
-
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
@@ -49,6 +46,7 @@ function SongTrack({ track, order }) {
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
+  const [activeStatus, setActiveStatus] = useState(false);
 
   /**
    * Either play or pause current track
@@ -83,7 +81,6 @@ function SongTrack({ track, order }) {
   };
 
   // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
   useEffect(() => {
     const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);

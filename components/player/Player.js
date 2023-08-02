@@ -76,7 +76,7 @@ function Player() {
       /(episode|show|podcastAndEpisodes)/i.test(router.asPath); // check if episode/show pages to remove repeat & shuffle controls
     setIsEpisode(isEpisode);
     const isArtist = (router?.asPath).includes('artist'); // check if single artist page (to disable setting CurrentItemId
-    setIsArtist(isArtist); // to album.id in skip forward/previous controls)
+    setIsArtist(isArtist); // to album.id in skip forward/previous controls) to avoid quickbanner loosing correct status
   }, [router?.asPath]);
 
   /* onload set state for playing, */

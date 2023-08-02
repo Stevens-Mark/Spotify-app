@@ -36,7 +36,7 @@ export const backgroundColorState = atom({
   default: null,
 });
 
-// holds the current position ("progress") in a track/episode
+// holds the current position ("progress") & total duration in a track/episode
 export const progressDataState = atom({
   key: 'progressDataState',
   default: {

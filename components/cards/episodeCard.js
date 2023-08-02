@@ -59,14 +59,12 @@ function EpisodeCard({ track, order, whichList }) {
     currentSongIndexState
   ); // to identify the track position for the green highlight of the active track
 
-  // used to set duration length in player for an episode
-  const setEpisodeDuration = useSetRecoilState(episodeDurationState);
+  const setEpisodeDuration = useSetRecoilState(episodeDurationState); // used to set duration length in player for an episode
   const progressData = useRecoilValue(progressDataState);
 
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const setActiveListInUse = useSetRecoilState(activeListInUseState);
-  // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(false); // used to set play/pause icons
 
   useEffect(() => {
     const listToUse = whichList === 'show' ? showEpisodesList : episodesList;
@@ -131,7 +129,7 @@ function EpisodeCard({ track, order, whichList }) {
             setEpisodeDuration(track?.duration_ms);
             setActiveListInUse(
               whichList === 'show' ? showEpisodesList : episodesList
-            ); // set list to reference for player
+            ); // set which list to reference for player
             setActivePlaylist(null); //episode playing so user's playlist null
           })
           .catch((err) => {

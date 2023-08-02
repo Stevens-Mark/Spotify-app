@@ -50,10 +50,8 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
   const setEpisodeDuration = useSetRecoilState(episodeDurationState); // used to set duration length in player fro an episode
-
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
-  // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
+  const [activeStatus, setActiveStatus] = useState(false); // used to set play/pause icons
 
   const [isVisible, setIsVisible] = useState(false); // show track info when play button at top of screen
   const [opacity, setOpacity] = useState(0);

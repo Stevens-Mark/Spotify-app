@@ -10,8 +10,7 @@ import { capitalize } from '@/lib/capitalize';
  * @returns {JSX}
  */
 function GenreHeading({ heading, scrollRef }) {
-  // show title when  at top of screen
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(false); // show title when  at top of screen
   const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {

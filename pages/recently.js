@@ -7,7 +7,7 @@ import useSpotify from '@/hooks/useSpotify';
 import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
-import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState } from 'recoil';
 import { recentlyListState, recentlyUrisState } from '@/atoms/songAtom';
 // import layouts/components
 import Layout from '@/components/layouts/Layout';

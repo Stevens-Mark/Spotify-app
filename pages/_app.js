@@ -37,7 +37,6 @@ export default function App({
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          // limit={3}
           style={{ fontSize: '18px', textAlign: 'center', bottom: '5rem' }}
         />
         {getLayout(<Component {...pageProps} />)}

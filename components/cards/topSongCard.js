@@ -20,6 +20,7 @@ const TopSongCard = ({
   song,
 }) => {
   const mainDivRef = useRef(null);
+  
   const handleButtonClick = (event) => {
     // When the new button is clicked, pass the event to the original click handler
     HandleTrackPlayPauseClick(event, order);

@@ -48,18 +48,12 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
   const originId = useRecoilValue(originIdState);
-  // used to set play/pause icons
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
-
-  // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);
-  // show track info when play button at top of screen
-  const [isVisible, setIsVisible] = useState(false);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);  // used to set play/pause icons
+  const [activeStatus, setActiveStatus] = useState(false);  // used to set play/pause icons
+  const [isVisible, setIsVisible] = useState(false);  // show track info when play button at top of screen
   const [isTextVisible, setIsTextVisible] = useState(true);
   const [opacity, setOpacity] = useState(0);
-
-  // used for quick play banner
-  const backgroundColor = useRecoilValue(backgroundColorState);
+  const backgroundColor = useRecoilValue(backgroundColorState);  // used for quick play banner
 
   /**
    * Either play or pause current track

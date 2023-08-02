@@ -52,7 +52,8 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] Welcome page
 - [x] Sidebar containing all the users playlists
 - [x] Search option returns results for albums, artists, playlists, podcasts/shows & episodes
-- [x] Media player controls
+- [x] Media player controls (repeat, shuffle etc)
+- [x] "Seek to position" control
 - [x] Quick play start/pause control banner on page scroll
 - [x] Equaliser graphic animation when track playing
 - [x] Infinite scrolling of media data
@@ -75,6 +76,7 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
 - [x] If an episode is currently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
+- [x] (As of writing) I am having issues when there are duplicate tracks in a playlist . To avoid both tracks are highlighted at the same time, shuffle no longer highlights tracks correctly. If I want shuffle to highlight tracks, then both duplicates highlight at the same time....
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing anyway...
 - [x] Quickplay Banner loses "pause icon" state & track duration disappears from the player progress bar (although a track is playing) when a user refreshes/reloads the episode page. Quickplay button then fails with "Playback failed" message.
 - [x] Quickplay Banner loses "pause icon" state  (although a track is playing) when a user refreshes/reloads the page. This happens on the Artist & Liked song pages.
@@ -195,7 +197,8 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Page d'accueil
 - [x] Barre latérale contenant toutes les listes de lecture des utilisateurs
 - [x] L'option de recherche renvoie les résultats pour les albums, les artistes, les listes de lecture, les podcasts/spectacles et les épisodes.
-- [x] Commandes du lecteur multimédia
+- [x] Commandes du lecteur multimédia  (répéter, mélanger, etc.)
+- [x] Commande "Seek to position" / "Recherche de position"
 - [x] Bannière de contrôle du démarrage de la lecture rapide et de la mise en pause lors du défilement de la page
 - [x] Animation graphique de l'égaliseur lors de la lecture d'une piste
 - [x] Défilement infini des données multimédias
@@ -219,6 +222,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] L'implémentation des boutons de navigation avant et arrière n'est pas parfaite.
 - [x] Si la piste sélectionnée apparaît à la même position (index dans la liste des pistes) dans un autre album/liste de lecture, elle est également surlignée en vert (ce qui ne devrait pas être le cas puisqu'elle se trouve dans un autre album/liste de lecture).
 - [x] Si un épisode est en cours de lecture, "getMyCurrentPlayingTrack" ne renvoie aucune information sur la piste (seulement qu'un épisode est en cours de lecture), donc lors du rechargement de la page, aucune information sur la piste n'est affichée dans le coin inférieur gauche. Pour une piste "normale", cela fonctionne. Problème de réponse de Spotify ??
+- [x] (Au moment de la rédaction) J'ai des problèmes lorsqu'il y a des pistes en double dans une liste de lecture. Pour éviter que les deux pistes soient surlignées en même temps, la lecture aléatoire ne surligne plus les pistes correctement. Si je veux que la lecture aléatoire mette les pistes en surbrillance, les deux doublons sont mis en surbrillance en même temps....
 - [x] Aucun des problèmes ci-dessous n'est rédhibitoire car il est peu probable que l'utilisateur rafraîchisse la page soudainement. Dans Spotify, si vous rafraîchissez la page, tout s'arrête de toute façon...
 - [x] La bannière Quickplay perd l'état "icône de pause" et la durée de la piste disparaît de la barre de progression du lecteur (bien qu'une piste soit en cours de lecture) lorsque l'utilisateur rafraîchit/recharge la page de l'épisode. Le bouton Quickplay s'éteint alors avec le message "Playback failed".
 - [x] La bannière Quickplay perd l'état "icône de pause" (bien qu'une piste soit en cours de lecture) lorsque l'utilisateur actualise ou recharge la page. Cela se produit sur les pages Artistes et Chansons appréciées.
