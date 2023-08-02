@@ -11,6 +11,7 @@ import {
   currentItemIdState,
   originIdState,
   progressDataState,
+  shuffleStatusState,
 } from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
@@ -43,7 +44,7 @@ function Player() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [shuffleState, setShuffletState] = useState(false); // shuffle functionality
+  const [shuffleState, setShuffletState] = useRecoilState(shuffleStatusState); // shuffle functionality
   const [repeatState, setRepeatState] = useState('off'); // repeat functionality
   const [volume, setVolume] = useState(50); // volume functionality
 
@@ -85,13 +86,17 @@ function Player() {
     setTimeout(() => {
       if (spotifyApi.getAccessToken()) {
         spotifyApi.getMyCurrentPlaybackState().then((data) => {
+          console.log('player ', data);
           setShuffletState(data.body?.shuffle_state);
           setRepeatState(data.body?.repeat_state);
           setIsPlaying(data.body?.is_playing);
+          setIsEpisode(
+            data.body?.currently_playing_type === 'episode' ? true : false
+          );
         });
       }
     }, 500);
-  }, [setIsPlaying, spotifyApi, session]);
+  }, [setIsPlaying, spotifyApi, session, setShuffletState]);
 
   /* set volume depending on user choose */
   /* debounce to avoid excessive calls */
@@ -491,6 +496,7 @@ function Player() {
     skipToNext,
     setCurrentTrackId,
     setCurrentItemId,
+    setShuffletState,
   ]);
 
   return (

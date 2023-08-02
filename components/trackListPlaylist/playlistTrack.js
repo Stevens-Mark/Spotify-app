@@ -12,6 +12,7 @@ import {
   playerInfoTypeState,
   currentItemIdState,
   originIdState,
+  shuffleStatusState,
 } from '@/atoms/otherAtoms';
 import {
   playlistIdState,
@@ -38,6 +39,7 @@ function PlaylistTrack({ track, order }) {
   const playlist = useRecoilValue(playlistTrackListState);
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
+  const shuffleState = useRecoilValue(shuffleStatusState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
@@ -53,18 +55,26 @@ function PlaylistTrack({ track, order }) {
 
   useEffect(() => {
     setTimeout(() => {
-      if (
-        currentSongIndex == null &&   //disabled as seems to effect/help shuffle ??
-        currentTrackId !== null &&
-        playlist !== null
-      ) {
+      if (currentTrackId !== null && playlist !== null) {
         const indexPosition = playlist?.tracks.items.findIndex(
-          (x) => x.track.id == currentTrackId
+          (x) => x.track.id === currentTrackId
         );
-        setCurrentSongIndex(indexPosition);
+        // if shuffle off
+        if (!shuffleState && currentSongIndex === null) {
+          setCurrentSongIndex(indexPosition);
+        } else if (shuffleState) {
+          // if shuffle on
+          setCurrentSongIndex(indexPosition);
+        }
       }
     }, 500);
-  }, [currentSongIndex, currentTrackId, playlist, setCurrentSongIndex]);
+  }, [
+    currentSongIndex,
+    currentTrackId,
+    playlist,
+    setCurrentSongIndex,
+    shuffleState,
+  ]);
 
   /**
    * Either play or pause current track
@@ -98,12 +108,20 @@ function PlaylistTrack({ track, order }) {
   // used to set play/pause icons
   useEffect(() => {
     const newActiveStatus =
-      song?.id === currentTrackId 
-      && order === currentSongIndex && 
-      currentItemId === originId 
-      && isPlaying;
+      song?.id === currentTrackId &&
+      order === currentSongIndex &&
+      currentItemId === originId &&
+      isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [currentItemId, currentSongIndex, currentTrackId, isPlaying, order, originId, song?.id]);
+  }, [
+    currentItemId,
+    currentSongIndex,
+    currentTrackId,
+    isPlaying,
+    order,
+    originId,
+    song?.id,
+  ]);
 
   return (
     <RenderTracks

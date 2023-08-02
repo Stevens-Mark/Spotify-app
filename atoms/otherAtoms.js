@@ -44,3 +44,9 @@ export const progressDataState = atom({
     progress: 0,
   },
 });
+
+// track whether shuffle on/off
+export const shuffleStatusState = atom({
+  key: 'shuffleStatusState',
+  default: false,
+});
