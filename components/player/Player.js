@@ -12,6 +12,7 @@ import {
   originIdState,
   progressDataState,
   shuffleStatusState,
+  playerInfoTypeState
 } from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
@@ -43,7 +44,7 @@ function Player() {
   const spotifyApi = useSpotify();
   const router = useRouter();
   const { data: session } = useSession();
-
+  const playerInfoType = useRecoilValue(playerInfoTypeState);
   const [shuffleState, setShuffletState] = useRecoilState(shuffleStatusState); // shuffle functionality
   const [repeatState, setRepeatState] = useState('off'); // repeat functionality
   const [volume, setVolume] = useState(50); // volume functionality
@@ -72,10 +73,10 @@ function Player() {
   }, [router?.asPath, setOriginId]);
 
   useEffect(() => {
-    const isEpisode =
-      router?.asPath &&
-      /(episode|show|podcastAndEpisodes)/i.test(router.asPath); // check if episode/show pages to remove repeat & shuffle controls
-    setIsEpisode(isEpisode);
+    // const isEpisode =
+    //   router?.asPath &&
+    //   /(episode|show|podcastAndEpisodes)/i.test(router.asPath); // check if episode/show pages to remove repeat & shuffle controls
+    // setIsEpisode(isEpisode);
     const isArtist = (router?.asPath).includes('artist'); // check if single artist page (to disable setting CurrentItemId
     setIsArtist(isArtist); // to album.id in skip forward/previous controls) to avoid quickbanner loosing correct status
   }, [router?.asPath]);
@@ -86,7 +87,6 @@ function Player() {
     setTimeout(() => {
       if (spotifyApi.getAccessToken()) {
         spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          console.log('player ', data);
           setShuffletState(data.body?.shuffle_state);
           setRepeatState(data.body?.repeat_state);
           setIsPlaying(data.body?.is_playing);
@@ -96,7 +96,7 @@ function Player() {
         });
       }
     }, 500);
-  }, [setIsPlaying, spotifyApi, session, setShuffletState]);
+  }, [setIsPlaying, spotifyApi, session, setShuffletState, playerInfoType]);
 
   /* set volume depending on user choose */
   /* debounce to avoid excessive calls */
@@ -508,7 +508,7 @@ function Player() {
       <div className="flex flex-col items-center justify-center">
         <div className="flex items-center justify-evenly w-full">
           {/* hide shuffle if on episode/show pages  */}
-          {!isEpisode && (
+          {playerInfoType === 'track' && (
             <button
               className="hidden sm:inline relative"
               onClick={() => setShuffle()}
@@ -545,7 +545,7 @@ function Player() {
           </button>
 
           {/* hide repeat if on episode/show pages  */}
-          {!isEpisode && (
+          {playerInfoType === 'track' && (
             <button
               className="hidden sm:inline relative"
               onClick={() => handleRepeatToggle()}
