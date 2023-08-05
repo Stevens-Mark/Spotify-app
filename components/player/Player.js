@@ -590,7 +590,7 @@ function Player() {
         </label>
         <input
           id="volume-control"
-          className="w-14 md:w-28 1.5"
+          className="w-14 md:w-28 h-1.5"
           type="range"
           value={volume}
           onChange={(e) => setVolume(Number(e.target.value))}

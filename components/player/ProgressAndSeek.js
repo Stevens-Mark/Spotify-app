@@ -63,7 +63,7 @@ function ProgressAndSeek({ currentPosition, duration }) {
 
   return (
     <div
-      className="flex items-center w-full mt-1 pr-5 text-pink-swan"
+      className="flex items-center w-full mt-1 text-pink-swan"
       onBlur={() => setIsInteracting(false)}
     >
       {currentPosition ? (

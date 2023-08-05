@@ -131,8 +131,8 @@
 #seek:hover::-moz-range-thumb,
 #volume-control:hover::-moz-range-thumb {
   /* styles for the thumb on hover (Firefox) */
-  background-color: #22C55E;
-  border-color: #22C55E;
+  background-color: white;
+  border-color: white;
   box-shadow: -402px 0 0 400px #22C55E;
 }
 #seek:hover::-webkit-slider-thumb,
