@@ -38,7 +38,7 @@ function LikedTrack({ track, order }) {
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
@@ -84,9 +84,9 @@ function LikedTrack({ track, order }) {
 
   // used to set play/pause icons
   useEffect(() => {
-    const newActiveStatus = song?.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && (currentItemId === originId || currentItemId === null) && isPlaying; // null check added in case user refreshes page
     setActiveStatus(newActiveStatus);
-  }, [currentTrackId, isPlaying, song?.id]);
+  }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
 
   return (
     <RenderTracks

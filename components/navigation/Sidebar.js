@@ -54,6 +54,7 @@ function Sidebar() {
     setActivePlaylistId((router?.asPath).split('/').pop());
   }, [router?.asPath, setActivePlaylistId]);
 
+
   useEffect(() => {
     const fetchCurrentTrack = async () => {
       try {
@@ -64,8 +65,11 @@ function Sidebar() {
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
           // setActivePlaylistId(currentPlaylistId);
-          setActivePlaylist(currentPlaylistId);
-          setCurrentItemId(currentPlaylistId);
+          // setActivePlaylist(currentPlaylistId);
+          if (currentPlaylistId !== undefined) {
+            setCurrentItemId(currentPlaylistId);
+            setActivePlaylist(currentPlaylistId);
+          }
         }
       } catch (err) {
         console.error('Failed to get current playing track / playlist ID');

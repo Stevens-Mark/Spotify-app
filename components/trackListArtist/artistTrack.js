@@ -3,7 +3,7 @@ import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 import {
-  artistTrackListState,
+  // artistTrackListState,
   artistTrackUrisState,
   activeArtistState,
 } from '@/atoms/artistAtom';
@@ -36,7 +36,7 @@ function ArtistTrack({ track, order }) {
   const song = track;
 
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
-  const artistTracklist = useRecoilValue(artistTrackListState);
+  // const artistTracklist = useRecoilValue(artistTrackListState);
 
   // console.log("track ", artistTracklist?.tracks)
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
@@ -55,7 +55,6 @@ function ArtistTrack({ track, order }) {
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
   const [activeStatus, setActiveStatus] = useState(false);
-
 
   // LEFT FOR NOW AS STILL TRYING TO FIND A SOLUTION TO LOSS OF HIGHLIGHT ON RELOAD
   // useEffect(() => {
@@ -109,7 +108,7 @@ function ArtistTrack({ track, order }) {
   useEffect(() => {
     const newActiveStatus =
       song?.id === currentTrackId 
-      && currentItemId === originId 
+      && (currentItemId === originId || currentItemId === null) // null check added in case user refreshes page
       && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
