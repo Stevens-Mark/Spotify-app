@@ -91,12 +91,8 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
     <button
       onClick={() => handleCollectionClick(collection?.id)}
       aria-label="Go to Liked Songs"
-      className={`flex items-center p-3 rounded-lg text-left w-full
-              ${
-                activePlaylist == collection?.id && isPlaying
-                  ? 'text-green-500'
-                  : 'hover:text-white focus:text-white'
-              } 
+      className={`group flex items-center p-3 rounded-lg text-left w-full
+
               ${
                 activePlaylistId == collection?.id
                   ? ` bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
@@ -112,7 +108,26 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
         height={100}
         style={{ objectFit: 'cover' }}
       />
-      <span className="line-clamp-1 w-full">{collection?.name}</span>
+      <div className="flex flex-col text-left w-full">
+        <span
+          className={`line-clamp-1 ${
+            activePlaylist == collection?.id && isPlaying
+              ? 'text-green-500'
+              : 'group-hover:text-white group-focus:text-white'
+          }  `}
+        >
+          {collection?.name}
+        </span>
+
+        <span className="flex text-[13px]">
+          <span>Playlist</span>
+          &nbsp;•&nbsp;
+          <span className="line-clamp-1">
+            {isLikedSong?.length}&nbsp; Songs
+          </span>
+        </span>
+      </div>
+
       <span className="pl-2 justify-end">
         {activePlaylist == collection?.id && isPlaying ? (
           <SpeakerWaveIcon className="w-4 h-4 text-green-500" />

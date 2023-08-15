@@ -237,7 +237,7 @@ function Sidebar() {
                       {playlist?.name}
                     </span>
 
-                    <span className="flex">
+                    <span className="flex text-[13px]">
                       <span>{capitalize(playlist?.type)}</span>
                       &nbsp;•&nbsp;
                       <span className="line-clamp-1">
@@ -245,6 +245,7 @@ function Sidebar() {
                       </span>
                     </span>
                   </div>
+
                   <span className="pl-2 justify-end">
                     {activePlaylist == playlist?.id && isPlaying ? (
                       <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
