@@ -8,16 +8,23 @@ import { isLikedSongState } from '@/atoms/otherAtoms';
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
 
-function AddRemoveLiked() {
+/**
+ * Handles the adding/removing tracks from lied song list
+ * @function AddRemoveLiked
+ * @param {string} songId ID of the song
+ * @returns {JSX} liked add/remove button
+ */
+function AddRemoveLiked({ songId }) {
   const spotifyApi = useSpotify();
   const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
-  const collection = isLikedSong?.includes(song?.id);
+  const collection = isLikedSong?.includes(songId);
 
   // Add track to liked songs list
   const handleAdd = () => {
-    spotifyApi.addToMySavedTracks([song?.id]).then(
+    spotifyApi.addToMySavedTracks([songId]).then(
       function () {
-        setIsLikedSong((prevLikedSongs) => [...prevLikedSongs, song?.id]); // Add song.id to the existing state array
+        // Add songId to the existing state array: causing rerender
+        setIsLikedSong((prevLikedSongs) => [...prevLikedSongs, songId]);
       },
       function (err) {
         toast.error('Adding track failed !', {
@@ -29,10 +36,11 @@ function AddRemoveLiked() {
 
   // Remove track from liked songs list
   const handleRemove = () => {
-    spotifyApi.removeFromMySavedTracks([song?.id]).then(
+    spotifyApi.removeFromMySavedTracks([songId]).then(
       function () {
+        // Remove songId from existing state array: causing rerender
         setIsLikedSong((prevLikedSongs) =>
-          prevLikedSongs.filter((likedSongId) => likedSongId !== song?.id)
+          prevLikedSongs.filter((likedSongId) => likedSongId !== songId)
         );
       },
       function (err) {
@@ -47,7 +55,7 @@ function AddRemoveLiked() {
     <>
       {collection ? (
         <button
-          className="text-green-500 h-5 w-5"
+          className="text-green-500 h-5 w-5 hover:scale-110 focus:scale-110"
           onClick={() => {
             handleRemove();
           }}

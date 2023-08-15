@@ -97,7 +97,6 @@ function LikedTrack({ track, order }) {
       activeStatus={activeStatus}
       song={song}
       addedAt={track?.added_at}
-      collection={true}
     />
   );
 }

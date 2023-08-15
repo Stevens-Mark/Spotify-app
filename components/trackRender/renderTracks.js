@@ -2,18 +2,13 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import useSpotify from '@/hooks/useSpotify';
-import { toast } from 'react-toastify';
-// import state management recoil
-import { useRecoilState } from 'recoil';
-import { isLikedSongState } from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 // import { getMonthDayYear } from '@/lib/time';
 // import icon
-import { PlayIcon, PauseIcon, HeartIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
+import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
+import AddRemoveLiked from './addRemoveLiked';
 
 /**
  * Handles the actual rendering of each track.
@@ -37,10 +32,7 @@ function RenderTracks({
   addedAt,
 }) {
   const router = useRouter();
-  const spotifyApi = useSpotify();
   const [linkAddress, setLinkAddress] = useState('');
-  const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
-  const collection = isLikedSong?.includes(song?.id);
 
   // Spotify does not make song further info/lyric etc available to the public
   // thus song name will direct to album, but no further
@@ -50,37 +42,7 @@ function RenderTracks({
     } else {
       setLinkAddress(`/album/${song?.album?.id}`);
     }
-  }, [isLikedSong, router?.asPath, song?.album?.id, song?.id]);
-
-  // Add track to liked songs list
-  const handleAdd = () => {
-    spotifyApi.addToMySavedTracks([song?.id]).then(
-      function () {
-        setIsLikedSong((prevLikedSongs) => [...prevLikedSongs, song?.id]); // Add song.id to the existing state array
-      },
-      function (err) {
-        toast.error('Adding track failed !', {
-          theme: 'colored',
-        });
-      }
-    );
-  };
-
-  // Remove track from liked songs list
-  const handleRemove = () => {
-    spotifyApi.removeFromMySavedTracks([song?.id]).then(
-      function () {
-        setIsLikedSong((prevLikedSongs) =>
-          prevLikedSongs.filter((likedSongId) => likedSongId !== song?.id)
-        );
-      },
-      function (err) {
-        toast.error('Removing track failed !', {
-          theme: 'colored',
-        });
-      }
-    );
-  };
+  }, [router?.asPath, song?.album?.id]);
 
   return (
     <div
@@ -148,9 +110,6 @@ function RenderTracks({
       </div>
       {song?.album?.name ? (
         <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-          {/* <span className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal">
-            {song?.album?.name}
-          </span> */}
           <Link
             href={linkAddress}
             className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal hover:underline focus:text-white focus:underline "
@@ -163,26 +122,8 @@ function RenderTracks({
             </span>
           )}
           <div className="flex items-center">
-            {/****  "like" heart to indicate part of likesongs list ****/}
-            {collection ? (
-              <button
-                className="text-green-500 h-5 w-5"
-                onClick={() => {
-                  handleRemove();
-                }}
-              >
-                <HeartIcon aria-label="Favorite" />
-              </button>
-            ) : (
-              <button
-                className="text-pink-swan h-5 w-5 opacity-0 group-hover:opacity-100 hover:text-white hover:scale-110  group-focus:opacity-100 focus:text-white focus:scale-110"
-                onClick={() => {
-                  handleAdd();
-                }}
-              >
-                <HeartOuline aria-label="Favorite" />
-              </button>
-            )}
+            {/**** "like" heart add/remove ****/}
+            <AddRemoveLiked songId={song?.id} />
 
             <span className="pl-5">
               {millisToMinutesAndSeconds(song?.duration_ms)}
@@ -191,6 +132,8 @@ function RenderTracks({
         </div>
       ) : (
         <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
+          {/**** "like" heart add/remove ****/}
+          <AddRemoveLiked songId={song?.id} />
           <span className="pl-5">
             {millisToMinutesAndSeconds(song?.duration_ms)}
           </span>
