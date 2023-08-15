@@ -2,11 +2,17 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
+import useSpotify from '@/hooks/useSpotify';
+import { toast } from 'react-toastify';
+// import state management recoil
+import { useRecoilState } from 'recoil';
+import { isLikedSongState } from '@/atoms/otherAtoms';
 // import functions
 import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 // import { getMonthDayYear } from '@/lib/time';
 // import icon
 import { PlayIcon, PauseIcon, HeartIcon } from '@heroicons/react/24/solid';
+import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
 import Equaliser from '@/components/graphics/Equaliser';
 
 /**
@@ -19,7 +25,6 @@ import Equaliser from '@/components/graphics/Equaliser';
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {object} song data
  * @param {string} addedAt date track added to list (just for playlists)
- * @param {boolean} collection sets a heart next to track in likesong list (currently just for show - DUMMY)
  * @returns {JSX}
  */
 function RenderTracks({
@@ -30,10 +35,12 @@ function RenderTracks({
   activeStatus,
   song,
   addedAt,
-  collection,
 }) {
   const router = useRouter();
+  const spotifyApi = useSpotify();
   const [linkAddress, setLinkAddress] = useState('');
+  const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
+  const collection = isLikedSong?.includes(song?.id);
 
   // Spotify does not make song further info/lyric etc available to the public
   // thus song name will direct to album, but no further
@@ -43,11 +50,41 @@ function RenderTracks({
     } else {
       setLinkAddress(`/album/${song?.album?.id}`);
     }
-  }, [router?.asPath, song?.album?.id]);
+  }, [isLikedSong, router?.asPath, song?.album?.id, song?.id]);
+
+  // Add track to liked songs list
+  const handleAdd = () => {
+    spotifyApi.addToMySavedTracks([song?.id]).then(
+      function () {
+        setIsLikedSong((prevLikedSongs) => [...prevLikedSongs, song?.id]); // Add song.id to the existing state array
+      },
+      function (err) {
+        toast.error('Adding track failed !', {
+          theme: 'colored',
+        });
+      }
+    );
+  };
+
+  // Remove track from liked songs list
+  const handleRemove = () => {
+    spotifyApi.removeFromMySavedTracks([song?.id]).then(
+      function () {
+        setIsLikedSong((prevLikedSongs) =>
+          prevLikedSongs.filter((likedSongId) => likedSongId !== song?.id)
+        );
+      },
+      function (err) {
+        toast.error('Removing track failed !', {
+          theme: 'colored',
+        });
+      }
+    );
+  };
 
   return (
     <div
-      className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer"
+      className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer group"
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
@@ -92,7 +129,7 @@ function RenderTracks({
             {song?.name}
           </Link>
           {/* show link(s) to artist(s) if not on artist page */}
-          {!(router?.asPath).includes('artist') &&
+          {!(router?.asPath).includes('artist') && (
             <div className="pr-2 line-clamp-1">
               {song?.artists?.map((artist, index) => (
                 <span key={artist?.id}>
@@ -106,22 +143,46 @@ function RenderTracks({
                 </span>
               ))}
             </div>
-          }
+          )}
         </div>
       </div>
       {song?.album?.name ? (
         <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-          <span className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal">
+          {/* <span className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal">
             {song?.album?.name}
-          </span>
+          </span> */}
+          <Link
+            href={linkAddress}
+            className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal hover:underline focus:text-white focus:underline "
+          >
+            {song?.album?.name}
+          </Link>
           {addedAt && (
             <span className="w-48 hidden mdlg:inline whitespace-nowrap pr-2">
               {formatDateToTimeElapsed(addedAt)}
             </span>
           )}
           <div className="flex items-center">
-            {/**** DUMMY "like" heart to indicate part of likesongs list - currently NON FUNCTIONAL****/}
-            {collection && <HeartIcon className="text-green-500 h-5 w-5" />}
+            {/****  "like" heart to indicate part of likesongs list ****/}
+            {collection ? (
+              <button
+                className="text-green-500 h-5 w-5"
+                onClick={() => {
+                  handleRemove();
+                }}
+              >
+                <HeartIcon aria-label="Favorite" />
+              </button>
+            ) : (
+              <button
+                className="text-pink-swan h-5 w-5 opacity-0 group-hover:opacity-100 hover:text-white hover:scale-110  group-focus:opacity-100 focus:text-white focus:scale-110"
+                onClick={() => {
+                  handleAdd();
+                }}
+              >
+                <HeartOuline aria-label="Favorite" />
+              </button>
+            )}
 
             <span className="pl-5">
               {millisToMinutesAndSeconds(song?.duration_ms)}

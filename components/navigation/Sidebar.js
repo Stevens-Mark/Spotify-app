@@ -11,6 +11,7 @@ import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import {
   activePlaylistIdState,
   activePlaylistState,
+  myPlaylistState,
 } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
@@ -34,10 +35,9 @@ function Sidebar() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
 
-  const [myPlaylists, setMyPlaylists] = useState([]);
-  const [activePlaylistId, setActivePlaylistId] = useRecoilState(
-    activePlaylistIdState
-  );
+  const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
+  const [activePlaylistId, setActivePlaylistId] =
+    useRecoilState(myPlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
@@ -53,7 +53,6 @@ function Sidebar() {
   useEffect(() => {
     setActivePlaylistId((router?.asPath).split('/').pop());
   }, [router?.asPath, setActivePlaylistId]);
-
 
   useEffect(() => {
     const fetchCurrentTrack = async () => {
@@ -77,15 +76,17 @@ function Sidebar() {
     };
 
     const fetchUserPlaylists = async () => {
-      if (spotifyApi.getAccessToken()) {
-        try {
-          const userPlaylists = await spotifyApi.getUserPlaylists();
-          setMyPlaylists(userPlaylists?.body?.items);
-        } catch (err) {
-          console.error('Failed to get user playlists');
-          toast.error('Playlists Retrieval failed !', {
-            theme: 'colored',
-          });
+      if (myPlaylists === null) {
+        if (spotifyApi.getAccessToken()) {
+          try {
+            const userPlaylists = await spotifyApi.getUserPlaylists();
+            setMyPlaylists(userPlaylists?.body?.items);
+          } catch (err) {
+            console.error('Failed to get user playlists');
+            toast.error('Playlists Retrieval failed !', {
+              theme: 'colored',
+            });
+          }
         }
       }
     };
@@ -100,6 +101,8 @@ function Sidebar() {
     setCurrentItemId,
     setIsPlaying,
     setActivePlaylistId,
+    myPlaylists,
+    setMyPlaylists,
   ]);
 
   const handleHome = () => {

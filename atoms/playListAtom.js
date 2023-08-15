@@ -24,3 +24,9 @@ export const activePlaylistState = atom({
   key: 'activePlaylistState',
   default: null,
 });
+
+// contains list of users playlists
+export const myPlaylistState = atom({
+  key: 'myPlaylistState',
+  default: null,
+});

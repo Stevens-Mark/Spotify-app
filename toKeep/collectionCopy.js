@@ -66,44 +66,77 @@ const LikedPage = () => {
 
   useEffect(() => {
     // Get Current User's Liked Song Tracks
-    // if (likedTracks === null) {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getMySavedTracks({
-          limit: itemsPerPage,
-          offset: 0,
-        })
-        .then(
-          function (data) {
-            // add this information to allow us to create the media banner for liked songs
-            data.body.id = 'collection';
-            data.body.type = 'collection';
-            data.body.name = 'Liked Songs';
-            data.body.owner = {
-              display_name: session?.user.name,
-              id: session?.user?.username,
-            };
-            data.body.images = [
-              {
-                height: 640,
-                url: '/images/LikedSongs.png',
-                width: 640,
-              },
-            ];
+    if (likedTracks === null) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getMySavedTracks({
+            limit: itemsPerPage,
+            offset: 0,
+          })
+          .then(
+            function (data) {
+              console.log('collection data ', data);
+              // add this information to allow us to create the media banner for liked songs
+              data.body.id = 'collection';
+              data.body.type = 'collection';
+              data.body.name = 'Liked Songs';
+              data.body.owner = {
+                display_name: session?.user.name,
+                id: session?.user?.username,
+              };
+              data.body.images = [
+                {
+                  height: 640,
+                  url: '/images/LikedSongs.png',
+                  width: 640,
+                },
+              ];
 
-            setCurrentPlaylistId(data?.body?.id);
-            setLikedTracklist(data?.body);
-            setLikedTrackUris(data.body?.items?.map((item) => item.track.uri)); // set uris to be used in player
-          },
-          function (err) {
-            console.log('Songs retrieval failed !');
-            toast.error('Songs retrieval failed !', {
-              theme: 'colored',
-            });
-          }
-        );
+              setCurrentPlaylistId(data?.body?.id);
+              setLikedTracklist(data?.body);
+              setLikedTrackUris(
+                data.body?.items?.map((item) => item.track.uri)
+              ); // set uris to be used in player
+
+              spotifyApi
+                .containsMySavedTracks(
+                  data.body?.items?.map((item) => item?.track?.id)
+                )
+                .then(
+                  function (containsData) {
+                    // `containsData` is an array of boolean values indicating whether each track is 
+                    // Create an array of objects with track ID and corresponding boolean value
+                    const tracksWithSavedStatus = data.body.items.map(
+                      (item, index) => ({
+                        id: item.track.id,
+                        isSaved: containsData?.body[index],
+                      })
+                    );
+
+                    // Now you have an array where each object contains the track ID and its saved status
+                    console.log(
+                      'Tracks with saved status: ',
+                      tracksWithSavedStatus
+                    );
+
+                    // You can store `tracksWithSavedStatus` in your state or use it as
+
+                    console.log(' containsMySavedTrack ', data);
+                  },
+                  function (err) {
+                    console.log('Something went wrong!', err);
+                  }
+                );
+            },
+            function (err) {
+              console.log('Songs retrieval failed !');
+              toast.error('Songs retrieval failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
     }
-    // }
   }, [
     itemsPerPage,
     likedTracks,

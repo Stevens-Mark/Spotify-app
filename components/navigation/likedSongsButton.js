@@ -1,6 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { useSession } from 'next-auth/react';
+import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
+// import state management recoil
+import { useRecoilValue, useRecoilState } from 'recoil';
+import { itemsPerPageState, isLikedSongState } from '@/atoms/otherAtoms';
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
 /**
@@ -13,6 +18,62 @@ import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
  */
 function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
   const router = useRouter();
+  const { data: session } = useSession();
+  const spotifyApi = useSpotify();
+  const itemsPerPage = useRecoilValue(itemsPerPageState);
+  const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
+  const [currentOffset, setCurrentOffset] = useState(0);
+  const [stopFetch, setStopFetch] = useState(false);
+
+  useEffect(() => {
+
+      if (!stopFetch) {
+        const nextOffset = currentOffset + 50;
+
+        if (spotifyApi.getAccessToken()) {
+          spotifyApi
+            .getMySavedTracks({
+              limit: 50,
+              offset: currentOffset,
+            })
+            .then(
+              function (data) {
+                const newLikedSongs = data.body?.items?.map(
+                  (item) => item?.track?.id
+                );
+
+                const uniqueLikedSongs = [
+                  ...new Set([...isLikedSong, ...newLikedSongs]),
+                ];
+
+                setIsLikedSong(uniqueLikedSongs);
+                setCurrentOffset(nextOffset);
+                // Check if there's no more data to fetch
+                if (data?.body?.items?.length === 0) {
+                  setStopFetch(true);
+                  // return;
+                }
+              },
+              function (err) {
+                console.log('Liked songs retrieval failed !');
+                // Handle the error if needed
+              }
+            );
+        }
+      }
+    
+  }, [
+    currentOffset,
+    isLikedSong,
+    setIsLikedSong,
+    spotifyApi,
+    session,
+    stopFetch,
+  ]);
+
+
+
+  // console.log('likedsongstatus ', isLikedSong);
 
   const collection = {
     id: 'collection',
