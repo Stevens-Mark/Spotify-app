@@ -24,6 +24,8 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
 
+
+  // collect all track Ids in the liked song list (used to set heart if needed in addRemoveLiked.js)
   useEffect(() => {
     if (!stopFetch) {
       const nextOffset = currentOffset + 50;

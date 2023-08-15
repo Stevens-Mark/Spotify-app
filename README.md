@@ -57,6 +57,7 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [x] Quick play start/pause control banner on page scroll
 - [x] Equaliser graphic animation when track playing
 - [x] Infinite scrolling of media data
+- [x] Add/Remove a track to/from the "Liked Songs" list
 - [x] Use of hooks and custom hooks
 - [x] Rccent search list currently persisted in local storage for ease of demo
 - [x] Responsive layout
@@ -67,7 +68,7 @@ And finally, I used Tailwind for the first time & I loved it!!!
 
 ## Limitations / Areas for improvement
 - [x] The spotify site is (deceptively) huge, with a lot of functionality & features. I have not attempted to replicate the whole site.
-- [x] You cannot add/delete/modify your playlists/liked songs from this app (maybe in the future).
+- [x] You cannot add/delete/modify your playlists from this app (maybe in the future).
 - [x] Episode ("up next") not implemented on show page.
 - [x] The Algorithms used by Spotify to create the various lists are not all available, so I cannot create lists like "jump back in" or "mixes for...." etc
 - [x] There are a presently a few known issues with my implementation, listed below:
@@ -202,7 +203,8 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [x] Bannière de contrôle du démarrage de la lecture rapide et de la mise en pause lors du défilement de la page
 - [x] Animation graphique de l'égaliseur lors de la lecture d'une piste
 - [x] Défilement infini des données multimédias
-- [x] Utilisation de crochets et de crochets personnalisés
+- [x] Ajouter/supprimer une chanson de la liste des "chansons favorites".
+- [x] Utilisation de hooks et de hooks personnalisés
 - [x] La liste de recherche actuelle est conservée dans le stockage local pour faciliter les démonstrations.
 - [x] Mise en page réactive
 - [x] Gestion des états avec [Recoil](https://recoiljs.org/)
@@ -212,7 +214,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 
 ## Limites / Domaines d'amélioration
 - [x] Le site spotify est (faussement) énorme, avec beaucoup de fonctionnalités et de caractéristiques. Je n'ai pas essayé de reproduire l'ensemble du site.
-- [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture/chansons préférées à partir de cette application (peut-être à l'avenir).
+- [x] Vous ne pouvez pas ajouter/supprimer/modifier vos listes de lecture à partir de cette application (peut-être à l'avenir).
 - [x] L'épisode ("up next") n'est pas implémenté sur la page de l'émission.
 - Les algorithmes utilisés par Spotify pour créer les différentes listes ne sont pas tous disponibles, donc je ne peux pas créer des listes comme "jump back in" ou "mixes for...." etc.
 - [x] Il y a actuellement quelques problèmes connus avec mon implémentation, listés ci-dessous :

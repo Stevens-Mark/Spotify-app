@@ -21,7 +21,7 @@ function AddRemoveLiked({ songId }) {
   const spotifyApi = useSpotify();
   const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
   const setTriggerUpdate = useSetRecoilState(updatetriggerLikedSongState); // used to trigger update of likedsongs
-  const collection = isLikedSong?.includes(songId);
+  const inLikedSongsList = isLikedSong?.includes(songId); // check if song in likedsongs list
 
   // Add track to liked songs list
   const handleAdd = () => {
@@ -59,7 +59,7 @@ function AddRemoveLiked({ songId }) {
 
   return (
     <>
-      {collection ? (
+      {inLikedSongsList ? (
         <button
           className="text-green-500 h-5 w-5 hover:scale-110 focus:scale-110"
           onClick={() => {
