@@ -5,7 +5,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { isLikedSongState } from '@/atoms/otherAtoms';
+import { isLikedSongState } from '@/atoms/songAtom';
 import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
 
 /**
@@ -66,8 +66,6 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
     session,
     stopFetch,
   ]);
-
-  // console.log('likedsongstatus ', isLikedSong);
 
   const collection = {
     id: 'collection',

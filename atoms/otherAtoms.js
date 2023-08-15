@@ -51,9 +51,5 @@ export const shuffleStatusState = atom({
   default: false,
 });
 
-// holds data as to whether a track is part of the users liked song list
-export const isLikedSongState = atom({
-  key: 'isLikedSongState',
-  default: [],
-});
+
 

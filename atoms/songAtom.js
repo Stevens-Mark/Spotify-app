@@ -58,3 +58,15 @@ export const likedUrisState = atom({
   key: 'likedUrisState',
   default: [],
 });
+
+// holds data as to whether a track is part of the users liked song list
+export const isLikedSongState = atom({
+  key: 'isLikedSongState',
+  default: [],
+});
+
+// contains boolean whether to update likedsong list after user adds/removes a track
+export const updatetriggerLikedSongState = atom({
+  key: 'updatetriggerLikedSongState',
+  default: false,
+});

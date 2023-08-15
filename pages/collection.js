@@ -8,7 +8,11 @@ import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
-import { likedListState, likedUrisState } from '@/atoms/songAtom';
+import {
+  likedListState,
+  likedUrisState,
+  updatetriggerLikedSongState,
+} from '@/atoms/songAtom';
 import { itemsPerPageState } from '@/atoms/otherAtoms';
 import { playlistIdState } from '@/atoms/playListAtom';
 // import components
@@ -50,6 +54,9 @@ const LikedPage = () => {
   const setLikedTrackUris = useSetRecoilState(likedUrisState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
+  const [triggerUpdate, setTriggerUpdate] = useRecoilState(
+    updatetriggerLikedSongState
+  );
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -65,45 +72,47 @@ const LikedPage = () => {
   }, [likedTracks?.id, setCurrentPlaylistId]);
 
   useEffect(() => {
-    // Get Current User's Liked Song Tracks
-    // if (likedTracks === null) {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi
-        .getMySavedTracks({
-          limit: itemsPerPage,
-          offset: 0,
-        })
-        .then(
-          function (data) {
-            // add this information to allow us to create the media banner for liked songs
-            data.body.id = 'collection';
-            data.body.type = 'collection';
-            data.body.name = 'Liked Songs';
-            data.body.owner = {
-              display_name: session?.user.name,
-              id: session?.user?.username,
-            };
-            data.body.images = [
-              {
-                height: 640,
-                url: '/images/LikedSongs.png',
-                width: 640,
-              },
-            ];
+    // Get Current User's Liked Song Tracks (if not loaded yet or needs update after track added/removed from likedsongs list)
+    if (likedTracks === null || triggerUpdate) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi
+          .getMySavedTracks({
+            limit: itemsPerPage,
+            offset: 0,
+          })
+          .then(
+            function (data) {
+              // add this information to allow us to create the media banner for liked songs
+              data.body.id = 'collection';
+              data.body.type = 'collection';
+              data.body.name = 'Liked Songs';
+              data.body.owner = {
+                display_name: session?.user.name,
+                id: session?.user?.username,
+              };
+              data.body.images = [
+                {
+                  height: 640,
+                  url: '/images/LikedSongs.png',
+                  width: 640,
+                },
+              ];
 
-            setCurrentPlaylistId(data?.body?.id);
-            setLikedTracklist(data?.body);
-            setLikedTrackUris(data.body?.items?.map((item) => item.track.uri)); // set uris to be used in player
-          },
-          function (err) {
-            console.log('Songs retrieval failed !');
-            toast.error('Songs retrieval failed !', {
-              theme: 'colored',
-            });
-          }
-        );
+              setCurrentPlaylistId(data?.body?.id);
+              setLikedTracklist(data?.body);
+              setLikedTrackUris(
+                data.body?.items?.map((item) => item.track.uri)
+              ); // set uris to be used in player
+            },
+            function (err) {
+              console.log('Songs retrieval failed !');
+              toast.error('Songs retrieval failed !', {
+                theme: 'colored',
+              });
+            }
+          );
+      }
     }
-    // }
   }, [
     itemsPerPage,
     likedTracks,
@@ -111,12 +120,18 @@ const LikedPage = () => {
     setCurrentPlaylistId,
     setLikedTrackUris,
     setLikedTracklist,
+    setTriggerUpdate,
     spotifyApi,
+    triggerUpdate,
   ]);
 
   // Function to fetch more data when the user scrolls down
   const fetchMoreData = () => {
-    if (!stopFetch) {
+    if (triggerUpdate) {
+      setTriggerUpdate(false); // if list updated (see above): need to reset states
+      setCurrentOffset(0);
+      setStopFetch(false);
+    } else if (!stopFetch) {
       const nextOffset = currentOffset + itemsPerPage; // Calculate the next offset
       if (spotifyApi.getAccessToken()) {
         spotifyApi

@@ -2,8 +2,11 @@ import React from 'react';
 import useSpotify from '@/hooks/useSpotify';
 import { toast } from 'react-toastify';
 // import state management recoil
-import { useRecoilState } from 'recoil';
-import { isLikedSongState } from '@/atoms/otherAtoms';
+import { useRecoilState, useSetRecoilState } from 'recoil';
+import {
+  isLikedSongState,
+  updatetriggerLikedSongState,
+} from '@/atoms/songAtom';
 // import icon
 import { HeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
@@ -17,14 +20,16 @@ import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
 function AddRemoveLiked({ songId }) {
   const spotifyApi = useSpotify();
   const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
+  const setTriggerUpdate = useSetRecoilState(updatetriggerLikedSongState); // used to trigger update of likedsongs
   const collection = isLikedSong?.includes(songId);
 
   // Add track to liked songs list
   const handleAdd = () => {
     spotifyApi.addToMySavedTracks([songId]).then(
       function () {
-        // Add songId to the existing state array: causing rerender
+        // Add songId to the existing state array & trigger list update causing rerender
         setIsLikedSong((prevLikedSongs) => [...prevLikedSongs, songId]);
+        setTriggerUpdate(true);
       },
       function (err) {
         toast.error('Adding track failed !', {
@@ -38,10 +43,11 @@ function AddRemoveLiked({ songId }) {
   const handleRemove = () => {
     spotifyApi.removeFromMySavedTracks([songId]).then(
       function () {
-        // Remove songId from existing state array: causing rerender
+        // Remove songId from existing state array & trigger list update causing rerender
         setIsLikedSong((prevLikedSongs) =>
           prevLikedSongs.filter((likedSongId) => likedSongId !== songId)
         );
+        setTriggerUpdate(true);
       },
       function (err) {
         toast.error('Removing track failed !', {
