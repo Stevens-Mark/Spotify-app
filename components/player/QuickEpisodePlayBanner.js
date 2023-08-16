@@ -151,8 +151,8 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsVisible(scrollPosition > 250); // Changed to the desired threshold
-      const maxScroll = 185; // Adjust the maximum scroll value as needed
+      setIsVisible(scrollPosition > 460); // Changed to the desired threshold
+      const maxScroll = 460; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
     };
