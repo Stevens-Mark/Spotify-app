@@ -12,6 +12,7 @@ import {
   activePlaylistIdState,
   activePlaylistState,
   myPlaylistState,
+  onlyUsersPlaylistState,
 } from '@/atoms/playListAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
@@ -36,6 +37,7 @@ function Sidebar() {
   const { data: session } = useSession();
 
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
+  const setUserCreatedPlaylists = useSetRecoilState(onlyUsersPlaylistState);
   const [activePlaylistId, setActivePlaylistId] =
     useRecoilState(myPlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
@@ -81,6 +83,14 @@ function Sidebar() {
           try {
             const userPlaylists = await spotifyApi.getUserPlaylists();
             setMyPlaylists(userPlaylists?.body?.items);
+            // Filter playlists by owner's display name - collection ids & playlist names
+            const filteredPlaylists = userPlaylists?.body?.items
+              .filter(
+                (playlist) =>
+                  playlist.owner.display_name === session?.user?.name
+              )
+              .map((playlist) => ({ id: playlist.id, name: playlist.name }));
+            setUserCreatedPlaylists(filteredPlaylists);
           } catch (err) {
             console.error('Failed to get user playlists');
             toast.error('Playlists Retrieval failed !', {
@@ -103,6 +113,7 @@ function Sidebar() {
     setActivePlaylistId,
     myPlaylists,
     setMyPlaylists,
+    setUserCreatedPlaylists,
   ]);
 
   const handleHome = () => {

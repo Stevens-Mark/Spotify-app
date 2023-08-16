@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 // import functions
 import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 // import icon
-import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
+import {
+  PlayIcon,
+  PauseIcon,
+  EllipsisHorizontalIcon,
+} from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
 import AddRemoveLiked from './addRemoveLiked';
+import PlaylistAddButton from './playlistAddButton';
 
 /**
  * Handles the actual rendering of each track.
@@ -31,7 +36,11 @@ function RenderTracks({
   addedAt,
 }) {
   const router = useRouter();
+  const playlistMenuRef = useRef(null);
   const [linkAddress, setLinkAddress] = useState('');
+  const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
+
+  // console.log(song)
 
   // Spotify does not make song further info/lyric etc available to the public
   // thus song name will direct to album, but no further
@@ -43,9 +52,39 @@ function RenderTracks({
     }
   }, [router?.asPath, song?.album?.id]);
 
+  // Add an event listener to close the playlist menu when clicking/press keyboard button outside add playlist menu
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        isPlaylistMenuVisible &&
+        playlistMenuRef.current &&
+        !playlistMenuRef.current.contains(event.target)
+      ) {
+        setPlaylistMenuVisible(false);
+      }
+    };
+
+    const handleKeyPress = (event) => {
+      if (
+        isPlaylistMenuVisible &&
+        event.key !== 'Tab' &&
+        event.key !== 'Enter'
+      ) {
+        setPlaylistMenuVisible(false);
+      }
+    };
+
+    window.addEventListener('click', handleOutsideClick);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('click', handleOutsideClick);
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [isPlaylistMenuVisible]);
+
   return (
     <div
-      className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer group"
+      className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer "
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
     >
@@ -127,6 +166,18 @@ function RenderTracks({
             <AddRemoveLiked songId={song?.id} />
 
             <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
+            {/* <EllipsisHorizontalIcon className="ml-5 w-6 h-6 text-pink-swan" /> */}
+            <div className="relative inline-block" ref={playlistMenuRef}>
+              <button
+                className="ml-5 w-6 h-6 text-pink-swan"
+                onClick={() => setPlaylistMenuVisible(!isPlaylistMenuVisible)}
+              >
+                <EllipsisHorizontalIcon />
+              </button>
+              {isPlaylistMenuVisible && (
+                <PlaylistAddButton songUri={song?.uri} openMenu={setPlaylistMenuVisible} />
+              )}
+            </div>
           </div>
         </div>
       ) : (

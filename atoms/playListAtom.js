@@ -25,8 +25,14 @@ export const activePlaylistState = atom({
   default: null,
 });
 
-// contains list of users playlists
+// contains list of All users playlists they've saved or created
 export const myPlaylistState = atom({
   key: 'myPlaylistState',
+  default: null,
+});
+
+// contains list of Only users playlists they've created
+export const onlyUsersPlaylistState = atom({
+  key: 'onlyUsersPlaylistState',
   default: null,
 });

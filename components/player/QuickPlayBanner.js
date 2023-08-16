@@ -55,6 +55,7 @@ function QuickPlayBanner({ item, scrollRef }) {
   const [opacity, setOpacity] = useState(0);
   const backgroundColor = useRecoilValue(backgroundColorState); // used for quick play banner
 
+
   /**
    * Either play or pause current track
    * @function HandleCardPlayPauseClick
