@@ -34,7 +34,6 @@ function AlbumTrack({ track, order }) {
   const currentAlbumId = useRecoilValue(albumIdState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);

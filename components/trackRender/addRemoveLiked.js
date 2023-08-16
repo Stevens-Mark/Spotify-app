@@ -9,7 +9,7 @@ import {
 } from '@/atoms/songAtom';
 // import icon
 import { HeartIcon } from '@heroicons/react/24/solid';
-import { HeartIcon as HeartOuline } from '@heroicons/react/24/outline';
+import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 
 /**
  * Handles the adding/removing tracks from lied song list
@@ -61,7 +61,7 @@ function AddRemoveLiked({ songId }) {
     <>
       {inLikedSongsList ? (
         <button
-          className="text-green-500 h-5 w-5 hover:scale-110 focus:scale-110"
+          className="text-green-500 h-5 w-5 hover:scale-125 focus:scale-125 transition delay-100 duration-300 ease-in-out mr-3"
           onClick={() => {
             handleRemove();
           }}
@@ -70,12 +70,12 @@ function AddRemoveLiked({ songId }) {
         </button>
       ) : (
         <button
-          className="text-pink-swan h-5 w-5 opacity-0 group-hover:opacity-100 hover:text-white hover:scale-110  group-focus:opacity-100 focus:text-white focus:scale-110"
+          className="text-black h-5 w-5 group-hover:text-pink-swan hover:scale-125 focus:text-pink-swan focus:scale-125 transition delay-100 duration-300 ease-in-out mr-3"
           onClick={() => {
             handleAdd();
           }}
         >
-          <HeartOuline aria-label="Add to Favorite" />
+          <HeartOutline aria-label="Add to Favorite" />
         </button>
       )}
     </>

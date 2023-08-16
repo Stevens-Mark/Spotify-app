@@ -121,7 +121,7 @@ function Card({ item }) {
           </button>
         )}
 
-        <h3 className="text-white capitalize mt-2 truncate">
+        <h3 className="text-white capitalize mt-2 line-clamp-2">
           {item?.name?.replace('/', ' & ')}
         </h3>
 

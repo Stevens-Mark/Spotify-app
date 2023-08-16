@@ -36,41 +36,19 @@ function ArtistTrack({ track, order }) {
   const song = track;
 
   const artistTrackUris = useRecoilValue(artistTrackUrisState);
-  // const artistTracklist = useRecoilValue(artistTrackListState);
-
-  // console.log("track ", artistTracklist?.tracks)
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
-  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);  // used to determine what type of info to load
+  const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  // const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
-    
-  const [currentSongIndex, setCurrentSongIndex] = useRecoilState(
-    currentSongIndexState
-  );  // to identify the track position for the green highlight of the active track
+
+  const setCurrentSongIndex = useSetRecoilState(currentSongIndexState); // to identify the track position for the green highlight of the active track
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
   const [activeStatus, setActiveStatus] = useState(false);
-
-  // LEFT FOR NOW AS STILL TRYING TO FIND A SOLUTION TO LOSS OF HIGHLIGHT ON RELOAD
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     if (
-  //       currentSongIndex == null &&
-  //       currentTrackId !== null &&
-  //       artistTracklist !== null
-  //     ) {
-  //       const indexPosition = artistTracklist?.tracks?.findIndex(
-  //         (x) => x.id == currentTrackId
-  //       );
-  //       setCurrentSongIndex(indexPosition);
-  //     }
-  //   }, 500);
-  // }, [artistTracklist, currentSongIndex, currentTrackId, setCurrentSongIndex]);
 
   /**
    * Either play or pause current track
@@ -107,9 +85,9 @@ function ArtistTrack({ track, order }) {
   // used to set play/pause icons
   useEffect(() => {
     const newActiveStatus =
-      song?.id === currentTrackId 
-      && (currentItemId === originId || currentItemId === null) // null check added in case user refreshes page
-      && isPlaying;
+      song?.id === currentTrackId &&
+      (currentItemId === originId || currentItemId === null) && // null check added in case user refreshes page
+      isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
 

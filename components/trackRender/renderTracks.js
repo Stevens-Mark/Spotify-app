@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 // import functions
 import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
-// import { getMonthDayYear } from '@/lib/time';
 // import icon
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 import Equaliser from '@/components/graphics/Equaliser';
@@ -98,7 +97,7 @@ function RenderTracks({
                   {index > 0 && ', '}
                   <Link
                     href={`/artist/${artist?.id}`}
-                    className="hover:text-white hover:underline focus:text-white focus:underline truncate"
+                    className="hover:text-white hover:underline focus:text-white focus:underline"
                   >
                     {artist?.name}
                   </Link>
@@ -110,12 +109,14 @@ function RenderTracks({
       </div>
       {song?.album?.name ? (
         <div className="flex items-end md:items-center justify-end mdlg:justify-between ml-auto md:ml-0">
-          <Link
-            href={linkAddress}
-            className="w-80 hidden mdlg:inline pr-3 truncate xl:whitespace-normal hover:underline focus:text-white focus:underline "
-          >
-            {song?.album?.name}
-          </Link>
+          <span className="w-80 hidden mdlg:inline pr-3 truncate">
+            <Link
+              href={linkAddress}
+              className=" xl:whitespace-normal hover:underline focus:text-white focus:underline "
+            >
+              {song?.album?.name}
+            </Link>
+          </span>
           {addedAt && (
             <span className="w-48 hidden mdlg:inline whitespace-nowrap pr-2">
               {formatDateToTimeElapsed(addedAt)}
@@ -125,18 +126,14 @@ function RenderTracks({
             {/**** "like" heart add/remove ****/}
             <AddRemoveLiked songId={song?.id} />
 
-            <span className="pl-5">
-              {millisToMinutesAndSeconds(song?.duration_ms)}
-            </span>
+            <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
           </div>
         </div>
       ) : (
         <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
           {/**** "like" heart add/remove ****/}
           <AddRemoveLiked songId={song?.id} />
-          <span className="pl-5">
-            {millisToMinutesAndSeconds(song?.duration_ms)}
-          </span>
+          <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
         </div>
       )}
     </div>

@@ -48,12 +48,12 @@ function QuickPlayBanner({ item, scrollRef }) {
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
 
   const originId = useRecoilValue(originIdState);
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);  // used to set play/pause icons
-  const [activeStatus, setActiveStatus] = useState(false);  // used to set play/pause icons
-  const [isVisible, setIsVisible] = useState(false);  // show track info when play button at top of screen
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
+  const [activeStatus, setActiveStatus] = useState(false); // used to set play/pause icons
+  const [isVisible, setIsVisible] = useState(false); // show track info when play button at top of screen
   const [isTextVisible, setIsTextVisible] = useState(true);
   const [opacity, setOpacity] = useState(0);
-  const backgroundColor = useRecoilValue(backgroundColorState);  // used for quick play banner
+  const backgroundColor = useRecoilValue(backgroundColorState); // used for quick play banner
 
   /**
    * Either play or pause current track
@@ -118,7 +118,7 @@ function QuickPlayBanner({ item, scrollRef }) {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
       setIsVisible(scrollPosition > 250); // Changed to the desired threshold
-      setIsTextVisible(scrollPosition > 250);
+      setIsTextVisible(scrollPosition > 460);
       const maxScroll = 185; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
@@ -203,9 +203,19 @@ function QuickPlayBanner({ item, scrollRef }) {
             </button>
             <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
           </div>
-
+          {/* 
           {item?.type === 'artist' && !isTextVisible && (
             <span className="text-white px-5 xs:px-12 text-xl md:text-2xl xl:text-3xl">
+              Popular
+            </span>
+          )} */}
+
+          {item?.type === 'artist' && !isTextVisible && (
+            <span
+              className={`text-white px-5 xs:px-12 text-xl md:text-2xl xl:text-3xl ${
+                !isVisible ? 'opacity-100' : 'opacity-0'
+              } transition delay-100 duration-300 ease-in-out`}
+            >
               Popular
             </span>
           )}

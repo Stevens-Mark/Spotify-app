@@ -4,6 +4,7 @@ import Link from 'next/link';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
+import AddRemoveLiked from '../trackRender/addRemoveLiked';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 
@@ -89,7 +90,7 @@ const TopSongCard = ({
                 {index > 0 && ', '}
                 <Link
                   href={`/artist/${artist?.id}`}
-                  className="hover:text-white hover:underline focus:text-white focus:underline truncate"
+                  className="hover:text-white hover:underline focus:text-white focus:underline"
                 >
                   {artist?.name}
                 </Link>
@@ -97,8 +98,13 @@ const TopSongCard = ({
             ))}
           </div>
         </div>
+
       </div>
-      <div className="self-end xs:self-center">
+      <div className="self-end xs:self-center items-center flex">
+                  {/**** "like" heart add/remove ****/}
+             
+                  <AddRemoveLiked songId={song?.id} />
+                
         {millisToMinutesAndSeconds(song?.duration_ms)}
       </div>
     </div>
