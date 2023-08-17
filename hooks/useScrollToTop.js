@@ -31,7 +31,7 @@ const useScrollToTop = () => {
     });
   };
 
-  const showButton = scrollPosition > 2000;
+  const showButton = scrollPosition > 1500;
   return {
     scrollableSectionRef,
     showButton,
