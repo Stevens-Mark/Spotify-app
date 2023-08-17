@@ -82,7 +82,7 @@ function RenderTracks({
             style={{ objectFit: 'cover' }}
           />
         )}
-        <div className="w-full">
+        <div className="">
           <Link
             href={linkAddress}
             className={`pr-2 hover:text-white hover:underline focus:text-white focus:underline line-clamp-1 ${

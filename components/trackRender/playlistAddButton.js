@@ -61,7 +61,8 @@ function PlaylistAddRemoveButton({ song, order }) {
       if (
         isPlaylistMenuVisible &&
         event.key !== 'Tab' &&
-        event.key !== 'Enter'
+        event.key !== 'Enter' &&
+        !event.key.startsWith('Arrow')
       ) {
         setPlaylistMenuVisible(false);
       }
@@ -148,13 +149,13 @@ function PlaylistAddRemoveButton({ song, order }) {
   return (
     <div className="relative inline-block" ref={playlistMenuRef}>
       <button
-        className="mt-2 ml-3 w-7 h-7 text-pink-swan md:text-black group-hover:text-pink-swan transition delay-100 duration-300 ease-in-out"
+        className="mt-2 ml-3 w-7 h-7 text-pink-swan md:text-black group-hover:text-pink-swan focus:text-pink-swan transition delay-100 duration-300 ease-in-out"
         onClick={() => setPlaylistMenuVisible(!isPlaylistMenuVisible)}
       >
         <EllipsisHorizontalIcon aria-label="Add or remove tracks to or from playlist" />
       </button>
       {isPlaylistMenuVisible && (
-        <div className="absolute z-10 top-8 right-0 w-56 rounded-md p-2 bg-gray-900 text-left">
+        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left">
           <button
             className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 ${
               isPlaylistSubMenuVisible ? 'bg-gray-800' : 'bg-gray-900'
@@ -183,7 +184,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           {isPlaylistSubMenuVisible && (
             <div
               className={`absolute ${
-                isOriginIdInPlaylists ? 'top-20' : 'top-12'
+                isOriginIdInPlaylists ? 'top-20' : 'top-11'
               }  xs:top-2 right-8 xs:right-56 `}
             >
               <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48">
@@ -192,7 +193,7 @@ function PlaylistAddRemoveButton({ song, order }) {
                   {possiblePlaylists?.map((playlist) => (
                     <button
                       key={playlist?.id}
-                      className="rounded-md text-left cursor-pointer hover:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
+                      className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
                       onClick={() => {
                         addToPlaylist(playlist?.id);
                       }}
