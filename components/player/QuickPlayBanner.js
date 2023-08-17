@@ -204,12 +204,6 @@ function QuickPlayBanner({ item, scrollRef }) {
             </button>
             <EllipsisHorizontalIcon className="ml-5 w-10 h-10 text-pink-swan" />
           </div>
-          {/* 
-          {item?.type === 'artist' && !isTextVisible && (
-            <span className="text-white px-5 xs:px-12 text-xl md:text-2xl xl:text-3xl">
-              Popular
-            </span>
-          )} */}
 
           {item?.type === 'artist' && !isTextVisible && (
             <span

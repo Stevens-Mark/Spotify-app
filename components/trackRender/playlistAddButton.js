@@ -33,6 +33,8 @@ function PlaylistAddRemoveButton({ song, order }) {
     playlistTrackListState
   );
 
+  console.log("song ", song)
+
   // check if current playlist displayed is one of the user's created playlists
   const isOriginIdInPlaylists = userCreatedPlaylists?.some(
     (playlist) => playlist.id === originId
@@ -75,6 +77,7 @@ function PlaylistAddRemoveButton({ song, order }) {
 
   // add choosen track to choosen playlist
   const addToPlaylist = (playlistId) => {
+    // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
       spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
         function () {
@@ -92,11 +95,12 @@ function PlaylistAddRemoveButton({ song, order }) {
             ...prevState,
             tracks: {
               ...prevState.tracks,
-              items: [...prevState.tracks.items, addedTrack],
+              items: [...prevState?.tracks?.items, addedTrack],
             },
           }));
         },
         function (err) {
+          console.log('Adding track failed!' ,err);
           toast.error('Adding track failed!', {
             theme: 'colored',
           });
@@ -105,37 +109,6 @@ function PlaylistAddRemoveButton({ song, order }) {
       setPlaylistMenuVisible(false);
     }
   };
-
-  // // remove choosen track from playlist
-  // const removeFromPlaylist = (playlistId) => {
-  //   if (spotifyApi.getAccessToken()) {
-  //     // remove from Spotify playlist
-  //     spotifyApi
-  //       .removeTracksFromPlaylist(playlistId, [{ uri: song?.uri }])
-  //       .then(
-  //         function () {
-  //           // remove from locally stored copy to trigger list rerender
-  //           const updatedTracks = playlistTracklist?.tracks?.items?.filter(
-  //             (item) => item?.track?.id !== song?.id
-  //           );
-
-  //           setPlaylistTracklist({
-  //             ...playlistTracklist,
-  //             tracks: {
-  //               ...playlistTracklist.tracks,
-  //               items: updatedTracks,
-  //             },
-  //           });
-  //         },
-  //         function (err) {
-  //           // console.log('Removing track failed!', err);
-  //           toast.error('Removing track failed!', {
-  //             theme: 'colored',
-  //           });
-  //         }
-  //       );
-  //   }
-  // };
 
   // remove choosen track from playlist
   const removeFromPlaylist = (playlistId, index) => {
@@ -157,7 +130,7 @@ function PlaylistAddRemoveButton({ song, order }) {
             setPlaylistTracklist({
               ...playlistTracklist,
               tracks: {
-                ...playlistTracklist.tracks,
+                ...playlistTracklist?.tracks,
                 items: updatedTracks,
               },
             });

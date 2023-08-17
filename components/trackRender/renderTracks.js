@@ -140,7 +140,7 @@ function RenderTracks({
           <AddRemoveLiked songId={song?.id} />
           <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
           {/* <Ellipsis - add/remove track to/from playlist */}
-          <PlaylistAddRemoveButton songUri={song?.uri} order={order}/>
+          <PlaylistAddRemoveButton song={song} order={order}/>
         </div>
       )}
     </div>
