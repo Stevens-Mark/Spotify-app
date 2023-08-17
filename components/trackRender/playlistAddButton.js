@@ -60,7 +60,8 @@ function PlaylistAddRemoveButton({ song, order }) {
         isPlaylistMenuVisible &&
         event.key !== 'Tab' &&
         event.key !== 'Enter' &&
-        !event.key.startsWith('Arrow')
+        !event.key.startsWith('Arrow') &&
+        event.key !== 'Shift'
       ) {
         setPlaylistMenuVisible(false);
       }
@@ -84,7 +85,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           const addedTrack = {
             added_at: new Date().toISOString(), // Current timestamp
             // Fill this with appropriate data missing from song
-            added_by: playlistTracklist?.tracks?.items?.[0].added_by, 
+            added_by: playlistTracklist?.tracks?.items?.[0].added_by,
             is_local: false,
             primary_color: null,
             track: song, // song data
@@ -99,7 +100,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           }));
         },
         function (err) {
-          console.log('Adding track failed!' ,err);
+          console.log('Adding track failed!', err);
           toast.error('Adding track failed!', {
             theme: 'colored',
           });
@@ -155,8 +156,8 @@ function PlaylistAddRemoveButton({ song, order }) {
       {isPlaylistMenuVisible && (
         <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left">
           <button
-            className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 ${
-              isPlaylistSubMenuVisible ? 'bg-gray-800' : 'bg-gray-900'
+            className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
+              isPlaylistSubMenuVisible ? 'bg-gray-800' : ''
             } `}
             onClick={() => {
               setPlaylistSubMenuVisible((prevState) => !prevState);
@@ -168,7 +169,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           {/* If a user's playlist add option to delete a track */}
           {isOriginIdInPlaylists && (
             <button
-              className="p-1 rounded-md text-white hover:bg-gray-800"
+              className="p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800"
               onClick={() => {
                 removeFromPlaylist(originId, order);
               }}
@@ -188,17 +189,23 @@ function PlaylistAddRemoveButton({ song, order }) {
               <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48">
                 {/* user's created playlist menu items */}
                 <div className="flex flex-col ">
-                  {possiblePlaylists?.map((playlist) => (
-                    <button
-                      key={playlist?.id}
-                      className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
-                      onClick={() => {
-                        addToPlaylist(playlist?.id);
-                      }}
-                    >
-                      {playlist?.name}
-                    </button>
-                  ))}
+                  {possiblePlaylists?.length > 0 ? (
+                    possiblePlaylists.map((playlist) => (
+                      <button
+                        key={playlist?.id}
+                        className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
+                        onClick={() => {
+                          addToPlaylist(playlist?.id);
+                        }}
+                      >
+                        {playlist?.name}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="text-white rounded-md text-left px-2 py-1 bg-gray-800 truncate">
+                      No playlists available
+                    </p>
+                  )}
                 </div>
               </div>
             </div>
