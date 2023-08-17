@@ -81,23 +81,7 @@ function PlaylistAddRemoveButton({ song, order }) {
     if (spotifyApi.getAccessToken()) {
       spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
         function () {
-          // add to locally stored copy to trigger list rerender
-          const addedTrack = {
-            added_at: new Date().toISOString(), // Current timestamp
-            // Fill this with appropriate data missing from song
-            added_by: playlistTracklist?.tracks?.items?.[0].added_by,
-            is_local: false,
-            primary_color: null,
-            track: song, // song data
-          };
-
-          setPlaylistTracklist((prevState) => ({
-            ...prevState,
-            tracks: {
-              ...prevState.tracks,
-              items: [...prevState?.tracks?.items, addedTrack],
-            },
-          }));
+          setPlaylistMenuVisible(false);
         },
         function (err) {
           console.log('Adding track failed!', err);
@@ -106,7 +90,6 @@ function PlaylistAddRemoveButton({ song, order }) {
           });
         }
       );
-      setPlaylistMenuVisible(false);
     }
   };
 
