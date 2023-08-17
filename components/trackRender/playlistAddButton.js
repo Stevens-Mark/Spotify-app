@@ -17,23 +17,21 @@ import {
 /**
  * Handles the adding/removing tracks from playlists
  * @function PlaylistAddRemoveButton
- * @param {string} songUri  URI of the song
+ * @param {string} songUri URI of the song
+ * @param {string} order index of song in list
  * @returns {JSX} add/remove menu
  */
-function PlaylistAddRemoveButton({ songUri }) {
+function PlaylistAddRemoveButton({ song, order }) {
   const playlistMenuRef = useRef(null);
   const spotifyApi = useSpotify();
   const originId = useRecoilValue(originIdState);
   const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
   const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
-  const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list users created playlists ONLY
- 
- 
-  // const [playlist, setPlaylistTracklist] = useRecoilState(
-  //   playlistTrackListState
-  // );
+  const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list: users created playlists ONLY
 
-  // console.log("playlist ", playlist)
+  const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
+    playlistTrackListState
+  );
 
   // check if current playlist displayed is one of the user's created playlists
   const isOriginIdInPlaylists = userCreatedPlaylists?.some(
@@ -78,28 +76,99 @@ function PlaylistAddRemoveButton({ songUri }) {
   // add choosen track to choosen playlist
   const addToPlaylist = (playlistId) => {
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.addTracksToPlaylist(playlistId, [songUri]).catch((err) => {
-        // console.log('Adding track failed!', err);
-        toast.error('Adding track failed!', {
-          theme: 'colored',
-        });
-      });
+      spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
+        function () {
+          // add to locally stored copy to trigger list rerender
+          const addedTrack = {
+            added_at: new Date().toISOString(), // Current timestamp
+            // Fill this with appropriate data missing from song
+            added_by: playlistTracklist?.tracks?.items?.[0].added_by, 
+            is_local: false,
+            primary_color: null,
+            track: song, // song data
+          };
+
+          setPlaylistTracklist((prevState) => ({
+            ...prevState,
+            tracks: {
+              ...prevState.tracks,
+              items: [...prevState.tracks.items, addedTrack],
+            },
+          }));
+        },
+        function (err) {
+          toast.error('Adding track failed!', {
+            theme: 'colored',
+          });
+        }
+      );
       setPlaylistMenuVisible(false);
     }
   };
 
+  // // remove choosen track from playlist
+  // const removeFromPlaylist = (playlistId) => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     // remove from Spotify playlist
+  //     spotifyApi
+  //       .removeTracksFromPlaylist(playlistId, [{ uri: song?.uri }])
+  //       .then(
+  //         function () {
+  //           // remove from locally stored copy to trigger list rerender
+  //           const updatedTracks = playlistTracklist?.tracks?.items?.filter(
+  //             (item) => item?.track?.id !== song?.id
+  //           );
+
+  //           setPlaylistTracklist({
+  //             ...playlistTracklist,
+  //             tracks: {
+  //               ...playlistTracklist.tracks,
+  //               items: updatedTracks,
+  //             },
+  //           });
+  //         },
+  //         function (err) {
+  //           // console.log('Removing track failed!', err);
+  //           toast.error('Removing track failed!', {
+  //             theme: 'colored',
+  //           });
+  //         }
+  //       );
+  //   }
+  // };
+
   // remove choosen track from playlist
-  const removeFromPlaylist = (playlistId) => {
+  const removeFromPlaylist = (playlistId, index) => {
     if (spotifyApi.getAccessToken()) {
+      // remove from Spotify playlist - use index to remove correct one if duplicates
       spotifyApi
-        .removeTracksFromPlaylist(playlistId, [{ uri: songUri }])
-        .catch((err) => {
-          // console.log('Removing track failed!', err);
-          toast.error('Removing track failed!', {
-            theme: 'colored',
-          });
-        });
-      setPlaylistMenuVisible(false);
+        .removeTracksFromPlaylistByPosition(
+          playlistId,
+          [index],
+          playlistTracklist?.snapshot_id
+        )
+        .then(
+          function () {
+            // remove from locally stored copy to trigger list rerender
+            const updatedTracks = playlistTracklist?.tracks?.items?.filter(
+              (item, idx) => idx !== index
+            );
+
+            setPlaylistTracklist({
+              ...playlistTracklist,
+              tracks: {
+                ...playlistTracklist.tracks,
+                items: updatedTracks,
+              },
+            });
+          },
+          function (err) {
+            console.log('Removing track failed!', err);
+            toast.error('Removing track failed!', {
+              theme: 'colored',
+            });
+          }
+        );
     }
   };
 
@@ -129,7 +198,7 @@ function PlaylistAddRemoveButton({ songUri }) {
             <button
               className="p-1 rounded-md text-white hover:bg-gray-800"
               onClick={() => {
-                removeFromPlaylist(originId);
+                removeFromPlaylist(originId, order);
               }}
             >
               <span className="pl-5  text-sm xs:text-base">

@@ -76,7 +76,19 @@ function Sidebar() {
         console.error('Failed to get current playing track / playlist ID');
       }
     };
+    fetchCurrentTrack();
+  }, [
+    session,
+    setActivePlaylist,
+    setCurrentItemId,
+    setCurrentTrackId,
+    setIsPlaying,
+    setPlayerInfoType,
+    spotifyApi,
+  ]);
 
+  
+  useEffect(() => {
     const fetchUserPlaylists = async () => {
       if (myPlaylists === null) {
         if (spotifyApi.getAccessToken()) {
@@ -101,16 +113,9 @@ function Sidebar() {
       }
     };
     fetchUserPlaylists();
-    fetchCurrentTrack();
   }, [
     spotifyApi,
     session,
-    setCurrentTrackId,
-    setActivePlaylist,
-    setPlayerInfoType,
-    setCurrentItemId,
-    setIsPlaying,
-    setActivePlaylistId,
     myPlaylists,
     setMyPlaylists,
     setUserCreatedPlaylists,
