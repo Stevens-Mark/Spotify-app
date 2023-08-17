@@ -55,7 +55,6 @@ function QuickPlayBanner({ item, scrollRef }) {
   const [opacity, setOpacity] = useState(0);
   const backgroundColor = useRecoilValue(backgroundColorState); // used for quick play banner
 
-
   /**
    * Either play or pause current track
    * @function HandleCardPlayPauseClick
@@ -220,9 +219,7 @@ function QuickPlayBanner({ item, scrollRef }) {
             {item?.type === 'playlist' && <TitleAlbumDateTimeLabel />}
             {item?.type === 'album' && <TitleTimeLabel />}
             {item?.type === 'artist' && <TitleAlbumTimeLabel />}
-            {item?.type === 'collection' && (
-              <TitleAlbumDateTimeLabel collection={true} />
-            )}
+            {item?.type === 'collection' && <TitleAlbumDateTimeLabel />}
           </div>
           <hr className="border-t-1 text-gray-400 mx-5 xs:mx-[3rem]" />
         </div>

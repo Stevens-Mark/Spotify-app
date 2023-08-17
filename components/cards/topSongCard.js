@@ -21,7 +21,7 @@ const TopSongCard = ({
   song,
 }) => {
   const mainDivRef = useRef(null);
-  
+
   const handleButtonClick = (event) => {
     // When the new button is clicked, pass the event to the original click handler
     HandleTrackPlayPauseClick(event, order);
@@ -47,7 +47,7 @@ const TopSongCard = ({
           aria-label="Play or Pause track"
         >
           <Image
-            className="h-10 w-10 min-w-[2.5rem]  rounded-sm"
+            className="h-10 w-10 min-w-[2.5rem] rounded-sm "
             src={song?.album?.images?.[0]?.url || noImage}
             alt=""
             width={100}
@@ -98,14 +98,13 @@ const TopSongCard = ({
             ))}
           </div>
         </div>
-
       </div>
-      <div className="self-end xs:self-center items-center flex">
-                  {/**** "like" heart add/remove ****/}
-             
-                  <AddRemoveLiked songId={song?.id} />
-                
-        {millisToMinutesAndSeconds(song?.duration_ms)}
+      <div className=" items-center flex">
+        {/**** "like" heart add/remove ****/}
+        <AddRemoveLiked songId={song?.id} />
+        <span className="w-8">
+          {millisToMinutesAndSeconds(song?.duration_ms)}
+        </span>
       </div>
     </div>
   );

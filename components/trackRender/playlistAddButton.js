@@ -157,7 +157,7 @@ function PlaylistAddRemoveButton({ song, order }) {
         <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left">
           <button
             className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
-              isPlaylistSubMenuVisible ? 'bg-gray-800' : ''
+              isPlaylistSubMenuVisible ? 'bg-gray-800' : 'bg-gray-900'
             } `}
             onClick={() => {
               setPlaylistSubMenuVisible((prevState) => !prevState);

@@ -74,7 +74,7 @@ function RenderTracks({
         </button>
         {song?.album?.images?.[0]?.url && (
           <Image
-            className="h-10 w-10"
+            className="h-10 w-10 hidden xs:inline "
             src={song?.album?.images?.[0].url}
             alt=""
             width={100}
@@ -120,7 +120,7 @@ function RenderTracks({
             </Link>
           </span>
           {addedAt && (
-            <span className="w-48 hidden mdlg:inline whitespace-nowrap pr-2">
+            <span className="w-48 hidden lg:inline whitespace-nowrap pr-2">
               {formatDateToTimeElapsed(addedAt)}
             </span>
           )}
@@ -128,19 +128,23 @@ function RenderTracks({
             {/**** "like" heart add/remove ****/}
             <AddRemoveLiked songId={song?.id} />
 
-            <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
+            <span className="w-8">
+              {millisToMinutesAndSeconds(song?.duration_ms)}
+            </span>
 
             {/* <Ellipsis - add/remove track to/from playlist */}
-            <PlaylistAddRemoveButton song={song} order={order}/>
+            <PlaylistAddRemoveButton song={song} order={order} />
           </div>
         </div>
       ) : (
-        <div className="flex items-end xs:items-center justify-end ml-auto md:ml-0">
+        <div className="flex items-center justify-end ml-auto md:ml-0">
           {/**** "like" heart add/remove ****/}
           <AddRemoveLiked songId={song?.id} />
-          <span>{millisToMinutesAndSeconds(song?.duration_ms)}</span>
+          <span className="w-8">
+            {millisToMinutesAndSeconds(song?.duration_ms)}
+          </span>
           {/* <Ellipsis - add/remove track to/from playlist */}
-          <PlaylistAddRemoveButton song={song} order={order}/>
+          <PlaylistAddRemoveButton song={song} order={order} />
         </div>
       )}
     </div>
