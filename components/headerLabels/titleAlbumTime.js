@@ -13,7 +13,7 @@ const TitleAlbumDate = () => {
         <span className='w-10 lg:w-8 pl-2'>#</span>
         <span className="w-full sm:w-72 mdlg:w-36 lg:w-60 xl:w-80 2xl:w-[30rem] pr-2">Title</span>
       </span>
-      <span className="flex items-center justify-end mdlg:justify-between ml-auto md:ml-0 pr-5">
+      <span className="flex items-center justify-end mdlg:justify-between ml-auto md:ml-0 pr-14">
         <span className="w-80 hidden mdlg:inline pr-1">Album</span>
         <span className="flex items-center">
           <ClockIcon className="h-5 w-5 pr-1" />

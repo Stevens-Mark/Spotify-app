@@ -12,7 +12,7 @@ import { HeartIcon } from '@heroicons/react/24/solid';
 import { HeartIcon as HeartOutline } from '@heroicons/react/24/outline';
 
 /**
- * Handles the adding/removing tracks from lied song list
+ * Handles the adding/removing tracks from liked song list
  * @function AddRemoveLiked
  * @param {string} songId ID of the song
  * @returns {JSX} liked add/remove button

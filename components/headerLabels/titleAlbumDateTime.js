@@ -16,7 +16,7 @@ const TitleAlbumDateTime = ({ collection }) => {
           Title
         </span>
       </span>
-      <span className="flex items-center justify-end mdlg:justify-between ml-auto md:ml-0 pr-5">
+      <span className="flex items-center justify-end mdlg:justify-between ml-auto md:ml-0 pr-14">
         <span className="w-80 hidden mdlg:inline pr-1">Album</span>
         <span className="w-48 hidden mdlg:inline pr-1">Date Added</span>
         <span className="flex items-center">
