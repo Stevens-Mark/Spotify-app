@@ -75,7 +75,6 @@ const LikedPage = () => {
           })
           .then(
             function (data) {
-              console.log('collection data ', data);
               // add this information to allow us to create the media banner for liked songs
               data.body.id = 'collection';
               data.body.type = 'collection';
@@ -112,16 +111,6 @@ const LikedPage = () => {
                         isSaved: containsData?.body[index],
                       })
                     );
-
-                    // Now you have an array where each object contains the track ID and its saved status
-                    console.log(
-                      'Tracks with saved status: ',
-                      tracksWithSavedStatus
-                    );
-
-                    // You can store `tracksWithSavedStatus` in your state or use it as
-
-                    console.log(' containsMySavedTrack ', data);
                   },
                   function (err) {
                     console.log('Something went wrong!', err);

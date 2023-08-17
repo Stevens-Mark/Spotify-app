@@ -33,8 +33,6 @@ function PlaylistAddRemoveButton({ song, order }) {
     playlistTrackListState
   );
 
-  console.log("song ", song)
-
   // check if current playlist displayed is one of the user's created playlists
   const isOriginIdInPlaylists = userCreatedPlaylists?.some(
     (playlist) => playlist.id === originId
