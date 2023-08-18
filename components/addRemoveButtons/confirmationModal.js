@@ -31,7 +31,7 @@ const ConfirmationModal = ({ onConfirm, onCancel, chosenPlaylist }) => {
           role="dialog"
           aria-modal="true"
           aria-labelledby="modal-heading"
-          className="bg-white rounded-md p-5"
+          className="bg-white rounded-md p-5 m-3"
         >
           <h2 id="modal-heading" className="text-black font-bold text-lg">
             Already Added ?

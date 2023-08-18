@@ -25,6 +25,8 @@ import ConfirmationModal from './confirmationModal';
  */
 function PlaylistAddRemoveButton({ song, order }) {
   const playlistMenuRef = useRef(null);
+  const lastFocusedElementRef = useRef(null); // Ref to store the last focused element
+  const activeOrderRef = useRef(null); // Ref to store the order of the active component
   const spotifyApi = useSpotify();
   const [showModal, setShowModal] = useState(false);
   const originId = useRecoilValue(originIdState);
@@ -79,11 +81,28 @@ function PlaylistAddRemoveButton({ song, order }) {
     };
   }, [isPlaylistMenuVisible]);
 
+  const storeLastFocusedElement = () => {
+    lastFocusedElementRef.current = document.activeElement;
+    activeOrderRef.current = order;
+  };
+
+  // Restore the last focused element
+  const restoreLastFocusedElement = () => {
+    if (
+      lastFocusedElementRef.current &&
+      lastFocusedElementRef.current.focus &&
+      activeOrderRef.current === order
+    ) {
+      lastFocusedElementRef.current.focus();
+    }
+  };
+
   // add track to choosen playlist as not duplicate or confirmed to by user
   const addTrack = async (playlistId) => {
     // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
       try {
+        setCooldown(true);
         await spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]);
 
         if (playlistId === originId) {
@@ -107,6 +126,13 @@ function PlaylistAddRemoveButton({ song, order }) {
           }));
         }
         setPlaylistMenuVisible(false);
+        setTimeout(function () {
+          document.getElementById(`elipsis-${order}`)?.focus?.();
+        }, 0);
+        // Start the cooldown
+        setTimeout(() => {
+          setCooldown(false);
+        }, 2500); // Set the cooldown time (in milliseconds)
       } catch (err) {
         console.log('Adding track failed!', err);
         toast.error('Adding track failed!', {
@@ -120,12 +146,18 @@ function PlaylistAddRemoveButton({ song, order }) {
   const confirmAdd = () => {
     addTrack(chosenPlaylist?.id);
     setShowModal(false);
+    setTimeout(function () {
+      document.getElementById(`elipsis-${order}`)?.focus?.();
+    }, 0);
   };
 
   // cancel adding duplicate to playlist
   const cancelAdd = () => {
     setShowModal(false);
     setPlaylistMenuVisible(false);
+    setTimeout(function () {
+      document.getElementById(`elipsis-${order}`)?.focus?.();
+    }, 0);
   };
 
   // check for duplicates before adding choosen track to choosen playlist
@@ -178,6 +210,10 @@ function PlaylistAddRemoveButton({ song, order }) {
           },
         });
 
+        setTimeout(function () {
+          document.getElementById(`elipsis-${order}`)?.focus?.();
+        }, 0);
+
         // Start the cooldown
         setTimeout(() => {
           setCooldown(false);
@@ -194,8 +230,12 @@ function PlaylistAddRemoveButton({ song, order }) {
   return (
     <div className="relative inline-block" ref={playlistMenuRef}>
       <button
+        id={`elipsis-${order}`}
         className="mt-2 ml-3 w-7 h-7 text-pink-swan md:text-black group-hover:text-pink-swan focus:text-pink-swan transition delay-100 duration-300 ease-in-out"
-        onClick={() => setPlaylistMenuVisible(!isPlaylistMenuVisible)}
+        onClick={() => {
+          storeLastFocusedElement();
+          setPlaylistMenuVisible(!isPlaylistMenuVisible);
+        }}
       >
         <EllipsisHorizontalIcon aria-label="Add or remove tracks to or from playlist" />
       </button>
@@ -215,7 +255,9 @@ function PlaylistAddRemoveButton({ song, order }) {
           {/* If a user's playlist add option to delete a track */}
           {isOriginIdInPlaylists && (
             <button
-              className="p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800"
+              className={`p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800 ${
+                cooldown ? 'cursor-not-allowed' : ''
+              } `}
               onClick={() => {
                 removeFromPlaylist(originId, order);
               }}
@@ -240,10 +282,13 @@ function PlaylistAddRemoveButton({ song, order }) {
                     possiblePlaylists.map((playlist) => (
                       <button
                         key={playlist?.id}
-                        className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
+                        className={`rounded-md text-left hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base   ${
+                          cooldown ? 'cursor-not-allowed' : ''
+                        } `}
                         onClick={() => {
                           checkDuplicatesBeforeAddTrack(playlist, song?.id);
                         }}
+                        disabled={cooldown}
                       >
                         {playlist?.name}
                       </button>
@@ -262,8 +307,14 @@ function PlaylistAddRemoveButton({ song, order }) {
       {showModal &&
         createPortal(
           <ConfirmationModal
-            onConfirm={confirmAdd}
-            onCancel={cancelAdd}
+            onConfirm={() => {
+              confirmAdd();
+              restoreLastFocusedElement();
+            }}
+            onCancel={() => {
+              cancelAdd();
+              restoreLastFocusedElement();
+            }}
             chosenPlaylist={chosenPlaylist}
           />,
           document.body

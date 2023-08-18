@@ -76,6 +76,7 @@ And finally, I used Tailwind for the first time & I loved it!!!
 ## Known issues
 - [x] Implmentation of the forward & backward navigation buttons not perfect.
 - [x] If the selected playing track appears in the same position (index in the track listing) in another album/playlist then it is green highlighted too (which should not be the case as it's in a different album/playlist).
+- [x] Add/remove track to/from playlist - be sure you are connected to Spotify otherwise the the app will show track added or removed, but it's not synced with Spotify properly. Also, I have had to limit the time between adding/removing tracks to allow the communication between Spotify & my app. Otherwise the server does not have time to process the requests properly & again looses sync. It's not perfect.
 - [x] If an episode is currently playing "getMyCurrentPlayingTrack" does not return any track information (only that an episode is playing) so on page reload no track information is shown in the bottom left hand side corner. For a "normal" track it works. Spotify response issue??
 - [x] (As of writing) I am having issues when there are duplicate tracks in a playlist: switching between shuffle on/off is buggy..
 - [x] None of the issues below are "deal breakers" as it's unlikely that the user would just refresh the page suddenly. In Spotify if you refresh the page everything stops playing anyway...
@@ -223,6 +224,7 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 ## Problèmes connus
 - [x] L'implémentation des boutons de navigation avant et arrière n'est pas parfaite.
 - [x] Si la piste sélectionnée apparaît à la même position (index dans la liste des pistes) dans un autre album/liste de lecture, elle est également surlignée en vert (ce qui ne devrait pas être le cas puisqu'elle se trouve dans un autre album/liste de lecture).
+- [x] Ajouter/supprimer un titre à/de la liste de lecture - assurez-vous d'être connecté à Spotify, sinon l'application affichera un titre ajouté ou supprimé, mais il ne sera pas synchronisé avec Spotify correctement. De plus, j'ai dû limiter le temps entre l'ajout et la suppression de titres pour permettre la communication entre Spotify et mon application. Sinon le serveur n'a pas le temps de traiter les requêtes correctement et la synchronisation est à nouveau rompue. Ce n'est pas parfait.
 - [x] Si un épisode est en cours de lecture, "getMyCurrentPlayingTrack" ne renvoie aucune information sur la piste (seulement qu'un épisode est en cours de lecture), donc lors du rechargement de la page, aucune information sur la piste n'est affichée dans le coin inférieur gauche. Pour une piste "normale", cela fonctionne. Problème de réponse de Spotify ??
 - [x] (Au moment d'écrire ces lignes) J'ai des problèmes lorsqu'il y a des pistes en double dans une liste de lecture : la commutation entre la lecture aléatoire activée/désactivée est boguée...
 - [x] Aucun des problèmes ci-dessous n'est rédhibitoire car il est peu probable que l'utilisateur rafraîchisse la page soudainement. Dans Spotify, si vous rafraîchissez la page, tout s'arrête de toute façon...
