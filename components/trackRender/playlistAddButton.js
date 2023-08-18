@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import useSpotify from '@/hooks/useSpotify';
 import { toast } from 'react-toastify';
 // import state management recoil
@@ -13,17 +14,19 @@ import {
   EllipsisHorizontalIcon,
   ChevronLeftIcon,
 } from '@heroicons/react/24/solid';
+import ConfirmationModal from './confirmationModal';
 
 /**
  * Handles the adding/removing tracks from playlists
  * @function PlaylistAddRemoveButton
- * @param {string} songUri URI of the song
+ * @param {object} song song data
  * @param {string} order index of song in list
  * @returns {JSX} add/remove menu
  */
 function PlaylistAddRemoveButton({ song, order }) {
   const playlistMenuRef = useRef(null);
   const spotifyApi = useSpotify();
+  const [showModal, setShowModal] = useState(false);
   const originId = useRecoilValue(originIdState);
   const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
   const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
@@ -75,13 +78,48 @@ function PlaylistAddRemoveButton({ song, order }) {
     };
   }, [isPlaylistMenuVisible]);
 
-  // add choosen track to choosen playlist
-  const addToPlaylist = (playlistId) => {
+  // add track to choosen playlist
+  const addTrack = (playlistId) => {
     // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
       spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
         function () {
           setPlaylistMenuVisible(false);
+        },
+        function (err) {
+          console.log('Adding track failed!', err);
+          toast.error('Adding track failed!', {
+            theme: 'colored',
+          });
+        }
+      );
+    }
+  };
+
+  const confirmAdd = () => {
+    addTrack(playlist?.id);
+    setShowModal(false);
+  };
+
+  const cancelAdd = () => {
+    setShowModal(false);
+    setPlaylistMenuVisible(false);
+  };
+
+  // add choosen track to choosen playlist
+  const addToPlaylist = (playlistId, songId) => {
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getPlaylist(playlistId).then(
+        function (data) {
+          const isSongInPlaylist = data.body?.tracks?.items?.some(
+            (item) => item.track.id === songId
+          );
+          console.log(isSongInPlaylist ? 'true' : 'false');
+          if (isSongInPlaylist) {
+            setShowModal(true);
+          } else {
+            addTrack(playlistId);
+          }
         },
         function (err) {
           console.log('Adding track failed!', err);
@@ -173,12 +211,12 @@ function PlaylistAddRemoveButton({ song, order }) {
                 {/* user's created playlist menu items */}
                 <div className="flex flex-col ">
                   {possiblePlaylists?.length > 0 ? (
-                    possiblePlaylists.map((playlist) => (
+                    userCreatedPlaylists.map((playlist) => (
                       <button
                         key={playlist?.id}
                         className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
                         onClick={() => {
-                          addToPlaylist(playlist?.id);
+                          addToPlaylist(playlist?.id, song?.id);
                         }}
                       >
                         {playlist?.name}
@@ -195,6 +233,11 @@ function PlaylistAddRemoveButton({ song, order }) {
           )}
         </div>
       )}
+      {showModal &&
+        createPortal(
+          <ConfirmationModal onConfirm={confirmAdd} onCancel={cancelAdd} />,
+          document.body
+        )}
     </div>
   );
 }
