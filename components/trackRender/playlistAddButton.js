@@ -4,7 +4,7 @@ import useSpotify from '@/hooks/useSpotify';
 import { toast } from 'react-toastify';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { originIdState } from '@/atoms/otherAtoms';
+import { originIdState, cooldownState } from '@/atoms/otherAtoms';
 import {
   onlyUsersPlaylistState,
   playlistTrackListState,
@@ -32,7 +32,7 @@ function PlaylistAddRemoveButton({ song, order }) {
   const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
   const [chosenPlaylist, setChosenPlaylist] = useState('');
   const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list: users created playlists ONLY
-
+  const [cooldown, setCooldown] = useRecoilState(cooldownState); // to limit how often the user can press remove from playlist so the server has time to process each request
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
     playlistTrackListState
   );
@@ -80,39 +80,39 @@ function PlaylistAddRemoveButton({ song, order }) {
   }, [isPlaylistMenuVisible]);
 
   // add track to choosen playlist as not duplicate or confirmed to by user
-  const addTrack = (playlistId) => {
+  const addTrack = async (playlistId) => {
     // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
-        function () {
-          if (playlistId === originId) {
-            // add to locally stored copy to trigger list rerender (if on playlist page where track added)
-            const addedTrack = {
-              added_at: new Date().toISOString(), // Current timestamp
-              // Fill this with appropriate data missing from song
-              added_by: playlistTracklist?.tracks?.items?.[0].added_by,
-              is_local: false,
-              primary_color: null,
-              track: song, // song data
-            };
+      try {
+        await spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]);
 
-            setPlaylistTracklist((prevState) => ({
-              ...prevState,
-              tracks: {
-                ...prevState.tracks,
-                items: [...prevState?.tracks?.items, addedTrack],
-              },
-            }));
-          }
-          setPlaylistMenuVisible(false);
-        },
-        function (err) {
-          console.log('Adding track failed!', err);
-          toast.error('Adding track failed!', {
-            theme: 'colored',
-          });
+        if (playlistId === originId) {
+          // add to locally stored copy to trigger list rerender (if on playlist page where track added)
+          // CURRENTLY NOT NEEDED AS I HAVE FILTERED OUT (SEE 'possiblePlaylists')
+          const addedTrack = {
+            added_at: new Date().toISOString(), // Current timestamp
+            // Fill this with appropriate data missing from song
+            added_by: playlistTracklist?.tracks?.items?.[0].added_by,
+            is_local: false,
+            primary_color: null,
+            track: song, // song data
+          };
+
+          setPlaylistTracklist((prevState) => ({
+            ...prevState,
+            tracks: {
+              ...prevState.tracks,
+              items: [...prevState?.tracks?.items, addedTrack],
+            },
+          }));
         }
-      );
+        setPlaylistMenuVisible(false);
+      } catch (err) {
+        console.log('Adding track failed!', err);
+        toast.error('Adding track failed!', {
+          theme: 'colored',
+        });
+      }
     }
   };
 
@@ -122,7 +122,7 @@ function PlaylistAddRemoveButton({ song, order }) {
     setShowModal(false);
   };
 
-   // cancel adding duplicate to playlist
+  // cancel adding duplicate to playlist
   const cancelAdd = () => {
     setShowModal(false);
     setPlaylistMenuVisible(false);
@@ -154,37 +154,40 @@ function PlaylistAddRemoveButton({ song, order }) {
   };
 
   // remove choosen track from playlist
-  const removeFromPlaylist = (playlistId, index) => {
-    if (spotifyApi.getAccessToken()) {
-      // remove from Spotify playlist - use index to remove correct one if duplicates
-      spotifyApi
-        .removeTracksFromPlaylistByPosition(
+  const removeFromPlaylist = async (playlistId, index) => {
+    if (spotifyApi.getAccessToken() && !cooldown) {
+      try {
+        setCooldown(true);
+        // remove from Spotify playlist - use index to remove correct one if duplicates
+        await spotifyApi.removeTracksFromPlaylistByPosition(
           playlistId,
           [index],
           playlistTracklist.snapshot_id
-        )
-        .then(
-          function () {
-            // remove from locally stored copy to trigger list rerender
-            const updatedTracks = playlistTracklist?.tracks?.items?.filter(
-              (item, idx) => idx !== index
-            );
-
-            setPlaylistTracklist({
-              ...playlistTracklist,
-              tracks: {
-                ...playlistTracklist?.tracks,
-                items: updatedTracks,
-              },
-            });
-          },
-          function (err) {
-            console.log('Removing track failed!', err);
-            toast.error('Removing track failed!', {
-              theme: 'colored',
-            });
-          }
         );
+
+        // Remove from locally stored copy to trigger list rerender
+        const updatedTracks = playlistTracklist?.tracks?.items?.filter(
+          (item, idx) => idx !== index
+        );
+
+        setPlaylistTracklist({
+          ...playlistTracklist,
+          tracks: {
+            ...playlistTracklist?.tracks,
+            items: updatedTracks,
+          },
+        });
+
+        // Start the cooldown
+        setTimeout(() => {
+          setCooldown(false);
+        }, 2500); // Set the cooldown time (in milliseconds)
+      } catch (err) {
+        console.log('Removing track failed!', err);
+        toast.error('Removing track failed!', {
+          theme: 'colored',
+        });
+      }
     }
   };
 
@@ -216,6 +219,7 @@ function PlaylistAddRemoveButton({ song, order }) {
               onClick={() => {
                 removeFromPlaylist(originId, order);
               }}
+              disabled={cooldown}
             >
               <span className="pl-5  text-sm xs:text-base">
                 Remove from this Playlist
@@ -233,7 +237,7 @@ function PlaylistAddRemoveButton({ song, order }) {
                 {/* user's created playlist menu items */}
                 <div className="flex flex-col ">
                   {possiblePlaylists?.length > 0 ? (
-                    userCreatedPlaylists.map((playlist) => (
+                    possiblePlaylists.map((playlist) => (
                       <button
                         key={playlist?.id}
                         className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"

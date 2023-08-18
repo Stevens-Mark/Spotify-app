@@ -51,5 +51,8 @@ export const shuffleStatusState = atom({
   default: false,
 });
 
-
-
+// to limit how often the user can press remove from playlist so the server has time to process each request
+export const cooldownState = atom({
+  key: 'cooldownState',
+  default: false,
+});
