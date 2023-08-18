@@ -24,7 +24,8 @@ const ConfirmationModal = ({ onConfirm, onCancel, chosenPlaylist }) => {
       <div
         ref={modalRef}
         tabIndex={-1}
-        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999]"
+        className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] fade-in"
+        
         onKeyDown={handleKeyDown}
       >
         <div
