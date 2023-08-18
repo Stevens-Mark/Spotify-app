@@ -30,6 +30,7 @@ function PlaylistAddRemoveButton({ song, order }) {
   const originId = useRecoilValue(originIdState);
   const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
   const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
+  const [chosenPlaylist, setChosenPlaylist] = useState('');
   const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list: users created playlists ONLY
 
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
@@ -78,12 +79,31 @@ function PlaylistAddRemoveButton({ song, order }) {
     };
   }, [isPlaylistMenuVisible]);
 
-  // add track to choosen playlist
+  // add track to choosen playlist as not duplicate or confirmed to by user
   const addTrack = (playlistId) => {
     // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
       spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]).then(
         function () {
+          if (playlistId === originId) {
+            // add to locally stored copy to trigger list rerender (if on playlist page where track added)
+            const addedTrack = {
+              added_at: new Date().toISOString(), // Current timestamp
+              // Fill this with appropriate data missing from song
+              added_by: playlistTracklist?.tracks?.items?.[0].added_by,
+              is_local: false,
+              primary_color: null,
+              track: song, // song data
+            };
+
+            setPlaylistTracklist((prevState) => ({
+              ...prevState,
+              tracks: {
+                ...prevState.tracks,
+                items: [...prevState?.tracks?.items, addedTrack],
+              },
+            }));
+          }
           setPlaylistMenuVisible(false);
         },
         function (err) {
@@ -96,29 +116,31 @@ function PlaylistAddRemoveButton({ song, order }) {
     }
   };
 
+  // confirm to add duplicate to playlist
   const confirmAdd = () => {
-    addTrack(playlist?.id);
+    addTrack(chosenPlaylist?.id);
     setShowModal(false);
   };
 
+   // cancel adding duplicate to playlist
   const cancelAdd = () => {
     setShowModal(false);
     setPlaylistMenuVisible(false);
   };
 
-  // add choosen track to choosen playlist
-  const addToPlaylist = (playlistId, songId) => {
+  // check for duplicates before adding choosen track to choosen playlist
+  const checkDuplicatesBeforeAddTrack = (playlist, songId) => {
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.getPlaylist(playlistId).then(
+      spotifyApi.getPlaylist(playlist.id).then(
         function (data) {
           const isSongInPlaylist = data.body?.tracks?.items?.some(
             (item) => item.track.id === songId
           );
-          console.log(isSongInPlaylist ? 'true' : 'false');
           if (isSongInPlaylist) {
-            setShowModal(true);
+            setChosenPlaylist(playlist);
+            setShowModal(true); // duplicates - open modal for confirmation
           } else {
-            addTrack(playlistId);
+            addTrack(playlist.id); // no duplicates so add track directly
           }
         },
         function (err) {
@@ -139,7 +161,7 @@ function PlaylistAddRemoveButton({ song, order }) {
         .removeTracksFromPlaylistByPosition(
           playlistId,
           [index],
-          playlistTracklist?.snapshot_id
+          playlistTracklist.snapshot_id
         )
         .then(
           function () {
@@ -216,7 +238,7 @@ function PlaylistAddRemoveButton({ song, order }) {
                         key={playlist?.id}
                         className="rounded-md text-left cursor-pointer hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base"
                         onClick={() => {
-                          addToPlaylist(playlist?.id, song?.id);
+                          checkDuplicatesBeforeAddTrack(playlist, song?.id);
                         }}
                       >
                         {playlist?.name}
@@ -235,7 +257,11 @@ function PlaylistAddRemoveButton({ song, order }) {
       )}
       {showModal &&
         createPortal(
-          <ConfirmationModal onConfirm={confirmAdd} onCancel={cancelAdd} />,
+          <ConfirmationModal
+            onConfirm={confirmAdd}
+            onCancel={cancelAdd}
+            chosenPlaylist={chosenPlaylist}
+          />,
           document.body
         )}
     </div>
