@@ -8,8 +8,8 @@ import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 // import components
 import Equaliser from '@/components/graphics/Equaliser';
-import AddRemoveLiked from './addRemoveLiked';
-import PlaylistAddRemoveButton from './playlistAddButton';
+import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
+import PlaylistAddRemoveButton from '../addRemoveButtons/playlistAddButton';
 
 /**
  * Handles the actual rendering of each track.

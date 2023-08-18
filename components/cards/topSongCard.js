@@ -4,7 +4,7 @@ import Link from 'next/link';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
-import AddRemoveLiked from '../trackRender/addRemoveLiked';
+import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 
