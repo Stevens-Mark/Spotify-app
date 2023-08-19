@@ -279,27 +279,30 @@ function PlaylistAddRemoveButton({ song, order }) {
               }  xs:top-2 right-8 xs:right-56 `}
             >
               {/* user's created playlist menu items */}
-              <div className="flex flex-col p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800">
-                {possiblePlaylists?.length > 0 ? (
-                  possiblePlaylists.map((playlist) => (
-                    <button
-                      key={playlist?.id}
-                      className={`rounded-md text-left hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base   ${
-                        cooldown ? 'cursor-not-allowed' : ''
-                      } `}
-                      onClick={() => {
-                        checkDuplicatesBeforeAddTrack(playlist, song?.id);
-                      }}
-                      disabled={cooldown}
-                    >
-                      {playlist?.name}
-                    </button>
-                  ))
-                ) : (
-                  <p className="text-white rounded-md text-left px-2 py-1 bg-gray-800 truncate">
-                    No playlists available
-                  </p>
-                )}
+              <div className="flex flex-col h-[20vh]">
+                <div
+                className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 overflow-y-scroll custom-scrollbar">
+                  {possiblePlaylists?.length > 0 ? (
+                    possiblePlaylists.map((playlist) => (
+                      <button
+                        key={playlist?.id}
+                        className={`rounded-md text-left w-full hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base ${
+                          cooldown ? 'cursor-not-allowed' : ''
+                        } `}
+                        onClick={() => {
+                          checkDuplicatesBeforeAddTrack(playlist, song?.id);
+                        }}
+                        disabled={cooldown}
+                      >
+                        {playlist?.name}
+                      </button>
+                    ))
+                  ) : (
+                    <p className="text-white rounded-md text-left px-2 py-1 bg-gray-800 truncate">
+                      No playlists available
+                    </p>
+                  )}
+                </div>
               </div>
             </div>
           )}
