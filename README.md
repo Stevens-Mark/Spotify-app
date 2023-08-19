@@ -106,7 +106,9 @@ And finally, I used Tailwind for the first time & I loved it!!!
 - [Spotify-web-api-node](https://github.com/thelinmichael/spotify-web-api-node) Version 5.0.2
 - [Tailwind](https://tailwindcss.com/) Version 3.3.1
 - [Tailwind-scrollbar-hide](https://www.npmjs.com/package/tailwind-scrollbar-hide) Version 1.1.7
-
+- [Date-fns](https://date-fns.org/) Version 2.30.0
+- [Focus-Trap](https://www.npmjs.com/package/focus-trap-react) Version 10.2.1
+- [react-responsive](https://www.npmjs.com/package/react-responsive) Version 9.0.2
 
 ## Installing and running the project
 - Clone the repository onto your computer :
@@ -255,6 +257,9 @@ En fin de compte, vous devez toujours coder vous-même et vous assurer que les c
 - [Spotify-web-api-node](https://github.com/thelinmichael/spotify-web-api-node) Version 5.0.2
 - [Tailwind](https://tailwindcss.com/) Version 3.3.1
 - [Tailwind-scrollbar-hide](https://www.npmjs.com/package/tailwind-scrollbar-hide) Version 1.1.7
+- [Date-fns](https://date-fns.org/) Version 2.30.0
+- [Focus-Trap](https://www.npmjs.com/package/focus-trap-react) Version 10.2.1
+- [react-responsive](https://www.npmjs.com/package/react-responsive) Version 9.0.2
 
 ## Installer et exécuter le projet
 - Clonez le dépôt sur votre ordinateur :

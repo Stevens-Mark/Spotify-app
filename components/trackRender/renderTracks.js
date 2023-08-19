@@ -90,15 +90,28 @@ function RenderTracks({
             style={{ objectFit: 'cover' }}
           />
         )}
-        <div className="">
-          <Link
-            href={linkAddress}
-            className={`pr-2 hover:text-white hover:underline focus:text-white focus:underline line-clamp-1 ${
-              activeStatus ? 'text-green-500' : 'text-white'
-            }`}
-          >
-            {song?.name}
-          </Link>
+         {/* link to album unless already on album page  */}
+        <div>
+          {!(router?.asPath).includes('album') ? (
+            <Link
+              href={linkAddress}
+              className={`pr-2 hover:underline focus:underline line-clamp-1 ${
+                activeStatus ? 'text-green-500' : 'text-white'
+              }`}
+            >
+              {song?.name}
+            </Link>
+          ) : (
+            <span
+              href={linkAddress}
+              className={`pr-2 line-clamp-1 ${
+                activeStatus ? 'text-green-500' : 'text-white'
+              }`}
+            >
+              {song?.name}
+            </span>
+          )}
+
           {/* show link(s) to artist(s) if not on artist page */}
           {!(router?.asPath).includes('artist') && (
             <div className="text-sm pr-2 line-clamp-1">
