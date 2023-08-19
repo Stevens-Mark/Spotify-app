@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
@@ -9,7 +9,7 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 // import components
 import Equaliser from '@/components/graphics/Equaliser';
 import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
-import PlaylistAddRemoveButton from '../addRemoveButtons/playlistAddButton';
+import PlaylistAddRemoveButton from '../addRemoveButtons/trackPlaylistAddRemoveButton';
 
 /**
  * Handles the actual rendering of each track.
@@ -34,6 +34,7 @@ function RenderTracks({
 }) {
   const router = useRouter();
   const [linkAddress, setLinkAddress] = useState('');
+  const mainDivRef = useRef(null);
 
   // Spotify does not make song further info/lyric etc available to the public
   // thus song name will direct to album, but no further
@@ -47,9 +48,16 @@ function RenderTracks({
 
   return (
     <div
+      ref={mainDivRef}
       className="grid grid-cols-[1fr,auto] mdlg:grid-cols-2 text-pink-swan py-4 px-5 hover:bg-gray-900 hover:text-white rounded-lg cursor-pointer group"
       onMouseEnter={() => setIsShown(true)}
       onMouseLeave={() => setIsShown(false)}
+      onFocus={() =>
+        mainDivRef.current.classList.add('text-white', 'bg-gray-900')
+      }
+      onBlur={() =>
+        mainDivRef.current.classList.remove('text-white', 'bg-gray-900')
+      }
     >
       <div className="flex items-center space-x-4">
         <button
@@ -74,7 +82,7 @@ function RenderTracks({
         </button>
         {song?.album?.images?.[0]?.url && (
           <Image
-            className="h-10 w-10 hidden xs:inline "
+            className="h-10 w-10 hidden xs:inline"
             src={song?.album?.images?.[0].url}
             alt=""
             width={100}

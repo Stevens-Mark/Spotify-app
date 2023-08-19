@@ -135,9 +135,7 @@ function All() {
                   <h2 className="text-white my-5 mr-5 text-2xl md:text-3xl 2xl:text-4xl">
                     Songs
                   </h2>
-                  <div className=" rounded-lg bg-gray-900">
                     <TopSongs />
-                  </div>
                 </>
               )}
             </>

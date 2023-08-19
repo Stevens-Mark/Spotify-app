@@ -15,7 +15,7 @@ function TopSongs() {
   const songs = queryResults?.tracks?.items;
 
   return (
-    <div className=" flex flex-col justify-between h-60 text-sm text-pink-swan px-4 py-2 rounded-lg cursor-pointer">
+    <div className=" flex flex-col justify-between h-60 text-sm text-pink-swan py-2 rounded-lg cursor-pointer">
       {/* 4 songs here */}
       {songs?.slice(0, 4).map((track, i) => (
         <TopSongTrack key={track.id} track={track} order={i} />

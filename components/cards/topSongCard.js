@@ -7,6 +7,7 @@ import { millisToMinutesAndSeconds } from '@/lib/time';
 import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
+import PlaylistAddRemoveButton from '../addRemoveButtons/trackPlaylistAddRemoveButton';
 
 /**
  * Renders the 4 songs next to top result
@@ -30,8 +31,8 @@ const TopSongCard = ({
   return (
     <div
       ref={mainDivRef}
-      className={`group flex justify-between text-pink-swan p-2 rounded-md hover:text-white hover:bg-gray-800 transition delay-100 duration-300 ease-in-out overflow-hidden ${
-        activeStatus ? 'text-white bg-gray-800' : ''
+      className={`group flex justify-between text-pink-swan p-2 rounded-md hover:text-white hover:bg-gray-800 transition delay-100 duration-300 ease-in-out  ${
+        activeStatus ? 'text-white bg-gray-900' : ''
       }`}
       onFocus={() =>
         mainDivRef.current.classList.add('text-white', 'bg-gray-800')
@@ -47,7 +48,7 @@ const TopSongCard = ({
           aria-label="Play or Pause track"
         >
           <Image
-            className="h-10 w-10 min-w-[2.5rem] rounded-sm "
+            className="h-10 w-10 min-w-[2.5rem] rounded-sm"
             src={song?.album?.images?.[0]?.url || noImage}
             alt=""
             width={100}
@@ -105,6 +106,8 @@ const TopSongCard = ({
         <span className="w-8">
           {millisToMinutesAndSeconds(song?.duration_ms)}
         </span>
+        {/* <Ellipsis - add/remove track to/from playlist */}
+        <PlaylistAddRemoveButton song={song} order={order} />
       </div>
     </div>
   );

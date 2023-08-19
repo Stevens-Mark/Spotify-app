@@ -230,6 +230,7 @@ function PlaylistAddRemoveButton({ song, order }) {
   return (
     <div className="relative inline-block" ref={playlistMenuRef}>
       <button
+        aria-label="options"
         id={`elipsis-${order}`}
         className="mt-2 ml-3 w-7 h-7 text-pink-swan md:text-black group-hover:text-pink-swan focus:text-pink-swan transition delay-100 duration-300 ease-in-out"
         onClick={() => {
@@ -237,11 +238,12 @@ function PlaylistAddRemoveButton({ song, order }) {
           setPlaylistMenuVisible(!isPlaylistMenuVisible);
         }}
       >
-        <EllipsisHorizontalIcon aria-label="Add or remove tracks to or from playlist" />
+        <EllipsisHorizontalIcon />
       </button>
       {isPlaylistMenuVisible && (
-        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left">
+        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800">
           <button
+            aria-label="Add track to playlist"
             className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
               isPlaylistSubMenuVisible ? 'bg-gray-800' : 'bg-gray-900'
             } `}
@@ -255,6 +257,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           {/* If a user's playlist add option to delete a track */}
           {isOriginIdInPlaylists && (
             <button
+              aria-label="remove track from playlist"
               className={`p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800 ${
                 cooldown ? 'cursor-not-allowed' : ''
               } `}
@@ -275,30 +278,28 @@ function PlaylistAddRemoveButton({ song, order }) {
                 isOriginIdInPlaylists ? 'top-20' : 'top-11'
               }  xs:top-2 right-8 xs:right-56 `}
             >
-              <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48">
-                {/* user's created playlist menu items */}
-                <div className="flex flex-col ">
-                  {possiblePlaylists?.length > 0 ? (
-                    possiblePlaylists.map((playlist) => (
-                      <button
-                        key={playlist?.id}
-                        className={`rounded-md text-left hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base   ${
-                          cooldown ? 'cursor-not-allowed' : ''
-                        } `}
-                        onClick={() => {
-                          checkDuplicatesBeforeAddTrack(playlist, song?.id);
-                        }}
-                        disabled={cooldown}
-                      >
-                        {playlist?.name}
-                      </button>
-                    ))
-                  ) : (
-                    <p className="text-white rounded-md text-left px-2 py-1 bg-gray-800 truncate">
-                      No playlists available
-                    </p>
-                  )}
-                </div>
+              {/* user's created playlist menu items */}
+              <div className="flex flex-col p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800">
+                {possiblePlaylists?.length > 0 ? (
+                  possiblePlaylists.map((playlist) => (
+                    <button
+                      key={playlist?.id}
+                      className={`rounded-md text-left hover:bg-gray-800 focus:bg-gray-800 truncate px-2 py-2 xs:py-1 text-sm xs:text-base   ${
+                        cooldown ? 'cursor-not-allowed' : ''
+                      } `}
+                      onClick={() => {
+                        checkDuplicatesBeforeAddTrack(playlist, song?.id);
+                      }}
+                      disabled={cooldown}
+                    >
+                      {playlist?.name}
+                    </button>
+                  ))
+                ) : (
+                  <p className="text-white rounded-md text-left px-2 py-1 bg-gray-800 truncate">
+                    No playlists available
+                  </p>
+                )}
               </div>
             </div>
           )}
