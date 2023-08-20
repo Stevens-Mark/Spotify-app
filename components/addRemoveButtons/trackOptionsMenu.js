@@ -16,17 +16,22 @@ import {
   EllipsisHorizontalIcon,
   ChevronLeftIcon,
 } from '@heroicons/react/24/solid';
+// import components
 import ConfirmationModal from './confirmationModal';
 
 /**
- * Handles the adding/removing tracks from playlists
- * @function PlaylistAddRemoveButton
+ * Handles the adding/removing tracks from playlists & other navigation
+ * @function TrackOptionsMenu
  * @param {object} song song data
  * @param {string} order index of song in list
- * @returns {JSX} add/remove menu
+ * @param {string} linkAddress to album
+ * @returns {JSX} options menu for track
  */
-function PlaylistAddRemoveButton({ song, order }) {
+function TrackOptionsMenu({ song, order, linkAddress }) {
   const router = useRouter();
+
+  const address = linkAddress ? linkAddress : `/album/${song?.album?.id}`;
+
   const playlistMenuRef = useRef(null);
   const lastFocusedElementRef = useRef(null); // Ref to store the last focused element
   const activeOrderRef = useRef(null); // Ref to store the order of the active component
@@ -35,8 +40,7 @@ function PlaylistAddRemoveButton({ song, order }) {
 
   const [showMainOptionsMenu, setShowMainOptionsMenu] = useState(false);
   const [showPlaylistSubMenu, setShowPlaylistSubMenu] = useState(false);
-  const [showArtistsSubMenu, setShowArtistsSubMenu] =
-    useState(false);
+  const [showArtistsSubMenu, setShowArtistsSubMenu] = useState(false);
   const [chosenPlaylist, setChosenPlaylist] = useState('');
 
   const originId = useRecoilValue(originIdState);
@@ -45,9 +49,6 @@ function PlaylistAddRemoveButton({ song, order }) {
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
     playlistTrackListState
   );
-
-  console.log('song ', song);
-  console.log('originId ', originId);
 
   // check if current playlist displayed is one of the user's created playlists
   const isOriginIdInPlaylists = userCreatedPlaylists?.some(
@@ -59,11 +60,10 @@ function PlaylistAddRemoveButton({ song, order }) {
     (playlist) => playlist.id !== originId
   );
 
+  // filter out artist to be displayed in dropdown menu from list when on their artist page
   const artistsToDisplay = song?.artists?.filter(
     (artist) => artist?.id !== originId
   );
-
-  console.log('artistsToDisplay ', artistsToDisplay);
 
   // Add an event listener to close the playlist menu when clicking/press keyboard button outside add playlist menu
   useEffect(() => {
@@ -113,7 +113,7 @@ function PlaylistAddRemoveButton({ song, order }) {
     }
   };
 
-  // add track to choosen playlist as not duplicate or confirmed to by user
+  // add track to choosen playlist as not duplicate or confirmed to add by user
   const addTrack = async (playlistId) => {
     // add to Spotify playlist
     if (spotifyApi.getAccessToken()) {
@@ -121,26 +121,26 @@ function PlaylistAddRemoveButton({ song, order }) {
         setCooldown(true);
         await spotifyApi.addTracksToPlaylist(playlistId, [song?.uri]);
 
-        if (playlistId === originId) {
-          // add to locally stored copy to trigger list rerender (if on playlist page where track added)
-          // CURRENTLY NOT NEEDED AS I HAVE FILTERED OUT (SEE 'possiblePlaylists')
-          const addedTrack = {
-            added_at: new Date().toISOString(), // Current timestamp
-            // Fill this with appropriate data missing from song
-            added_by: playlistTracklist?.tracks?.items?.[0].added_by,
-            is_local: false,
-            primary_color: null,
-            track: song, // song data
-          };
+        // add to locally stored copy to trigger list rerender (if on playlist page where track added)
+        // CURRENTLY NOT NEEDED AS I HAVE FILTERED OUT (SEE 'possiblePlaylists')
+        // if (playlistId === originId) {
+        //   const addedTrack = {
+        //     added_at: new Date().toISOString(), // Current timestamp
+        //     // Fill this with appropriate data missing from song
+        //     added_by: playlistTracklist?.tracks?.items?.[0].added_by,
+        //     is_local: false,
+        //     primary_color: null,
+        //     track: song, // song data
+        //   };
 
-          setPlaylistTracklist((prevState) => ({
-            ...prevState,
-            tracks: {
-              ...prevState.tracks,
-              items: [...prevState?.tracks?.items, addedTrack],
-            },
-          }));
-        }
+        //   setPlaylistTracklist((prevState) => ({
+        //     ...prevState,
+        //     tracks: {
+        //       ...prevState.tracks,
+        //       items: [...prevState?.tracks?.items, addedTrack],
+        //     },
+        //   }));
+        // }
         setShowMainOptionsMenu(false);
         setTimeout(function () {
           document.getElementById(`elipsis-${order}`)?.focus?.();
@@ -148,7 +148,7 @@ function PlaylistAddRemoveButton({ song, order }) {
         // Start the cooldown
         setTimeout(() => {
           setCooldown(false);
-        }, 2500); // Set the cooldown time (in milliseconds)
+        }, 2000); // Set the cooldown time (in milliseconds)
       } catch (err) {
         console.log('Adding track failed!', err);
         toast.error('Adding track failed!', {
@@ -233,7 +233,7 @@ function PlaylistAddRemoveButton({ song, order }) {
         // Start the cooldown
         setTimeout(() => {
           setCooldown(false);
-        }, 2500); // Set the cooldown time (in milliseconds)
+        }, 2000); // Set the cooldown time (in milliseconds)
       } catch (err) {
         console.log('Removing track failed!', err);
         toast.error('Removing track failed!', {
@@ -259,7 +259,7 @@ function PlaylistAddRemoveButton({ song, order }) {
 
       {/* MAIN OPTIONS MENU LIST  */}
       {showMainOptionsMenu && (
-        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800  shadow-elipsisMenu">
+        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800 shadow-elipsisMenu">
           {/* PRINCIPAL MENU - ADD TRACK */}
           <button
             aria-label="Add track to playlist"
@@ -268,6 +268,7 @@ function PlaylistAddRemoveButton({ song, order }) {
             } `}
             onClick={() => {
               setShowPlaylistSubMenu((prevState) => !prevState);
+              setShowArtistsSubMenu(false);
             }}
           >
             <ChevronLeftIcon className="h-4 w-4 text-white" />
@@ -275,7 +276,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           </button>
 
           {/* PRINCIPAL MENU - REMOVE TRACK */}
-          {/* If a user's playlist - add option to delete a track */}
+          {/* If a user's created playlist - add option to delete a track */}
           {isOriginIdInPlaylists && (
             <button
               aria-label="remove track from playlist"
@@ -297,75 +298,81 @@ function PlaylistAddRemoveButton({ song, order }) {
           {/* show go to album link if not on album page  */}
           {/* {!(router?.asPath).includes('album') && ( */}
           <Link
-            href={`/album/${song?.album?.id}`}
+            href={address}
             aria-label="Go to album"
             className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
           >
             <span className="pl-5 text-sm xs:text-base ">Go to album</span>
           </Link>
-          {/* )} */}
+          {/* )}  */}
 
           {/* PRINCIPAL MENU - GO TO ARTIST */}
-          {song?.artists?.length < 2 && artistsToDisplay?.length !== 0 ? (
-            <Link
-              href={`/artist/${song?.artists?.[0].id}`}
-              aria-label="Go to artist"
-              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
-            >
-              <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
-            </Link>
-          ) : (
-            <>
-              {artistsToDisplay?.length !== 0 && (
-                <button
-                  aria-label="open artist list"
-                  className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
-                    showArtistsSubMenu ? 'bg-gray-800' : 'bg-gray-900'
-                  } `}
-                  onClick={() => {
-                    setShowArtistsSubMenu((prevState) => !prevState);
-                  }}
-                >
-                  <ChevronLeftIcon className="h-4 w-4 text-white" />
-                  <span className="pl-1 text-sm xs:text-base">
-                    Go to artists
-                  </span>
-                </button>
-              )}
-            </>
-          )}
+          <div className="relative">
+            {song?.artists?.length < 2 && artistsToDisplay?.length !== 0 ? (
+              <Link
+                href={`/artist/${song?.artists?.[0].id}`}
+                aria-label="Go to artist"
+                className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+              >
+                <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
+              </Link>
+            ) : (
+              <>
+                {artistsToDisplay?.length !== 0 && (
+                  <button
+                    aria-label="open artist list"
+                    className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
+                      showArtistsSubMenu ? 'bg-gray-800' : 'bg-gray-900'
+                    } `}
+                    onClick={() => {
+                      setShowArtistsSubMenu((prevState) => !prevState);
+                      setShowPlaylistSubMenu(false);
+                    }}
+                  >
+                    <ChevronLeftIcon className="h-4 w-4 text-white" />
+                    <span className="pl-1 text-sm xs:text-base">
+                      Go to artists
+                    </span>
+                  </button>
+                )}
+              </>
+            )}
 
-          {showArtistsSubMenu && (
-            <div
-              className={`absolute ${
-                isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
-              }  xs:top-20 right-12 xs:right-56 `}
-            >
-              <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 shadow-elipsisMenu">
-                <div>
-                  {artistsToDisplay?.map((artist, index) => (
-                    <Link
-                      href={`/artist/${artist?.id}`}
-                      key={artist?.id}
-                      className={`w-full inline-block p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
-                    >
-                      <span className="text-sm xs:text-base ">
-                        {artist?.name}
-                      </span>
-                    </Link>
-                  ))}
+            {/* SUB-MENU - GO TO ARTIST */}
+            {showArtistsSubMenu && (
+              <div
+                className={`absolute ${
+                  isOriginIdInPlaylists ? 'top-9' : 'top-9'
+                }  xs:top-2 right-10 xs:right-[13.5rem] 
+                `}
+              >
+                <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 shadow-elipsisMenu">
+                  <div>
+                    {artistsToDisplay?.map((artist, index) => (
+                      <Link
+                        href={`/artist/${artist?.id}`}
+                        key={artist?.id}
+                        className={`w-full inline-block p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+                      >
+                        <span className="text-sm xs:text-base ">
+                          {artist?.name}
+                        </span>
+                      </Link>
+                    ))}
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
 
+          {/* SUB-MENU - PLAYLIST OPTIONS TO ADD TRACK TO */}
           {showPlaylistSubMenu && (
             <div
               className={`absolute ${
-                isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
+                isOriginIdInPlaylists ? 'top-[8.5rem]' : 'top-[6.5rem]'
               }  xs:top-2 right-12 xs:right-56 `}
             >
-              {/* user's created playlist menu items h-[20vh]*/}
+              {/* user's created playlist menu items*/}
               <div className="flex flex-col max-h-44 h-fit shadow-elipsisMenu">
                 <div className="p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 overflow-y-scroll custom-scrollbar">
                   {possiblePlaylists?.length > 0 ? (
@@ -413,4 +420,4 @@ function PlaylistAddRemoveButton({ song, order }) {
   );
 }
 
-export default PlaylistAddRemoveButton;
+export default TrackOptionsMenu;

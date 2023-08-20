@@ -7,7 +7,7 @@ import { millisToMinutesAndSeconds } from '@/lib/time';
 import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import PlaylistAddRemoveButton from '../addRemoveButtons/trackPlaylistAddRemoveButton';
+import TrackOptionsMenu from '../addRemoveButtons/trackOptionsMenu';
 
 /**
  * Renders the 4 songs next to top result
@@ -107,7 +107,7 @@ const TopSongCard = ({
           {millisToMinutesAndSeconds(song?.duration_ms)}
         </span>
         {/* <Ellipsis - add/remove track to/from playlist */}
-        <PlaylistAddRemoveButton song={song} order={order} />
+        <TrackOptionsMenu song={song} order={order} />
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 // import components
 import Equaliser from '@/components/graphics/Equaliser';
 import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
-import PlaylistAddRemoveButton from '../addRemoveButtons/trackPlaylistAddRemoveButton';
+import TrackOptionsMenu from '../addRemoveButtons/trackOptionsMenu';
 
 /**
  * Handles the actual rendering of each track.
@@ -90,7 +90,7 @@ function RenderTracks({
             style={{ objectFit: 'cover' }}
           />
         )}
-         {/* link to album unless already on album page  */}
+        {/* link to album unless already on album page  */}
         <div>
           {!(router?.asPath).includes('album') ? (
             <Link
@@ -154,7 +154,7 @@ function RenderTracks({
             </span>
 
             {/* <Ellipsis - add/remove track to/from playlist */}
-            <PlaylistAddRemoveButton song={song} order={order} />
+            <TrackOptionsMenu song={song} order={order} />
           </div>
         </div>
       ) : (
@@ -165,7 +165,7 @@ function RenderTracks({
             {millisToMinutesAndSeconds(song?.duration_ms)}
           </span>
           {/* <Ellipsis - add/remove track to/from playlist */}
-          <PlaylistAddRemoveButton song={song} order={order} />
+          <TrackOptionsMenu song={song} order={order} linkAddress={linkAddress}/>
         </div>
       )}
     </div>
