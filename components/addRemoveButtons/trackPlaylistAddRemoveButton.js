@@ -1,5 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
+import Link from 'next/link';
 import { createPortal } from 'react-dom';
+import { useRouter } from 'next/router';
 import useSpotify from '@/hooks/useSpotify';
 import { toast } from 'react-toastify';
 // import state management recoil
@@ -24,6 +26,7 @@ import ConfirmationModal from './confirmationModal';
  * @returns {JSX} add/remove menu
  */
 function PlaylistAddRemoveButton({ song, order }) {
+  const router = useRouter();
   const playlistMenuRef = useRef(null);
   const lastFocusedElementRef = useRef(null); // Ref to store the last focused element
   const activeOrderRef = useRef(null); // Ref to store the order of the active component
@@ -32,12 +35,17 @@ function PlaylistAddRemoveButton({ song, order }) {
   const originId = useRecoilValue(originIdState);
   const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
   const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
+  const [isPlaylistSubMenuTwoVisible, setPlaylistSubMenuTwoVisible] =
+    useState(false);
   const [chosenPlaylist, setChosenPlaylist] = useState('');
   const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list: users created playlists ONLY
   const [cooldown, setCooldown] = useRecoilState(cooldownState); // to limit how often the user can press remove from playlist so the server has time to process each request
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
     playlistTrackListState
   );
+
+  console.log('song ', song);
+  console.log('originId ', originId);
 
   // check if current playlist displayed is one of the user's created playlists
   const isOriginIdInPlaylists = userCreatedPlaylists?.some(
@@ -48,6 +56,12 @@ function PlaylistAddRemoveButton({ song, order }) {
   const possiblePlaylists = userCreatedPlaylists?.filter(
     (playlist) => playlist.id !== originId
   );
+
+  const artistsToDisplay = song?.artists?.filter(
+    (artist) => artist?.id !== originId
+  );
+
+  console.log('artistsToDisplay ', artistsToDisplay);
 
   // Add an event listener to close the playlist menu when clicking/press keyboard button outside add playlist menu
   useEffect(() => {
@@ -241,7 +255,7 @@ function PlaylistAddRemoveButton({ song, order }) {
         <EllipsisHorizontalIcon />
       </button>
       {isPlaylistMenuVisible && (
-        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800">
+        <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800  shadow-elipsisMenu">
           <button
             aria-label="Add track to playlist"
             className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
@@ -258,7 +272,7 @@ function PlaylistAddRemoveButton({ song, order }) {
           {isOriginIdInPlaylists && (
             <button
               aria-label="remove track from playlist"
-              className={`p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800 ${
+              className={`w-full text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800 ${
                 cooldown ? 'cursor-not-allowed' : ''
               } `}
               onClick={() => {
@@ -266,22 +280,89 @@ function PlaylistAddRemoveButton({ song, order }) {
               }}
               disabled={cooldown}
             >
-              <span className="pl-5  text-sm xs:text-base">
+              <span className="pl-5 text-sm xs:text-base">
                 Remove from this Playlist
               </span>
             </button>
           )}
 
+          <>
+            {song?.artists?.length < 2 && artistsToDisplay?.length !== 0 ? (
+              <Link
+                href={`/artist/${song?.artists?.[0].id}`}
+                aria-label="Go to artist"
+                className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+              >
+                <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
+              </Link>
+            ) : (
+              <>
+                {artistsToDisplay?.length !== 0 && (
+                  <button
+                    aria-label="open artist list"
+                    className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
+                      isPlaylistSubMenuTwoVisible
+                        ? 'bg-gray-800'
+                        : 'bg-gray-900'
+                    } `}
+                    onClick={() => {
+                      setPlaylistSubMenuTwoVisible((prevState) => !prevState);
+                    }}
+                  >
+                    <ChevronLeftIcon className="h-4 w-4 text-white" />
+                    <span className="pl-1 text-sm xs:text-base">
+                      Go to artists
+                    </span>
+                  </button>
+                )}
+              </>
+            )}
+          </>
+
+          {isPlaylistSubMenuTwoVisible && (
+            <div
+              className={`absolute ${
+                isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
+              }  xs:top-20 right-12 xs:right-56 `}
+            >
+              <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 shadow-elipsisMenu">
+                <div>
+                  {artistsToDisplay?.map((artist, index) => (
+                    <Link
+                      href={`/artist/${artist?.id}`}
+                      key={artist?.id}
+                      className={`w-full inline-block p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+                    >
+                      <span className="text-sm xs:text-base ">
+                        {artist?.name}
+                      </span>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* show go to album link if not on album page  */}
+          {/* {!(router?.asPath).includes('album') && ( */}
+            <Link
+              href={`/album/${song?.album?.id}`}
+              aria-label="Go to album"
+              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+            >
+              <span className="pl-5 text-sm xs:text-base ">Go to album</span>
+            </Link>
+          {/* )} */}
+
           {isPlaylistSubMenuVisible && (
             <div
               className={`absolute ${
-                isOriginIdInPlaylists ? 'top-20' : 'top-11'
-              }  xs:top-2 right-8 xs:right-56 `}
+                isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
+              }  xs:top-2 right-12 xs:right-56 `}
             >
-              {/* user's created playlist menu items */}
-              <div className="flex flex-col h-[20vh]">
-                <div
-                className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 overflow-y-scroll custom-scrollbar">
+              {/* user's created playlist menu items h-[20vh]*/}
+              <div className="flex flex-col max-h-44 h-fit shadow-elipsisMenu">
+                <div className="p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 overflow-y-scroll custom-scrollbar">
                   {possiblePlaylists?.length > 0 ? (
                     possiblePlaylists.map((playlist) => (
                       <button

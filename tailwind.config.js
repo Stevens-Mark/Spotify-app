@@ -27,6 +27,7 @@ export const theme = {
       '3xl': '5px 5px 5px black',
       image: '0 8px 24px rgba(0,0,0,.5)',
       image2: '0 4px 60px rgba(0,0,0,.5)',
+      elipsisMenu: '0 16px 24px rgba(0,0,0,.3), 0 6px 8px rgba(0,0,0,.2)',
       custom:
         'rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px',
     },
