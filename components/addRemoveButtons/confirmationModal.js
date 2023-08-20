@@ -1,6 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import FocusTrap from 'focus-trap-react';
 
+/**
+ * Renders modal for agree/reject adding duplicate track
+ * @function TrackOptionsMenu
+ * @param {function} onConfirm to confirm adding duplicate
+ * @param {function} onCancel to reject adding duplicate
+ * @param {object} chosenPlaylist id & name of chosen playlist
+ * @returns {JSX}
+ */
 const ConfirmationModal = ({ onConfirm, onCancel, chosenPlaylist }) => {
   const modalRef = useRef(null);
   const cancelButtonRef = useRef(null);
@@ -25,7 +33,6 @@ const ConfirmationModal = ({ onConfirm, onCancel, chosenPlaylist }) => {
         ref={modalRef}
         tabIndex={-1}
         className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[999] fade-in"
-        
         onKeyDown={handleKeyDown}
       >
         <div
@@ -37,7 +44,9 @@ const ConfirmationModal = ({ onConfirm, onCancel, chosenPlaylist }) => {
           <h2 id="modal-heading" className="text-black font-bold text-lg">
             Already Added ?
           </h2>
-          <p>This is already in your &#39;{chosenPlaylist?.name}&#39; playlist</p>
+          <p>
+            This is already in your &#39;{chosenPlaylist?.name}&#39; playlist
+          </p>
           <div className="mt-6 flex justify-between">
             <button
               ref={cancelButtonRef}
