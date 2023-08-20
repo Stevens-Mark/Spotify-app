@@ -32,12 +32,14 @@ function PlaylistAddRemoveButton({ song, order }) {
   const activeOrderRef = useRef(null); // Ref to store the order of the active component
   const spotifyApi = useSpotify();
   const [showModal, setShowModal] = useState(false);
-  const originId = useRecoilValue(originIdState);
-  const [isPlaylistMenuVisible, setPlaylistMenuVisible] = useState(false);
-  const [isPlaylistSubMenuVisible, setPlaylistSubMenuVisible] = useState(false);
-  const [isPlaylistSubMenuTwoVisible, setPlaylistSubMenuTwoVisible] =
+
+  const [showMainOptionsMenu, setShowMainOptionsMenu] = useState(false);
+  const [showPlaylistSubMenu, setShowPlaylistSubMenu] = useState(false);
+  const [showArtistsSubMenu, setShowArtistsSubMenu] =
     useState(false);
   const [chosenPlaylist, setChosenPlaylist] = useState('');
+
+  const originId = useRecoilValue(originIdState);
   const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState); // list: users created playlists ONLY
   const [cooldown, setCooldown] = useRecoilState(cooldownState); // to limit how often the user can press remove from playlist so the server has time to process each request
   const [playlistTracklist, setPlaylistTracklist] = useRecoilState(
@@ -67,23 +69,23 @@ function PlaylistAddRemoveButton({ song, order }) {
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (
-        isPlaylistMenuVisible &&
+        showMainOptionsMenu &&
         playlistMenuRef.current &&
         !playlistMenuRef.current.contains(event.target)
       ) {
-        setPlaylistMenuVisible(false);
+        setShowMainOptionsMenu(false);
       }
     };
 
     const handleKeyPress = (event) => {
       if (
-        isPlaylistMenuVisible &&
+        showMainOptionsMenu &&
         event.key !== 'Tab' &&
         event.key !== 'Enter' &&
         !event.key.startsWith('Arrow') &&
         event.key !== 'Shift'
       ) {
-        setPlaylistMenuVisible(false);
+        setShowMainOptionsMenu(false);
       }
     };
 
@@ -93,7 +95,7 @@ function PlaylistAddRemoveButton({ song, order }) {
       window.removeEventListener('click', handleOutsideClick);
       window.removeEventListener('keydown', handleKeyPress);
     };
-  }, [isPlaylistMenuVisible]);
+  }, [showMainOptionsMenu]);
 
   const storeLastFocusedElement = () => {
     lastFocusedElementRef.current = document.activeElement;
@@ -139,7 +141,7 @@ function PlaylistAddRemoveButton({ song, order }) {
             },
           }));
         }
-        setPlaylistMenuVisible(false);
+        setShowMainOptionsMenu(false);
         setTimeout(function () {
           document.getElementById(`elipsis-${order}`)?.focus?.();
         }, 0);
@@ -168,7 +170,7 @@ function PlaylistAddRemoveButton({ song, order }) {
   // cancel adding duplicate to playlist
   const cancelAdd = () => {
     setShowModal(false);
-    setPlaylistMenuVisible(false);
+    setShowMainOptionsMenu(false);
     setTimeout(function () {
       document.getElementById(`elipsis-${order}`)?.focus?.();
     }, 0);
@@ -249,26 +251,31 @@ function PlaylistAddRemoveButton({ song, order }) {
         className="mt-2 ml-3 w-7 h-7 text-pink-swan md:text-black group-hover:text-pink-swan focus:text-pink-swan transition delay-100 duration-300 ease-in-out"
         onClick={() => {
           storeLastFocusedElement();
-          setPlaylistMenuVisible(!isPlaylistMenuVisible);
+          setShowMainOptionsMenu(!showMainOptionsMenu);
         }}
       >
         <EllipsisHorizontalIcon />
       </button>
-      {isPlaylistMenuVisible && (
+
+      {/* MAIN OPTIONS MENU LIST  */}
+      {showMainOptionsMenu && (
         <div className="absolute z-10 top-14 right-0 w-56 rounded-md p-2 bg-gray-900 text-left border-[1px] border-gray-800  shadow-elipsisMenu">
+          {/* PRINCIPAL MENU - ADD TRACK */}
           <button
             aria-label="Add track to playlist"
             className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
-              isPlaylistSubMenuVisible ? 'bg-gray-800' : 'bg-gray-900'
+              showPlaylistSubMenu ? 'bg-gray-800' : 'bg-gray-900'
             } `}
             onClick={() => {
-              setPlaylistSubMenuVisible((prevState) => !prevState);
+              setShowPlaylistSubMenu((prevState) => !prevState);
             }}
           >
             <ChevronLeftIcon className="h-4 w-4 text-white" />
             <span className="pl-1 text-sm xs:text-base">Add to Playlist</span>
           </button>
-          {/* If a user's playlist add option to delete a track */}
+
+          {/* PRINCIPAL MENU - REMOVE TRACK */}
+          {/* If a user's playlist - add option to delete a track */}
           {isOriginIdInPlaylists && (
             <button
               aria-label="remove track from playlist"
@@ -286,40 +293,49 @@ function PlaylistAddRemoveButton({ song, order }) {
             </button>
           )}
 
-          <>
-            {song?.artists?.length < 2 && artistsToDisplay?.length !== 0 ? (
-              <Link
-                href={`/artist/${song?.artists?.[0].id}`}
-                aria-label="Go to artist"
-                className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
-              >
-                <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
-              </Link>
-            ) : (
-              <>
-                {artistsToDisplay?.length !== 0 && (
-                  <button
-                    aria-label="open artist list"
-                    className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
-                      isPlaylistSubMenuTwoVisible
-                        ? 'bg-gray-800'
-                        : 'bg-gray-900'
-                    } `}
-                    onClick={() => {
-                      setPlaylistSubMenuTwoVisible((prevState) => !prevState);
-                    }}
-                  >
-                    <ChevronLeftIcon className="h-4 w-4 text-white" />
-                    <span className="pl-1 text-sm xs:text-base">
-                      Go to artists
-                    </span>
-                  </button>
-                )}
-              </>
-            )}
-          </>
+          {/* PRINCIPAL MENU - GO TO ALBUM */}
+          {/* show go to album link if not on album page  */}
+          {/* {!(router?.asPath).includes('album') && ( */}
+          <Link
+            href={`/album/${song?.album?.id}`}
+            aria-label="Go to album"
+            className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+          >
+            <span className="pl-5 text-sm xs:text-base ">Go to album</span>
+          </Link>
+          {/* )} */}
 
-          {isPlaylistSubMenuTwoVisible && (
+          {/* PRINCIPAL MENU - GO TO ARTIST */}
+          {song?.artists?.length < 2 && artistsToDisplay?.length !== 0 ? (
+            <Link
+              href={`/artist/${song?.artists?.[0].id}`}
+              aria-label="Go to artist"
+              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+            >
+              <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
+            </Link>
+          ) : (
+            <>
+              {artistsToDisplay?.length !== 0 && (
+                <button
+                  aria-label="open artist list"
+                  className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
+                    showArtistsSubMenu ? 'bg-gray-800' : 'bg-gray-900'
+                  } `}
+                  onClick={() => {
+                    setShowArtistsSubMenu((prevState) => !prevState);
+                  }}
+                >
+                  <ChevronLeftIcon className="h-4 w-4 text-white" />
+                  <span className="pl-1 text-sm xs:text-base">
+                    Go to artists
+                  </span>
+                </button>
+              )}
+            </>
+          )}
+
+          {showArtistsSubMenu && (
             <div
               className={`absolute ${
                 isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
@@ -343,18 +359,7 @@ function PlaylistAddRemoveButton({ song, order }) {
             </div>
           )}
 
-          {/* show go to album link if not on album page  */}
-          {/* {!(router?.asPath).includes('album') && ( */}
-            <Link
-              href={`/album/${song?.album?.id}`}
-              aria-label="Go to album"
-              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
-            >
-              <span className="pl-5 text-sm xs:text-base ">Go to album</span>
-            </Link>
-          {/* )} */}
-
-          {isPlaylistSubMenuVisible && (
+          {showPlaylistSubMenu && (
             <div
               className={`absolute ${
                 isOriginIdInPlaylists ? 'top-32' : 'top-[6.5rem]'
