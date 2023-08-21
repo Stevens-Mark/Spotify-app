@@ -60,6 +60,24 @@ function Sidebar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
+    // Function to handle window resize event
+    const handleResize = () => {
+      // Close the menu automatically for mobile landscape sizes galaxy s20 ultra & below (e.g., width less than 916px)
+      if (window.innerWidth < 916 && isMenuOpen) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    // Add event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [isMenuOpen]);
+
+  useEffect(() => {
     setActivePlaylistId((router?.asPath).split('/').pop());
   }, [router?.asPath, setActivePlaylistId]);
 
