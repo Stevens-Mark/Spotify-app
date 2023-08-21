@@ -29,6 +29,7 @@ import ConfirmationModal from './confirmationModal';
  */
 function TrackOptionsMenu({ song, order, linkAddress }) {
   const router = useRouter();
+  const showAlbumLink = !(router?.asPath).includes('album');
 
   const address = linkAddress ? linkAddress : `/album/${song?.album?.id}`;
 
@@ -296,15 +297,15 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
 
           {/* PRINCIPAL MENU - GO TO ALBUM */}
           {/* show go to album link if not on album page  */}
-          {/* {!(router?.asPath).includes('album') && ( */}
-          <Link
-            href={address}
-            aria-label="Go to album"
-            className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
-          >
-            <span className="pl-5 text-sm xs:text-base ">Go to album</span>
-          </Link>
-          {/* )}  */}
+          {showAlbumLink && (
+            <Link
+              href={address}
+              aria-label="Go to album"
+              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+            >
+              <span className="pl-5 text-sm xs:text-base ">Go to album</span>
+            </Link>
+          )}
 
           {/* PRINCIPAL MENU - GO TO ARTIST */}
           <div className="relative">
@@ -341,12 +342,10 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
             {/* SUB-MENU - GO TO ARTIST */}
             {showArtistsSubMenu && (
               <div
-                className={`absolute ${
-                  isOriginIdInPlaylists ? 'top-9' : 'top-9'
-                }  xs:top-2 right-10 xs:right-[13.5rem] 
+                className={`absolute top-9 xs:top-2 right-10 xs:right-[13.5rem] 
                 `}
               >
-                <div className="p-4 xs:p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 shadow-elipsisMenu">
+                <div className="p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 shadow-elipsisMenu">
                   <div>
                     {artistsToDisplay?.map((artist, index) => (
                       <Link
@@ -369,7 +368,15 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
           {showPlaylistSubMenu && (
             <div
               className={`absolute ${
-                isOriginIdInPlaylists ? 'top-[8.5rem]' : 'top-[6.5rem]'
+                isOriginIdInPlaylists &&
+                showAlbumLink &&
+                artistsToDisplay?.length !== 0
+                  ? 'top-[8.7rem]'
+                  : !isOriginIdInPlaylists &&
+                    showAlbumLink &&
+                    artistsToDisplay?.length !== 0
+                  ? 'top-[6.6rem]'
+                  : 'top-[4.6rem]'
               }  xs:top-2 right-12 xs:right-56 `}
             >
               {/* user's created playlist menu items*/}
