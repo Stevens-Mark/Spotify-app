@@ -301,7 +301,7 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
             <Link
               href={address}
               aria-label="Go to album"
-              className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+              className={`relative w-full inline-block text-left p-1  rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
             >
               <span className="pl-5 text-sm xs:text-base ">Go to album</span>
             </Link>
@@ -313,7 +313,7 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
               <Link
                 href={`/artist/${song?.artists?.[0].id}`}
                 aria-label="Go to artist"
-                className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800`}
+                className={`w-full inline-block text-left p-1 rounded-md text-white hover:bg-gray-800 focus:bg-gray-800 mt-[3px]`}
               >
                 <span className="pl-5 text-sm xs:text-base ">Go to artist</span>
               </Link>
@@ -322,7 +322,7 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
                 {artistsToDisplay?.length !== 0 && (
                   <button
                     aria-label="open artist list"
-                    className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 ${
+                    className={`w-full p-1 rounded-md text-white flex items-center hover:bg-gray-800 focus:bg-gray-800 mt-[3px] ${
                       showArtistsSubMenu ? 'bg-gray-800' : 'bg-gray-900'
                     } `}
                     onClick={() => {
@@ -380,8 +380,8 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
               }  xs:top-2 right-12 xs:right-56 `}
             >
               {/* user's created playlist menu items*/}
-              <div className="flex flex-col max-h-44 h-fit shadow-elipsisMenu">
-                <div className="p-2 bg-gray-900 text-white rounded-md w-48 border-[1px] border-gray-800 overflow-y-scroll custom-scrollbar">
+              <div className="flex flex-col max-h-48 h-fit shadow-elipsisMenu rounded-md py-3 bg-gray-900 border-[1px] border-gray-800">
+                <div className="p-2 bg-gray-900 text-white w-48 overflow-y-scroll custom-scrollbar">
                   {possiblePlaylists?.length > 0 ? (
                     possiblePlaylists.map((playlist) => (
                       <button
