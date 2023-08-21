@@ -56,3 +56,9 @@ export const cooldownState = atom({
   key: 'cooldownState',
   default: false,
 });
+
+// holds to value to determine which list(s) to show in the sidebar
+export const listToShowState = atom({
+  key: 'listToShowState',
+  default: 'all',
+});

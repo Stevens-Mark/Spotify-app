@@ -16,7 +16,11 @@ import {
 } from '@/atoms/playListAtom';
 import { mySavedAlbumsState } from '@/atoms/albumAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
-import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
+import {
+  currentItemIdState,
+  playerInfoTypeState,
+  listToShowState,
+} from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 // import icon/images
@@ -31,12 +35,13 @@ import {
 import noCoverImage from '@/public/images/noImageAvailable.svg';
 // import component
 import LikedButton from './likedSongsButton';
+import SidebarListButtons from './sidebarListButtons';
 
 function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
-
+  const [listToShow, setListToShow] = useRecoilState(listToShowState); // determine which list(s) to show in the sidebar
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
   const [mySavedAlbums, setMySavedAlbums] = useRecoilState(mySavedAlbumsState);
   const setUserCreatedPlaylists = useSetRecoilState(onlyUsersPlaylistState);
@@ -175,7 +180,7 @@ function Sidebar() {
         <Bars3Icon className="h-6 w-6" />
       </button>
       <div
-        className={`md:pt-7 pt-20 text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 overflow-y-scroll h-screen scrollbar-hide ${
+        className={`md:pt-7 pt-20 text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 ${
           isMenuOpen
             ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-50'
             : 'hidden '
@@ -215,16 +220,6 @@ function Sidebar() {
                 <p>Recently Played</p>
               </Link>
             </li>
-
-            <li>
-              <button
-                aria-label="Create Playlist"
-                className="flex items-center space-x-2 mb-4 hover:text-white focus:text-white"
-              >
-                <PlusCircleIcon className="h-5 w-5 ml-3" />
-                <p>Create Playlist</p>
-              </button>
-            </li>
           </ul>
         </nav>
 
@@ -239,126 +234,140 @@ function Sidebar() {
           <p>Logout</p>
         </button>
 
-        <hr className="border-t-[0.1px] border-gray-900 mb-4" />
-
-        {/* Menu button - Liked Songs */}
-        <LikedButton
-          activePlaylistId={activePlaylistId}
-          activePlaylist={activePlaylist}
-          isPlaying={isPlaying}
-        />
         <hr className="border-t-[0.1px] border-gray-900" />
+        {/* playlist, album to chose which lis(s) in sidebar  */}
+        <SidebarListButtons/>
+        <div className="overflow-y-scroll h-screen scrollbar-hide ">
+          {(listToShow === 'playlists' || listToShow === 'all') && (
+            <>
+              {/* Menu button - Liked Songs */}
+              <LikedButton
+                activePlaylistId={activePlaylistId}
+                activePlaylist={activePlaylist}
+                isPlaying={isPlaying}
+              />
+              <hr className="border-t-[0.1px] border-gray-900" />{' '}
+            </>
+          )}
 
-        <nav role="navigation" aria-label="Your Playlist menu">
-          <ul>
-            {/* Menu buttons - playlists */}
-            {myPlaylists?.map((playlist) => (
-              <li key={playlist?.id}>
-                <button
-                  aria-label="Go to playlist"
-                  onClick={() => handlePlaylistClick(playlist?.id)}
-                  className={`group flex items-center p-3 rounded-lg min-w-full ${
-                    activePlaylistId == playlist?.id
-                      ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
-                      : 'hover:bg-gray-900 focus:bg-gray-900'
-                  }`}
-                >
-                  <Image
-                    className="h-10 w-10 mr-2 rounded-sm"
-                    src={playlist?.images?.[0]?.url || noCoverImage}
-                    alt=""
-                    width={100}
-                    height={100}
-                    style={{ objectFit: 'cover' }}
-                  />
-                  <div className="flex flex-col text-left w-full">
-                    <span
-                      className={`line-clamp-1 ${
-                        activePlaylist == playlist?.id && isPlaying
-                          ? 'text-green-500'
-                          : 'group-hover:text-white group-focus:text-white'
-                      } `}
-                    >
-                      {playlist?.name}
-                    </span>
+          {(listToShow === 'playlists' || listToShow === 'all') && (
+            <>
+              <nav role="navigation" aria-label="Your Playlist menu">
+                <ul>
+                  {/* Menu buttons - playlists */}
+                  {myPlaylists?.map((playlist) => (
+                    <li key={playlist?.id}>
+                      <button
+                        aria-label="Go to playlist"
+                        onClick={() => handlePlaylistClick(playlist?.id)}
+                        className={`group flex items-center p-3 rounded-lg min-w-full ${
+                          activePlaylistId == playlist?.id
+                            ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
+                            : 'hover:bg-gray-900 focus:bg-gray-900'
+                        }`}
+                      >
+                        <Image
+                          className="h-10 w-10 mr-2 rounded-sm"
+                          src={playlist?.images?.[0]?.url || noCoverImage}
+                          alt=""
+                          width={100}
+                          height={100}
+                          style={{ objectFit: 'cover' }}
+                        />
+                        <div className="flex flex-col text-left w-full">
+                          <span
+                            className={`line-clamp-1 ${
+                              activePlaylist == playlist?.id && isPlaying
+                                ? 'text-green-500'
+                                : 'group-hover:text-white group-focus:text-white'
+                            } `}
+                          >
+                            {playlist?.name}
+                          </span>
 
-                    <span className="flex text-[13px]">
-                      <span>{capitalize(playlist?.type)}</span>
-                      &nbsp;•&nbsp;
-                      <span className="line-clamp-1">
-                        {capitalize(playlist?.owner?.display_name)}
-                      </span>
-                    </span>
-                  </div>
+                          <span className="flex text-[13px]">
+                            <span>{capitalize(playlist?.type)}</span>
+                            &nbsp;•&nbsp;
+                            <span className="line-clamp-1">
+                              {capitalize(playlist?.owner?.display_name)}
+                            </span>
+                          </span>
+                        </div>
 
-                  <span className="pl-2 justify-end">
-                    {activePlaylist == playlist?.id && isPlaying ? (
-                      <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
-                    ) : (
-                      ' '
-                    )}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <hr className="border-t-[0.1px] border-gray-900" />
+                        <span className="pl-2 justify-end">
+                          {activePlaylist == playlist?.id && isPlaying ? (
+                            <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+                          ) : (
+                            ' '
+                          )}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>
+              <hr className="border-t-[0.1px] border-gray-900" />
+            </>
+          )}
+          {(listToShow === 'albums' || listToShow === 'all') && (
+            <>
+              <nav role="navigation" aria-label="Your user saved album menu">
+                <ul>
+                  {/* Menu buttons - user saved albums */}
+                  {mySavedAlbums?.map((item) => (
+                    <li key={item?.album?.id}>
+                      <button
+                        aria-label="Go to album"
+                        onClick={() => handleAlbumClick(item?.album?.id)}
+                        className={`group flex items-center p-3 rounded-lg min-w-full ${
+                          activePlaylistId == item?.album?.id
+                            ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
+                            : 'hover:bg-gray-900 focus:bg-gray-900'
+                        }`}
+                      >
+                        <Image
+                          className="h-10 w-10 mr-2 rounded-sm"
+                          src={item?.album?.images?.[0]?.url || noCoverImage}
+                          alt=""
+                          width={100}
+                          height={100}
+                          style={{ objectFit: 'cover' }}
+                        />
+                        <div className="flex flex-col text-left w-full">
+                          <span
+                            className={`line-clamp-1 ${
+                              activePlaylist == item?.album?.id && isPlaying
+                                ? 'text-green-500'
+                                : 'group-hover:text-white group-focus:text-white'
+                            } `}
+                          >
+                            {item?.album?.name}
+                          </span>
+                          <span className="flex text-[13px]">
+                            <span>{capitalize(item?.album?.type)}</span>
+                            &nbsp;•&nbsp;
+                            <span className="line-clamp-1">
+                              {capitalize(item?.album?.artists?.[0]?.name)}
+                            </span>
+                          </span>
+                        </div>
 
-        <nav role="navigation" aria-label="Your user saved album menu">
-          <ul>
-            {/* Menu buttons - user saved albums */}
-            {mySavedAlbums?.map((item) => (
-              <li key={item?.album?.id}>
-                <button
-                  aria-label="Go to album"
-                  onClick={() => handleAlbumClick(item?.album?.id)}
-                  className={`group flex items-center p-3 rounded-lg min-w-full ${
-                    activePlaylistId == item?.album?.id
-                      ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
-                      : 'hover:bg-gray-900 focus:bg-gray-900'
-                  }`}
-                >
-                  <Image
-                    className="h-10 w-10 mr-2 rounded-sm"
-                    src={item?.album?.images?.[0]?.url || noCoverImage}
-                    alt=""
-                    width={100}
-                    height={100}
-                    style={{ objectFit: 'cover' }}
-                  />
-                  <div className="flex flex-col text-left w-full">
-                    <span
-                      className={`line-clamp-1 ${
-                        activePlaylist == item?.album?.id && isPlaying
-                          ? 'text-green-500'
-                          : 'group-hover:text-white group-focus:text-white'
-                      } `}
-                    >
-                      {item?.album?.name}
-                    </span>
-                    <span className="flex text-[13px]">
-                      <span>{capitalize(item?.album?.type)}</span>
-                      &nbsp;•&nbsp;
-                      <span className="line-clamp-1">
-                        {capitalize(item?.album?.artists?.[0]?.name)}
-                      </span>
-                    </span>
-                  </div>
-
-                  <span className="pl-2 justify-end">
-                    {activePlaylist == item?.album?.id && isPlaying ? (
-                      <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
-                    ) : (
-                      ' '
-                    )}
-                  </span>
-                </button>
-              </li>
-            ))}
-          </ul>
-        </nav>
-        <hr className="border-t-[0.1px] border-gray-900 pb-36" />
+                        <span className="pl-2 justify-end">
+                          {activePlaylist == item?.album?.id && isPlaying ? (
+                            <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+                          ) : (
+                            ' '
+                          )}
+                        </span>
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </nav>{' '}
+            </>
+          )}
+          <hr className="border-t-[0.1px] border-gray-900 pb-[22rem]" />
+        </div>
       </div>
     </>
   );
