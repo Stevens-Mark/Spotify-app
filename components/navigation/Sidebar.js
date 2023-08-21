@@ -198,7 +198,7 @@ function Sidebar() {
         <Bars3Icon className="h-6 w-6" />
       </button>
       <div
-        className={`md:pt-7 pt-20 text-pink-swan p-5 mb-96 text-sm lg:text-base border-r border-gray-900 normalbar overflow-y-scroll ${
+        className={`md:pt-7 pt-20 text-pink-swan p-5 mb-96 text-sm lg:text-base border-r border-gray-900 normalbar overflow-y-scroll h-screen scrollbar-hide ${
           isMenuOpen
             ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-50'
             : 'hidden'
