@@ -136,8 +136,8 @@ function Sidebar() {
 
             setMySavedAlbums(userSavedlbums?.body?.items);
           } catch (err) {
-            console.error('Failed to get user playlists');
-            toast.error('Playlists Retrieval failed !', {
+            console.error('Failed to get user saved albums');
+            toast.error('Saved albums Retrieval failed !', {
               theme: 'colored',
             });
           }
