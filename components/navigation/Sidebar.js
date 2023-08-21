@@ -14,6 +14,7 @@ import {
   myPlaylistState,
   onlyUsersPlaylistState,
 } from '@/atoms/playListAtom';
+import { mySavedAlbumsState } from '@/atoms/albumAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import { currentItemIdState, playerInfoTypeState } from '@/atoms/otherAtoms';
 // import functions
@@ -37,6 +38,7 @@ function Sidebar() {
   const { data: session } = useSession();
 
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
+  const [mySavedAlbums, setMySavedAlbums] = useRecoilState(mySavedAlbumsState);
   const setUserCreatedPlaylists = useSetRecoilState(onlyUsersPlaylistState);
   const [activePlaylistId, setActivePlaylistId] =
     useRecoilState(myPlaylistState);
@@ -87,7 +89,7 @@ function Sidebar() {
     spotifyApi,
   ]);
 
-  
+  // fetch playlists
   useEffect(() => {
     const fetchUserPlaylists = async () => {
       if (myPlaylists === null) {
@@ -121,14 +123,41 @@ function Sidebar() {
     setUserCreatedPlaylists,
   ]);
 
+  // fetch user saved albums
+  useEffect(() => {
+    const fetchUserSavedlbums = async () => {
+      if (mySavedAlbums === null) {
+        if (spotifyApi.getAccessToken()) {
+          try {
+            const userSavedlbums = await spotifyApi.getMySavedAlbums({
+              limit: 50,
+              offset: 0,
+            });
+
+            setMySavedAlbums(userSavedlbums?.body?.items);
+          } catch (err) {
+            console.error('Failed to get user playlists');
+            toast.error('Playlists Retrieval failed !', {
+              theme: 'colored',
+            });
+          }
+        }
+      }
+    };
+    fetchUserSavedlbums();
+  }, [spotifyApi, session, mySavedAlbums, setMySavedAlbums]);
+
   const handleHome = () => {
     router.push('/');
     setSubmitted(false);
     setQuery('');
   };
 
-  const handleClick = (id) => {
+  const handlePlaylistClick = (id) => {
     router.push(`/playlist/${id}`);
+  };
+  const handleAlbumClick = (id) => {
+    router.push(`/album/${id}`);
   };
 
   const handleMenuToggle = () => {
@@ -227,7 +256,7 @@ function Sidebar() {
               <li key={playlist?.id}>
                 <button
                   aria-label="Go to playlist"
-                  onClick={() => handleClick(playlist?.id)}
+                  onClick={() => handlePlaylistClick(playlist?.id)}
                   className={`group flex items-center p-3 rounded-lg min-w-full ${
                     activePlaylistId == playlist?.id
                       ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
@@ -264,6 +293,61 @@ function Sidebar() {
 
                   <span className="pl-2 justify-end">
                     {activePlaylist == playlist?.id && isPlaying ? (
+                      <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
+                    ) : (
+                      ' '
+                    )}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </nav>
+        <hr className="border-t-[0.1px] border-gray-900" />
+
+        <nav role="navigation" aria-label="Your user saved album menu">
+          <ul>
+            {/* Menu buttons - user saved albums */}
+            {mySavedAlbums?.map((item) => (
+              <li key={item?.album?.id}>
+                <button
+                  aria-label="Go to album"
+                  onClick={() => handleAlbumClick(item?.album?.id)}
+                  className={`group flex items-center p-3 rounded-lg min-w-full ${
+                    activePlaylistId == item?.album?.id
+                      ? `bg-gray-900 hover:bg-gray-800 focus:bg-gray-800`
+                      : 'hover:bg-gray-900 focus:bg-gray-900'
+                  }`}
+                >
+                  <Image
+                    className="h-10 w-10 mr-2 rounded-sm"
+                    src={item?.album?.images?.[0]?.url || noCoverImage}
+                    alt=""
+                    width={100}
+                    height={100}
+                    style={{ objectFit: 'cover' }}
+                  />
+                  <div className="flex flex-col text-left w-full">
+                    <span
+                      className={`line-clamp-1 ${
+                        activePlaylist == item?.album?.id && isPlaying
+                          ? 'text-green-500'
+                          : 'group-hover:text-white group-focus:text-white'
+                      } `}
+                    >
+                      {item?.album?.name}
+                    </span>
+                    <span className="flex text-[13px]">
+                      <span>{capitalize(item?.album?.type)}</span>
+                      &nbsp;•&nbsp;
+                      <span className="line-clamp-1">
+                        {capitalize(item?.album?.artists?.[0]?.name)}
+                      </span>
+                    </span>
+                  </div>
+
+                  <span className="pl-2 justify-end">
+                    {activePlaylist == item?.album?.id && isPlaying ? (
                       <SpeakerWaveIcon className="w-4 h-4 text-green-500" />
                     ) : (
                       ' '
