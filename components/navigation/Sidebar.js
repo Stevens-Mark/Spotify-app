@@ -254,8 +254,8 @@ function Sidebar() {
 
         <hr className="border-t-[0.1px] border-gray-900" />
         {/* playlist, album to chose which lis(s) in sidebar  */}
-        <SidebarListButtons/>
-        <div className="mobilebar mdlg:overflow-y-scroll h-screen scrollbar-hide ">
+        {mySavedAlbums?.length !== 0 && <SidebarListButtons />}
+        <div className="mobilebar galaxyS20:overflow-y-scroll h-screen scrollbar-hide ">
           {(listToShow === 'playlists' || listToShow === 'all') && (
             <>
               {/* Menu button - Liked Songs */}

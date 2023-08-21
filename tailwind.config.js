@@ -59,6 +59,7 @@ export const theme = {
     isMd: '640px',
     isMdLg: '825px',
     mdlg: '900px',
+    galaxyS20: '916px',
     ..._screens,
   },
 };

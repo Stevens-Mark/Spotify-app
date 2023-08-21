@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState } from 'recoil';
 import { isLikedSongState } from '@/atoms/songAtom';
-import { SpeakerWaveIcon } from '@heroicons/react/24/solid';
+import { SpeakerWaveIcon, HandThumbUpIcon } from '@heroicons/react/24/solid';
 
 /**
  * Render Liked song Button in Navigation sidebar
@@ -23,7 +23,6 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
   const [isLikedSong, setIsLikedSong] = useRecoilState(isLikedSongState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
-
 
   // collect all track Ids in the liked song list (used to set heart if needed in addRemoveLiked.js)
   useEffect(() => {
@@ -121,7 +120,8 @@ function LikedSongsButton({ activePlaylistId, activePlaylist, isPlaying }) {
           {collection?.name}
         </span>
 
-        <span className="flex text-[13px]">
+        <span className="flex text-[13px] items-center">
+          <HandThumbUpIcon className="w-4 h-4 mr-1 text-green-500" />
           <span>Playlist</span>
           &nbsp;•&nbsp;
           <span className="line-clamp-1">

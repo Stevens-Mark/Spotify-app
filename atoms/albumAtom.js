@@ -14,6 +14,6 @@ export const albumTrackListState = atom({
 
 // contains list of All users saved albums
 export const mySavedAlbumsState = atom({
-  key: 'ySavedAlbumsState',
+  key: 'mySavedAlbumsState',
   default: null,
 });

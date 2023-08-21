@@ -225,12 +225,12 @@
 }
 
 /* control scoll behaviour of sidebar for mobile & computers  */
-@media (max-width: 900px) {
+@media (max-width: 916px) {
   .mobilebar {
     overflow: unset;
   }
 }
-@media (min-width: 900px) {
+@media (min-width: 916px) {
 
   .normalbar {
     overflow: unset;
