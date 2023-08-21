@@ -371,12 +371,12 @@ function TrackOptionsMenu({ song, order, linkAddress }) {
                 isOriginIdInPlaylists &&
                 showAlbumLink &&
                 artistsToDisplay?.length !== 0
-                  ? 'top-[8.7rem]'
+                  ? 'top-[8.9rem]'
                   : !isOriginIdInPlaylists &&
                     showAlbumLink &&
                     artistsToDisplay?.length !== 0
-                  ? 'top-[6.6rem]'
-                  : 'top-[4.6rem]'
+                  ? 'top-[6.8rem]'
+                  : 'top-[4.8rem]'
               }  xs:top-2 right-12 xs:right-56 `}
             >
               {/* user's created playlist menu items*/}
