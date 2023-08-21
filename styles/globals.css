@@ -224,3 +224,15 @@
   scrollbar-color: rgb(55 65 81) rgb(17 24 39);
 }
 
+/* control scoll behaviour of sidebar for mobile & computers  */
+@media (max-width: 900px) {
+  .mobilebar {
+    overflow: unset;
+  }
+}
+@media (min-width: 900px) {
+
+  .normalbar {
+    overflow: unset;
+  }
+}

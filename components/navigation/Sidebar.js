@@ -198,10 +198,10 @@ function Sidebar() {
         <Bars3Icon className="h-6 w-6" />
       </button>
       <div
-        className={`md:pt-7 pt-20 text-pink-swan p-5 pb-36 text-sm lg:text-base border-r border-gray-900 ${
+        className={`md:pt-7 pt-20 text-pink-swan p-5 mb-96 text-sm lg:text-base border-r border-gray-900 normalbar overflow-y-scroll ${
           isMenuOpen
             ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-50'
-            : 'hidden '
+            : 'hidden'
         } md:inline md:relative min-w-[13rem] isMdLg:min-w-[16rem] lg:w-[21%]`}
       >
         <nav role="navigation" aria-label="Primary">
@@ -255,7 +255,7 @@ function Sidebar() {
         <hr className="border-t-[0.1px] border-gray-900" />
         {/* playlist, album to chose which lis(s) in sidebar  */}
         <SidebarListButtons/>
-        <div className="overflow-y-scroll h-screen scrollbar-hide ">
+        <div className="mobilebar mdlg:overflow-y-scroll h-screen scrollbar-hide ">
           {(listToShow === 'playlists' || listToShow === 'all') && (
             <>
               {/* Menu button - Liked Songs */}
