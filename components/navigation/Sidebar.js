@@ -132,13 +132,6 @@ function Sidebar() {
                 a.name < b.name ? -1 : 1
               )
             );
-            // Filter playlists by owner's display name - collection ids & playlist names
-            // const filteredPlaylists = userPlaylists?.body?.items
-            //   .filter(
-            //     (playlist) =>
-            //       playlist.owner.display_name === session?.user?.name
-            //   )
-            //   .map((playlist) => ({ id: playlist.id, name: playlist.name }));
 
             const users = userPlaylists?.body?.items.filter(
               (playlist) => playlist.owner.display_name === session?.user?.name
@@ -229,7 +222,7 @@ function Sidebar() {
         <Bars3Icon className="h-6 w-6" />
       </button>
       <div
-        className={`md:pt-7 pt-20 text-pink-swan p-5 mb-96 text-sm lg:text-base border-r border-gray-900 normalbar overflow-y-scroll scrollbar-hide ${
+        className={`md:pt-7 pt-20 text-pink-swan p-2 mb-96 text-sm lg:text-base border-r border-gray-900 normalbar overflow-y-scroll scrollbar-hide ${
           isMenuOpen
             ? 'fixed top-0 left-0 w-screen h-screen bg-gray-900 z-50'
             : 'hidden'

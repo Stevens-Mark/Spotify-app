@@ -16,7 +16,7 @@ function SidebarListButtons() {
   return (
     <>
       <nav role="navigation" aria-label="choose a list" className="py-2">
-        <ul className="px-2 space-x-2  flex items-center justify-start w-full">
+        <ul className="px-2 py-1 space-x-2  flex items-center justify-start w-full flex-wrap">
           {(listToShow === 'playlists' || listToShow === 'albums') && (
             <li>
               <button
@@ -37,7 +37,7 @@ function SidebarListButtons() {
           )}
           {(listToShow === 'playlists' || listToShow === 'all') && (
             <>
-              <li className="relative z-10">
+              <li className="relative z-10 py-1">
                 <button
                   aria-label="Show all playlists"
                   className={`text-sm py-1 px-2 rounded-full ${
@@ -56,14 +56,14 @@ function SidebarListButtons() {
                 </button>
               </li>
               {listToShow === 'playlists' && (
-                <>
+                <span className=" flex whitespace-nowrap space-x-2 py-1">
                   {(playlistInUse === 'user' || playlistInUse === 'all') && (
                     <li className="relative z-0">
                       <button
                         aria-label="Show playlists by you"
                         className={`${
                           playlistInUse === 'user'
-                            ? 'bg-white text-gray-900  focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
+                            ? 'bg-white text-gray-900 focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
                             : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                         } text-sm py-1 px-2 rounded-full`}
                         onClick={() =>
@@ -95,7 +95,7 @@ function SidebarListButtons() {
                       </button>
                     </li>
                   )}
-                </>
+                </span>
               )}
             </>
           )}
