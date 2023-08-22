@@ -117,8 +117,15 @@ function Sidebar() {
       if (myPlaylists === null) {
         if (spotifyApi.getAccessToken()) {
           try {
-            const userPlaylists = await spotifyApi.getUserPlaylists();
-            setMyPlaylists(userPlaylists?.body?.items);
+            const userPlaylists = await spotifyApi.getUserPlaylists({
+              limit: 50,
+              offset: 0,
+            });
+            setMyPlaylists(
+              userPlaylists?.body?.items.sort((a, b) =>
+                a.name < b.name ? -1 : 1
+              )
+            );
             // Filter playlists by owner's display name - collection ids & playlist names
             const filteredPlaylists = userPlaylists?.body?.items
               .filter(
@@ -155,11 +162,14 @@ function Sidebar() {
               limit: 50,
               offset: 0,
             });
-
-            setMySavedAlbums(userSavedlbums?.body?.items);
+            setMySavedAlbums(
+              userSavedlbums?.body?.items.sort((a, b) =>
+                a.album.name < b.album.name ? -1 : 1
+              )
+            );
           } catch (err) {
             console.error('Failed to get user saved albums');
-            toast.error('Saved albums Retrieval failed !', {
+            toast.error('Albums Retrieval failed !', {
               theme: 'colored',
             });
           }
