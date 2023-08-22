@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import { signOut, useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 // import state management recoil
-import { useRecoilState, useSetRecoilState } from 'recoil';
+import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { querySubmittedState, queryState } from '@/atoms/searchAtom';
 import {
   activePlaylistIdState,
@@ -29,7 +29,6 @@ import {
   HomeIcon,
   BuildingLibraryIcon,
   MagnifyingGlassIcon,
-  PlusCircleIcon,
   ArrowLeftOnRectangleIcon,
 } from '@heroicons/react/24/outline';
 import noCoverImage from '@/public/images/noImageAvailable.svg';
@@ -41,7 +40,7 @@ function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
-  const [listToShow, setListToShow] = useRecoilState(listToShowState); // determine which list(s) to show in the sidebar
+  const listToShow = useRecoilValue(listToShowState); // determine which list(s) to show in the sidebar
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
   const [mySavedAlbums, setMySavedAlbums] = useRecoilState(mySavedAlbumsState);
   const setUserCreatedPlaylists = useSetRecoilState(onlyUsersPlaylistState);
@@ -241,8 +240,6 @@ function Sidebar() {
           </ul>
         </nav>
 
-        <hr className="border-t-[0.1px] border-gray-900 " />
-
         <button
           className="flex items-center py-4 space-x-2 hover:text-white focus:text-white"
           onClick={() => signOut()}
@@ -384,7 +381,7 @@ function Sidebar() {
               </nav>{' '}
             </>
           )}
-          <hr className="border-t-[0.1px] border-gray-900 pb-[22rem]" />
+          <hr className="border-t-[0.1px] border-gray-900 md:pb-[22rem]" />
         </div>
       </div>
     </>

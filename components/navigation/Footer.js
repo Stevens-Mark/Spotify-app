@@ -17,9 +17,13 @@ function Footer() {
   };
 
   return (
-    <nav role="navigation" aria-label="Outside Links Menu">
-      {/* group one */}
-      <div className="pt-20 px-8 flex justify-none md:justify-between flex-wrap flex-col mdlg:flex-row">
+    <>
+      <nav
+        className="pt-20 px-8 flex justify-none md:justify-between flex-wrap flex-col mdlg:flex-row"
+        role="navigation"
+        aria-label="Outside Links Menu"
+      >
+        {/* group one */}
         <div className="flex flex-wrap isSm:flex-nowrap">
           <ul className="space-y-4 w-48 mdlg:w-56 mb-10">
             <li>
@@ -144,32 +148,37 @@ function Footer() {
 
         {/* group four - social media */}
 
-        <div className="flex space-x-4 xxs:justify-end mb-10">
-          <Link href="#" passHref onClick={disableLinkClick}>
-            <Image
-              className="h-10 w-10 p-2 bg-gray-800 rounded-full hover:bg-gray-700 min-w-12"
-              src={instagramIcon}
-              alt="Check us out on Instagram"
-            />
-          </Link>
+        <ul className="flex space-x-4 xxs:justify-end mb-10">
+          <li>
+            <Link href="#" passHref onClick={disableLinkClick}>
+              <Image
+                className="h-10 w-10 p-2 bg-gray-800 rounded-full hover:bg-gray-700 min-w-12"
+                src={instagramIcon}
+                alt="Check us out on Instagram"
+              />
+            </Link>
+          </li>
+          <li>
+            <Link href="#" passHref onClick={disableLinkClick}>
+              <Image
+                className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
+                src={twitterIcon}
+                alt="Follow us on Twitter"
+              />
+            </Link>
+          </li>
+          <li>
+            <Link href="#" passHref onClick={disableLinkClick}>
+              <Image
+                className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
+                src={facebookIcon}
+                alt="Follow us on facebook"
+              />
+            </Link>
+          </li>
+        </ul>
+      </nav>
 
-          <Link href="#" passHref onClick={disableLinkClick}>
-            <Image
-              className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
-              src={twitterIcon}
-              alt="Follow us on Twitter"
-            />
-          </Link>
-
-          <Link href="#" passHref onClick={disableLinkClick}>
-            <Image
-              className="h-10 w-10 p-3 bg-gray-800 rounded-full hover:bg-gray-700"
-              src={facebookIcon}
-              alt="Follow us on facebook"
-            />
-          </Link>
-        </div>
-      </div>
       <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mb-8" />
       {/* Final dummy links */}
       <div className="px-8 flex justify-between flex-col md:flex-row">
@@ -229,9 +238,9 @@ function Footer() {
           </Link>
         </div>
       </div>
-      <div className="px-8 flex justify-between flex-col md:flex-row"></div>
+      {/* <div className="px-8 flex justify-between flex-col md:flex-row"></div> */}
       <hr className="border-t-[0.1px] border-gray-900 mx-0 xs:mx-8 mt-8 mb-28" />
-    </nav>
+    </>
   );
 }
 

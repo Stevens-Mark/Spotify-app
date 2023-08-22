@@ -6,7 +6,7 @@ import { listToShowState } from '@/atoms/otherAtoms';
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
 /**
- * Renders the playlist, album to chose which lis(s) in sidebar
+ * Renders the playlist, album  buttons - to chose which list(s) in sidebar
  * @function SidebarListButton
  * @returns {JSX}
  */
