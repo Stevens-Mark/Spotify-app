@@ -36,3 +36,9 @@ export const onlyUsersPlaylistState = atom({
   key: 'onlyUsersPlaylistState',
   default: null,
 });
+
+// contains list of Only users playlists they've created
+export const spotifyPlaylistState = atom({
+  key: 'spotifyPlaylistState',
+  default: null,
+});

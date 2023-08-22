@@ -1,7 +1,7 @@
 import React from 'react';
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { listToShowState } from '@/atoms/otherAtoms';
+import { listToShowState, playlistInUseState } from '@/atoms/otherAtoms';
 // import icon/images
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -12,14 +12,18 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
  */
 function SidebarListButtons() {
   const [listToShow, setListToShow] = useRecoilState(listToShowState); // determine which list(s) to show in the sidebar
+  const [playlistInUse, setPlaylistInUse] = useRecoilState(playlistInUseState);
   return (
     <>
       <nav role="navigation" aria-label="choose a list" className="py-2">
-        <ul className="px-2 space-x-2 space-y-2 flex items-center justify-start w-full">
+        <ul className="px-2 space-x-2  flex items-center justify-start w-full">
           {(listToShow === 'playlists' || listToShow === 'albums') && (
-            <li className="mt-2">
+            <li>
               <button
-                onClick={() => setListToShow('all')}
+                onClick={() => {
+                  setListToShow('all');
+                  setPlaylistInUse('all');
+                }}
                 aria-label="Show all items"
                 className={`text-sm p-1 rounded-full ${
                   listToShow === 'all'
@@ -32,30 +36,81 @@ function SidebarListButtons() {
             </li>
           )}
           {(listToShow === 'playlists' || listToShow === 'all') && (
-            <li className="mt-2">
-              <button
-                onClick={() => setListToShow('playlists')}
-                aria-label="Show playlists"
-                className={`text-sm py-1 px-2 rounded-full ${
-                  listToShow === 'playlists'
-                    ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
-                    : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
-                }`}
-              >
-                Playlists
-              </button>
-            </li>
+            <>
+              <li className="relative z-10">
+                <button
+                  aria-label="Show all playlists"
+                  className={`text-sm py-1 px-2 rounded-full ${
+                    listToShow === 'playlists'
+                      ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
+                      : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
+                  }`}
+                  onClick={() => {
+                    setListToShow(
+                      listToShow === 'playlists' ? 'all' : 'playlists'
+                    );
+                    setPlaylistInUse('all');
+                  }}
+                >
+                  Playlists
+                </button>
+              </li>
+              {listToShow === 'playlists' && (
+                <>
+                  {(playlistInUse === 'user' || playlistInUse === 'all') && (
+                    <li className="relative z-0">
+                      <button
+                        aria-label="Show playlists by you"
+                        className={`${
+                          playlistInUse === 'user'
+                            ? 'bg-white text-gray-900  focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
+                            : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
+                        } text-sm py-1 px-2 rounded-full`}
+                        onClick={() =>
+                          setPlaylistInUse(
+                            playlistInUse === 'user' ? 'all' : 'user'
+                          )
+                        }
+                      >
+                        You
+                      </button>
+                    </li>
+                  )}
+                  {(playlistInUse === 'spotify' || playlistInUse === 'all') && (
+                    <li className="relative z-0">
+                      <button
+                        aria-label="Show playlists by spotify"
+                        className={`${
+                          playlistInUse === 'spotify'
+                            ? 'bg-white text-gray-900  focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
+                            : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
+                        } text-sm py-1 px-2 rounded-full`}
+                        onClick={() =>
+                          setPlaylistInUse(
+                            playlistInUse === 'spotify' ? 'all' : 'spotify'
+                          )
+                        }
+                      >
+                        Spotify
+                      </button>
+                    </li>
+                  )}
+                </>
+              )}
+            </>
           )}
           {(listToShow === 'albums' || listToShow === 'all') && (
-            <li className="mt-2">
+            <li className="list">
               <button
-                onClick={() => setListToShow('albums')}
                 aria-label="Show albums"
-                className={`text-sm py-1 px-3 rounded-full ${
+                className={`text-sm py-1 px-2 rounded-full ${
                   listToShow === 'albums'
                     ? 'bg-gray-300 text-gray-900 hover:bg-white focus:bg-white'
                     : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
                 }`}
+                onClick={() =>
+                  setListToShow(listToShow === 'albums' ? 'all' : 'albums')
+                }
               >
                 Albums
               </button>

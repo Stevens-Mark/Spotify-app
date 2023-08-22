@@ -13,6 +13,7 @@ import {
   activePlaylistState,
   myPlaylistState,
   onlyUsersPlaylistState,
+  spotifyPlaylistState,
 } from '@/atoms/playListAtom';
 import { mySavedAlbumsState } from '@/atoms/albumAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
@@ -20,6 +21,7 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   listToShowState,
+  playlistInUseState 
 } from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
@@ -40,17 +42,21 @@ function Sidebar() {
   const router = useRouter();
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
-  const listToShow = useRecoilValue(listToShowState); // determine which list(s) to show in the sidebar
+  const listToShow = useRecoilValue(listToShowState); // determine either playlist or album to show in the sidebar
+  const playlistInUse = useRecoilValue(playlistInUseState ); // determine which playlist to show in the sidebar (owner or spotify)
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
   const [mySavedAlbums, setMySavedAlbums] = useRecoilState(mySavedAlbumsState);
-  const setUserCreatedPlaylists = useSetRecoilState(onlyUsersPlaylistState);
+  const [userCreatedPlaylists, setUserCreatedPlaylists] = useRecoilState(
+    onlyUsersPlaylistState
+  );
+  const [spotifyPlaylists, setSpotifyPlaylists] =
+    useRecoilState(spotifyPlaylistState);
   const [activePlaylistId, setActivePlaylistId] =
     useRecoilState(myPlaylistState);
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const setSubmitted = useSetRecoilState(querySubmittedState);
@@ -127,13 +133,22 @@ function Sidebar() {
               )
             );
             // Filter playlists by owner's display name - collection ids & playlist names
-            const filteredPlaylists = userPlaylists?.body?.items
-              .filter(
-                (playlist) =>
-                  playlist.owner.display_name === session?.user?.name
-              )
-              .map((playlist) => ({ id: playlist.id, name: playlist.name }));
-            setUserCreatedPlaylists(filteredPlaylists);
+            // const filteredPlaylists = userPlaylists?.body?.items
+            //   .filter(
+            //     (playlist) =>
+            //       playlist.owner.display_name === session?.user?.name
+            //   )
+            //   .map((playlist) => ({ id: playlist.id, name: playlist.name }));
+
+            const users = userPlaylists?.body?.items.filter(
+              (playlist) => playlist.owner.display_name === session?.user?.name
+            );
+
+            const spotify = userPlaylists?.body?.items.filter(
+              (playlist) => playlist.owner.id === 'spotify'
+            );
+            setSpotifyPlaylists(spotify);
+            setUserCreatedPlaylists(users);
           } catch (err) {
             console.error('Failed to get user playlists');
             toast.error('Playlists Retrieval failed !', {
@@ -150,6 +165,7 @@ function Sidebar() {
     myPlaylists,
     setMyPlaylists,
     setUserCreatedPlaylists,
+    setSpotifyPlaylists,
   ]);
 
   // fetch user saved albums
@@ -195,6 +211,12 @@ function Sidebar() {
   const handleMenuToggle = () => {
     setIsMenuOpen(!isMenuOpen);
   };
+
+  const playlistToUse = playlistInUse =='user'
+    ? userCreatedPlaylists
+    : playlistInUse === 'spotify'
+    ? spotifyPlaylists
+    : myPlaylists;
 
   return (
     <>
@@ -280,7 +302,7 @@ function Sidebar() {
               <nav role="navigation" aria-label="Your Playlist menu">
                 <ul>
                   {/* Menu buttons - playlists */}
-                  {myPlaylists?.map((playlist) => (
+                  {playlistToUse?.map((playlist) => (
                     <li key={playlist?.id}>
                       <button
                         aria-label="Go to playlist"
@@ -388,7 +410,8 @@ function Sidebar() {
                     </li>
                   ))}
                 </ul>
-              </nav>{' '}
+              </nav>
+              <hr className="border-t-[0.1px] border-gray-900" />
             </>
           )}
           <hr className="border-t-[0.1px] border-gray-900 md:pb-[22rem]" />

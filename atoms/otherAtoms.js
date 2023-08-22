@@ -57,8 +57,14 @@ export const cooldownState = atom({
   default: false,
 });
 
-// holds to value to determine which list(s) to show in the sidebar
+// holds to value to determine either playlist or album to show in the sidebar
 export const listToShowState = atom({
   key: 'listToShowState',
+  default: 'all',
+});
+
+// holds to value to determine which playlist to show in the sidebar (owner or spotify)
+export const playlistInUseState = atom({
+  key: 'playlistInUseState',
   default: 'all',
 });
