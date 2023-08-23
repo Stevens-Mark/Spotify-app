@@ -277,7 +277,9 @@ function Sidebar() {
 
         <hr className="border-t-[0.1px] border-gray-900" />
         {/* playlist, album to chose which lis(s) in sidebar  */}
-        {mySavedAlbums?.length !== 0 && <SidebarListButtons />}
+        {(mySavedAlbums?.length !== 0 ||
+          userCreatedPlaylists?.length !== 0 ||
+          spotifyPlaylists?.length !== 0) && <SidebarListButtons />}
         <div className="mobilebar galaxyS20:overflow-y-scroll h-screen scrollbar-hide ">
           {playlistInUse === 'all' && listToShow !== 'albums' && (
             <>

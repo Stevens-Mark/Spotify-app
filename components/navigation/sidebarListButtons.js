@@ -1,7 +1,12 @@
 import React from 'react';
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { listToShowState, playlistInUseState } from '@/atoms/otherAtoms';
+import {
+  onlyUsersPlaylistState,
+  spotifyPlaylistState,
+} from '@/atoms/playListAtom';
+import { mySavedAlbumsState } from '@/atoms/albumAtom';
 // import icon/images
 import { XMarkIcon } from '@heroicons/react/24/solid';
 
@@ -13,11 +18,15 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 function SidebarListButtons() {
   const [listToShow, setListToShow] = useRecoilState(listToShowState); // determine which list(s) to show in the sidebar
   const [playlistInUse, setPlaylistInUse] = useRecoilState(playlistInUseState);
+  const userCreatedPlaylists = useRecoilValue(onlyUsersPlaylistState);
+  const spotifyPlaylists = useRecoilValue(spotifyPlaylistState);
+  const mySavedAlbums = useRecoilValue(mySavedAlbumsState);
+
   return (
     <>
       <nav role="navigation" aria-label="choose a list" className="py-2">
         <ul className="px-2 py-1 space-x-2  flex items-center justify-start w-full flex-wrap">
-          {(listToShow !== 'all') && (
+          {listToShow !== 'all' && (
             <li>
               <button
                 onClick={() => {
@@ -35,7 +44,7 @@ function SidebarListButtons() {
               </button>
             </li>
           )}
-          {(listToShow !== 'albums') && (
+          {listToShow !== 'albums' && (
             <>
               <li className="relative z-10 py-1">
                 <button
@@ -57,26 +66,27 @@ function SidebarListButtons() {
               </li>
               {listToShow === 'playlists' && (
                 <span className=" flex whitespace-nowrap space-x-2 py-1">
-                  {(playlistInUse === 'user' || playlistInUse === 'all') && (
-                    <li className="relative z-0">
-                      <button
-                        aria-label="Show playlists by you"
-                        className={`${
-                          playlistInUse === 'user'
-                            ? 'bg-white text-gray-900 focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
-                            : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
-                        } text-sm py-1 px-2 rounded-full`}
-                        onClick={() =>
-                          setPlaylistInUse(
-                            playlistInUse === 'user' ? 'all' : 'user'
-                          )
-                        }
-                      >
-                        You
-                      </button>
-                    </li>
-                  )}
-                  {(playlistInUse !== 'user' ) && (
+                  {userCreatedPlaylists?.length > 0 &&
+                    playlistInUse !== 'spotify' && (
+                      <li className="relative z-0">
+                        <button
+                          aria-label="Show playlists by you"
+                          className={`${
+                            playlistInUse === 'user'
+                              ? 'bg-white text-gray-900 focus:bg-white -ml-8 pl-7 transition delay-100 duration-200 ease-in-out'
+                              : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
+                          } text-sm py-1 px-2 rounded-full`}
+                          onClick={() =>
+                            setPlaylistInUse(
+                              playlistInUse === 'user' ? 'all' : 'user'
+                            )
+                          }
+                        >
+                          You
+                        </button>
+                      </li>
+                    )}
+                  {spotifyPlaylists?.length > 0 && (
                     <li className="relative z-0">
                       <button
                         aria-label="Show playlists by spotify"
@@ -99,8 +109,8 @@ function SidebarListButtons() {
               )}
             </>
           )}
-          {(listToShow !== 'playlists') && (
-            <li className="relative z-10 py-1" >
+          {mySavedAlbums?.length !== 0 && listToShow !== 'playlists' && (
+            <li className="relative z-10 py-1">
               <button
                 aria-label="Show albums"
                 className={`text-sm py-1 px-2 rounded-full ${
