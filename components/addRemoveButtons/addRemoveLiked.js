@@ -61,21 +61,23 @@ function AddRemoveLiked({ songId }) {
     <>
       {inLikedSongsList ? (
         <button
+          aria-label="Remove from Favorite"
           className="text-green-500 h-5 w-5 hover:scale-125 focus:scale-125 transition delay-100 duration-300 ease-in-out mr-3"
           onClick={() => {
             handleRemove();
           }}
         >
-          <HeartIcon aria-label="Remove from Favorite" />
+          <HeartIcon className="fade-in" />
         </button>
       ) : (
         <button
+          aria-label="Add to Favorite"
           className="text-black h-5 w-5 group-hover:text-pink-swan hover:scale-125 focus:text-pink-swan focus:scale-125 transition delay-100 duration-300 ease-in-out mr-3"
           onClick={() => {
             handleAdd();
           }}
         >
-          <HeartOutline aria-label="Add to Favorite" />
+          <HeartOutline className="fade-in" />
         </button>
       )}
     </>
