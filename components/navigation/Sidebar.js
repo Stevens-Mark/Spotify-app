@@ -279,7 +279,7 @@ function Sidebar() {
         {/* playlist, album to chose which lis(s) in sidebar  */}
         {mySavedAlbums?.length !== 0 && <SidebarListButtons />}
         <div className="mobilebar galaxyS20:overflow-y-scroll h-screen scrollbar-hide ">
-          {playlistInUse !== 'spotify' && listToShow !== 'albums' && (
+          {playlistInUse === 'all' && listToShow !== 'albums' && (
             <>
               {/* Menu button - Liked Songs */}
               <LikedButton
