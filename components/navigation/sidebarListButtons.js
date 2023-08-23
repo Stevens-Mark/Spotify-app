@@ -100,7 +100,7 @@ function SidebarListButtons() {
             </>
           )}
           {(listToShow !== 'playlists') && (
-            <li className="list">
+            <li className="relative z-10 py-1" >
               <button
                 aria-label="Show albums"
                 className={`text-sm py-1 px-2 rounded-full ${
