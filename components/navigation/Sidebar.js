@@ -21,7 +21,7 @@ import {
   currentItemIdState,
   playerInfoTypeState,
   listToShowState,
-  playlistInUseState 
+  playlistInUseState,
 } from '@/atoms/otherAtoms';
 // import functions
 import { capitalize } from '@/lib/capitalize';
@@ -43,7 +43,7 @@ function Sidebar() {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const listToShow = useRecoilValue(listToShowState); // determine either playlist or album to show in the sidebar
-  const playlistInUse = useRecoilValue(playlistInUseState ); // determine which playlist to show in the sidebar (owner or spotify)
+  const playlistInUse = useRecoilValue(playlistInUseState); // determine which playlist to show in the sidebar (owner or spotify)
   const [myPlaylists, setMyPlaylists] = useRecoilState(activePlaylistIdState);
   const [mySavedAlbums, setMySavedAlbums] = useRecoilState(mySavedAlbumsState);
   const [userCreatedPlaylists, setUserCreatedPlaylists] = useRecoilState(
@@ -205,11 +205,12 @@ function Sidebar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  const playlistToUse = playlistInUse =='user'
-    ? userCreatedPlaylists
-    : playlistInUse === 'spotify'
-    ? spotifyPlaylists
-    : myPlaylists;
+  const playlistToUse =
+    playlistInUse == 'user'
+      ? userCreatedPlaylists
+      : playlistInUse === 'spotify'
+      ? spotifyPlaylists
+      : myPlaylists;
 
   return (
     <>
@@ -278,7 +279,7 @@ function Sidebar() {
         {/* playlist, album to chose which lis(s) in sidebar  */}
         {mySavedAlbums?.length !== 0 && <SidebarListButtons />}
         <div className="mobilebar galaxyS20:overflow-y-scroll h-screen scrollbar-hide ">
-          {(listToShow === 'playlists' || listToShow === 'all') && (
+          {playlistInUse !== 'spotify' && listToShow !== 'albums' && (
             <>
               {/* Menu button - Liked Songs */}
               <LikedButton
@@ -290,7 +291,7 @@ function Sidebar() {
             </>
           )}
 
-          {(listToShow === 'playlists' || listToShow === 'all') && (
+          {listToShow !== 'albums' && (
             <>
               <nav role="navigation" aria-label="Your Playlist menu">
                 <ul>

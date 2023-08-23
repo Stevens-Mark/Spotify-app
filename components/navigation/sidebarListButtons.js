@@ -17,7 +17,7 @@ function SidebarListButtons() {
     <>
       <nav role="navigation" aria-label="choose a list" className="py-2">
         <ul className="px-2 py-1 space-x-2  flex items-center justify-start w-full flex-wrap">
-          {(listToShow === 'playlists' || listToShow === 'albums') && (
+          {(listToShow !== 'all') && (
             <li>
               <button
                 onClick={() => {
@@ -35,7 +35,7 @@ function SidebarListButtons() {
               </button>
             </li>
           )}
-          {(listToShow === 'playlists' || listToShow === 'all') && (
+          {(listToShow !== 'albums') && (
             <>
               <li className="relative z-10 py-1">
                 <button
@@ -76,7 +76,7 @@ function SidebarListButtons() {
                       </button>
                     </li>
                   )}
-                  {(playlistInUse === 'spotify' || playlistInUse === 'all') && (
+                  {(playlistInUse !== 'user' ) && (
                     <li className="relative z-0">
                       <button
                         aria-label="Show playlists by spotify"
@@ -99,7 +99,7 @@ function SidebarListButtons() {
               )}
             </>
           )}
-          {(listToShow === 'albums' || listToShow === 'all') && (
+          {(listToShow !== 'playlists') && (
             <li className="list">
               <button
                 aria-label="Show albums"
