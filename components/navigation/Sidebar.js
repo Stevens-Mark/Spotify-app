@@ -64,19 +64,16 @@ function Sidebar() {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  // handle window resize event - automatically close hamburger menu for mobile landscape
+  // sizes galaxy s20 ultra & below (e.g., width less than 916px)
   useEffect(() => {
-    // Function to handle window resize event
     const handleResize = () => {
-      // Close the menu automatically for mobile landscape sizes galaxy s20 ultra & below (e.g., width less than 916px)
       if (window.innerWidth < 916 && isMenuOpen) {
         setIsMenuOpen(false);
       }
     };
+    window.addEventListener('resize', handleResize); // Add event listener for window resize
 
-    // Add event listener for window resize
-    window.addEventListener('resize', handleResize);
-
-    // Clean up the event listener on component unmount
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -95,8 +92,6 @@ function Sidebar() {
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
-          // setActivePlaylistId(currentPlaylistId);
-          // setActivePlaylist(currentPlaylistId);
           if (currentPlaylistId !== undefined) {
             setCurrentItemId(currentPlaylistId);
             setActivePlaylist(currentPlaylistId);
@@ -205,6 +200,7 @@ function Sidebar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  // show playlist: all, user's or spotify 
   const playlistToUse =
     playlistInUse == 'user'
       ? userCreatedPlaylists
