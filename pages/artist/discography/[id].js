@@ -134,7 +134,7 @@ function Discography({ artistDiscography, id }) {
           scrollableSectionRef.current = node;
         }}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col mt-20">
           {discography?.map((item, i) => (
             <DiscographyCard key={`${item.id}-${i}`} item={item} />
           ))}

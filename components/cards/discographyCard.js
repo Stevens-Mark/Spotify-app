@@ -12,7 +12,6 @@ import { capitalize } from '@/lib/capitalize';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import TitleTimeLabel from '@/components/headerLabels/titleTime';
-// import AlbumTrack from '../trackListAlbum/albumTrack';
 import DiscographyTrack from '../discography/discographyTrack';
 /**
 
@@ -27,9 +26,7 @@ function DiscographyCard({ item }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
   const [albumTracks, setAlbumTracklist] = useState(null);
-
-  // console.log("tracks",albumTracks)
-
+ 
   // useEffect(() => {
   //   spotifyApi.getAlbumTracks(item?.id, { limit: 50 }).then(
   //     function (data) {
@@ -62,10 +59,10 @@ function DiscographyCard({ item }) {
 
   return (
     <div>
-      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white">
+      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white pr-12">
         <div className="flex items-center">
           <Image
-            className="ml-8 aspect-square shadow-image w-28 h-28"
+            className="ml-4 xs:ml-8 aspect-square shadow-image w-20 h-20 md:w-28 md:h-28"
             src={item?.images?.[0]?.url || noImage}
             alt=""
             width={100}
@@ -76,22 +73,26 @@ function DiscographyCard({ item }) {
 
         {/* Item details */}
         <div className="ml-4">
-          <div className="capitalize text-2xl line-clamp-1">{item?.name}</div>
-          <div className="text-pink-swan mt-2">
+          <div className="capitalize text-xl md:text-2xl line-clamp-1">{item?.name}</div>
+          <div className="text-pink-swan mt-0 md:mt-2">
             <span>{capitalize(item?.album_type)}&nbsp;•&nbsp;</span>
             <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
+            <span>
+              {albumTracks?.tracks?.items?.length}&nbsp;
+              {albumTracks?.tracks?.items?.length === 1 ? 'Song' : 'Songs'}
+            </span>
           </div>
           <button
-            className="mt-3"
+            className="mt-1 md:mt-3"
             // onClick={(event) => {
             //   HandleEpisodePlayPause(event, order);
             // }}
             aria-label="Play or Pause"
           >
             {activeStatus ? (
-              <PauseCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 " />
+              <PauseCircleIcon className="w-8 h-8 md:w-10 md:h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110 " />
             ) : (
-              <PlayCircleIcon className="w-10 h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110" />
+              <PlayCircleIcon className="w-8 h-8 md:w-10 md:h-10 transition delay-100 duration-300 ease-in-out hover:scale-110 focus:scale-110" />
             )}
           </button>
         </div>
