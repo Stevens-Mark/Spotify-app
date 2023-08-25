@@ -21,6 +21,7 @@ import TrackOptionsMenu from '../addRemoveButtons/trackOptionsMenu';
  * @param {boolean} activeStatus if playing or not set equalizer & play/pause icon
  * @param {object} song data
  * @param {string} addedAt date track added to list (just for playlists)
+ * @param {string} albumId passed from artists discography
  * @returns {JSX}
  */
 function RenderTracks({
@@ -31,6 +32,7 @@ function RenderTracks({
   activeStatus,
   song,
   addedAt,
+  albumId,
 }) {
   const router = useRouter();
   const [linkAddress, setLinkAddress] = useState('');
@@ -41,10 +43,13 @@ function RenderTracks({
   useEffect(() => {
     if ((router?.asPath).includes('album')) {
       setLinkAddress(`/album/${(router?.asPath).split('/').pop()}`);
+    } else if ((router?.asPath).includes('discography')) {
+      setLinkAddress(`/album/${albumId}`);
     } else {
       setLinkAddress(`/album/${song?.album?.id}`);
     }
-  }, [router?.asPath, song?.album?.id]);
+  }, [albumId, router?.asPath, song?.album?.id]);
+
 
   return (
     <div
@@ -165,7 +170,11 @@ function RenderTracks({
             {millisToMinutesAndSeconds(song?.duration_ms)}
           </span>
           {/* <Ellipsis - add/remove track to/from playlist */}
-          <TrackOptionsMenu song={song} order={order} linkAddress={linkAddress}/>
+          <TrackOptionsMenu
+            song={song}
+            order={order}
+            linkAddress={linkAddress}
+          />
         </div>
       )}
     </div>

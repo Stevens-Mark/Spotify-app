@@ -13,6 +13,7 @@ import ArtistTracks from '@/components/trackListArtist/artistTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
 import BackToTopButton from '@/components/backToTopButton';
+import ArtistAlbums from '@/components/discography/artistDiscography';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -101,6 +102,7 @@ const ArtistPage = ({ artistInfo, artistTracks }) => {
         <QuickPlayBanner item={artistInfo} scrollRef={scrollRef} />
 
         <ArtistTracks />
+        <ArtistAlbums artistId={artistInfo?.id} />
         {/* Scroll to top button */}
         {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         <Footer />

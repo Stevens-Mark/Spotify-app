@@ -2,7 +2,6 @@ import useSpotify from '@/hooks/useSpotify';
 import React, { useState, useEffect } from 'react';
 // import state management recoil
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
-import { albumIdState } from '@/atoms/albumAtom';
 import {
   currentTrackIdState,
   currentSongIndexState,
@@ -21,17 +20,20 @@ import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 import RenderTracks from '../trackRender/renderTracks';
 
 /**
- * Renders each track in the album
- * @function AlbumTrack
+ * Renders each track in the discography
+ * @function DiscographyTrack
  * @param {object} track information
  * @param {number} order track index in the album list
+ * @param {string} currentAlbumId album id
  * @returns {JSX}
  */
-function AlbumTrack({ track, order }) {
+function DiscographyTrack({ track, order, currentAlbumId }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  const currentAlbumId = useRecoilValue(albumIdState);
+  console.log('disc song', song)
+  console.log('disc currentAlbumId', currentAlbumId)
+
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const originId = useRecoilValue(originIdState);
@@ -76,7 +78,7 @@ function AlbumTrack({ track, order }) {
 
   useEffect(() => {
     const newActiveStatus =
-      song?.id === currentTrackId && currentItemId === originId && isPlaying;
+      song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
 
@@ -88,8 +90,9 @@ function AlbumTrack({ track, order }) {
       order={order}
       activeStatus={activeStatus}
       song={song}
+      albumId={currentAlbumId}
     />
   );
 }
 
-export default AlbumTrack;
+export default DiscographyTrack;
