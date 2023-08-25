@@ -19,6 +19,10 @@ export const activeArtistState = atom({
   default: false,
 });
 
+export const artistsDiscographyShortState = atom({
+  key: 'artistsDiscographyShortState',
+  default: [],
+});
 export const artistsDiscographyState = atom({
   key: 'artistsDiscographyState',
   default: [],

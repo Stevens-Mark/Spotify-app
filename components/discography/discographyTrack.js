@@ -31,8 +31,8 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  console.log('disc song', song)
-  console.log('disc currentAlbumId', currentAlbumId)
+  // console.log('disc song', song)
+  // console.log('disc currentAlbumId', currentAlbumId)
 
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);

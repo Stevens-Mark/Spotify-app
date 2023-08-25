@@ -28,7 +28,7 @@ function DiscographyCard({ item }) {
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
   const [albumTracks, setAlbumTracklist] = useState(null);
 
-  console.log("tracks",albumTracks)
+  // console.log("tracks",albumTracks)
 
   // useEffect(() => {
   //   spotifyApi.getAlbumTracks(item?.id, { limit: 50 }).then(
@@ -45,7 +45,6 @@ function DiscographyCard({ item }) {
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getAlbum(item?.id).then(
         function (data) {
-          console.log('Album information', data.body);
           setAlbumTracklist(data.body);
         },
         function (err) {

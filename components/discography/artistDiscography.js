@@ -5,10 +5,8 @@ import useSpotify from '@/hooks/useSpotify';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { artistsDiscographyState } from '@/atoms/artistAtom';
+import { artistsDiscographyShortState } from '@/atoms/artistAtom';
 import Card from '../cards/card';
-// import mockAlbumData from '@/public/mockData/album';
-
 
 /**
  * Renders partial artist discography list on artist page
@@ -21,11 +19,12 @@ function ArtistDiscography({ artistId }) {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const numOfItems = useNumOfItems();
-  const [discography, setDiscography] = useRecoilState(artistsDiscographyState);
+  const [discography, setDiscography] = useRecoilState(artistsDiscographyShortState);
 
+  // fetch just the first 7 albums to display on artist page
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
-      spotifyApi.getArtistAlbums(artistId, { limit: 50 }).then(
+      spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
         function (data) {
           setDiscography(data.body?.items);
         },
@@ -70,7 +69,7 @@ function ArtistDiscography({ artistId }) {
         </section>
       ) : (
         <section className="mb-9">
-          {/*  partial artists discography list */}
+          {/*  partial (7]) artists discography list */}
           <div className="flex items-center justify-between">
             <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
               Discography

@@ -50,7 +50,7 @@ export async function getServerSideProps(context) {
 }
 
 /**
- * Renders Artist page with tracks
+ * Renders 
  * @function ShowPage
  * @param {object} showInfo information about the show
  * @returns {JSX}
