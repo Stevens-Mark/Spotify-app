@@ -14,7 +14,7 @@ import { itemsPerPageState } from '@/atoms/otherAtoms';
 import Layout from '@/components/layouts/Layout';
 import DiscographyCard from '@/components/cards/discographyCard';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/backToTopButton';
+import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;

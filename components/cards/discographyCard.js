@@ -18,7 +18,7 @@ import { capitalize } from '@/lib/capitalize';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import TitleTimeLabel from '@/components/headerLabels/titleTime';
-import DiscographyTrack from '../discography/discographyTrack';
+import DiscographyTrack from '../trackListDiscography/discographyTracks';
 /**
 
  * @function DiscographyCard

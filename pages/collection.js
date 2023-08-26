@@ -21,7 +21,7 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
 import LikedTracks from '@/components/trackListLiked/likedTracks';
-import BackToTopButton from '@/components/backToTopButton';
+import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
 
 // Helper function to merge and remove duplicates from the new data
 const mergeAndRemoveDuplicates = (existingData, newData) => {

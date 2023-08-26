@@ -7,7 +7,7 @@ import Footer from '@/components/navigation/Footer';
 import SongTracks from '../trackListSongs/songTracks';
 import RecentPlayedSongs from '../trackListSongs/recentlyPlayedTracks';
 import GenreHeading from '../headerLabels/GenreHeading';
-import BackToTopButton from '@/components/backToTopButton';
+import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
 
 /**
  * Renders a list from search: Playlists, albums,etc ...

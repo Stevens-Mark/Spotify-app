@@ -8,8 +8,8 @@ import { millisToMinutesAndSeconds, formatDateToTimeElapsed } from '@/lib/time';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
 // import components
 import Equaliser from '@/components/graphics/Equaliser';
-import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
-import TrackOptionsMenu from '../addRemoveButtons/trackOptionsMenu';
+import AddRemoveLiked from '../addRemove/addRemoveLiked';
+import TrackOptionsMenu from '../addRemove/trackOptionsMenu';
 
 /**
  * Handles the actual rendering of each track.
@@ -49,7 +49,6 @@ function RenderTracks({
       setLinkAddress(`/album/${song?.album?.id}`);
     }
   }, [albumId, router?.asPath, song?.album?.id]);
-
 
   return (
     <div

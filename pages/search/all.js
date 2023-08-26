@@ -19,7 +19,7 @@ import TopResult from '../../components/topResult';
 import Card from '@/components/cards/card';
 import TopSongs from '@/components/topSongs';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/backToTopButton';
+import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
 
 /**
  * Renders the list of All options from search.
@@ -135,7 +135,7 @@ function All() {
                   <h2 className="text-white my-5 mr-5 text-2xl md:text-3xl 2xl:text-4xl">
                     Songs
                   </h2>
-                    <TopSongs />
+                  <TopSongs />
                 </>
               )}
             </>

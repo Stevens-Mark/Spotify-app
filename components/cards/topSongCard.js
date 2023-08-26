@@ -4,10 +4,10 @@ import Link from 'next/link';
 // import functions
 import { millisToMinutesAndSeconds } from '@/lib/time';
 // import component/icons
-import AddRemoveLiked from '../addRemoveButtons/addRemoveLiked';
+import AddRemoveLiked from '../addRemove/addRemoveLiked';
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayIcon, PauseIcon } from '@heroicons/react/24/solid';
-import TrackOptionsMenu from '../addRemoveButtons/trackOptionsMenu';
+import TrackOptionsMenu from '../addRemove/trackOptionsMenu';
 
 /**
  * Renders the 4 songs next to top result
