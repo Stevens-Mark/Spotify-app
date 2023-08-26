@@ -96,7 +96,7 @@ function Discography({ artistDiscography, id }) {
             function (data) {
               setStopFetch(data?.body?.next === null);
               setDiscography((prevDiscography) => {
-                const mergedList = [...prevDiscography, ...data.body.items];
+                const mergedList = [...prevDiscography, ...data.body?.items];
 
                 // Remove duplicates based on item id
                 const uniqueList = Array.from(
@@ -136,7 +136,7 @@ function Discography({ artistDiscography, id }) {
       >
         <div className="flex flex-col mt-20">
           {discography?.map((item, i) => (
-            <DiscographyCard key={`${item.id}-${i}`} item={item} />
+            <DiscographyCard key={`${item?.id}-${i}`} item={item} />
           ))}
         </div>
         {showButton && <BackToTopButton scrollToTop={scrollToTop} />}

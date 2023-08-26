@@ -8,6 +8,7 @@ import {
   isPlayState,
 } from '@/atoms/songAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
+import { albumIdState } from '@/atoms/albumAtom';
 import {
   playerInfoTypeState,
   currentItemIdState,
@@ -31,14 +32,12 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
   const spotifyApi = useSpotify();
   const song = track;
 
-  // console.log('disc song', song)
-  // console.log('disc currentAlbumId', currentAlbumId)
-
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState); // used to determine what type of info to load
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const originId = useRecoilValue(originIdState);
   const [currentTrackId, setCurrentTrackId] =
     useRecoilState(currentTrackIdState);
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // to identify the track position for the green highlight of the active track
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
@@ -61,6 +60,7 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
       originId,
       song,
       currentAlbumId, // determines it's album to play in play/pause function
+      setCurrentAlbumId,
       setCurrentItemId,
       currentTrackIndex,
       currentTrackId,
@@ -76,11 +76,11 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
     HandleTrackPlayPause(albumOptions);
   };
 
+  // set track to active or not
   useEffect(() => {
-    const newActiveStatus =
-      song?.id === currentTrackId && isPlaying;
+    const newActiveStatus = song?.id === currentTrackId && isPlaying;
     setActiveStatus(newActiveStatus);
-  }, [currentItemId, currentTrackId, isPlaying, originId, song?.id]);
+  }, [currentTrackId, isPlaying, song?.id]);
 
   return (
     <RenderTracks

@@ -6,7 +6,13 @@ import { useSession } from 'next-auth/react';
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import { artistsDiscographyState } from '@/atoms/artistAtom';
 import { currentItemIdState } from '@/atoms/otherAtoms';
-import { isPlayState } from '@/atoms/songAtom';
+import { albumIdState } from '@/atoms/albumAtom';
+// import { isPlayState } from '@/atoms/songAtom';
+import {
+  currentTrackIdState,
+  currentSongIndexState,
+  isPlayState,
+} from '@/atoms/songAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
 import noImage from '@/public/images/noImageAvailable.svg';
@@ -26,7 +32,8 @@ function DiscographyCard({ item }) {
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
   const [albumTracks, setAlbumTracklist] = useState(null);
- 
+  const [currentAlbumId ,setCurrentAlbumId] = useRecoilState(albumIdState);
+
   // useEffect(() => {
   //   spotifyApi.getAlbumTracks(item?.id, { limit: 50 }).then(
   //     function (data) {
@@ -38,6 +45,8 @@ function DiscographyCard({ item }) {
   //   );
   // }, [item?.id, spotifyApi]);
 
+  
+// fetch album tracklist
   useEffect(() => {
     if (spotifyApi.getAccessToken()) {
       spotifyApi.getAlbum(item?.id).then(
@@ -50,12 +59,12 @@ function DiscographyCard({ item }) {
       );
     }
   }, [item?.id, spotifyApi, session]);
-  // used to set play/pause icons
 
-  useEffect(() => {
-    const newActiveStatus = currentItemId === item?.id && isPlaying;
-    setActiveStatus(newActiveStatus);
-  }, [currentItemId, isPlaying, item?.id]);
+// album quickplay button update to active or not 
+useEffect(() => {
+  const newActiveStatus = item?.id === currentAlbumId && isPlaying;
+  setActiveStatus(newActiveStatus);
+}, [currentAlbumId, isPlaying, item?.id]);
 
   return (
     <div>
@@ -73,7 +82,9 @@ function DiscographyCard({ item }) {
 
         {/* Item details */}
         <div className="ml-4">
-          <div className="capitalize text-xl md:text-2xl line-clamp-1">{item?.name}</div>
+          <div className="capitalize text-xl md:text-2xl line-clamp-1">
+            {item?.name}
+          </div>
           <div className="text-pink-swan mt-0 md:mt-2">
             <span>{capitalize(item?.album_type)}&nbsp;•&nbsp;</span>
             <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
@@ -84,9 +95,17 @@ function DiscographyCard({ item }) {
           </div>
           <button
             className="mt-1 md:mt-3"
-            // onClick={(event) => {
-            //   HandleEpisodePlayPause(event, order);
-            // }}
+            onClick={() => {
+              if (activeStatus) {
+                // Pause logic: Set isPlaying to false
+                setIsPlaying(false);
+                setCurrentItemId(null); // Clear the currently playing item
+              } else {
+                // Play logic: Set isPlaying to true and set the current item ID
+                setIsPlaying(true);
+                setCurrentItemId(item?.id);
+              }
+            }}
             aria-label="Play or Pause"
           >
             {activeStatus ? (

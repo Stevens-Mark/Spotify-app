@@ -19,10 +19,13 @@ export const activeArtistState = atom({
   default: false,
 });
 
+// stores first 7 artists albums from discography (CSR) client side rendering
 export const artistsDiscographyShortState = atom({
   key: 'artistsDiscographyShortState',
   default: [],
 });
+
+// stores first  artists albums from discography (SSR) - server side rendering
 export const artistsDiscographyState = atom({
   key: 'artistsDiscographyState',
   default: [],
