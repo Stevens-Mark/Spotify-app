@@ -12,7 +12,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import Card from '@/components/cards/card';
 import EpisodeCard from '@/components/cards/episodeCard';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
+import BackToTopButton from '@/components/backToTopButton';
 
 /**
  * Renders the list of Shows/Podcasts & Episodes from search.

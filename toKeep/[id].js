@@ -14,7 +14,7 @@ import { itemsPerPageState } from '@/atoms/otherAtoms';
 import Layout from '@/components/layouts/Layout';
 import DiscographyCard from '@/components/cards/discographyCard';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/backToTopButton';
+import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
   const fetchArtistDiscography = async (id) => {
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/artists/${id}/albums?limit=50`,
+        `https://api.spotify.com/v1/artists/${id}/albums?limit=1`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,

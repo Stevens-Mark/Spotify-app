@@ -7,6 +7,7 @@ import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards 
 import { useRecoilState } from 'recoil';
 import { artistsDiscographyShortState } from '@/atoms/artistAtom';
 import Card from '../cards/card';
+import mockAlbumData from '@/public/mockData/mockAlbums';
 
 /**
  * Renders partial artist discography list on artist page
@@ -23,16 +24,17 @@ function ArtistDiscography({ artistId }) {
 
   // fetch just the first 7 albums to display on artist page
   useEffect(() => {
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
-        function (data) {
-          setDiscography(data.body?.items);
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
-    }
+    setDiscography(mockAlbumData);
+    // if (spotifyApi.getAccessToken()) {
+    //   spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
+    //     function (data) {
+    //       setDiscography(data.body?.items);
+    //     },
+    //     function (err) {
+    //       console.error(err);
+    //     }
+    //   );
+    // }
   }, [spotifyApi, session, setDiscography, artistId]);
 
   // useEffect(() => {

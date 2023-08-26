@@ -14,7 +14,7 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import AlbumTracks from '@/components/trackListAlbum/albumTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
+import BackToTopButton from '@/components/backToTopButton';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;

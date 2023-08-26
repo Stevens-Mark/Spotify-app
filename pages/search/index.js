@@ -16,7 +16,7 @@ import NestedLayout from '@/components/layouts/NestedLayout';
 import RecentSearches from '@/components/Recent';
 import GenreCard from '@/components/cards/genreCard';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
+import BackToTopButton from '@/components/backToTopButton';
 
 /**
  * Renders search page

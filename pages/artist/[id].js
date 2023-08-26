@@ -12,7 +12,7 @@ import MediaHeading from '@/components/headerLabels/MediaHero';
 import ArtistTracks from '@/components/trackListArtist/artistTracks';
 import QuickPlayBanner from '@/components/player/QuickPlayBanner';
 import Footer from '@/components/navigation/Footer';
-import BackToTopButton from '@/components/addRemoveButtons/backToTopButton';
+import BackToTopButton from '@/components/backToTopButton';
 import ArtistDiscography from '@/components/discography/artistDiscography';
 
 export async function getServerSideProps(context) {

@@ -21,14 +21,14 @@ import { HandleTrackPlayPause } from '@/lib/playbackUtils';
 import RenderTracks from '../trackRender/renderTracks';
 
 /**
- * Renders each track in the discography
- * @function DiscographyTrack
+ * Renders each track for each album (in the discography)
+ * @function DiscographyTracks
  * @param {object} track information
  * @param {number} order track index in the album list
  * @param {string} currentAlbumId album id
  * @returns {JSX}
  */
-function DiscographyTrack({ track, order, currentAlbumId }) {
+function DiscographyTracks({ track, order, currentAlbumId }) {
   const spotifyApi = useSpotify();
   const song = track;
 
@@ -40,7 +40,7 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
   const setCurrentAlbumId = useSetRecoilState(albumIdState);
   // to identify the track position for the green highlight of the active track
   const setCurrentSongIndex = useSetRecoilState(currentSongIndexState);
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
+  const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
   const [isShown, setIsShown] = useState(false);
   const setActiveArtist = useSetRecoilState(activeArtistState);
@@ -95,4 +95,4 @@ function DiscographyTrack({ track, order, currentAlbumId }) {
   );
 }
 
-export default DiscographyTrack;
+export default DiscographyTracks;

@@ -12,7 +12,7 @@ import {
   originIdState,
   progressDataState,
   shuffleStatusState,
-  playerInfoTypeState
+  playerInfoTypeState,
 } from '@/atoms/otherAtoms';
 import {
   currentTrackIdState,
@@ -21,6 +21,7 @@ import {
 } from '@/atoms/songAtom';
 import { activeArtistState } from '@/atoms/artistAtom';
 import { activeListInUseState, episodeDurationState } from '@/atoms/showAtom';
+import { albumIdState } from '@/atoms/albumAtom';
 // import component
 import PlayingInfo from './PlayingInfo';
 // please vist https://heroicons.com/ for icon details
@@ -61,6 +62,7 @@ function Player() {
     useRecoilState(episodeDurationState);
 
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const [originId, setOriginId] = useRecoilState(originIdState);
   const [isEpisode, setIsEpisode] = useState(false);
   const [isArtist, setIsArtist] = useState(false);
@@ -360,6 +362,7 @@ function Player() {
                     ) {
                       setCurrentItemId(data.body?.item?.album?.id);
                     }
+                    setCurrentAlbumId(data.body?.item?.album?.id);
                     setCurrentSongIndex(currentSongIndex + 1);
                   })
                   .catch((err) => {
@@ -390,6 +393,7 @@ function Player() {
     findNextEpisodeId,
     isArtist,
     originId,
+    setCurrentAlbumId,
     setCurrentItemId,
     setCurrentSongIndex,
     setCurrentTrackId,
