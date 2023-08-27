@@ -4,8 +4,11 @@ import { capitalize } from '@/lib/capitalize';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 
 /**
- * Renders discography sticky Player Banner
+ * Renders discography sticky Quick Player Banner
  * @function DiscographyQuickPlayBanner
+ * @param {string} title of album
+ * @param {boolean} activeStatus playing or not
+ * @param {function} handleClick play or pause track
  * @returns {JSX}
  */
 function DiscographyQuickPlayBanner({ title, activeStatus, handleClick }) {
@@ -28,7 +31,7 @@ function DiscographyQuickPlayBanner({ title, activeStatus, handleClick }) {
               <PlayCircleIcon className="w-8 h-8 xs:w-12 xs:h-12" />
             )}
           </button>
-          <h2 className="text-white text-xl font-bold p-2 truncate pr-[100px] isMdLg:pr-[250px]">
+          <h2 className="text-white text-xl font-bold p-2 truncate pr-[67px] isMdLg:pr-[250px]">
             {capitalize(title)}
           </h2>
         </div>

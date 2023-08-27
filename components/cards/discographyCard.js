@@ -21,6 +21,7 @@ import DiscographyQuickPlayBanner from '../player/DiscographyQuickPlayer';
 /**
  * @function DiscographyCard
  * @param {object} item
+ * @param {object} scrollRef
  * @returns {JSX}
  */
 function DiscographyCard({ item, scrollRef }) {
@@ -28,7 +29,7 @@ function DiscographyCard({ item, scrollRef }) {
   const { data: session } = useSession();
   const [activeStatus, setActiveStatus] = useState(false);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
-  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState); // used to set play/pause icons
+  const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const [albumTracks, setAlbumTracklist] = useState(null);
   const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
 
@@ -38,7 +39,6 @@ function DiscographyCard({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const cardRect = cardRef.current.getBoundingClientRect();
-      // const scrollPosition = scrollRef.current.scrollTop;
 
       if (cardRect.top <= 0 && cardRect.bottom > 0) {
         // console.log(`Item name "${item?.name}" is at the top of the screen.`);
@@ -48,7 +48,7 @@ function DiscographyCard({ item, scrollRef }) {
       }
     };
 
-    const debouncedHandleScroll = debounce(handleScroll, 100); // Adjust the debounce delay as needed
+    const debouncedHandleScroll = debounce(handleScroll, 100);
 
     handleScroll(); // Check initial position
 
@@ -61,20 +61,9 @@ function DiscographyCard({ item, scrollRef }) {
     };
   }, [item, scrollRef]);
 
-  // useEffect(() => {
-  //   spotifyApi.getAlbumTracks(item?.id, { limit: 50 }).then(
-  //     function (data) {
-  //       setAlbumTracklist(data.body?.items)
-  //     },
-  //     function (err) {
-  //       console.log('Something went wrong!', err);
-  //     }
-  //   );
-  // }, [item?.id, spotifyApi]);
-
   // fetch album tracklist
   useEffect(() => {
-    setAlbumTracklist(albumAndTrackData);
+    setAlbumTracklist(albumAndTrackData); // for mocking data
     // if (spotifyApi.getAccessToken()) {
     //   spotifyApi.getAlbum(item?.id).then(
     //     function (data) {
@@ -93,6 +82,8 @@ function DiscographyCard({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, isPlaying, item?.id]);
 
+
+  // TEMPORARY FUNCTION - NOT COORECT FUNCTIONALITY
   const HandleCardPlayPauseClick = (event) => {
     if (activeStatus) {
       // Pause logic: Set isPlaying to false
