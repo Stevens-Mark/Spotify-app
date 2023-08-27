@@ -117,7 +117,8 @@ function RenderTracks({
           )}
 
           {/* show link(s) to artist(s) if not on artist page */}
-          {!(router?.asPath).includes('artist') && (
+          {(!(router?.asPath).includes('artist') ||
+            (router?.asPath).includes('discography')) && (
             <div className="text-sm pr-2 line-clamp-1">
               {song?.artists?.map((artist, index) => (
                 <span key={artist?.id}>

@@ -26,17 +26,17 @@ function ArtistDiscography({ artistId }) {
 
   // fetch just the first 7 albums to display on artist page
   useEffect(() => {
-    setDiscography(mockAlbumData);
-    // if (spotifyApi.getAccessToken()) {
-    //   spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
-    //     function (data) {
-    //       setDiscography(data.body?.items);
-    //     },
-    //     function (err) {
-    //       console.error(err);
-    //     }
-    //   );
-    // }
+    // setDiscography(mockAlbumData);
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
+        function (data) {
+          setDiscography(data.body?.items);
+        },
+        function (err) {
+          console.error(err);
+        }
+      );
+    }
   }, [spotifyApi, session, setDiscography, artistId]);
 
   // useEffect(() => {
