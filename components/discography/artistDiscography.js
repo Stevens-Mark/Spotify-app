@@ -7,12 +7,12 @@ import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards 
 import { useRecoilState } from 'recoil';
 import { artistsDiscographyShortState } from '@/atoms/artistAtom';
 import Card from '../cards/card';
-import mockAlbumData from '@/public/mockData/mockAlbums';
+import { mockAlbumData } from '@/public/mockData/mockAlbums';
 
 /**
  * Renders partial artist discography list on artist page
  * @function ArtistDiscography
- * @param {string} artistId 
+ * @param {string} artistId
  * @returns {JSX}
  */
 function ArtistDiscography({ artistId }) {
@@ -20,7 +20,9 @@ function ArtistDiscography({ artistId }) {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const numOfItems = useNumOfItems();
-  const [discography, setDiscography] = useRecoilState(artistsDiscographyShortState);
+  const [discography, setDiscography] = useRecoilState(
+    artistsDiscographyShortState
+  );
 
   // fetch just the first 7 albums to display on artist page
   useEffect(() => {
@@ -96,4 +98,4 @@ function ArtistDiscography({ artistId }) {
   );
 }
 
-export default  ArtistDiscography;
+export default ArtistDiscography;

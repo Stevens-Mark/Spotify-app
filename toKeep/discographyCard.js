@@ -16,7 +16,6 @@ import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
 import TitleTimeLabel from '@/components/headerLabels/titleTime';
 import DiscographyTrack from '../trackListDiscography/discographyTracks';
 import { albumAndTrackData } from '@/public/mockData/mockAlbums';
-import DiscographyQuickPlayBanner from '../player/DiscographyQuickPlayer';
 
 /**
  * @function DiscographyCard
@@ -32,19 +31,16 @@ function DiscographyCard({ item, scrollRef }) {
   const [albumTracks, setAlbumTracklist] = useState(null);
   const [currentAlbumId, setCurrentAlbumId] = useRecoilState(albumIdState);
 
-  const [isAtTop, setIsAtTop] = useState(false);
+
   const cardRef = useRef(null);
 
   useEffect(() => {
     const handleScroll = () => {
       const cardRect = cardRef.current.getBoundingClientRect();
-      // const scrollPosition = scrollRef.current.scrollTop;
+      const scrollPosition = scrollRef.current.scrollTop;
 
       if (cardRect.top <= 0 && cardRect.bottom > 0) {
-        // console.log(`Item name "${item?.name}" is at the top of the screen.`);
-        setIsAtTop(true); // Set the state when the component is at the top
-      } else {
-        setIsAtTop(false); // Reset the state when the component is not at the top
+        console.log(`Item name "${item?.name}" is at the top of the screen.`);
       }
     };
 
@@ -87,35 +83,17 @@ function DiscographyCard({ item, scrollRef }) {
     // }
   }, [item?.id, spotifyApi, session]);
 
+  
+
   // album quickplay button update to active or not
   useEffect(() => {
     const newActiveStatus = item?.id === currentAlbumId && isPlaying;
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, isPlaying, item?.id]);
 
-  const HandleCardPlayPauseClick = (event) => {
-    if (activeStatus) {
-      // Pause logic: Set isPlaying to false
-      setIsPlaying(false);
-      setCurrentItemId(null); // Clear the currently playing item
-    } else {
-      // Play logic: Set isPlaying to true and set the current item ID
-      setIsPlaying(true);
-      setCurrentItemId(item?.id);
-    }
-  };
-
   return (
-    <section ref={cardRef}>
-      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white pr-12 mb-4">
-        {/* Conditionally render quick play button & title when album reaches top */}
-        {isAtTop && (
-          <DiscographyQuickPlayBanner
-            title={item?.name}
-            activeStatus={activeStatus}
-            handleClick={HandleCardPlayPauseClick}
-          />
-        )}
+    <div>
+      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white pr-12" ref={cardRef}>
         <div className="flex items-center">
           <Image
             className="ml-4 xs:ml-8 aspect-square shadow-image w-20 h-20 md:w-28 md:h-28"
@@ -127,11 +105,11 @@ function DiscographyCard({ item, scrollRef }) {
           />
         </div>
 
-        {/* Album/single details */}
+        {/* Item details */}
         <div className="ml-4">
-          <h2 className="capitalize text-xl md:text-2xl line-clamp-1">
+          <div className="capitalize text-xl md:text-2xl line-clamp-1">
             {item?.name}
-          </h2>
+          </div>
           <div className="text-pink-swan mt-0 md:mt-2">
             <span>{capitalize(item?.album_type)}&nbsp;•&nbsp;</span>
             <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
@@ -142,8 +120,16 @@ function DiscographyCard({ item, scrollRef }) {
           </div>
           <button
             className="mt-1 md:mt-3"
-            onClick={(event) => {
-              HandleCardPlayPauseClick(event);
+            onClick={() => {
+              if (activeStatus) {
+                // Pause logic: Set isPlaying to false
+                setIsPlaying(false);
+                setCurrentItemId(null); // Clear the currently playing item
+              } else {
+                // Play logic: Set isPlaying to true and set the current item ID
+                setIsPlaying(true);
+                setCurrentItemId(item?.id);
+              }
             }}
             aria-label="Play or Pause"
           >
@@ -159,8 +145,8 @@ function DiscographyCard({ item, scrollRef }) {
         <TitleTimeLabel />
       </div>
       <hr className="border-t-1 text-gray-400 mx-5 xs:mx-[3rem]" />
-      <div>
-        <h3 className="sr-only">Album Track List</h3>
+      <section>
+        <h2 className="sr-only">Track List</h2>
         <div className="p-0 xs:p-8 flex flex-col space-y-1 bp-28 text-white">
           {albumTracks?.tracks?.items?.map((track, i) => (
             <DiscographyTrack
@@ -171,8 +157,8 @@ function DiscographyCard({ item, scrollRef }) {
             />
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+    </div>
   );
 }
 

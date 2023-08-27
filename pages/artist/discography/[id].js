@@ -23,7 +23,7 @@ export async function getServerSideProps(context) {
   const fetchArtistDiscography = async (id) => {
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/artists/${id}/albums?limit=50`,
+        `https://api.spotify.com/v1/artists/${id}/albums?limit=1`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
@@ -119,13 +119,18 @@ function Discography({ artistDiscography, id }) {
     }
   };
   const containerRef = useInfiniteScroll(fetchMoreData);
-
+  
   return (
     <>
       <Head>
         <title>Provided by Spotify - Discography</title>
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
+      <div className="absolute top-0 left-0 w-full z-[25] h-32 bg-black shadow-elipsisMenu">
+        <h1 className="absolute left-5 xs:left-9 bottom-4 text-white text-xl font-bold">
+          {discography?.[0]?.artists?.[0]?.name}
+        </h1>
+      </div>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
         ref={(node) => {
@@ -134,9 +139,13 @@ function Discography({ artistDiscography, id }) {
           scrollableSectionRef.current = node;
         }}
       >
-        <div className="flex flex-col mt-20">
+        <div className="flex flex-col mt-32">
           {discography?.map((item, i) => (
-            <DiscographyCard key={`${item?.id}-${i}`} item={item} />
+            <DiscographyCard
+              key={`${item?.id}-${i}`}
+              item={item}
+              scrollRef={scrollRef}
+            />
           ))}
         </div>
         {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
