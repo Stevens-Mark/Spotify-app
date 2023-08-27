@@ -23,12 +23,12 @@ function DiscographyQuickPlayBanner({ title, activeStatus, handleClick }) {
             aria-label="Play or Pause"
           >
             {activeStatus ? (
-              <PauseCircleIcon className="w-12 h-12" />
+              <PauseCircleIcon className="w-8 h-8 xs:w-12 xs:h-12" />
             ) : (
-              <PlayCircleIcon className="w-12 h-12" />
+              <PlayCircleIcon className="w-8 h-8 xs:w-12 xs:h-12" />
             )}
           </button>
-          <h2 className="text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[100px] isMdLg:pr-[250px]">
+          <h2 className="text-white text-xl font-bold p-2 truncate pr-[100px] isMdLg:pr-[250px]">
             {capitalize(title)}
           </h2>
         </div>

@@ -200,12 +200,12 @@ function QuickEpisodePlayBanner({ item, scrollRef }) {
                   aria-label="Play or Pause show/episode"
                 >
                   {activeStatus ? (
-                    <PauseCircleIcon className="w-12 h-12" />
+                    <PauseCircleIcon className="w-8 h-8 xs:w-12 xs:h-12" />
                   ) : (
-                    <PlayCircleIcon className="w-12 h-12" />
+                    <PlayCircleIcon className="w-8 h-8 xs:w-12 xs:h-12" />
                   )}
                 </button>
-                <span className="drop-shadow-text text-white text-xl font-bold p-2 hidden xxs:inline truncate pr-[100px] isMdLg:pr-[250px]">
+                <span className="drop-shadow-text text-white text-xl font-bold p-2 truncate pr-[67px] isMdLg:pr-[250px]">
                   {capitalize(item?.name)}
                 </span>{' '}
               </>
