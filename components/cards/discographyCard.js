@@ -163,7 +163,7 @@ function DiscographyCard({ item, scrollRef }) {
 
   return (
     <section ref={cardRef}>
-      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white pr-12 mb-4">
+      <div className="grid grid-cols-[max-content_1fr] items-center p-2 text-white pr-12 mb-6">
         {/* Conditionally render quick play button & title when album reaches top */}
         {isAtTop && (
           <DiscographyQuickPlayBanner
