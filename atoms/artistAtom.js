@@ -36,3 +36,9 @@ export const viewState = atom({
   key: 'viewState',
   default: false,
 });
+
+// last artist discography loaded Id
+export const lastArtistIdState = atom({
+  key: 'lastArtistIdState',
+  default: null,
+});

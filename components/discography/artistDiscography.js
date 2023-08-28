@@ -5,7 +5,10 @@ import useSpotify from '@/hooks/useSpotify';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
 import { useRecoilState } from 'recoil';
-import { artistsDiscographyShortState } from '@/atoms/artistAtom';
+import {
+  artistsDiscographyShortState,
+  lastArtistIdState,
+} from '@/atoms/artistAtom';
 import Card from '../cards/card';
 import { mockAlbumData } from '@/public/mockData/mockAlbums';
 
@@ -23,21 +26,33 @@ function ArtistDiscography({ artistId }) {
   const [discography, setDiscography] = useRecoilState(
     artistsDiscographyShortState
   );
+  const [lastArtistId, setLastArtistId] = useRecoilState(lastArtistIdState); // last artists loaed Id
 
   // fetch just the first 7 albums to display on artist page
   useEffect(() => {
     // setDiscography(mockAlbumData);
-    if (spotifyApi.getAccessToken()) {
-      spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
-        function (data) {
-          setDiscography(data.body?.items);
-        },
-        function (err) {
-          console.error(err);
-        }
-      );
+    // avoid artist discography being refetched when user returns to same artists page (after browsing discography for example)
+    if (lastArtistId !== artistId) {
+      if (spotifyApi.getAccessToken()) {
+        spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
+          function (data) {
+            setDiscography(data.body?.items);
+            setLastArtistId(artistId);
+          },
+          function (err) {
+            console.error(err);
+          }
+        );
+      }
     }
-  }, [spotifyApi, session, setDiscography, artistId]);
+  }, [
+    spotifyApi,
+    session,
+    setDiscography,
+    artistId,
+    lastArtistId,
+    setLastArtistId,
+  ]);
 
   // useEffect(() => {
   //   if (spotifyApi.getAccessToken()) {
