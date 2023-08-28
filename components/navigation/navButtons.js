@@ -16,7 +16,7 @@ function NavigationButtons() {
   const router = useRouter();
   const [canGoBack, setCanGoBack] = useState(false);
   const [canGoForward, setCanGoForward] = useState(false);
-  const [navIndex, setNnavIndex] = useRecoilState(navIndexState);
+  const [navIndex, setNavIndex] = useRecoilState(navIndexState);
 
   useEffect(() => {
     // Check if the current URL is '/' (when local server) or contains the "code" query parameter (when deployed)
@@ -32,14 +32,14 @@ function NavigationButtons() {
   const handleGoBack = () => {
     if (canGoBack) {
       router.back();
-      setNnavIndex((prevState) => prevState - 1);
+      setNavIndex((prevState) => prevState - 1);
     }
   };
 
   const handleGoForward = () => {
     if (canGoForward) {
       window.history.forward();
-      setNnavIndex((prevState) => prevState + 1);
+      setNavIndex((prevState) => prevState + 1);
     }
   };
 

@@ -15,7 +15,7 @@ import {
   onlyUsersPlaylistState,
   spotifyPlaylistState,
 } from '@/atoms/playListAtom';
-import { mySavedAlbumsState } from '@/atoms/albumAtom';
+import { mySavedAlbumsState, albumIdState } from '@/atoms/albumAtom';
 import { currentTrackIdState, isPlayState } from '@/atoms/songAtom';
 import {
   currentItemIdState,
@@ -56,6 +56,7 @@ function Sidebar() {
   const setCurrentTrackId = useSetRecoilState(currentTrackIdState);
   const [activePlaylist, setActivePlaylist] =
     useRecoilState(activePlaylistState);
+  const setCurrentAlbumId = useSetRecoilState(albumIdState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setCurrentItemId = useSetRecoilState(currentItemIdState);
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
@@ -92,6 +93,7 @@ function Sidebar() {
           setPlayerInfoType(data.body?.currently_playing_type);
           setIsPlaying(data.body?.is_playing);
           setCurrentTrackId(data.body?.item?.id);
+          setCurrentAlbumId(data.body?.item?.album?.id);
           if (currentPlaylistId !== undefined) {
             setCurrentItemId(currentPlaylistId);
             setActivePlaylist(currentPlaylistId);
@@ -105,6 +107,7 @@ function Sidebar() {
   }, [
     session,
     setActivePlaylist,
+    setCurrentAlbumId,
     setCurrentItemId,
     setCurrentTrackId,
     setIsPlaying,
@@ -200,7 +203,7 @@ function Sidebar() {
     setIsMenuOpen(!isMenuOpen);
   };
 
-  // show playlist: all, user's or spotify 
+  // show playlist: all, user's or spotify
   const playlistToUse =
     playlistInUse == 'user'
       ? userCreatedPlaylists

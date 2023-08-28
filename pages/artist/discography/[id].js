@@ -8,11 +8,15 @@ import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { artistsDiscographyState } from '@/atoms/artistAtom';
+import { artistsDiscographyState, viewState } from '@/atoms/artistAtom';
 import { itemsPerPageState } from '@/atoms/otherAtoms';
 // import layouts/components
 import Layout from '@/components/layouts/Layout';
 import DiscographyCard from '@/components/cards/discographyCard';
+import Card from '@/components/cards/card';
+// import images/icons
+import { Squares2X2Icon, ListBulletIcon } from '@heroicons/react/24/outline';
+
 import Footer from '@/components/navigation/Footer';
 import BackToTopButton from '@/components/backToTopButton';
 
@@ -63,6 +67,7 @@ function Discography({ artistDiscography, id }) {
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
   const [discography, setDiscography] = useRecoilState(artistsDiscographyState);
+  const [toggle, setToggle] = useRecoilState(viewState);
 
   useEffect(() => {
     setDiscography(artistDiscography.items);
@@ -119,7 +124,12 @@ function Discography({ artistDiscography, id }) {
     }
   };
   const containerRef = useInfiniteScroll(fetchMoreData);
-  
+
+  // toggle between list/card view
+  const handleView = () => {
+    setToggle((prevState) => !prevState);
+  };
+
   return (
     <>
       <Head>
@@ -127,9 +137,22 @@ function Discography({ artistDiscography, id }) {
         <link rel="icon" href="/spotify.ico"></link>
       </Head>
       <div className="absolute top-0 left-0 w-full z-[25] h-32 bg-black shadow-elipsisMenu">
-        <h1 className="absolute left-5 xs:left-9 bottom-4 text-white text-xl font-bold">
-          {discography?.[0]?.artists?.[0]?.name}
-        </h1>
+        <div className="absolute left-5 xs:left-9 bottom-5 w-full">
+          <h1 className="text-white text-xl font-bold">
+            {discography?.[0]?.artists?.[0]?.name}
+          </h1>
+          <button
+            onClick={handleView}
+            aria-label="change between list & card view"
+            className="rounded-full text-pink-swan bg-gray-900 hover:bg-gray-800 hover:text-white focus:bg-gray-800 focus:text-white absolute -bottom-1 right-11 xs:right-14"
+          >
+            {toggle ? (
+              <Squares2X2Icon className=" w-9 h-9 md:w-9 md:h-9 p-2" />
+            ) : (
+              <ListBulletIcon className=" w-9 h-9 md:w-9 md:h-9 p-2" />
+            )}
+          </button>
+        </div>
       </div>
       <div
         className="flex-grow h-screen overflow-y-scroll scrollbar-hide"
@@ -139,15 +162,24 @@ function Discography({ artistDiscography, id }) {
           scrollableSectionRef.current = node;
         }}
       >
-        <div className="flex flex-col mt-32">
-          {discography?.map((item, i) => (
-            <DiscographyCard
-              key={`${item?.id}-${i}`}
-              item={item}
-              scrollRef={scrollRef}
-            />
-          ))}
-        </div>
+        {toggle ? (
+          <div className="flex flex-col mt-32">
+            {discography?.map((item, i) => (
+              <DiscographyCard
+                key={`${item?.id}-${i}`}
+                item={item}
+                scrollRef={scrollRef}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="px-5 xs:px-8 mt-32 grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
+            {discography?.map((item, i) => (
+              <Card key={`${item?.id}-${i}`} item={item} />
+            ))}
+          </div>
+        )}
+
         {showButton && <BackToTopButton scrollToTop={scrollToTop} />}
         <Footer />
       </div>

@@ -41,7 +41,7 @@ function ArtistDiscography({ artistId }) {
 
   // useEffect(() => {
   //   if (spotifyApi.getAccessToken()) {
-  //     spotifyApi.getNewReleases({ limit : 50 })
+  //     spotifyApi.getNewReleases( { limit : 50, country: 'GB' })
   //     .then(function(data) {
 
   //       console.log('new releases', data.body);
@@ -52,6 +52,36 @@ function ArtistDiscography({ artistId }) {
   //       }, function(err) {
   //          console.log("Something went wrong!", err);
   //       });
+
+  //   }
+  // }, [spotifyApi, session, artistId]);
+
+  //   useEffect(() => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     spotifyApi.getFeaturedPlaylists({ limit : 50, country: 'GB', locale: 'en_GB',})
+  //     .then(function(data) {
+  //       console.log(data.body);
+  //       console.log('FeaturedPlaylists ', data.body);
+  //     }, function(err) {
+  //       console.log("Something went wrong!", err);
+  //     });
+
+  //   }
+  // }, [spotifyApi]);
+
+  //     useEffect(() => {
+  //   if (spotifyApi.getAccessToken()) {
+  //     spotifyApi.getRecommendations({
+  //       min_energy: 0.4,
+  //       seed_artists: [artistId],
+  //       min_popularity: 50
+  //     })
+  //   .then(function(data) {
+  //     let recommendations = data.body;
+  //     console.log("recommend ",recommendations);
+  //   }, function(err) {
+  //     console.log("Something went wrong!", err);
+  //   });
 
   //   }
   // }, [spotifyApi, session, artistId]);
@@ -73,7 +103,7 @@ function ArtistDiscography({ artistId }) {
         </section>
       ) : (
         <section className="mb-9">
-          {/*  partial (7]) artists discography list */}
+          {/*  partial (7) artists discography list */}
           <div className="flex items-center justify-between">
             <h2 className="text-white mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
               Discography

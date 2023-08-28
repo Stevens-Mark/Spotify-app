@@ -30,3 +30,9 @@ export const artistsDiscographyState = atom({
   key: 'artistsDiscographyState',
   default: [],
 });
+
+// toggle between list/card view on discography page
+export const viewState = atom({
+  key: 'viewState',
+  default: false,
+});

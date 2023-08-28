@@ -119,15 +119,15 @@ function Player() {
               );
               if (activeDevice) {
                 spotifyApi.setVolume(volume).catch((err) => {
-                  console.error('Something went wrong !');
-                  toast.error('Something went wrong !', {
+                  console.error('Set volume failed !');
+                  toast.error('Something went wrong!', {
                     theme: 'colored',
                   });
                 });
               }
             })
             .catch((err) => {
-              console.error('Something went wrong !');
+              console.error('Set volume failed !');
               toast.error('Something went wrong !', {
                 theme: 'colored',
               });

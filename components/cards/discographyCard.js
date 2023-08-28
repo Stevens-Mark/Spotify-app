@@ -11,8 +11,10 @@ import { albumIdState } from '@/atoms/albumAtom';
 import { isPlayState } from '@/atoms/songAtom';
 // import functions
 import { capitalize } from '@/lib/capitalize';
+// import images/icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
+// import components 
 import TitleTimeLabel from '@/components/headerLabels/titleTime';
 import DiscographyTrack from '../trackListDiscography/discographyTracks';
 import { albumAndTrackData } from '@/public/mockData/mockAlbums';
@@ -82,7 +84,6 @@ function DiscographyCard({ item, scrollRef }) {
     setActiveStatus(newActiveStatus);
   }, [currentAlbumId, isPlaying, item?.id]);
 
-
   // TEMPORARY FUNCTION - NOT COORECT FUNCTIONALITY
   // const HandleCardPlayPauseClick = (event) => {
   //   if (activeStatus) {
@@ -96,63 +97,69 @@ function DiscographyCard({ item, scrollRef }) {
   //   }
   // };
 
-    /**
+  /**
    * Either play or pause current track
    * @function HandleCardPlayPauseClick
    * @param {event object} event
    */
-    const HandleCardPlayPauseClick = (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-  
-      if (spotifyApi.getAccessToken()) {
-        spotifyApi.getMyCurrentPlaybackState().then((data) => {
-          // if track playing originates from the current page then pause
-          if (currentItemId === originId && data.body?.is_playing) {
+  const HandleCardPlayPauseClick = (event) => {
+    event.preventDefault();
+    event.stopPropagation();
+
+    if (spotifyApi.getAccessToken()) {
+      spotifyApi.getMyCurrentPlaybackState().then((data) => {
+        // if track playing originates from the current page then pause
+        if (item.id === data.body?.item?.album?.id && data.body?.is_playing) {
+          console.log('should pause');
+          // if (currentItemId === originId && data.body?.is_playing) {
+          // spotifyApi
+          //   .pause()
+          //   .then(() => {
+          setIsPlaying(false);
+          //   })
+          //   .catch((err) => {
+          //     console.error('Pause failed: ');
+          //     toast.error('Pause failed !', {
+          //       theme: 'colored',
+          //     });
+          //   });
+        } else {
+          // or if paused, restart track (that originates from the current page)
+          if (item.id === data.body?.item?.album?.id) {
+            console.log('should restart same track');
+            // if (currentItemId === originId) {
             // spotifyApi
-            //   .pause()
+            //   .play()
             //   .then(() => {
-            //     setIsPlaying(false);
+                setIsPlaying(true);
             //   })
             //   .catch((err) => {
-            //     console.error('Pause failed: ');
-            //     toast.error('Pause failed !', {
+            //     console.error('Playback failed: ');
+            //     toast.error('Playback failed !', {
             //       theme: 'colored',
             //     });
             //   });
           } else {
-            // or if paused, restart track (that originates from the current page)
-            if (currentItemId === originId) {
-              // spotifyApi
-              //   .play()
-              //   .then(() => {
-              //     setIsPlaying(true);
-              //   })
-              //   .catch((err) => {
-              //     console.error('Playback failed: ');
-              //     toast.error('Playback failed !', {
-              //       theme: 'colored',
-              //     });
-              //   });
-            } else {
-              // otherwise no track played from the curent page yet, so start with first track
-              // HandleCardPlayPause(
-              //   item,
-              //   setCurrentItemId,
-              //   currentItemId,
-              //   setIsPlaying,
-              //   setPlayerInfoType,
-              //   setCurrentTrackId,
-              //   setCurrentSongIndex,
-              //   setActivePlaylist,
-              //   setActiveArtist,
-              //   spotifyApi
-              // );
-            }
+            console.log('so start with first track');
+            setIsPlaying(true);
+            // otherwise no track played from the curent page yet, so start with first track
+            // HandleCardPlayPause(
+            //   item,
+            //   setCurrentItemId,
+            //   currentItemId,
+            //   setIsPlaying,
+            //   setPlayerInfoType,
+            //   setCurrentTrackId,
+            //   setCurrentSongIndex,
+            //   setActivePlaylist,
+            //   setActiveArtist,
+            //   spotifyApi
+            // );
           }
-        });
-      }
-    };
+        }
+      });
+    }
+  };
 
   return (
     <section ref={cardRef}>

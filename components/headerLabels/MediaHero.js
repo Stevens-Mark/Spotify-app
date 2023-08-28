@@ -153,7 +153,7 @@ const MediaHeading = ({ item, itemTracks }) => {
                   </span>
                   {item?.followers?.total !== 0 && (
                     <span>
-                      {(item?.followers?.total).toLocaleString()}{' '}
+                      {(item?.followers?.total)?.toLocaleString()}{' '}
                       followers&nbsp;•&nbsp;
                     </span>
                   )}
@@ -186,7 +186,7 @@ const MediaHeading = ({ item, itemTracks }) => {
               {item?.type === 'artist' && (
                 <>
                   <span>
-                    {(item?.followers?.total).toLocaleString()}{' '}
+                    {(item?.followers?.total)?.toLocaleString()}{' '}
                     followers&nbsp;•&nbsp;
                   </span>
                   <span className="text-base">
