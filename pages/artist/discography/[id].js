@@ -27,7 +27,7 @@ export async function getServerSideProps(context) {
   const fetchArtistDiscography = async (id) => {
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/artists/${id}/albums?limit=1`,
+        `https://api.spotify.com/v1/artists/${id}/albums?limit=14`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
