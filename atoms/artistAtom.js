@@ -34,7 +34,7 @@ export const artistsDiscographyState = atom({
 // toggle between list/card view on discography page
 export const viewState = atom({
   key: 'viewState',
-  default: false,
+  default: true,
 });
 
 // last artist discography loaded Id
