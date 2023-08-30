@@ -19,16 +19,34 @@ export const activeArtistState = atom({
   default: false,
 });
 
-// stores first 7 artists albums from discography (CSR) client side rendering
-export const artistsDiscographyShortState = atom({
+// stores artists discography (SSR server side rendering) - on discography page
+export const discographyState = atom({
+  key: 'discographyState',
+  default: [],
+});
+
+// stores shorter list of artists albums/singles from discography (CSR) - client side rendering
+export const artistsDiscographyState = atom({
   key: 'artistsDiscographyShortState',
   default: [],
 });
 
-// stores first  artists albums from discography (SSR) - server side rendering
-export const artistsDiscographyState = atom({
-  key: 'artistsDiscographyState',
+// stores albums only from artist discography
+export const albumsDiscographyState = atom({
+  key: 'albumsDiscographyState',
   default: [],
+});
+
+// strores singles only from artist discography
+export const singlesDiscographyState = atom({
+  key: 'singlesDiscographyState',
+  default: [],
+});
+
+// show all, singles or albums only from artists discography
+export const discographyToShowState = atom({
+  key: 'discographyToShowState',
+  default: 'all',
 });
 
 // toggle between list/card view on discography page

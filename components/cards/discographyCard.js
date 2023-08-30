@@ -9,12 +9,10 @@ import { currentItemIdState } from '@/atoms/otherAtoms';
 import { albumIdState } from '@/atoms/albumAtom';
 // import { isPlayState } from '@/atoms/songAtom';
 import { isPlayState } from '@/atoms/songAtom';
-// import functions
-import { capitalize } from '@/lib/capitalize';
 // import images/icons
 import noImage from '@/public/images/noImageAvailable.svg';
 import { PlayCircleIcon, PauseCircleIcon } from '@heroicons/react/24/solid';
-// import components 
+// import components
 import TitleTimeLabel from '@/components/headerLabels/titleTime';
 import DiscographyTrack from '../trackListDiscography/discographyTracks';
 import { albumAndTrackData } from '@/public/mockData/mockAlbums';
@@ -131,7 +129,7 @@ function DiscographyCard({ item, scrollRef }) {
             // spotifyApi
             //   .play()
             //   .then(() => {
-                setIsPlaying(true);
+            setIsPlaying(true);
             //   })
             //   .catch((err) => {
             //     console.error('Playback failed: ');
@@ -188,8 +186,13 @@ function DiscographyCard({ item, scrollRef }) {
           <h2 className="capitalize text-xl md:text-2xl line-clamp-1">
             {item?.name}
           </h2>
-          <div className="text-pink-swan mt-0 md:mt-2">
-            <span>{capitalize(item?.album_type)}&nbsp;•&nbsp;</span>
+          <div className="text-pink-swan mt-0 md:mt-2 capitalize">
+            <span>
+              {item?.name?.toLowerCase().includes('ep')
+                ? 'EP'
+                : item?.album_type}
+              &nbsp;•&nbsp;
+            </span>
             <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
             <span>
               {albumTracks?.tracks?.items?.length}&nbsp;

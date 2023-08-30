@@ -4,13 +4,19 @@ import { useSession } from 'next-auth/react';
 import useSpotify from '@/hooks/useSpotify';
 import useNumOfItems from '@/hooks/useNumberOfItems'; //control number of cards shown depending on screen width
 // import state management recoil
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import {
-  artistsDiscographyShortState,
+  discographyToShowState,
+  artistsDiscographyState,
+  singlesDiscographyState,
+  albumsDiscographyState,
   lastArtistIdState,
 } from '@/atoms/artistAtom';
+// import functions
+import { filterDiscography } from '@/lib/filterDiscography';
+// import components
 import Card from '../cards/card';
-import { mockAlbumData } from '@/public/mockData/mockAlbums';
+import DiscographyViewButtons from './discographyViewButtons';
 
 /**
  * Renders partial artist discography list on artist page
@@ -23,20 +29,25 @@ function ArtistDiscography({ artistId }) {
   const spotifyApi = useSpotify();
   const { data: session } = useSession();
   const numOfItems = useNumOfItems();
-  const [discography, setDiscography] = useRecoilState(
-    artistsDiscographyShortState
+  const [lastArtistId, setLastArtistId] = useRecoilState(lastArtistIdState); // last artists loaded Id
+  const [allDiscography, setAllDiscography] = useRecoilState(
+    artistsDiscographyState
   );
-  const [lastArtistId, setLastArtistId] = useRecoilState(lastArtistIdState); // last artists loaed Id
+  const [singlesOnly, setSinglesOnly] = useRecoilState(singlesDiscographyState);
+  const [albumsOnly, setAlbumsOnly] = useRecoilState(albumsDiscographyState);
+  const discographyToShow = useRecoilValue(discographyToShowState);
 
-  // fetch just the first 7 albums to display on artist page
   useEffect(() => {
-    // setDiscography(mockAlbumData);
     // avoid artist discography being refetched when user returns to same artists page (after browsing discography for example)
     if (lastArtistId !== artistId) {
       if (spotifyApi.getAccessToken()) {
-        spotifyApi.getArtistAlbums(artistId, { limit: 7 }).then(
+        spotifyApi.getArtistAlbums(artistId, { limit: 14 }).then(
           function (data) {
-            setDiscography(data.body?.items);
+            setAllDiscography(data.body?.items);
+
+            setSinglesOnly(filterDiscography(data.body?.items, 'single'));
+
+            setAlbumsOnly(filterDiscography(data.body?.items, 'album'));
             setLastArtistId(artistId);
           },
           function (err) {
@@ -48,58 +59,22 @@ function ArtistDiscography({ artistId }) {
   }, [
     spotifyApi,
     session,
-    setDiscography,
-    artistId,
     lastArtistId,
+    artistId,
+    setSinglesOnly,
+    setAlbumsOnly,
     setLastArtistId,
+    setAllDiscography,
   ]);
 
-  // useEffect(() => {
-  //   if (spotifyApi.getAccessToken()) {
-  //     spotifyApi.getNewReleases( { limit : 50, country: 'GB' })
-  //     .then(function(data) {
+  // show  all, albums or singles
+  const listToUse =
+    discographyToShow == 'album'
+      ? albumsOnly
+      : discographyToShow === 'single'
+      ? singlesOnly
+      : allDiscography;
 
-  //       console.log('new releases', data.body);
-  //       const filteredAlbums = data.body.albums.items.filter(album => {
-  //         return album.artists.some(artist => artist.id === artistId);
-  //       });
-  //       console.log('filtered releases',filteredAlbums)
-  //       }, function(err) {
-  //          console.log("Something went wrong!", err);
-  //       });
-
-  //   }
-  // }, [spotifyApi, session, artistId]);
-
-  //   useEffect(() => {
-  //   if (spotifyApi.getAccessToken()) {
-  //     spotifyApi.getFeaturedPlaylists({ limit : 50, country: 'GB', locale: 'en_GB',})
-  //     .then(function(data) {
-  //       console.log(data.body);
-  //       console.log('FeaturedPlaylists ', data.body);
-  //     }, function(err) {
-  //       console.log("Something went wrong!", err);
-  //     });
-
-  //   }
-  // }, [spotifyApi]);
-
-  //     useEffect(() => {
-  //   if (spotifyApi.getAccessToken()) {
-  //     spotifyApi.getRecommendations({
-  //       min_energy: 0.4,
-  //       seed_artists: [artistId],
-  //       min_popularity: 50
-  //     })
-  //   .then(function(data) {
-  //     let recommendations = data.body;
-  //     console.log("recommend ",recommendations);
-  //   }, function(err) {
-  //     console.log("Something went wrong!", err);
-  //   });
-
-  //   }
-  // }, [spotifyApi, session, artistId]);
 
   const handleDiscography = () => {
     router.push(`/artist/discography/${artistId}`);
@@ -107,7 +82,7 @@ function ArtistDiscography({ artistId }) {
 
   return (
     <div className=" py-4 px-5 xs:px-8">
-      {discography?.length === 0 ? (
+      {allDiscography?.length === 0 ? (
         <section>
           <h2 className="text-white mt-4 mb-5 text-2xl md:text-3xl 2xl:text-4xl flex-1">
             Discography
@@ -132,8 +107,9 @@ function ArtistDiscography({ artistId }) {
               <span>show all</span>
             </button>
           </div>
+          <DiscographyViewButtons />
           <div className="grid grid-cols-1 xxs:grid-cols-2 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-6">
-            {discography?.slice(0, numOfItems).map((item, i) => (
+            {listToUse?.slice(0, numOfItems).map((item, i) => (
               <Card key={`${item.id}-${i}`} item={item} />
             ))}
           </div>

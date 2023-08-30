@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import useSpotify from '@/hooks/useSpotify';
+import { useRouter } from 'next/router';
 // import state management recoil
 import { useRecoilState, useSetRecoilState, useRecoilValue } from 'recoil';
 import {
@@ -29,8 +30,8 @@ import noImage from '@/public/images/noImageAvailable.svg';
  */
 function Card({ item }) {
   const spotifyApi = useSpotify();
-
-    // used to determine what type of info to load
+  const router = useRouter();
+  // used to determine what type of info to load
   const setPlayerInfoType = useSetRecoilState(playerInfoTypeState);
   const [isPlaying, setIsPlaying] = useRecoilState(isPlayState);
   const setActivePlaylist = useSetRecoilState(activePlaylistState);
@@ -40,6 +41,13 @@ function Card({ item }) {
   // used to set play/pause icons
   const [currentItemId, setCurrentItemId] = useRecoilState(currentItemIdState);
   const currentAlbumId = useRecoilValue(albumIdState);
+  const [isDiscography, setIsDiscography] = useState(false);
+
+  // check if on discography page
+  useEffect(() => {
+    const Discography = (router?.asPath).includes('artist');
+    setIsDiscography(Discography);
+  }, [router?.asPath]);
 
   const linkAddress =
     item?.type === 'album'
@@ -121,13 +129,13 @@ function Card({ item }) {
           </button>
         )}
 
-        <h3 className="text-white capitalize mt-2 line-clamp-2">
+        <h3 className="text-white capitalize mt-2 line-clamp-1">
           {item?.name?.replace('/', ' & ')}
         </h3>
 
         <div className="flex flex-wrap text-pink-swan mt-2 h-10">
           {/* album */}
-          {item?.type === 'album' && (
+          {item?.type === 'album' && !isDiscography && (
             <>
               <span>{item?.release_date.slice(0, 4)}&nbsp;•&nbsp;</span>
               {item?.artists?.slice(0, 2).map((item) => (
@@ -135,6 +143,17 @@ function Card({ item }) {
                   {item?.name}.&nbsp;
                 </span>
               ))}
+            </>
+          )}
+          {/* for discography card only */}
+          {item?.type === 'album' && isDiscography && (
+            <>
+              <span>{item?.release_date?.slice(0, 4)}&nbsp;•&nbsp;</span>
+              <span className="capitalize">
+                {item?.name?.toLowerCase().includes('ep')
+                  ? 'EP'
+                  : item?.album_type}
+              </span>
             </>
           )}
 

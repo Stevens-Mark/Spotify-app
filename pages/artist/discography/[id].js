@@ -8,17 +8,22 @@ import useScrollToTop from '@/hooks/useScrollToTop';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 // import state management recoil
 import { useRecoilState, useRecoilValue } from 'recoil';
-import { artistsDiscographyState, viewState } from '@/atoms/artistAtom';
+import {
+  discographyState,
+  viewState,
+  discographyToShowState,
+} from '@/atoms/artistAtom';
 import { itemsPerPageState } from '@/atoms/otherAtoms';
+// import functions
+// import { filterDiscography } from '@/lib/filterDiscography';
 // import layouts/components
 import Layout from '@/components/layouts/Layout';
 import DiscographyCard from '@/components/cards/discographyCard';
 import Card from '@/components/cards/card';
-// import images/icons
-import { Squares2X2Icon, ListBulletIcon } from '@heroicons/react/24/outline';
-
 import Footer from '@/components/navigation/Footer';
 import BackToTopButton from '@/components/backToTopButton';
+// import images/icons
+import { Squares2X2Icon, ListBulletIcon } from '@heroicons/react/24/outline';
 
 export async function getServerSideProps(context) {
   const { id } = context.query;
@@ -52,6 +57,10 @@ export async function getServerSideProps(context) {
   };
 }
 
+const filterDiscography = (array, type) => {
+  return array?.filter((item) => item?.album_type === type);
+};
+
 /**
  * Renders the artist discography page.
  * @function Discography
@@ -66,12 +75,28 @@ function Discography({ artistDiscography, id }) {
   const itemsPerPage = useRecoilValue(itemsPerPageState);
   const [currentOffset, setCurrentOffset] = useState(0);
   const [stopFetch, setStopFetch] = useState(false);
-  const [discography, setDiscography] = useRecoilState(artistsDiscographyState);
+  const [discography, setDiscography] = useRecoilState(discographyState);
   const [toggle, setToggle] = useRecoilState(viewState);
+  const discographyToShow = useRecoilValue(discographyToShowState);
 
+// filter (or not) the discography & sort
   useEffect(() => {
-    setDiscography(artistDiscography.items);
-  }, [artistDiscography, setDiscography]);
+    const filteredDiscography = artistDiscography.items.filter((item) => {
+      if (discographyToShow === 'album') {
+        return item.album_type === 'album';
+      }
+      if (discographyToShow === 'single') {
+        return item.album_type === 'single';
+      }
+      return true; // No additional filtering for other cases
+    });
+
+    const sortedDiscography = filteredDiscography.sort((a, b) =>     // Sort  discography 
+      a.release_date > b.release_date ? -1 : 1
+    );
+
+    setDiscography(sortedDiscography);
+  }, [artistDiscography, discographyToShow, setDiscography]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -100,15 +125,27 @@ function Discography({ artistDiscography, id }) {
           .then(
             function (data) {
               setStopFetch(data?.body?.next === null);
+              const newData = data.body?.items || []; 
+              let filteredNewData = newData;
+
+              if (discographyToShow === 'album') {
+                filteredNewData = filterDiscography(newData, 'album');
+              } else if (discographyToShow === 'single') {
+                filteredNewData = filterDiscography(newData, 'single');
+              }
+
               setDiscography((prevDiscography) => {
-                const mergedList = [...prevDiscography, ...data.body?.items];
+                const mergedList = [...prevDiscography, ...filteredNewData];
 
                 // Remove duplicates based on item id
                 const uniqueList = Array.from(
                   new Set(mergedList.map((item) => item?.id))
                 ).map((id) => mergedList.find((item) => item.id === id));
 
-                return uniqueList;
+                const sorted = uniqueList.sort((a, b) =>     // Sort  discography 
+                a.release_date > b.release_date ? -1 : 1
+              );
+                return sorted;
               });
 
               setCurrentOffset(nextOffset);

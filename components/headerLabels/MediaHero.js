@@ -17,7 +17,7 @@ import {
   totalCollectionTrackDuration,
 } from '@/lib/totalTrackDuration';
 import { capitalize } from '@/lib/capitalize';
-import { analyseImageColor } from '@/lib/analyseImageColor.js';
+import { analyseImageColor } from '@/lib/colorFunctions.js';
 
 /**
  * Renders the Hero heading, image, title

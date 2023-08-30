@@ -19,7 +19,7 @@ import {
 import { HandleCardPlayPause } from '@/lib/playbackUtils';
 // import functions
 import { capitalize } from '@/lib/capitalize';
-import { darkenColor } from '@/lib/darkenColor';
+import { darkenColor } from '@/lib/colorFunctions';
 // import icons/images
 import {
   PlayCircleIcon,
