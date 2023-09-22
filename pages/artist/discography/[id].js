@@ -15,7 +15,10 @@ import {
 } from '@/atoms/artistAtom';
 import { itemsPerPageState } from '@/atoms/otherAtoms';
 // import functions
-// import { filterDiscography } from '@/lib/filterDiscography';
+import {
+  filterIdDiscography,
+  getArtistNameById,
+} from '@/lib/filterDiscography';
 // import layouts/components
 import Layout from '@/components/layouts/Layout';
 import DiscographyCard from '@/components/cards/discographyCard';
@@ -32,7 +35,7 @@ export async function getServerSideProps(context) {
   const fetchArtistDiscography = async (id) => {
     try {
       const res = await fetch(
-        `https://api.spotify.com/v1/artists/${id}/albums?limit=14`,
+        `https://api.spotify.com/v1/artists/${id}/albums?limit=50`,
         {
           headers: {
             Authorization: `Bearer ${session.user.accessToken}`,
@@ -57,10 +60,6 @@ export async function getServerSideProps(context) {
   };
 }
 
-const filterDiscography = (array, type) => {
-  return array?.filter((item) => item?.album_type === type);
-};
-
 /**
  * Renders the artist discography page.
  * @function Discography
@@ -79,24 +78,31 @@ function Discography({ artistDiscography, id }) {
   const [toggle, setToggle] = useRecoilState(viewState);
   const discographyToShow = useRecoilValue(discographyToShowState);
 
-// filter (or not) the discography & sort
+  // filter (or not) the discography & sort
   useEffect(() => {
     const filteredDiscography = artistDiscography.items.filter((item) => {
+      const hasArtist = item.artists.some((artist) => artist.id === id);
       if (discographyToShow === 'album') {
-        return item.album_type === 'album';
+        return item?.album_group === 'album' && hasArtist;
       }
       if (discographyToShow === 'single') {
-        return item.album_type === 'single';
+        return item?.album_group === 'single' && hasArtist;
       }
-      return true; // No additional filtering for other cases
+      if (discographyToShow === 'compilation') {
+        return item?.album_group === 'compilation' && hasArtist;
+      }
+      return hasArtist; // No additional filtering for other cases
     });
 
-    const sortedDiscography = filteredDiscography.sort((a, b) =>     // Sort  discography 
-      a.release_date > b.release_date ? -1 : 1
+    const sortedDiscography = filteredDiscography.sort(
+      (
+        a,
+        b // Sort  discography
+      ) => (a.release_date > b.release_date ? -1 : 1)
     );
 
     setDiscography(sortedDiscography);
-  }, [artistDiscography, discographyToShow, setDiscography]);
+  }, [artistDiscography, discographyToShow, id, setDiscography]);
 
   // show message when all data loaded/end of infinite scrolling
   useEffect(() => {
@@ -125,13 +131,21 @@ function Discography({ artistDiscography, id }) {
           .then(
             function (data) {
               setStopFetch(data?.body?.next === null);
-              const newData = data.body?.items || []; 
-              let filteredNewData = newData;
+              const newData = data.body?.items;
+              let filteredNewData = newData.filter((item) =>
+                item.artists.some((artist) => artist.id === id)
+              );
 
               if (discographyToShow === 'album') {
-                filteredNewData = filterDiscography(newData, 'album');
+                filteredNewData = filterIdDiscography(id, newData, 'album');
               } else if (discographyToShow === 'single') {
-                filteredNewData = filterDiscography(newData, 'single');
+                filteredNewData = filterIdDiscography(id, newData, 'single');
+              } else if (discographyToShow === 'compilation') {
+                filteredNewData = filterIdDiscography(
+                  id,
+                  newData,
+                  'compilation'
+                );
               }
 
               setDiscography((prevDiscography) => {
@@ -142,9 +156,12 @@ function Discography({ artistDiscography, id }) {
                   new Set(mergedList.map((item) => item?.id))
                 ).map((id) => mergedList.find((item) => item.id === id));
 
-                const sorted = uniqueList.sort((a, b) =>     // Sort  discography 
-                a.release_date > b.release_date ? -1 : 1
-              );
+                const sorted = uniqueList.sort(
+                  (
+                    a,
+                    b // Sort  discography
+                  ) => (a.release_date > b.release_date ? -1 : 1)
+                );
                 return sorted;
               });
 
@@ -176,7 +193,7 @@ function Discography({ artistDiscography, id }) {
       <div className="absolute top-0 left-0 w-full z-[25] h-32 bg-black shadow-elipsisMenu">
         <div className="absolute left-5 xs:left-9 bottom-5 w-full">
           <h1 className="text-white text-xl font-bold">
-            {discography?.[0]?.artists?.[0]?.name}
+            {getArtistNameById(discography?.[0]?.artists, id)}
           </h1>
           <button
             onClick={handleView}

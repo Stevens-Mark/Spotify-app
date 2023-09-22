@@ -10,6 +10,7 @@ import {
   artistsDiscographyState,
   singlesDiscographyState,
   albumsDiscographyState,
+  compilationDiscographyState,
   lastArtistIdState,
 } from '@/atoms/artistAtom';
 // import functions
@@ -35,19 +36,28 @@ function ArtistDiscography({ artistId }) {
   );
   const [singlesOnly, setSinglesOnly] = useRecoilState(singlesDiscographyState);
   const [albumsOnly, setAlbumsOnly] = useRecoilState(albumsDiscographyState);
+  const [compilationOnly, setCompilationOnly] = useRecoilState(
+    compilationDiscographyState
+  );
+
   const discographyToShow = useRecoilValue(discographyToShowState);
 
   useEffect(() => {
     // avoid artist discography being refetched when user returns to same artists page (after browsing discography for example)
     if (lastArtistId !== artistId) {
       if (spotifyApi.getAccessToken()) {
-        spotifyApi.getArtistAlbums(artistId, { limit: 14 }).then(
+        spotifyApi.getArtistAlbums(artistId, { limit: 50 }).then(
           function (data) {
             setAllDiscography(data.body?.items);
 
             setSinglesOnly(filterDiscography(data.body?.items, 'single'));
 
             setAlbumsOnly(filterDiscography(data.body?.items, 'album'));
+
+            setCompilationOnly(
+              filterDiscography(data.body?.items, 'compilation')
+            );
+
             setLastArtistId(artistId);
           },
           function (err) {
@@ -65,16 +75,18 @@ function ArtistDiscography({ artistId }) {
     setAlbumsOnly,
     setLastArtistId,
     setAllDiscography,
+    setCompilationOnly,
   ]);
 
-  // show  all, albums or singles
+  // show  all, albums, singles or compilations
   const listToUse =
-    discographyToShow == 'album'
+    discographyToShow === 'album'
       ? albumsOnly
       : discographyToShow === 'single'
       ? singlesOnly
+      : discographyToShow === 'compilation'
+      ? compilationOnly
       : allDiscography;
-
 
   const handleDiscography = () => {
     router.push(`/artist/discography/${artistId}`);

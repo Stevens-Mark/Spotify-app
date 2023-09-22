@@ -25,7 +25,7 @@ export const discographyState = atom({
   default: [],
 });
 
-// stores shorter list of artists albums/singles from discography (CSR) - client side rendering
+// stores list of artists albums/singles from discography (CSR) - client side rendering - on artist page
 export const artistsDiscographyState = atom({
   key: 'artistsDiscographyShortState',
   default: [],
@@ -40,6 +40,12 @@ export const albumsDiscographyState = atom({
 // strores singles only from artist discography
 export const singlesDiscographyState = atom({
   key: 'singlesDiscographyState',
+  default: [],
+});
+
+// strores compilations only from artist discography
+export const compilationDiscographyState = atom({
+  key: 'compilationDiscographyState',
   default: [],
 });
 

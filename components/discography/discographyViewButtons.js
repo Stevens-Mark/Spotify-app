@@ -4,6 +4,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import {
   singlesDiscographyState,
   albumsDiscographyState,
+  compilationDiscographyState,
   discographyToShowState,
 } from '@/atoms/artistAtom';
 
@@ -18,9 +19,10 @@ import { XMarkIcon } from '@heroicons/react/24/solid';
 function DiscographyViewButtons() {
   const [discographyToShow, setDiscographyToShow] = useRecoilState(
     discographyToShowState
-  ); // determine which record list to show
+  ); // determine which records list to show
   const singlesOnly = useRecoilValue(singlesDiscographyState);
   const albumsOnly = useRecoilValue(albumsDiscographyState);
+  const compilationOnly = useRecoilValue(compilationDiscographyState);
 
   return (
     <>
@@ -85,6 +87,25 @@ function DiscographyViewButtons() {
                     }
                   >
                     Singles
+                  </button>
+                </li>
+              )}
+              {compilationOnly?.length > 0 && (
+                <li>
+                  <button
+                    aria-label="Show compilations"
+                    className={`${
+                      discographyToShow === 'compilation'
+                        ? 'bg-white text-gray-900  focus:bg-white transition delay-100 duration-200 ease-in-out'
+                        : 'bg-gray-900 text-white hover:bg-gray-800 focus:bg-gray-800'
+                    } text-sm py-1 px-2 rounded-full`}
+                    onClick={() =>
+                      setDiscographyToShow(
+                        discographyToShow === 'compilation' ? 'all' : 'compilation'
+                      )
+                    }
+                  >
+                    Compilations
                   </button>
                 </li>
               )}
