@@ -117,8 +117,8 @@ function QuickPlayBanner({ item, scrollRef }) {
   useEffect(() => {
     const handleScroll = () => {
       const scrollPosition = scrollRef.current.scrollTop;
-      setIsVisible(scrollPosition > 460); // Changed to the desired threshold
-      setIsTextVisible(scrollPosition > 460);
+      setIsVisible(scrollPosition > 400); // Changed to the desired threshold
+      setIsTextVisible(scrollPosition > 400);
       const maxScroll = 460; // Adjust the maximum scroll value as needed
       const opacityValue = Math.min(scrollPosition / maxScroll, 1);
       setOpacity(opacityValue);
